@@ -448,7 +448,7 @@ definition {
 		ObjectAdmin.markLayoutAsDefault();
 
 		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
-		
+
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block 1",
 			isCollapsible = "Yes",
@@ -463,9 +463,6 @@ definition {
 		ObjectAdmin.goToCustomObject(objectName = "CustomObject");
 
 		CreateObject.assertCanCollapseAndExpandEntryField();
-
-
-
 	}
 
 	@description = "LPS-135549 - Verify it is possible to create a BigDecimal field"

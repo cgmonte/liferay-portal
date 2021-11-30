@@ -5,16 +5,11 @@ definition {
 
 		Click(locator1 = "CreateObject#COLLAPSE_EXPAND_OBJECT_PORTLET_ENTRY_FIELD");
 
-		AssertNotVisible(
-			locator1 = "ObjectAdmin#ENTRY_STRING_VALUE_FIELD");
+		AssertNotVisible(locator1 = "ObjectAdmin#ENTRY_STRING_VALUE_FIELD");
 
 		Click(locator1 = "CreateObject#COLLAPSE_EXPAND_OBJECT_PORTLET_ENTRY_FIELD");
 
-		AssertVisible(
-			locator1 = "ObjectAdmin#ENTRY_STRING_VALUE_FIELD");
-
-				
-
+		AssertVisible(locator1 = "ObjectAdmin#ENTRY_STRING_VALUE_FIELD");
 	}
 
 	macro assertCannotAddRelationshipTabFirst {
