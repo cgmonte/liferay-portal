@@ -130,6 +130,11 @@
 		<td>xpath=(//button[(@class='dropdown-item') and contains(text(),'Delete')])[3]</td>
 		<td></td>
 	</tr>
+	<tr>
+		<td>COLLAPSE_EXPAND_OBJECT_PORTLET_ENTRY_FIELD</td>
+		<td>//button[contains(@class,'collapse-icon collapse-icon-middle panel-header panel-header-link')]</td>
+		<td></td>
+	</tr>
 </tbody>
 </table>
 </body>
