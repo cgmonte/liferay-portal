@@ -208,7 +208,7 @@ definition {
 		}
 
 		if ("${noAuthorize}" == "true") {
-			Pause(locator1 = "1000");
+			WaitForElementPresent(locator1 = "OAuth2#OAUTH2_TESTER_CLIENT_SECRET");
 		}
 		else {
 			Button.click(button = "Authorize");
@@ -402,7 +402,7 @@ definition {
 
 		Button.click(button = "Authorize");
 
-		Pause(locator1 = "3000");
+		WaitForElementPresent(locator1 = "OAuth2#OAUTH2_TESTER_PORTAL_URL");
 
 		var currentURL = selenium.getCurrentUrl();
 
