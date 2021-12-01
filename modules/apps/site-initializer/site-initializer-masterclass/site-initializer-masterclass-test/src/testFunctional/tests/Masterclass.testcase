@@ -32,10 +32,8 @@ definition {
 	@description = "This is a test for LPS-137508. Create a Site with the Masterclass Site initializer"
 	@priority = "5"
 	test AddMasterclassSite {
-		task ("Go to Masterclass site") {
-			var portalURL = PropsUtil.get("portal.url");
-
-			Navigator.openSpecificURL(url = "${portalURL}/web/test-masterclass-name");
+		task ("Go to Masterclass Site") {
+			ApplicationsMenu.gotoSite(site = "Test Masterclass Name");
 		}
 
 		task ("Assert the Masterclass Welcome Page is present") {
@@ -57,9 +55,7 @@ definition {
 		}
 
 		task ("Assert the default Masterclass Moderns is applied to Home page") {
-			var portalURL = PropsUtil.get("portal.url");
-
-			Navigator.openSpecificURL(url = "${portalURL}/web/test-masterclass-name");
+			ApplicationsMenu.gotoSite(site = "Test Masterclass Name");
 
 			AssertCssValue(
 				key_content = "Read More",
@@ -858,12 +854,58 @@ definition {
 	}
 
 	@description = "This is a test for LPS-141768. View the READ MORE links of the three courses redirect to the course display page"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test ReadMoreLinksRedirectToCourseDisplayPage {
+		task ("Go to Masterclass Site") {
+			ApplicationsMenu.gotoSite(site = "Test Masterclass Name");
+		}
 
-		// TODO Create the automation about the LPS-141768.
+		task ("Go to Courses Page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+		}
 
+		task ("Assert the Read More link of the first course redirects to the course display page") {
+			Click(
+				key_buttonName = "Read More",
+				key_href = "product-design-bootcamp",
+				locator1 = "Masterclass#FRAGMENT_LINK");
+
+			AssertElementPresent(
+				key_title = "Product Design Bootcamp",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+        }
+
+        task ("Assert the Read More link of the second course redirects to the course display page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+
+			Click(
+				key_buttonName = "Read More",
+				key_href = "project-manager-certification",
+				locator1 = "Masterclass#FRAGMENT_LINK");
+
+			AssertElementPresent(
+				key_title = "Project Manager Certification",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+        }
+
+        task ("Assert the Read More link of the third course redirects to the course display page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+
+			Click(
+				key_buttonName = "Read More",
+				key_href = "digital-marketing-bootcamp",
+				locator1 = "Masterclass#FRAGMENT_LINK");
+
+			AssertElementPresent(
+				key_title = "Digital Marketing Bootcamp",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+        }
 	}
 
 	@description = "This is a test for LPS-140613. View if the Student can have permissions set"
@@ -979,12 +1021,35 @@ definition {
 	}
 
 	@description = "This is a test for LPS-141768. View the three available courses in Home content page"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test ViewAvailableCoursesinHomeCP {
+		task ("Go to Masterclass Site") {
+			ApplicationsMenu.gotoSite(site = "Test Masterclass Name");
+		}
 
-		// TODO Create the automation about the LPS-141768.
+		task ("Assert the first course is present in Home page") {
+			Masterclass.viewCoursesInPage(
+				key_title = "Product Design Bootcamp",
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_buttonName = "Read More",
+				key_href = "product-design-bootcamp");
+		}
 
+		task ("Assert the second course is present in Home page") {
+			Masterclass.viewCoursesInPage(
+				key_title = "Project Manager Certification",
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_buttonName = "Read More",
+				key_href = "project-manager-certification");
+		}
+
+		task ("Assert the third course is present in Home page") {
+			Masterclass.viewCoursesInPage(
+				key_title = "Digital Marketing Bootcamp",
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_buttonName = "Read More",
+				key_href = "digital-marketing-bootcamp");			
+		}
 	}
 
 	@description = "This is a test for LPS-141370. View a Blog Collection in Display Page Template of Blogs"
@@ -1038,12 +1103,41 @@ definition {
 	}
 
 	@description = "This is a test for LPS-141768. View list to the three available courses pages"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test ViewListofAvailableCoursesPage {
+		task ("Go to Masterclass Site") {
+			ApplicationsMenu.gotoSite(site = "Test Masterclass Name");
+		}
 
-		// TODO Create the automation about the LPS-141768.
+		task ("Go to Courses Page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+		}
 
+		task ("Assert the first course is present in Courses Page") {
+			Masterclass.viewCoursesInPage(
+				key_title = "Product Design Bootcamp",
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_buttonName = "Read More",
+				key_href = "product-design-bootcamp");
+		}
+
+		task ("Assert the second course is present in Courses Page") {
+			Masterclass.viewCoursesInPage(
+				key_title = "Project Manager Certification",
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_buttonName = "Read More",
+				key_href = "project-manager-certification");
+		}
+
+		task ("Assert the third course is present in Courses Page") {
+			Masterclass.viewCoursesInPage(
+				key_title = "Digital Marketing Bootcamp",
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_buttonName = "Read More",
+				key_href = "digital-marketing-bootcamp");				
+		}
 	}
 
 	@description = "This is a test for LPS-137508. View the Masterclass Categories"
@@ -1283,12 +1377,55 @@ definition {
 	}
 
 	@description = "This is a test for LPS-141768. View the names of the three courses redirect to the course display page"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test ViewNameofCoursesRedirectToCourseDisplayPage {
+		task ("Go to Masterclass Site") {
+			ApplicationsMenu.gotoSite(site = "Test Masterclass Name");
+		}
 
-		// TODO Create the automation about the LPS-141768.
+		task ("Go to Courses Page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+		}
 
+		task ("Assert the title of the first course redirects to the course display page") {
+			Click(
+				key_title = "Product Design Bootcamp",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+
+			AssertElementPresent(
+				key_title = "Product Design Bootcamp",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+		}
+
+        task ("Assert the title of the second course redirects to the course display page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+
+			Click(
+				key_title = "Project Manager Certification",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+
+			AssertElementPresent(
+				key_title = "Project Manager Certification",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+        }
+
+        task ("Assert the title of the third course redirects to the course display page") {
+			Navigator.gotoSitePage(
+				pageName = "Courses",
+				siteName = "Test Masterclass Name");
+
+			Click(
+				key_title = "Digital Marketing Bootcamp",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+
+			AssertElementPresent(
+				key_title = "Digital Marketing Bootcamp",
+				locator1 = "Masterclass#FRAGMENT_HEADING");
+        }
 	}
 
 	@description = "This is a test for LPS-140613. View the Student and Teacher are present in Site Roles"
