@@ -876,7 +876,7 @@ definition {
 
 		WaitForElementPresent(locator1 = "Header#H3_TITLE");
 
-		Pause(locator1 = "5000");
+		WaitForElementNotPresent(locator1 = "UserBar#USER_AVATAR_IMAGE");
 	}
 
 }
