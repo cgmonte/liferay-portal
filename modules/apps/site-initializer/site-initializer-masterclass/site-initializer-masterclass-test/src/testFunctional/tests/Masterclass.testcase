@@ -875,9 +875,9 @@ definition {
 			AssertElementPresent(
 				key_title = "Product Design Bootcamp",
 				locator1 = "Masterclass#FRAGMENT_HEADING");
-        }
+		}
 
-        task ("Assert the Read More link of the second course redirects to the course display page") {
+		task ("Assert the Read More link of the second course redirects to the course display page") {
 			Navigator.gotoSitePage(
 				pageName = "Courses",
 				siteName = "Test Masterclass Name");
@@ -890,9 +890,9 @@ definition {
 			AssertElementPresent(
 				key_title = "Project Manager Certification",
 				locator1 = "Masterclass#FRAGMENT_HEADING");
-        }
+		}
 
-        task ("Assert the Read More link of the third course redirects to the course display page") {
+		task ("Assert the Read More link of the third course redirects to the course display page") {
 			Navigator.gotoSitePage(
 				pageName = "Courses",
 				siteName = "Test Masterclass Name");
@@ -905,7 +905,7 @@ definition {
 			AssertElementPresent(
 				key_title = "Digital Marketing Bootcamp",
 				locator1 = "Masterclass#FRAGMENT_HEADING");
-        }
+		}
 	}
 
 	@description = "This is a test for LPS-140613. View if the Student can have permissions set"
@@ -1029,26 +1029,26 @@ definition {
 
 		task ("Assert the first course is present in Home page") {
 			Masterclass.viewCoursesInPage(
-				key_title = "Product Design Bootcamp",
-				key_description = "This is a short description to introduce the key aspects of the course.",
 				key_buttonName = "Read More",
-				key_href = "product-design-bootcamp");
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_href = "product-design-bootcamp",
+				key_title = "Product Design Bootcamp");
 		}
 
 		task ("Assert the second course is present in Home page") {
 			Masterclass.viewCoursesInPage(
-				key_title = "Project Manager Certification",
-				key_description = "This is a short description to introduce the key aspects of the course.",
 				key_buttonName = "Read More",
-				key_href = "project-manager-certification");
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_href = "project-manager-certification",
+				key_title = "Project Manager Certification");
 		}
 
 		task ("Assert the third course is present in Home page") {
 			Masterclass.viewCoursesInPage(
-				key_title = "Digital Marketing Bootcamp",
-				key_description = "This is a short description to introduce the key aspects of the course.",
 				key_buttonName = "Read More",
-				key_href = "digital-marketing-bootcamp");			
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_href = "digital-marketing-bootcamp",
+				key_title = "Digital Marketing Bootcamp");
 		}
 	}
 
@@ -1117,26 +1117,26 @@ definition {
 
 		task ("Assert the first course is present in Courses Page") {
 			Masterclass.viewCoursesInPage(
-				key_title = "Product Design Bootcamp",
-				key_description = "This is a short description to introduce the key aspects of the course.",
 				key_buttonName = "Read More",
-				key_href = "product-design-bootcamp");
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_href = "product-design-bootcamp",
+				key_title = "Product Design Bootcamp");
 		}
 
 		task ("Assert the second course is present in Courses Page") {
 			Masterclass.viewCoursesInPage(
-				key_title = "Project Manager Certification",
-				key_description = "This is a short description to introduce the key aspects of the course.",
 				key_buttonName = "Read More",
-				key_href = "project-manager-certification");
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_href = "project-manager-certification",
+				key_title = "Project Manager Certification");
 		}
 
 		task ("Assert the third course is present in Courses Page") {
 			Masterclass.viewCoursesInPage(
-				key_title = "Digital Marketing Bootcamp",
-				key_description = "This is a short description to introduce the key aspects of the course.",
 				key_buttonName = "Read More",
-				key_href = "digital-marketing-bootcamp");				
+				key_description = "This is a short description to introduce the key aspects of the course.",
+				key_href = "digital-marketing-bootcamp",
+				key_title = "Digital Marketing Bootcamp");
 		}
 	}
 
@@ -1399,7 +1399,7 @@ definition {
 				locator1 = "Masterclass#FRAGMENT_HEADING");
 		}
 
-        task ("Assert the title of the second course redirects to the course display page") {
+		task ("Assert the title of the second course redirects to the course display page") {
 			Navigator.gotoSitePage(
 				pageName = "Courses",
 				siteName = "Test Masterclass Name");
@@ -1411,9 +1411,9 @@ definition {
 			AssertElementPresent(
 				key_title = "Project Manager Certification",
 				locator1 = "Masterclass#FRAGMENT_HEADING");
-        }
+		}
 
-        task ("Assert the title of the third course redirects to the course display page") {
+		task ("Assert the title of the third course redirects to the course display page") {
 			Navigator.gotoSitePage(
 				pageName = "Courses",
 				siteName = "Test Masterclass Name");
@@ -1425,7 +1425,7 @@ definition {
 			AssertElementPresent(
 				key_title = "Digital Marketing Bootcamp",
 				locator1 = "Masterclass#FRAGMENT_HEADING");
-        }
+		}
 	}
 
 	@description = "This is a test for LPS-140613. View the Student and Teacher are present in Site Roles"

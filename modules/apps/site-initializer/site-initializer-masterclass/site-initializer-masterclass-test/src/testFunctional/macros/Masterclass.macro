@@ -52,16 +52,16 @@ definition {
 
 		if (isSet(description)) {
 			AssertElementPresent(
-					key_description = "${key_description}",
-					locator1 = "Masterclass#FRAGMENT_TEXT_BLOCK");
+				key_description = "${key_description}",
+				locator1 = "Masterclass#FRAGMENT_TEXT_BLOCK");
 		}
 
 		if (isSet(link)) {
 			AssertElementPresent(
-					key_buttonName = "${key_buttonName}",
-					key_href = "${key_href}",
-					locator1 = "Masterclass#FRAGMENT_LINK");
-		}	
+				key_buttonName = "${key_buttonName}",
+				key_href = "${key_href}",
+				locator1 = "Masterclass#FRAGMENT_LINK");
+		}
 	}
 
 }
