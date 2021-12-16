@@ -12,7 +12,7 @@
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 
 import {DefinitionBuilderContext} from '../../../DefinitionBuilderContext';
 import {DiagramBuilderContext} from '../../DiagramBuilderContext';
@@ -30,6 +30,17 @@ export default function SelectedNodeInfo({errors, setErrors}) {
 		setSelectedNode,
 		setSelectedNodeNewId,
 	} = useContext(DiagramBuilderContext);
+
+	useEffect(() => {
+		if (
+			selectedNode &&
+			(selectedLanguageId
+				? selectedNode.data.label[selectedLanguageId] === ''
+				: selectedNode.data.label[defaultLanguageId] === '')
+		) {
+			setErrors({...errors, label: true});
+		}
+	}, [selectedNode, selectedLanguageId, defaultLanguageId]);
 
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('information')}>
@@ -124,27 +135,22 @@ export default function SelectedNodeInfo({errors, setErrors}) {
 						if (target.value.trim() === '') {
 							setErrors({
 								...errors,
-								id: {...errors.id, empty: true},
+								id: {duplicated: false, empty: true},
 							});
 						}
 						else {
-							setErrors({
-								...errors,
-								id: {...errors.id, empty: false},
-							});
-						}
-
-						if (isIdDuplicated(elements, target.value.trim())) {
-							setErrors({
-								...errors,
-								id: {...errors.id, duplicated: true},
-							});
-						}
-						else {
-							setErrors({
-								...errors,
-								id: {...errors.id, duplicated: false},
-							});
+							if (isIdDuplicated(elements, target.value.trim())) {
+								setErrors({
+									...errors,
+									id: {duplicated: true, empty: false},
+								});
+							}
+							else {
+								setErrors({
+									...errors,
+									id: {duplicated: false, empty: false},
+								});
+							}
 						}
 
 						setSelectedNodeNewId(target.value);

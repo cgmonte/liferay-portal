@@ -28,8 +28,8 @@ export default function Sidebar() {
 	useEffect(() => {
 		setSelectedNodeNewId(null);
 		setErrors({
+			...errors,
 			id: {duplicated: false, empty: false},
-			label: false,
 		});
 	}, [selectedNode?.id, setSelectedNodeNewId]);
 

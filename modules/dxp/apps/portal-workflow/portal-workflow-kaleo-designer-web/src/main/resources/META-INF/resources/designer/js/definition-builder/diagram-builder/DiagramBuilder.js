@@ -129,12 +129,7 @@ export default function DiagramBuilder({version}) {
 	};
 
 	useEffect(() => {
-		if (
-			selectedNode &&
-			(selectedLanguageId
-				? selectedNode.data.label[selectedLanguageId] !== ''
-				: selectedNode.data.label[defaultLanguageId] !== '')
-		) {
+		if (selectedNode) {
 			setElements((elements) =>
 				elements.map((element) => {
 					if (isNode(element) && element.id === selectedNode.id) {
