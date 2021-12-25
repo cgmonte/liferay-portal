@@ -37,27 +37,51 @@ import FloatingConnectionLine from './components/transitions/FloatingConnectionL
 let id = 2;
 const getId = () => `node_${id++}`;
 
-const isOverlapping = (elementPosition, newElementPosition) => {
-	const isInHorizontalBounds =
-		newElementPosition.x < elementPosition.x + 280 &&
-		newElementPosition.x + 280 > elementPosition.x;
+const isOverlapping = (elementPosition, newElementPosition, mousePositionInsideNode) => {	
+	// console.log(mousePositionInsideNode)
 
-	const isInVerticalBounds =
-		newElementPosition.y < elementPosition.y + 100 &&
-		newElementPosition.y + 100 > elementPosition.y;
 
-	const isOverlapping = isInHorizontalBounds && isInVerticalBounds;
+	const elementLeftBound = elementPosition.x;
+	const elementRightBound = elementPosition.x + 280;
+	// const elementTopBound = elementPosition.y;
+	// const elementBottomBound = elementPosition.y + 100;
+
+	console.log({newElementPosition})
+	console.log({mousePositionInsideNode})
+	console.log({elementLeftBound})
+	console.log({elementRightBound})
+
+	const isInHorizontalBounds = 
+		((newElementPosition.x - mousePositionInsideNode.mouseX) > elementLeftBound || (newElementPosition.x + (mousePositionInsideNode.width - mousePositionInsideNode.mouseX)) > elementLeftBound)
+		&& ((newElementPosition.x - mousePositionInsideNode.mouseX) < elementRightBound || (newElementPosition.x + (mousePositionInsideNode.width - mousePositionInsideNode.mouseX)) < elementRightBound);
+
+
+	// const isInHorizontalBounds =
+	// 	(newElementPosition.x + mousePositionInsideNode.mouseX) < (elementPosition.x + 280) &&
+	// 	(newElementPosition.x - mousePositionInsideNode.mouseX) + 280 > elementPosition.x;
+
+	// const isInVerticalBounds =
+	// 	newElementPosition.y < elementPosition.y + 100 &&
+	// 	newElementPosition.y + 100 > elementPosition.y;
+
+	// const isOverlapping = isInHorizontalBounds && isInVerticalBounds;
+
+	const isOverlapping = isInHorizontalBounds;
+
 
 	return isOverlapping;
 };
 
-const isPositionAvailable = (elements, newElementPosition) => {
+const isPositionAvailable = (elements, newElementPosition, mousePositionInsideNode) => {
+	
+	// console.log(mousePositionInsideNode)
+
 	let available = true;
 
 	elements.forEach((element) => {
 		if (
 			isNode(element) &&
-			isOverlapping(element.position, newElementPosition)
+			isOverlapping(element.position, newElementPosition, mousePositionInsideNode)
 		) {
 			available = false;
 		}
@@ -75,9 +99,12 @@ export default function DiagramBuilder({version}) {
 	} = useContext(DefinitionBuilderContext);
 	const reactFlowWrapperRef = useRef(null);
 	const [availableArea, setAvailableArea] = useState(null);
+	const [mousePositionInsideNode, setMousePositionInsideNode] = useState(null);
 	const [reactFlowInstance, setReactFlowInstance] = useState(null);
 	const [selectedNode, setSelectedNode] = useState(null);
 	const [selectedNodeNewId, setSelectedNodeNewId] = useState(null);
+
+	// useEffect(() => {console.log(mousePositionInsideNode)}, [mousePositionInsideNode])
 
 	const onConnect = (params) => {
 		setElements((els) =>
@@ -111,7 +138,7 @@ export default function DiagramBuilder({version}) {
 			y: event.clientY - reactFlowBounds.top,
 		});
 
-		if (isPositionAvailable(elements, position)) {
+		if (isPositionAvailable(elements, position, mousePositionInsideNode)) {
 			setAvailableArea(true);
 		}
 		else {
@@ -132,7 +159,7 @@ export default function DiagramBuilder({version}) {
 				y: event.clientY - reactFlowBounds.top,
 			});
 
-			if (isPositionAvailable(elements, position)) {
+			if (isPositionAvailable(elements, position, mousePositionInsideNode)) {
 				event.preventDefault();
 
 				const type = event.dataTransfer.getData(
@@ -254,7 +281,7 @@ export default function DiagramBuilder({version}) {
 					</ReactFlowProvider>
 				</div>
 
-				<Sidebar />
+				<Sidebar setMousePositionInsideNode={setMousePositionInsideNode}/>
 			</div>
 		</DiagramBuilderContextProvider>
 	);

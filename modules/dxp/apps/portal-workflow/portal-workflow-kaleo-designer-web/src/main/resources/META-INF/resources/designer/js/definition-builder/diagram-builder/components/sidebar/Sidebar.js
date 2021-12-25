@@ -16,7 +16,7 @@ import SelectedNodeInfo from './SelectedNodeInfo';
 import SidebarBody from './SidebarBody';
 import SidebarHeader from './SidebarHeader';
 
-export default function Sidebar() {
+export default function Sidebar({setMousePositionInsideNode}) {
 	const {selectedNode, setSelectedNode, setSelectedNodeNewId} = useContext(
 		DiagramBuilderContext
 	);
@@ -51,7 +51,7 @@ export default function Sidebar() {
 				}
 			/>
 
-			<SidebarBody displayDefaultContent={!selectedNode}>
+			<SidebarBody displayDefaultContent={!selectedNode} setMousePositionInsideNode={setMousePositionInsideNode}>
 				<SelectedNodeInfo errors={errors} setErrors={setErrors} />
 			</SidebarBody>
 		</div>

@@ -15,12 +15,34 @@ import React, {useContext} from 'react';
 import {DiagramBuilderContext} from '../../DiagramBuilderContext';
 import {nodeDescription, nodeTypes} from '../nodes/utils';
 
-const onDragStart = (event, nodeType) => {
+const onDragStart = (event, nodeType,setMousePositionInsideNode) => {
 	event.dataTransfer.setData('application/reactflow', nodeType);
 	event.dataTransfer.effectAllowed = 'move';
+
+	const nodeRect = event.target.getBoundingClientRect();
+	const height = nodeRect.height;
+	const mouseX = event.clientX - nodeRect.left;
+	const mouseY = event.clientY - nodeRect.top;
+	const width = nodeRect.width;
+
+	setMousePositionInsideNode({height, mouseX, mouseY, width});
+
 };
 
-export default function SidebarBody({children, displayDefaultContent = true}) {
+// const handleClick = (event, setMousePositionInsideNode) => {
+// 	const nodeRect = event.target.getBoundingClientRect();
+// 	const height = nodeRect.height;
+// 	const mouseX = event.clientX - nodeRect.left;
+// 	const mouseY = event.clientY - nodeRect.top;
+// 	const width = nodeRect.width;
+
+// 	setMousePositionInsideNode({height, mouseX, mouseY, width});
+	
+// 	// console.log('Left: ', mouseX);
+// 	// console.log('Top: ', mouseY);
+// }
+
+export default function SidebarBody({children, displayDefaultContent = true, setMousePositionInsideNode}) {
 	const {setAvailableArea} = useContext(DiagramBuilderContext);
 
 	return (
@@ -31,8 +53,10 @@ export default function SidebarBody({children, displayDefaultContent = true}) {
 							descriptionSidebar={nodeDescription[key]}
 							draggable
 							key={index}
+							// onDragStart={(event) => handleClick(event, setMousePositionInsideNode)}
 							onDragEnd={() => setAvailableArea(null)}
-							onDragStart={(event) => onDragStart(event, key)}
+							onDragStart={(event) => onDragStart(event, key, setMousePositionInsideNode)}
+
 						/>
 				  ))
 				: children}
