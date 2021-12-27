@@ -37,45 +37,31 @@ import FloatingConnectionLine from './components/transitions/FloatingConnectionL
 let id = 2;
 const getId = () => `node_${id++}`;
 
-const isOverlapping = (elementPosition, newElementPosition, mousePositionInsideNode) => {	
-	// console.log(mousePositionInsideNode)
+const isOverlapping = (elementPosition, newElementPosition, mousePositionInsideNode) => {
 
+	if (mousePositionInsideNode !== null) {
+		const elementLeftBound = elementPosition.x;
+		const elementRightBound = elementPosition.x + 290;
+		const elementTopBound = elementPosition.y;
+		const elementBottomBound = elementPosition.y + 110;
 
-	const elementLeftBound = elementPosition.x;
-	const elementRightBound = elementPosition.x + 280;
-	// const elementTopBound = elementPosition.y;
-	// const elementBottomBound = elementPosition.y + 100;
+		const isInHorizontalBounds = 
+			((newElementPosition.x - mousePositionInsideNode.mouseX) > elementLeftBound || (newElementPosition.x + (mousePositionInsideNode.width - mousePositionInsideNode.mouseX)) > elementLeftBound)
+			&& ((newElementPosition.x - mousePositionInsideNode.mouseX) < elementRightBound || (newElementPosition.x + (mousePositionInsideNode.width - mousePositionInsideNode.mouseX)) < elementRightBound);
+		
+		const isInVerticallBounds = 
+			((newElementPosition.y - mousePositionInsideNode.mouseY) > elementTopBound || (newElementPosition.y + (mousePositionInsideNode.height - mousePositionInsideNode.mouseY)) > elementTopBound)
+			&& ((newElementPosition.y - mousePositionInsideNode.mouseY) < elementBottomBound || (newElementPosition.y + (mousePositionInsideNode.height - mousePositionInsideNode.mouseY)) < elementBottomBound);
 
-	console.log({newElementPosition})
-	console.log({mousePositionInsideNode})
-	console.log({elementLeftBound})
-	console.log({elementRightBound})
-
-	const isInHorizontalBounds = 
-		((newElementPosition.x - mousePositionInsideNode.mouseX) > elementLeftBound || (newElementPosition.x + (mousePositionInsideNode.width - mousePositionInsideNode.mouseX)) > elementLeftBound)
-		&& ((newElementPosition.x - mousePositionInsideNode.mouseX) < elementRightBound || (newElementPosition.x + (mousePositionInsideNode.width - mousePositionInsideNode.mouseX)) < elementRightBound);
-
-
-	// const isInHorizontalBounds =
-	// 	(newElementPosition.x + mousePositionInsideNode.mouseX) < (elementPosition.x + 280) &&
-	// 	(newElementPosition.x - mousePositionInsideNode.mouseX) + 280 > elementPosition.x;
-
-	// const isInVerticalBounds =
-	// 	newElementPosition.y < elementPosition.y + 100 &&
-	// 	newElementPosition.y + 100 > elementPosition.y;
-
-	// const isOverlapping = isInHorizontalBounds && isInVerticalBounds;
-
-	const isOverlapping = isInHorizontalBounds;
-
+		const isOverlapping = isInHorizontalBounds && isInVerticallBounds;
 
 	return isOverlapping;
+	}
+
+	return false;	
 };
 
 const isPositionAvailable = (elements, newElementPosition, mousePositionInsideNode) => {
-	
-	// console.log(mousePositionInsideNode)
-
 	let available = true;
 
 	elements.forEach((element) => {
