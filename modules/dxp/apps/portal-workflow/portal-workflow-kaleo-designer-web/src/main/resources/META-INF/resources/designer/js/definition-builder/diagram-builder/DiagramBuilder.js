@@ -11,9 +11,11 @@
 
 import PropTypes from 'prop-types';
 import React, {
+	forwardRef, 
 	useCallback,
 	useContext,
 	useEffect,
+	useImperativeHandle,
 	useRef,
 	useState,
 } from 'react';
@@ -106,6 +108,7 @@ export default function DiagramBuilder({version}) {
 		setElements,
 	} = useContext(DefinitionBuilderContext);
 	const reactFlowWrapperRef = useRef(null);
+	const shadowRef = useRef(null);
 	const [collidingElements, setCollidingElements] = useState(null);
 	const [nodeRectData, setNodeRectData] = useState(null);
 	const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -157,6 +160,8 @@ export default function DiagramBuilder({version}) {
 
 		setCollidingElements(getCollidingElements(elements, position, nodeRectData));
 
+		shadowRef.current.updatePosition(position, nodeRectData, collidingElements);
+
 		event.preventDefault();
 
 		event.dataTransfer.dropEffect = 'move';
@@ -189,6 +194,8 @@ export default function DiagramBuilder({version}) {
 
 				setElements((elements) => elements.concat(newNode));
 			}
+			
+			shadowRef.current.updateVisibility();
 			setCollidingElements(null);
 		},
 		[elements, reactFlowInstance, setElements, nodeRectData]
@@ -308,6 +315,8 @@ export default function DiagramBuilder({version}) {
 					</ReactFlowProvider>
 				</div>
 
+				<ShadowBorder ref={shadowRef}/>
+
 				<Sidebar />
 			</div>
 		</DiagramBuilderContextProvider>
@@ -317,3 +326,43 @@ export default function DiagramBuilder({version}) {
 DiagramBuilder.propTypes = {
 	version: PropTypes.string.isRequired,
 };
+
+export const ShadowBorder = forwardRef((props, ref) => {
+	const [positionInsideBuilder, setPositionInsideBuilder] = useState({x: 100, y: 200});
+	const [size, setSize] = useState({height: 0, width: 0});
+	const [visible, setVisibility] = useState('none');
+	const [isColliding, setCollision] = useState(false)
+
+	const updatePosition = (newElementPosition, nodeRectData, collidingElements) => {
+		setVisibility('block')
+		const newShadowPosition = {
+			x: newElementPosition.x - nodeRectData.mouseXInsideRect,
+			y: newElementPosition.y - nodeRectData.mouseYInsideRect,
+		}
+		setPositionInsideBuilder(newShadowPosition);
+		setSize({height: nodeRectData.rectHeight, width: nodeRectData.rectWidth})
+		setCollision(collidingElements?.length)	
+	}
+
+	const updateVisibility = () => {
+		setVisibility('none')
+	}
+	
+	useImperativeHandle(ref, () => {
+		return {
+			updatePosition, updateVisibility
+		}
+	 });
+
+	return (
+			<div className={`node-border-area ${isColliding ? 'red' : 'blue'}`} style={{
+				display: visible,
+				height: `${size.height + 30}px`,
+				position: "absolute",
+				transform: `translate(${positionInsideBuilder.x - 15}px, ${positionInsideBuilder.y - 15}px)`,
+				width: `${size.width + 30}px`,
+				zIndex: "3",
+			}}/>
+
+	)
+});
