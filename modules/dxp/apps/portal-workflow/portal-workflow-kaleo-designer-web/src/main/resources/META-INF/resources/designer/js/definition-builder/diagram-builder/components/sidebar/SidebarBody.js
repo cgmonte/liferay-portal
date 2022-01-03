@@ -15,13 +15,27 @@ import React, {useContext} from 'react';
 import {DiagramBuilderContext} from '../../DiagramBuilderContext';
 import {nodeDescription, nodeTypes} from '../nodes/utils';
 
-const onDragStart = (event, nodeType) => {
+const onDragStart = (event, nodeType, setNodeRectData) => {
 	event.dataTransfer.setData('application/reactflow', nodeType);
 	event.dataTransfer.effectAllowed = 'move';
+
+	const nodeRect = event.target.getBoundingClientRect();
+	const rectHeight = nodeRect.height;
+	const mouseXInsideRect = event.clientX - nodeRect.left;
+	const mouseYInsideRect = event.clientY - nodeRect.top;
+	const rectWidth = nodeRect.width;
+	setNodeRectData({
+		mouseXInsideRect,
+		mouseYInsideRect,
+		rectHeight,
+		rectWidth,
+	});
 };
 
 export default function SidebarBody({children, displayDefaultContent = true}) {
-	const {setCollidingElements} = useContext(DiagramBuilderContext);
+	const {setCollidingElements, setNodeRectData} = useContext(
+		DiagramBuilderContext
+	);
 
 	return (
 		<div className="sidebar-body">
@@ -32,7 +46,7 @@ export default function SidebarBody({children, displayDefaultContent = true}) {
 							draggable
 							key={index}
 							onDragEnd={() => setCollidingElements(null)}
-							onDragStart={(event) => onDragStart(event, key)}
+							onDragStart={(event) => onDragStart(event, key, setNodeRectData)}
 						/>
 				  ))
 				: children}

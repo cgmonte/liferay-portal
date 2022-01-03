@@ -39,27 +39,53 @@ import FloatingConnectionLine from './components/transitions/FloatingConnectionL
 let id = 2;
 const getId = () => `item_${id++}`;
 
-const isOverlapping = (elementPosition, newElementPosition) => {
-	const isInHorizontalBounds =
-		newElementPosition.x < elementPosition.x + 280 &&
-		newElementPosition.x + 280 > elementPosition.x;
+const isOverlapping = (elementPosition, newElementPosition, nodeRectData) => {
+	// console.log (nodeRectData);
+	if (nodeRectData !== null) {
+		const elementLeftBound = elementPosition.x;
+		const elementRightBound = elementPosition.x + 254;
+		const elementTopBound = elementPosition.y;
+		const elementBottomBound = elementPosition.y + 74;
 
-	const isInVerticalBounds =
-		newElementPosition.y < elementPosition.y + 100 &&
-		newElementPosition.y + 100 > elementPosition.y;
+		const isInHorizontalBounds =
+			(newElementPosition.x - nodeRectData.mouseXInsideRect >
+				elementLeftBound ||
+				newElementPosition.x +
+					(nodeRectData.rectWidth - nodeRectData.mouseXInsideRect) >
+					elementLeftBound) &&
+			(newElementPosition.x - nodeRectData.mouseXInsideRect <
+				elementRightBound ||
+				newElementPosition.x +
+					(nodeRectData.rectWidth - nodeRectData.mouseXInsideRect) <
+					elementRightBound);
 
-	const isOverlapping = isInHorizontalBounds && isInVerticalBounds;
+		const isInVerticalBounds =
+			(newElementPosition.y - nodeRectData.mouseYInsideRect >
+				elementTopBound ||
+				newElementPosition.y +
+					(nodeRectData.rectHeight - nodeRectData.mouseYInsideRect) >
+					elementTopBound) &&
+			(newElementPosition.y - nodeRectData.mouseYInsideRect <
+				elementBottomBound ||
+				newElementPosition.y +
+					(nodeRectData.rectHeight - nodeRectData.mouseYInsideRect) <
+					elementBottomBound);
 
-	return isOverlapping;
+		const isOverlapping = isInHorizontalBounds && isInVerticalBounds;
+
+		return isOverlapping;
+	}
+
+	return false;
 };
 
-const getCollidingElements = (elements, newElementPosition) => {
+const getCollidingElements = (elements, newElementPosition, nodeRectData) => {
 	const collidingElements = [];
 
 	elements.forEach((element) => {
 		if (
 			isNode(element) &&
-			isOverlapping(element.position, newElementPosition)
+			isOverlapping(element.position, newElementPosition, nodeRectData)
 		) {
 			collidingElements.push(element.id);
 		}
@@ -82,6 +108,7 @@ export default function DiagramBuilder({version}) {
 	} = useContext(DefinitionBuilderContext);
 	const reactFlowWrapperRef = useRef(null);
 	const [collidingElements, setCollidingElements] = useState(null);
+	const [nodeRectData, setNodeRectData] = useState(null);
 	const [reactFlowInstance, setReactFlowInstance] = useState(null);
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
@@ -129,7 +156,7 @@ export default function DiagramBuilder({version}) {
 			y: event.clientY - reactFlowBounds.top,
 		});
 
-		setCollidingElements(getCollidingElements(elements, position));
+		setCollidingElements(getCollidingElements(elements, position, nodeRectData));
 
 		event.preventDefault();
 
@@ -145,7 +172,7 @@ export default function DiagramBuilder({version}) {
 				y: event.clientY - reactFlowBounds.top,
 			});
 
-			if (getCollidingElements(elements, position).length === 0) {
+			if (getCollidingElements(elements, position, nodeRectData).length === 0) {
 				event.preventDefault();
 
 				const type = event.dataTransfer.getData(
@@ -165,7 +192,7 @@ export default function DiagramBuilder({version}) {
 			}
 			setCollidingElements(null);
 		},
-		[elements, reactFlowInstance, setElements]
+		[elements, reactFlowInstance, setElements, nodeRectData]
 	);
 
 	const onLoad = (reactFlowInstance) => {
@@ -247,10 +274,12 @@ export default function DiagramBuilder({version}) {
 	const contextProps = {
 		collidingElements,
 		elements,
+		nodeRectData,
 		selectedItem,
 		selectedItemNewId,
 		setCollidingElements,
 		setElements,
+		setNodeRectData,
 		setSelectedItem,
 		setSelectedItemNewId,
 	};
