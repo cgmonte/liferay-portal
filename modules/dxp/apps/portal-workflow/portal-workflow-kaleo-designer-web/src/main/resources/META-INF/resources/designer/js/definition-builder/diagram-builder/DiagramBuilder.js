@@ -40,7 +40,6 @@ let id = 2;
 const getId = () => `item_${id++}`;
 
 const isOverlapping = (elementPosition, newElementPosition, nodeRectData) => {
-	// console.log (nodeRectData);
 	if (nodeRectData !== null) {
 		const elementLeftBound = elementPosition.x;
 		const elementRightBound = elementPosition.x + 254;
