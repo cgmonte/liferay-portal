@@ -13,6 +13,7 @@
 import {defaultLanguageId} from '../constants';
 import {removeNewLine, replaceTabSpaces} from '../util/utils';
 import {DEFAULT_LANGUAGE} from './constants';
+import parseAssignments from './utils';
 import XMLDefinition from './xmlDefinition';
 
 export default function DeserializeUtil(content) {
@@ -55,8 +56,7 @@ DeserializeUtil.prototype = {
 							label[key] = replaceTabSpaces(removeNewLine(value));
 						});
 					});
-				}
-				else {
+				} else {
 					label = {[defaultLanguageId]: node.name};
 				}
 
@@ -67,6 +67,10 @@ DeserializeUtil.prototype = {
 				};
 
 				if (type === 'task') {
+					if (node.assignments) {
+						data.assignments = parseAssignments(node);
+					}
+
 					data.scriptLanguage =
 						node.scriptLanguage || DEFAULT_LANGUAGE;
 				}
@@ -75,11 +79,9 @@ DeserializeUtil.prototype = {
 
 				if (node.id) {
 					nodeId = node.id;
-				}
-				else if (node.name) {
+				} else if (node.name) {
 					nodeId = node.name;
-				}
-				else {
+				} else {
 					return;
 				}
 
@@ -104,8 +106,7 @@ DeserializeUtil.prototype = {
 									}
 								);
 							});
-						}
-						else {
+						} else {
 							label = {[defaultLanguageId]: transition.name};
 						}
 
@@ -113,11 +114,9 @@ DeserializeUtil.prototype = {
 
 						if (transition.id) {
 							transitionId = transition.id;
-						}
-						else if (transition.name) {
+						} else if (transition.name) {
 							transitionId = transition.name;
-						}
-						else {
+						} else {
 							return;
 						}
 
