@@ -64,36 +64,49 @@ function getLocationValue(field, context) {
 
 			if (resNodesAttributes.length) {
 				value.content = resNodesAttributes;
-			}
-			else if (res.children.length) {
+			} else if (res.children.length) {
 				const content = [];
 
 				for (const child of res.children) {
 					const childContent = {};
 
-					for (const item of child.children) {
+					if (!child.children.length) {
 						const childNodesAttributes = getChildAttributes(
-							item.childNodes
+							child.childNodes
 						);
 
 						let itemContent;
 
 						if (childNodesAttributes.length) {
 							itemContent = childNodesAttributes;
-						}
-						else {
-							itemContent = item.textContent;
+						} else {
+							itemContent = child.textContent;
 						}
 
-						childContent[item.tagName] = itemContent;
+						childContent[child.tagName] = itemContent;
+					} else {
+						for (const item of child.children) {
+							const childNodesAttributes = getChildAttributes(
+								item.childNodes
+							);
+
+							let itemContent;
+
+							if (childNodesAttributes.length) {
+								itemContent = childNodesAttributes;
+							} else {
+								itemContent = item.textContent;
+							}
+
+							childContent[item.tagName] = itemContent;
+						}
 					}
 
 					content.push(childContent);
 				}
 
 				value.content = content;
-			}
-			else {
+			} else {
 				value.content = res.textContent;
 			}
 		}
@@ -134,7 +147,6 @@ function parseResults(schema, xmldoc_in, data_out) {
 		let j;
 
 		if (nodeList.length) {
-
 			// Loop through each result node
 
 			for (i = nodeList.length - 1; i >= 0; i--) {
@@ -159,8 +171,7 @@ function parseResults(schema, xmldoc_in, data_out) {
 			}
 
 			data_out.results = results;
-		}
-		else {
+		} else {
 			data_out.error = new Error(
 				'XML schema result nodes retrieval failure'
 			);
@@ -186,8 +197,7 @@ const XMLSchemaUtil = {
 			data_out = parseResults(schema, xmlDoc, data_out);
 
 			data_out = parseMeta(schema.metaFields, xmlDoc, data_out);
-		}
-		else {
+		} else {
 			data_out.error = new Error('XML schema parse failure');
 		}
 
