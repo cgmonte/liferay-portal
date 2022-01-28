@@ -11,21 +11,36 @@
 
 import ClayButton from '@clayui/button';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useContext} from 'react';
 
+import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import SidebarPanel from '../../SidebarPanel';
 
-const Assignments = ({setContentName}) => (
-	<SidebarPanel panelTitle={Liferay.Language.get('assignments')}>
-		<ClayButton
-			className="mr-3"
-			displayType="secondary"
-			onClick={() => setContentName('assignments')}
-		>
-			{Liferay.Language.get('new')}
-		</ClayButton>
-	</SidebarPanel>
-);
+const Assignments = ({setContentName}) => {
+	const {selectedItem} = useContext(DiagramBuilderContext);
+
+	return (
+		<SidebarPanel panelTitle={Liferay.Language.get('assignments')}>
+			{!selectedItem.data.assignments ? (
+				<ClayButton
+					className="mr-3"
+					displayType="secondary"
+					onClick={() => setContentName('assignments')}
+				>
+					{Liferay.Language.get('new')}
+				</ClayButton>
+			) : (
+				<CurrentAssignments
+					assignments={selectedItem.data.assignments}
+				/>
+			)}
+		</SidebarPanel>
+	);
+};
+
+const CurrentAssignments = () => {
+	return <p>Current Assignments:</p>;
+};
 
 Assignments.propTypes = {
 	setContentName: PropTypes.func.isRequired,
