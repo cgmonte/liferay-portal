@@ -20,6 +20,10 @@ import User from './select-assignment/User';
 
 const options = [
 	{
+		label: '',
+		value: '',
+	},
+	{
 		assignmentType: 'assetCreator',
 		label: Liferay.Language.get('asset-creator'),
 	},
