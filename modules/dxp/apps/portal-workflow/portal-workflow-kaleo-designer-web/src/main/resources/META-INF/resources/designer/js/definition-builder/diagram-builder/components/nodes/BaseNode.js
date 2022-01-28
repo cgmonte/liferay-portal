@@ -25,6 +25,7 @@ let connectionNodeId = '';
 let handleConnect = false;
 
 export default function BaseNode({
+	assignments,
 	className,
 	description,
 	descriptionSidebar,
@@ -130,6 +131,7 @@ export default function BaseNode({
 	if (newNode) {
 		setSelectedItem({
 			data: {
+				assignments,
 				description,
 				label,
 				newNode: false,
@@ -189,6 +191,7 @@ export default function BaseNode({
 					if (!descriptionSidebar) {
 						setSelectedItem({
 							data: {
+								assignments,
 								description,
 								label,
 								script,
