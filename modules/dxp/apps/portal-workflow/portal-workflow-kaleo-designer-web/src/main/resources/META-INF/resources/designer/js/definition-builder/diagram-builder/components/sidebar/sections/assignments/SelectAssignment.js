@@ -99,6 +99,7 @@ const SelectAssignment = (props) => {
 								disabled={item?.disabled}
 								key={item.assignmentType}
 								label={item.label}
+								selected={item.assignmentType === section}
 								value={item.assignmentType}
 							/>
 						))}
