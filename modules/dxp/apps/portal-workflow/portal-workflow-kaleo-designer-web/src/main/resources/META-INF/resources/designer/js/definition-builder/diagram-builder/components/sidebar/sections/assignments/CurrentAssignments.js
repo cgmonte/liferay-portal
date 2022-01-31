@@ -12,13 +12,17 @@
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayLayout from '@clayui/layout';
 import ClayLink from '@clayui/link';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import {options} from './SelectAssignment';
+import {getAssignmentType} from './utils';
 
 const CurrentAssignments = ({assignments, setContentName}) => {
 	const {setSelectedItem} = useContext(DiagramBuilderContext);
+	const assignmentType = getAssignmentType(assignments);
+
+	const [assignmentsDetails, setAssignmentsDetails] = useState(null);
 
 	const deleteCurrentAssignments = () => {
 		setSelectedItem((previousValue) => ({
@@ -30,16 +34,16 @@ const CurrentAssignments = ({assignments, setContentName}) => {
 		}));
 	};
 
-	const optionFilter = (option) => {
-		if (
-			assignments.assignmentType[0] === 'user' &&
-			!Object.keys(assignments).includes('emailAddress')
-		) {
-			return option.assignmentType === 'assetCreator';
-		}
+	const optionFilter = (option) => option.assignmentType === assignmentType;
 
-		return option.assignmentType === assignments.assignmentType[0];
-	};
+	useEffect(() => {
+		if (assignmentType === 'user') {
+			setAssignmentsDetails(assignments.usersData.map(({name}) => name).join(', '));
+		}
+		if (assignmentType === 'roleId') {
+			setAssignmentsDetails(assignments.rolesData.name);
+		}
+	}, [assignmentType, assignments, setSelectedItem]);
 
 	return (
 		<ClayLayout.ContentCol className="current-assignments-area" float>
@@ -54,6 +58,12 @@ const CurrentAssignments = ({assignments, setContentName}) => {
 					onClick={() => setContentName('assignments')}
 				>
 					{options.find(optionFilter)?.label}
+
+					{assignmentType !== 'assetCreator'
+						? assignmentsDetails
+							? `: ${assignmentsDetails}`
+							: `: ${assignments[Object.keys(assignments)[1]]}`
+						: ''}
 				</ClayLink>
 
 				<ClayButtonWithIcon
