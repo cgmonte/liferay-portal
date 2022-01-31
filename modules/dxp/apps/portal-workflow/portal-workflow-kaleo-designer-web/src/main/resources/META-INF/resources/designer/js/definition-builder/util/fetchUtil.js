@@ -35,6 +35,39 @@ function retrieveDefinitionRequest(definitionId) {
 	});
 }
 
+function retrieveRolesBy(filterType, keywords) {
+	if (filterType === 'roleId') {
+		return fetch(
+			`${window.location.origin}/o/headless-admin-user/v1.0/roles/` +
+				keywords,
+			{
+				headers,
+				method: 'GET',
+			}
+		);
+	}
+}
+
+function retrieveUsersBy(filterType, keywords) {
+	let filterParameter = String();
+	for (const keyword of keywords) {
+		filterParameter =
+			filterParameter + filterType + " eq '" + keyword + "' or ";
+	}
+	filterParameter = encodeURIComponent(filterParameter)
+		.replace(/'/g, '%27')
+		.slice(0, -8);
+	
+	const url = new URL(
+		`${window.location.origin}/o/headless-admin-user/v1.0/user-accounts?filter=${filterParameter}`
+	);
+
+	return fetch(url, {
+		headers,
+		method: 'GET',
+	});
+}
+
 function saveDefinitionRequest(requestBody) {
 	return fetch(`${baseURL}/workflow-definitions/save`, {
 		body: JSON.stringify(requestBody),
@@ -51,5 +84,7 @@ export {
 	headers,
 	publishDefinitionRequest,
 	retrieveDefinitionRequest,
+	retrieveRolesBy,
+	retrieveUsersBy,
 	saveDefinitionRequest,
 };
