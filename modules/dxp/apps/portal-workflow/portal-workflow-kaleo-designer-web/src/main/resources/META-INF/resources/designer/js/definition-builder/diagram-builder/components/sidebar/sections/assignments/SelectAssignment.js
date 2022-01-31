@@ -10,7 +10,7 @@
  */
 
 import ClayForm, {ClaySelect} from '@clayui/form';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import SidebarPanel from '../../SidebarPanel';
@@ -18,6 +18,7 @@ import Role from '../assignments/select-assignment/Role';
 import AssetCreator from './select-assignment/AssetCreator';
 import ResourceActions from './select-assignment/ResourceActions';
 import User from './select-assignment/User';
+import {getAssignmentType} from './utils';
 
 const options = [
 	{
@@ -63,16 +64,19 @@ const SelectAssignment = (props) => {
 	const {selectedItem} = useContext(DiagramBuilderContext);
 	const assignments = selectedItem?.data?.assignments;
 
-	const assignmentType =
-		assignments?.assignmentType[0] === 'user' &&
-		!Object.keys(assignments).includes('emailAddress')
-			? 'assetCreator'
-			: assignments?.assignmentType[0];
+	const assignmentType = getAssignmentType(assignments);
 
 	const [section, setSection] = useState(assignmentType || '');
 	const [sections, setSections] = useState([{identifier: `${Date.now()}-0`}]);
 
 	const AssignmentSectionComponent = AssignmentSectionComponents[section];
+
+	useEffect(() => {
+		if (assignmentType === 'user') {
+			setSections(assignments.usersData);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
@@ -112,10 +116,10 @@ const SelectAssignment = (props) => {
 					AssignmentSectionComponent && (
 						<AssignmentSectionComponent
 							{...props}
-							displayDelete={sections?.length > 1}
 							identifier={identifier}
 							index={index}
 							key={`section-${identifier}`}
+							sectionsLength={sections?.length}
 							setSections={setSections}
 						/>
 					)
