@@ -263,9 +263,10 @@ export default function DiagramBuilder({version}) {
 						)
 							.then((response) => response.json())
 							.then(({items}) => {
-								items.forEach((item) => {
+								items.forEach((item, index) => {
 									usersData.push({
 										emailAddress: item.emailAddress,
+										identifier: `${Date.now()}-${index}`,
 										name: item.name,
 										screenName: item.alternateName,
 										userId: item.id,
