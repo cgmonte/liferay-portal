@@ -28,19 +28,15 @@ import {DefinitionBuilderContext} from '../DefinitionBuilderContext';
 import {defaultLanguageId} from '../constants';
 import DeserializeUtil from '../source-builder/deserializeUtil';
 import {singleEventObserver} from '../util/EventObserver';
-import {
-	retrieveDefinitionRequest,
-	retrieveRolesBy,
-	retrieveUsersBy,
-} from '../util/fetchUtil';
+import {retrieveDefinitionRequest} from '../util/fetchUtil';
 import {DiagramBuilderContextProvider} from './DiagramBuilderContext';
 import {nodeTypes} from './components/nodes/utils';
 import Sidebar from './components/sidebar/Sidebar';
-import {getAssignmentType} from './components/sidebar/sections/assignments/utils';
 import {isIdDuplicated} from './components/sidebar/utils';
 import edgeTypes from './components/transitions/Edge';
 import FloatingConnectionLine from './components/transitions/FloatingConnectionLine';
 import getCollidingElements from './util/collisionDetection';
+import populateAssignmentsData from './util/populateAssignmentData'
 
 let id = 2;
 const getId = () => `item_${id++}`;
@@ -286,62 +282,6 @@ export default function DiagramBuilder({version}) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedItem, selectedItemNewId]);
 
-	const addRetrievedData = useCallback(
-		async (initialElements) => {
-			for (let index = 0; index < initialElements.length; index++) {
-				const element = initialElements[index];
-				if (element.data.assignments) {
-					const assignmentType = getAssignmentType(
-						element.data.assignments
-					);
-					if (assignmentType === 'user') {
-						const usersData = [];
-						await retrieveUsersBy(
-							'emailAddress',
-							element.data.assignments.emailAddress
-						)
-							.then((response) => response.json())
-							.then(({items}) => {
-								items.forEach((item, index) => {
-									usersData.push({
-										emailAddress: item.emailAddress,
-										identifier: `${Date.now()}-${index}`,
-										name: item.name,
-										screenName: item.alternateName,
-										userId: item.id,
-									});
-								});
-							})
-							.then(() => {
-								initialElements[
-									index
-								].data.assignments.usersData = usersData;
-								setElements([...initialElements]);
-							});
-					}
-					if (assignmentType === 'roleId') {
-						await retrieveRolesBy(
-							'roleId',
-							element.data.assignments.roleId
-						)
-							.then((response) => response.json())
-							.then((response) => {
-								initialElements[
-									index
-								].data.assignments.rolesData = {
-									id: response.id,
-									name: response.name,
-									roleType: response.roleType,
-								};
-								setElements([...initialElements]);
-							});
-					}
-				}
-			}
-		},
-		[setElements]
-	);
-
 	useEffect(() => {
 		if (deserialize && currentEditor) {
 			const xmlDefinition = currentEditor.getData();
@@ -357,19 +297,15 @@ export default function DiagramBuilder({version}) {
 
 			setElements(elements);
 
-			addRetrievedData(elements);
+			populateAssignmentsData(elements, setElements);
 
 			setDeserialize(false);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
-		addRetrievedData,
 		currentEditor,
 		definitionTitle,
 		deserialize,
-		setDefinitionDescription,
-		setDefinitionTitle,
-		setDeserialize,
-		setElements,
 		version,
 	]);
 
@@ -388,7 +324,7 @@ export default function DiagramBuilder({version}) {
 
 					setElements(elements);
 
-					addRetrievedData(elements);
+					populateAssignmentsData(elements, setElements);
 				});
 		}
 
