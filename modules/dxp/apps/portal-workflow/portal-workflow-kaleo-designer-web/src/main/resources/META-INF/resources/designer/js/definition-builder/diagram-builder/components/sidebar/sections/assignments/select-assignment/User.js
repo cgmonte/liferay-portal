@@ -46,16 +46,16 @@ const User = ({identifier, index, sectionsLength, setSections}) => {
 
 	useEffect(() => {
 		setUser((prev) => {
-			if (selectedItem.data.assignments?.usersData) {
+			if (selectedItem.data.assignments?.sectionsData) {
 				return {
 					emailAddress:
-						selectedItem.data.assignments?.usersData[index]
+						selectedItem.data.assignments?.sectionsData[index]
 							?.emailAddress,
 					screenName:
-						selectedItem.data.assignments?.usersData[index]
+						selectedItem.data.assignments?.sectionsData[index]
 							?.screenName,
 					userId:
-						selectedItem.data.assignments?.usersData[index]?.userId,
+						selectedItem.data.assignments?.sectionsData[index]?.userId,
 				};
 			} else {
 				return {
@@ -76,7 +76,7 @@ const User = ({identifier, index, sectionsLength, setSections}) => {
 				assignments: {
 					assignmentType: ['user'],
 					emailAddress: values.map(({emailAddress}) => emailAddress),
-					usersData: values.map((values) => values),
+					sectionsData: values.map((values) => values),
 				},
 			},
 		}));

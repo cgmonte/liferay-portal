@@ -19,7 +19,7 @@ const populateAssignmentsData = async (initialElements, setElements) => {
 			const assignmentType = getAssignmentType(element.data.assignments);
 
 			if (assignmentType === 'user') {
-				const usersData = [];
+				const sectionsData = [];
 
 				await retrieveUsersBy(
 					'emailAddress',
@@ -28,7 +28,7 @@ const populateAssignmentsData = async (initialElements, setElements) => {
 					.then((response) => response.json())
 					.then(({items}) => {
 						items.forEach((item, index) => {
-							usersData.push({
+							sectionsData.push({
 								emailAddress: item.emailAddress,
 								identifier: `${Date.now()}-${index}`,
 								name: item.name,
@@ -40,7 +40,7 @@ const populateAssignmentsData = async (initialElements, setElements) => {
 					.then(() => {
 						initialElements[
 							index
-						].data.assignments.usersData = usersData;
+						].data.assignments.sectionsData = sectionsData;
 						setElements([...initialElements]);
 					});
 			}
