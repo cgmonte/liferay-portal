@@ -122,6 +122,7 @@ const User = ({identifier, index, sectionsLength, setSections}) => {
 
 				<ClayAutocomplete>
 					<ClayAutocomplete.Input
+						autoComplete="off"
 						id="search"
 						onChange={(event) => setSearch(event.target.value)}
 						value={search}
