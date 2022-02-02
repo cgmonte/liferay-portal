@@ -49,13 +49,12 @@ const CurrentAssignments = ({assignments, setContentName}) => {
 		if (assignmentType === 'roleId') {
 			setAssignmentsDetails({
 				assignmentsCount: 1,
-				firstName: assignments.rolesData.name,
+				firstName: assignments.sectionsData.name,
 			});
 		}
 		if (assignmentType === 'user') {
 			setAssignmentsDetails({
 				assignmentsCount: assignments.sectionsData.length,
-<<<<<<< HEAD
 				firstName: assignments.sectionsData
 					.sort((firstElement, secondElement) => {
 						if (firstElement.name < secondElement.name) {
@@ -68,9 +67,6 @@ const CurrentAssignments = ({assignments, setContentName}) => {
 						return 0;
 					})[0]
 					.name.split(' ')[0],
-=======
-				firstName: assignments.sectionsData[0].name.split(' ')[0],
->>>>>>> 841c6b6 (LPS-145491 Rename usersData to sectionsData)
 			});
 		}
 	}, [assignmentType, assignments]);

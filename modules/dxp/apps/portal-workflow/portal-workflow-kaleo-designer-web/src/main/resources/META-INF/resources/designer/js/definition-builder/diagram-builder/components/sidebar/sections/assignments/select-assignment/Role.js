@@ -46,8 +46,8 @@ const Roles = () => {
 	useEffect(()=>{
 		setFieldValues(
 			{
-				id: selectedItem.data.assignments?.rolesData?.id || '',
-				name: selectedItem.data.assignments?.rolesData?.name || '',
+				id: selectedItem.data.assignments?.sectionsData?.id || '',
+				name: selectedItem.data.assignments?.sectionsData?.name || '',
 			}
 		)
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,7 +81,7 @@ const Roles = () => {
 				assignments: {
 					assignmentType: ['roleId'],
 					roleId: role.id,
-					rolesData: {
+					sectionsData: {
 						id: role.id,
 						name: role.name,
 						roleType: role.roleType,
