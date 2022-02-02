@@ -14,6 +14,7 @@ import ClayLayout from '@clayui/layout';
 import ClayLink from '@clayui/link';
 import React, {useContext, useEffect, useState} from 'react';
 
+import lang from '../../../../../util/lang';
 import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import {options} from './SelectAssignment';
 import {getAssignmentType} from './utils';
@@ -37,11 +38,21 @@ const CurrentAssignments = ({assignments, setContentName}) => {
 	const optionFilter = (option) => option.assignmentType === assignmentType;
 
 	useEffect(() => {
-		if (assignmentType === 'user') {
-			setAssignmentsDetails(assignments.usersData.map(({name}) => name).join(', '));
+		if (assignmentType === 'resourceActions') {
+			const resourceActionsArray = assignments.resourceAction.split(' ');
+			setAssignmentsDetails({
+				assignmentsCount: resourceActionsArray.length,
+				firstName: resourceActionsArray[0],
+			});
 		}
 		if (assignmentType === 'roleId') {
 			setAssignmentsDetails(assignments.rolesData.name);
+		}
+		if (assignmentType === 'user') {
+			setAssignmentsDetails({
+				assignmentsCount: assignments.usersData.length,
+				firstName: assignments.usersData[0].name.split(' ')[0],
+			});
 		}
 	}, [assignmentType, assignments, setSelectedItem]);
 
@@ -53,17 +64,41 @@ const CurrentAssignments = ({assignments, setContentName}) => {
 			>
 				<ClayLink
 					button={false}
+					className="truncate-container"
 					displayType="secondary"
 					href="#"
 					onClick={() => setContentName('assignments')}
 				>
 					{options.find(optionFilter)?.label}
 
-					{assignmentType !== 'assetCreator'
-						? assignmentsDetails
-							? `: ${assignmentsDetails}`
-							: `: ${assignments[Object.keys(assignments)[1]]}`
-						: ''}
+					{assignmentType !== 'assetCreator' ? (
+						assignmentsDetails ? (
+							assignmentsDetails.assignmentsCount === 1 ? (
+								<span>
+									: {assignmentsDetails.firstName || ''}
+								</span>
+							) : (
+								<>
+									<span>
+										: {assignmentsDetails.firstName || ''}{' '}
+									</span>
+									<span>
+										{lang.sub(
+											Liferay.Language.get('and-x-more'),
+											[
+												assignmentsDetails.assignmentsCount -
+													1,
+											]
+										)}
+									</span>
+								</>
+							)
+						) : (
+							`: ${assignments[Object.keys(assignments)[1]]}`
+						)
+					) : (
+						''
+					)}
 				</ClayLink>
 
 				<ClayButtonWithIcon
