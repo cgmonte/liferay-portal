@@ -62,14 +62,21 @@
 			padding-top: 3px;
 			padding-bottom: 3px;
 
-			.delete-button {
-				& svg {
-					fill: #6b6c7e;
-				}
-			}
-
 			.current-assignments-row {
 				align-items: center;
+
+				.truncate-container {
+					max-width: 240px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.delete-button {
+					& svg {
+						fill: #6b6c7e;
+					}
+				}
 			}
 		}
 
