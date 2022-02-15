@@ -371,6 +371,7 @@ function appendXMLNotifications(buffer, notifications, nodeName) {
 
 function appendXMLTaskTimers(buffer, taskTimers) {
 	if (taskTimers && taskTimers.name && taskTimers.name.length > 0) {
+		console.log('taskTimers', taskTimers)
 		const xmlTaskTimers = XMLUtil.createObj('task-timers');
 
 		buffer.push(xmlTaskTimers.open);
@@ -516,6 +517,7 @@ function serializeDefinition(
 	}
 
 	nodes?.forEach((item) => {
+		console.log('item', item)
 		const description = item.data?.description;
 		const id = item.id;
 		const initial = item.type === 'start';

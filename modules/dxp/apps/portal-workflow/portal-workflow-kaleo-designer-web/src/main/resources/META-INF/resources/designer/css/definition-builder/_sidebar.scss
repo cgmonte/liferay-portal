@@ -59,6 +59,11 @@
 			}
 		}
 
+		#timers-buttons-area {
+			display: flex;
+			justify-content: end;
+		}
+
 		.current-node-data-area {
 			border: 1px solid #e7e7ed;
 			border-radius: 4px;
@@ -82,6 +87,10 @@
 			}
 		}
 
+		#timerDescription {
+			height: 2.5rem;
+		}
+
 		span .lexicon-icon-exclamation-full:hover {
 			color: #da1414 !important;
 		}
@@ -92,6 +101,31 @@
 
 		#resource-actions {
 			height: 136px;
+		}
+
+		#button-as-select {
+			background-image: url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Cpath%20class='lexicon-icon-outline%20caret-double-l-top'%20d='m347.913%20199.336-81.538-85c-5.413-5.642-14.188-5.642-19.6%200l-81.538%2085c-8.731%209.101-2.548%2024.664%209.8%2024.664h163.077c12.348%200%2018.531-15.563%209.8-24.664z'%20fill='%236b6c7e'/%3E%3Cpath%20class='lexicon-icon-outline%20caret-double-l-bottom'%20d='m165.236%20312.664%2081.538%2085c5.412%205.642%2014.188%205.642%2019.6%200l81.538-85c8.731-9.101%202.548-24.664-9.8-24.664H175.035c-12.347%200-18.531%2015.563-9.8%2024.664z'%20fill='%236b6c7e'/%3E%3C/svg%3E");
+			background-position: right 0.5em center;
+			background-repeat: no-repeat;
+			background-size: 1.5em 1.5em;
+			cursor: pointer;
+			padding-right: 2em;
+			padding-top: 0.3em;
+			color: #272833;
+		}
+
+		.help-text {
+			color: #6b6c7e;
+			word-wrap: break-word;
+		}
+
+		.help-text {
+			margin-bottom: 0px;
+		}
+
+		.timers-duration-toggle,
+		.timers-input {
+			margin-bottom: 1.5rem;
 		}
 	}
 

@@ -63,6 +63,7 @@ export default function SidebarHeader({
 		if (
 			(event.key === 'Backspace' || event.key === 'Delete') &&
 			document.querySelectorAll('.form-control:focus').length === 0 &&
+			document.querySelectorAll('.form-control-inset:focus').length === 0 &&
 			document.querySelectorAll('.CodeMirror-focused').length === 0
 		) {
 			setShowDeleteConfirmationModal(true);
