@@ -59,6 +59,11 @@
 			}
 		}
 
+		#timers-buttons-area {
+			display: flex;
+			justify-content: end;
+		}
+
 		.current-node-data-area {
 			border: 1px solid #e7e7ed;
 			border-radius: 4px;
@@ -82,6 +87,10 @@
 			}
 		}
 
+		#timerDescription {
+			height: 2.5rem;
+		}
+
 		span .lexicon-icon-exclamation-full:hover {
 			color: #da1414 !important;
 		}
@@ -92,6 +101,20 @@
 
 		#resource-actions {
 			height: 136px;
+		}
+
+		.help-text {
+			color: #6b6c7e;
+			word-wrap: break-word;
+		}
+
+		.help-text {
+			margin-bottom: 0px;
+		}
+
+		.timers-duration-toggle,
+		.timers-input {
+			margin-bottom: 1.5rem;
 		}
 	}
 

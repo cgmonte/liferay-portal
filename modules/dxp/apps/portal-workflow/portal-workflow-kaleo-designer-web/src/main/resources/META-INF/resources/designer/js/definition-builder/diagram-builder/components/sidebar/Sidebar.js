@@ -114,7 +114,7 @@ const contents = {
 				...previousValue,
 				data: {
 					...previousValue.data,
-					timers: null,
+					taskTimers: null,
 				},
 			})),
 		sections: ['timers'],

@@ -9,15 +9,67 @@
  * distribution rights of the Software.
  */
 
+import {ClayToggle} from '@clayui/form';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 
 import SidebarPanel from '../../SidebarPanel';
+import TimerFields from './TimerFields';
 
-const TimerDuration = () => {
+const TimerDuration = ({
+	index,
+	selectedItem,
+	setSelectedItem,
+	updateSelectedItem,
+}) => {
+	const [recurrence, setRecurrence] = useState(
+		selectedItem?.data.taskTimers?.delay[index].scale.length > 1
+	);
+
+	const handleToggle = () => {
+		if (recurrence) {
+			setRecurrence(false);
+			setSelectedItem((previousItem) => {
+				const itemCopy = {
+					...previousItem,
+				};
+
+				itemCopy.data.taskTimers?.delay[index].scale.splice(1, 1);
+				itemCopy.data.taskTimers?.delay[index].duration.splice(1, 1);
+
+				return itemCopy;
+			});
+		} else {
+			setRecurrence(true);
+		}
+	};
+
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('duration')}>
-			Duration Placeholder
+			<TimerFields
+				index={index}
+				scaleHelpText={Liferay.Language.get('starter-time')}
+				selectedItem={selectedItem}
+				updateSelectedItem={updateSelectedItem}
+			/>
+
+			<div className="timers-duration-toggle">
+				<ClayToggle
+					label={Liferay.Language.get('recurrence')}
+					onToggle={handleToggle}
+					toggled={recurrence}
+				/>
+			</div>
+
+			{recurrence && (
+				<TimerFields
+					index={index}
+					recurrence
+					scaleHelpText={Liferay.Language.get('recurrence')}
+					selectedItem={selectedItem}
+					updateSelectedItem={updateSelectedItem}
+				/>
+			)}
 		</SidebarPanel>
 	);
 };

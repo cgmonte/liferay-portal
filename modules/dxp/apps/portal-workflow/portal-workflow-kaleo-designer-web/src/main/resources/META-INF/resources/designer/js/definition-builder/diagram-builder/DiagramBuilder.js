@@ -65,6 +65,15 @@ export default function DiagramBuilder({version}) {
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
 
+	useEffect(()=>{
+		// if (selectedItem?.data?.taskTimers) {
+		// 	for (const [key, value] of Object.entries(selectedItem.data.taskTimers)) {
+		// 		console.log(`taskTimers ${key}:`, value);
+		// 	}
+		// }
+		console.log('taskTimers:', selectedItem?.data?.taskTimers);
+	}, [selectedItem])
+
 	const onConnect = (params) => {
 		if (
 			elements.filter(

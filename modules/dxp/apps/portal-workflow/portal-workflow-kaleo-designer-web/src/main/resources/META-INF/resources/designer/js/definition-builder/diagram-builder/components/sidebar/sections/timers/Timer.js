@@ -18,35 +18,106 @@ import TimerAction from './TimerAction';
 import TimerDuration from './TimerDuration';
 import TimerInfo from './TimerInfo';
 
-const Timer = ({setSections}) => {
-	const {setSelectedItem} = useContext(DiagramBuilderContext);
+const Timer = ({identifier, index, setSections}) => {
+	const {selectedItem, setSelectedItem} = useContext(DiagramBuilderContext);
+
 	const [subSections, setSubSections] = useState([
 		{identifier: `${Date.now()}-0`},
 	]);
 
-	const updateSelectedItem = (values) => {
-		setSelectedItem((previousItem) => ({
-			...previousItem,
-			data: {
-				...previousItem.data,
-				taskTimers: {
-					blocking: [],
-					delay: [{duration: [], scale: []}],
-					description: [values.timerDescription],
-					name: [values.timerName],
-					reassignments: [],
-					timerActions: [],
-					timerNotifications: [],
-				},
-			},
-		}));
+	const updateSelectedItem = (values, options) => {
+		setSelectedItem((previousItem) => {
+			const itemCopy = {
+				...previousItem,
+			};
+			const [key, value] = Object.entries(values)[0];
+
+			if (key === 'delay') {
+				itemCopy.data.taskTimers.delay[index].duration.splice(
+					options.delay,
+					1,
+					value.duration
+				);
+				itemCopy.data.taskTimers.delay[index].scale.splice(
+					options.delay,
+					1,
+					value.scale
+				);
+			} else {
+				itemCopy.data.taskTimers[key].splice(index, 1, value);
+			}
+
+			return itemCopy;
+		});
 	};
+
+	const deleteTimer = () => {
+		setSelectedItem((previousItem) => {
+			const itemCopy = {
+				...previousItem,
+			};
+
+			for (const key of Object.keys(itemCopy.data.taskTimers)) {
+				itemCopy.data.taskTimers[key].splice(index, 1);
+			}
+
+			return itemCopy;
+		});
+		setSections((prevSections) => {
+			const newSections = prevSections.filter(
+				(prevSection) => prevSection.identifier !== identifier
+			);
+
+			return newSections;
+		});
+	};
+
+	const newTaskTimer = (previousItem) => ({
+		...previousItem,
+		data: {
+			...previousItem.data,
+			taskTimers: {
+				blocking: [...previousItem.data.taskTimers.blocking, false],
+				delay: [
+					...previousItem.data.taskTimers.delay,
+					{
+						duration: [''],
+						scale: [''],
+					},
+				],
+				description: [...previousItem.data.taskTimers.description, ''],
+				name: [...previousItem.data.taskTimers.name, ''],
+				reassignments: [
+					...previousItem.data.taskTimers.reassignments,
+					{},
+				],
+				timerActions: [
+					...previousItem.data.taskTimers.timerActions,
+					{},
+				],
+				timerNotifications: [
+					...previousItem.data.taskTimers.timerNotifications,
+					{},
+				],
+			},
+		},
+	});
 
 	return (
 		<div className="panel">
-			<TimerInfo updateSelectedItem={updateSelectedItem} />
+			<TimerInfo
+				deleteTimer={deleteTimer}
+				index={index}
+				selectedItem={selectedItem}
+				updateSelectedItem={updateSelectedItem}
+			/>
 
-			<TimerDuration updateSelectedItem={updateSelectedItem} />
+			<TimerDuration
+				index={index}
+				selectedItem={selectedItem}
+				setSelectedItem={setSelectedItem}
+				updateSelectedItem={updateSelectedItem}
+			/>
 
 			{subSections.map(({identifier}, index) => (
 				<TimerAction
@@ -54,6 +125,7 @@ const Timer = ({setSections}) => {
 					index={index}
 					key={`section-${identifier}`}
 					sectionsLength={subSections?.length}
+					selectedItem={selectedItem}
 					updateSelectedItem={updateSelectedItem}
 				/>
 			))}
@@ -85,7 +157,7 @@ const Timer = ({setSections}) => {
 				<div className="autofit-col autofit-col-end">
 					<ClayButton
 						displayType="secondary"
-						onClick={() =>
+						onClick={() => {
 							setSections((prev) => {
 								return [
 									...prev,
@@ -95,8 +167,11 @@ const Timer = ({setSections}) => {
 										}`,
 									},
 								];
-							})
-						}
+							});
+							setSelectedItem((previousItem) =>
+								newTaskTimer(previousItem)
+							);
+						}}
 					>
 						{Liferay.Language.get('new-timer')}
 					</ClayButton>

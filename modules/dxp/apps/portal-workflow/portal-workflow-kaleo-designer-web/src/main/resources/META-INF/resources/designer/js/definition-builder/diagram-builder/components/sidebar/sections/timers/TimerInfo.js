@@ -9,15 +9,63 @@
  * distribution rights of the Software.
  */
 
+import {ClayButtonWithIcon} from '@clayui/button';
+import ClayForm, {ClayInput} from '@clayui/form';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 
 import SidebarPanel from '../../SidebarPanel';
 
-const TimerInfo = () => {
+const TimerInfo = ({deleteTimer, index, selectedItem, updateSelectedItem}) => {
+	const [timerDescription, setTimerDescription] = useState(
+		selectedItem?.data.taskTimers?.description[index] || ''
+	);
+	const [timerName, setTimerName] = useState(
+		selectedItem?.data.taskTimers?.name[index] || ''
+	);
+
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('information')}>
-			Information Placeholder
+			<ClayButtonWithIcon
+				className="delete-button text-secondary trash-button"
+				displayType="unstyled"
+				onClick={deleteTimer}
+				symbol="trash"
+			/>
+
+			<ClayForm.Group>
+				<label htmlFor="timerName">
+					{Liferay.Language.get('name')}
+				</label>
+
+				<ClayInput
+					id="timerName"
+					onBlur={({target}) =>
+						updateSelectedItem({name: target.value})
+					}
+					onChange={({target}) => setTimerName(target.value)}
+					placeholder={Liferay.Language.get('my-task-timer')}
+					type="text"
+					value={timerName}
+				/>
+			</ClayForm.Group>
+
+			<ClayForm.Group>
+				<label htmlFor="timerDescription">
+					{Liferay.Language.get('description')}
+				</label>
+
+				<ClayInput
+					component="textarea"
+					id="timerDescription"
+					onBlur={({target}) =>
+						updateSelectedItem({description: target.value})
+					}
+					onChange={({target}) => setTimerDescription(target.value)}
+					type="text"
+					value={timerDescription}
+				/>
+			</ClayForm.Group>
 		</SidebarPanel>
 	);
 };

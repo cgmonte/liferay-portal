@@ -358,7 +358,12 @@ function appendXMLNotifications(buffer, notifications, nodeName) {
 }
 
 function appendXMLTaskTimers(buffer, taskTimers) {
-	if (taskTimers && taskTimers.name && taskTimers.name.length > 0) {
+	if (
+		taskTimers &&
+		taskTimers.name &&
+		taskTimers.name.length > 0 &&
+		taskTimers.name.find((name) => name !== '')
+	) {
 		const xmlTaskTimers = XMLUtil.createObj('task-timers');
 
 		buffer.push(xmlTaskTimers.open);
@@ -373,53 +378,54 @@ function appendXMLTaskTimers(buffer, taskTimers) {
 		const xmlTaskTimer = XMLUtil.createObj('task-timer');
 
 		taskTimers.name.forEach((item, index) => {
-			buffer.push(xmlTaskTimer.open, XMLUtil.create('name', item));
+			if (item !== '') {
+				buffer.push(xmlTaskTimer.open, XMLUtil.create('name', item));
 
-			if (isValidValue(description, index)) {
-				buffer.push(XMLUtil.create('description', description[index]));
-			}
+				if (isValidValue(description, index)) {
+					buffer.push(XMLUtil.create('description', description[index]));
+				}
 
-			const xmlDelay = XMLUtil.createObj('delay');
+				const xmlDelay = XMLUtil.createObj('delay');
 
-			buffer.push(xmlDelay.open);
+				buffer.push(xmlDelay.open);
+				
+				buffer.push(XMLUtil.create('duration', delay[index].duration[0]));
+				buffer.push(XMLUtil.create('scale', delay[index].scale[0]));
 
-			buffer.push(XMLUtil.create('duration', delay[index].duration[0]));
-			buffer.push(XMLUtil.create('scale', delay[index].scale[0]));
+				buffer.push(xmlDelay.close);
 
-			buffer.push(xmlDelay.close);
+				if (delay[index].duration.length > 1 && delay[index].duration[1]) {
+					const xmlRecurrence = XMLUtil.createObj('recurrence');
 
-			if (delay[index].duration.length > 1 && delay[index].duration[1]) {
-				const xmlRecurrence = XMLUtil.createObj('recurrence');
+					buffer.push(xmlRecurrence.open);
 
-				buffer.push(xmlRecurrence.open);
+					buffer.push(
+						XMLUtil.create('duration', delay[index].duration[1])
+					);
+					buffer.push(XMLUtil.create('scale', delay[index].scale[1]));
 
-				buffer.push(
-					XMLUtil.create('duration', delay[index].duration[1])
+					buffer.push(xmlRecurrence.close);
+				}
+
+				if (blocking && blocking[index] !== '') {
+					buffer.push(XMLUtil.create('blocking', blocking[index]));
+				} else {
+					buffer.push(XMLUtil.create('blocking', String(false)));
+				}
+
+				appendXMLActions(
+					buffer,
+					timerActions[index],
+					timerNotifications[index],
+					reassignments[index],
+					'timer-actions',
+					'timer-action',
+					'timer-notification',
+					'reassignments'
 				);
-				buffer.push(XMLUtil.create('scale', delay[index].scale[1]));
 
-				buffer.push(xmlRecurrence.close);
+				buffer.push(xmlTaskTimer.close);
 			}
-
-			if (blocking && blocking[index] !== '') {
-				buffer.push(XMLUtil.create('blocking', blocking[index]));
-			}
-			else {
-				buffer.push(XMLUtil.create('blocking', String(false)));
-			}
-
-			appendXMLActions(
-				buffer,
-				timerActions[index],
-				timerNotifications[index],
-				reassignments[index],
-				'timer-actions',
-				'timer-action',
-				'timer-notification',
-				'reassignments'
-			);
-
-			buffer.push(xmlTaskTimer.close);
 		});
 
 		buffer.push(xmlTaskTimers.close);
