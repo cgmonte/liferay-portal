@@ -26,8 +26,92 @@ const TimePicker = ({
 		seconds: '',
 	});
 
+	useEffect(() => {
+		console.log('time:', time);
+	}, [time]);
+
 	const updateInputFIeld = (value) => {
 		setTime({...time, [selectedField]: value});
+	};
+
+	const increase = () => {
+		setTime((previousTime) => {
+			if (parseInt(previousTime[selectedField], 10) > 59) {
+				return {...previousTime};
+			}
+
+			const calculated = {
+				...previousTime,
+				[selectedField]: (
+					parseInt(
+						time[selectedField] === '' ? 0 : time[selectedField],
+						10
+					) + 1
+				).toString(),
+			};
+
+			if (calculated[selectedField].length === 1) {
+				calculated[selectedField] = `0${calculated[selectedField]}`;
+			}
+
+			return calculated;
+		});
+	};
+
+	const decrease = () => {
+		setTime((previousTime) => {
+			if (parseInt(previousTime[selectedField], 10) < 1) {
+				return {...previousTime};
+			}
+
+			const calculated = {
+				...previousTime,
+				[selectedField]: (
+					parseInt(
+						time[selectedField] === '' ? 0 : time[selectedField],
+						10
+					) - 1
+				).toString(),
+			};
+
+			if (calculated[selectedField].length === 1) {
+				calculated[selectedField] = `0${calculated[selectedField]}`;
+			}
+
+			return calculated;
+		});
+	};
+
+	const calculate = (calcFunction) => {
+		setTime((previousTime) => {
+			if (parseInt(previousTime[selectedField], 10) < 1) {
+				return {...previousTime};
+			}
+
+			const calculated = {
+				...previousTime,
+				[selectedField]: calcFunction(
+					parseInt(
+						time[selectedField] === '' ? 0 : time[selectedField],
+						10
+					)
+				).toString(),
+			};
+
+			if (calculated[selectedField].length === 1) {
+				calculated[selectedField] = `0${calculated[selectedField]}`;
+			}
+
+			return calculated;
+		});
+	};
+
+	const handleClear = () => {
+		setTime({
+			hours: '',
+			minutes: '',
+			seconds: '',
+		});
 	};
 
 	const handleBlur = () => {
@@ -161,13 +245,10 @@ const TimePicker = ({
 				</div>
 
 				<div className="clay-time-action-group">
-					{/* <div className="clay-time-action-group-item">
+					<div className="clay-time-action-group-item">
 						<button
 							className="btn clay-time-clear-btn"
-							onClick={() => {
-								console.log('foo');
-								handleClear();
-							}}
+							onClick={handleClear}
 							type="button"
 						>
 							<svg
@@ -178,7 +259,7 @@ const TimePicker = ({
 								<ClayIcon symbol="times-circle" />
 							</svg>
 						</button>
-					</div> */}
+					</div>
 
 					<div className="clay-time-action-group-item">
 						<div
@@ -187,10 +268,7 @@ const TimePicker = ({
 						>
 							<button
 								className="btn btn-secondary clay-time-inner-spin-btn clay-time-inner-spin-btn-inc"
-								id="increase"
-								onClick={({target}) =>
-									updateInputFIeld()
-								}
+								onClick={increase}
 								type="button"
 							>
 								<svg
@@ -204,10 +282,7 @@ const TimePicker = ({
 
 							<button
 								className="btn btn-secondary clay-time-inner-spin-btn clay-time-inner-spin-btn-dec"
-								id="decrease"
-								// onClick={() =>
-								// 	updateInputFIeld((value) => value - 1)
-								// }
+								onClick={decrease}
 								type="button"
 							>
 								<svg
