@@ -65,6 +65,11 @@ export default function DiagramBuilder({version}) {
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
 
+	useEffect(() => {
+		// console.log('actions:', selectedItem?.data.actions);
+		console.log('taskTimers:', selectedItem?.data.taskTimers);
+	}, [selectedItem]);
+
 	const onConnect = (params) => {
 		if (
 			elements.filter(
@@ -262,8 +267,7 @@ export default function DiagramBuilder({version}) {
 						setSelectedItemNewId(null);
 
 						setSelectedItem(element);
-					}
-					else if (isEdge(element)) {
+					} else if (isEdge(element)) {
 						element = {
 							...element,
 							...(selectedItem.id === element.source && {

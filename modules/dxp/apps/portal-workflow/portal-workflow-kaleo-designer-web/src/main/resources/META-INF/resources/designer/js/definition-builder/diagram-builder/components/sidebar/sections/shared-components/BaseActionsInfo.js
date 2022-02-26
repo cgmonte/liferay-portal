@@ -45,14 +45,14 @@ const BaseActionsInfo = ({
 	const {actions} = selectedItem.data;
 
 	const [description, setDescription] = useState(
-		actions?.description?.[index]
+		actions?.description?.[index] || ''
 	);
 	const [executionType, setExecutionType] = useState(
 		actions?.executionType?.[index] ?? executionTypeOptions[0].value
 	);
-	const [name, setName] = useState(actions?.name?.[index]);
-	const [priority, setPriority] = useState(actions?.priority?.[index]);
-	const [template, setTemplate] = useState(actions?.script?.[index]);
+	const [name, setName] = useState(actions?.name?.[index] || '');
+	const [priority, setPriority] = useState(actions?.priority?.[index] || MIN_PRIORITY);
+	const [template, setTemplate] = useState(actions?.script?.[index] || '');
 
 	useEffect(() => {
 		if (
@@ -164,6 +164,7 @@ const BaseActionsInfo = ({
 
 					<ClaySelect
 						aria-label="Select"
+						defaultValue={executionType}
 						id="execution-type"
 						onChange={({target}) => {
 							setExecutionType(target.value);
@@ -182,7 +183,6 @@ const BaseActionsInfo = ({
 							<ClaySelect.Option
 								key={item.value}
 								label={item.label}
-								selected={item.value === executionType}
 								value={item.value}
 							/>
 						))}
@@ -240,14 +240,13 @@ const BaseActionsInfo = ({
 					value={priority}
 				/>
 			</ClayForm.Group>
-			<div className="sheet-subtitle" />
+			{/* <div className="sheet-subtitle" /> */}
 		</>
 	);
 };
 
 BaseActionsInfo.propTypes = {
 	executionTypeInput: PropTypes.func,
-	index: PropTypes.number,
 	placeholderName: PropTypes.string,
 	placeholderTemplate: PropTypes.string,
 	templateLabel: PropTypes.string,

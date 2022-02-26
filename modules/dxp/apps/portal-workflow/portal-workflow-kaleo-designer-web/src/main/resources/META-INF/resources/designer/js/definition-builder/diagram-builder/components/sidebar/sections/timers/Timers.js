@@ -17,16 +17,14 @@ const Timers = (props) => {
 	const [sections, setSections] = useState([{identifier: `${Date.now()}-0`}]);
 
 	return sections.map(({identifier}, index) => (
-		<>
-			<Timer
-				{...props}
-				identifier={identifier}
-				index={index}
-				key={`section-${identifier}`}
-				sectionsLength={sections?.length}
-				setSections={setSections}
-			/>
-		</>
+		<Timer
+			{...props}
+			identifier={identifier}
+			key={`section-${identifier}`}
+			sectionsLength={sections?.length}
+			setSections={setSections}
+			timersIndex={index}
+		/>
 	));
 };
 

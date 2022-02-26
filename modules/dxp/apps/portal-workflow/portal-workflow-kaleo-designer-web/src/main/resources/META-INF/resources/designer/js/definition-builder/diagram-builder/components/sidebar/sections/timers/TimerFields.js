@@ -83,11 +83,11 @@ const TimerFields = ({
 };
 
 TimerFields.propTypes = {
-	index: PropTypes.number,
+	index: PropTypes.number.isRequired,
 	recurrence: PropTypes.bool,
-	scaleHelpText: PropTypes.string,
-	selectedItem: PropTypes.object,
-	updateSelectedItem: PropTypes.func,
+	scaleHelpText: PropTypes.string.isRequired,
+	selectedItem: PropTypes.object.isRequired,
+	updateSelectedItem: PropTypes.func.isRequired,
 };
 
 export default TimerFields;

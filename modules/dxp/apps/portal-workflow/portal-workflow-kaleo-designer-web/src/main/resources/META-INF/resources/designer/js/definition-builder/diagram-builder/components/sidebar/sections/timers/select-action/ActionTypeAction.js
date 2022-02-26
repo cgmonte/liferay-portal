@@ -10,65 +10,78 @@
  */
 
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
-import React, {useState} from 'react';
+import PropTypes from 'prop-types';
+import React, {useContext} from 'react';
 
+import {DiagramBuilderContext} from '../../../../../DiagramBuilderContext';
 import BaseActionsInfo from '../../shared-components/BaseActionsInfo';
 
-const ActionTypeAction = () => {
-	const [scriptSections, setScriptSections] = useState([
-		{identifier: `${Date.now()}-0`},
-	]);
+const ActionTypeAction = ({
+	actionSectionsIndex,
+	actionType,
+	identifier,
+	setActionSections,
+	// timersIndex,
+	// updateSelectedItem,
+}) => {
+	// const {selectedItem} = useContext(DiagramBuilderContext);
 
-	const deleteSection = (identifier) => {
-		setScriptSections((prevSections) => {
-			const newSections = prevSections.filter(
-				(prevSection) => prevSection.identifier !== identifier
-			);
+	const updateActionInfo = (item) => {
+		if (item.name && item.template && item.executionType) {
+			setActionSections((previousSections) => {
+				const updatedSections = [...previousSections];
 
-			return newSections;
-		});
+				updatedSections[actionSectionsIndex] = {
+					...previousSections[actionSectionsIndex],
+					...item,
+					actionType,
+				};
+
+				// updateTimerAction(prev);
+
+				return updatedSections;
+			});
+		}
 	};
 
-	return scriptSections.map(({identifier}) => {
-		return (
-			<div key={`section-${identifier}`}>
-				<BaseActionsInfo
-					templateLabel={Liferay.Language.get('script')}
-					templateLabelSecondary={Liferay.Language.get('groovy')}
-				/>
+	// const updateTimerAction = (values) => {
+	// 	updateSelectedItem(
+	// 		{
+	// 			timerActions: {
+	// 				...selectedItem.data.taskTimers.timerActions[timersIndex],
 
-				<div className="section-buttons-area">
-					<ClayButton
-						className="mr-3"
-						displayType="secondary"
-						onClick={() =>
-							setScriptSections((prev) => {
-								return [
-									...prev,
-									{
-										identifier: `${Date.now()}-${
-											prev.length
-										}`,
-									},
-								];
-							})
-						}
-					>
-						{Liferay.Language.get('new-section')}
-					</ClayButton>
+	// 				// the following code overwrites the entire spread with values only from current action
 
-					{scriptSections.length > 1 && (
-						<ClayButtonWithIcon
-							className="delete-button"
-							displayType="unstyled"
-							onClick={() => deleteSection(identifier)}
-							symbol="trash"
-						/>
-					)}
-				</div>
-			</div>
-		);
-	});
+	// 				description: values.map(({description}) => description),
+	// 				executionType: values.map(
+	// 					({executionType}) => executionType
+	// 				),
+	// 				name: values.map(({name}) => name),
+	// 				priority: values.map(({priority}) => priority),
+	// 				script: values.map(({template}) => template),
+	// 				sectionsData: values.map((values) => values),
+	// 			},
+	// 		},
+	// 		{actionSectionsIndex}
+	// 	);
+	// };
+
+	return (
+		<BaseActionsInfo
+			index={actionSectionsIndex}
+			key={`section-${identifier}`}
+			templateLabel={Liferay.Language.get('script')}
+			templateLabelSecondary={Liferay.Language.get('groovy')}
+			updateActionInfo={updateActionInfo}
+		/>
+	);
+};
+
+ActionTypeAction.propTypes = {
+	actionSectionsIndex: PropTypes.number.isRequired,
+	actionSubSectionsIndex: PropTypes.number.isRequired,
+	timersIndex: PropTypes.number.isRequired,
+	updateSelectedItem: PropTypes.func.isRequired,
 };
 
 export default ActionTypeAction;
