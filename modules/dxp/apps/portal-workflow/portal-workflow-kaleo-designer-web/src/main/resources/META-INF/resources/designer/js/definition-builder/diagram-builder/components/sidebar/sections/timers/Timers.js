@@ -9,24 +9,33 @@
  * distribution rights of the Software.
  */
 
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
+import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import Timer from './Timer';
 
 const Timers = (props) => {
+	const {selectedItem} = useContext(DiagramBuilderContext);
 	const [sections, setSections] = useState([{identifier: `${Date.now()}-0`}]);
 
+	useEffect(() => {
+		setSections(
+			selectedItem.data.taskTimers?.delay?.map((_, index) => ({
+				identifier: `${Date.now()}-${index}`,
+			})) || {identifier: `${Date.now()}-0`}
+		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return sections.map(({identifier}, index) => (
-		<>
-			<Timer
-				{...props}
-				identifier={identifier}
-				index={index}
-				key={`section-${identifier}`}
-				sectionsLength={sections?.length}
-				setSections={setSections}
-			/>
-		</>
+		<Timer
+			{...props}
+			identifier={identifier}
+			key={`section-${identifier}`}
+			sectionsLength={sections?.length}
+			setSections={setSections}
+			timersIndex={index}
+		/>
 	));
 };
 

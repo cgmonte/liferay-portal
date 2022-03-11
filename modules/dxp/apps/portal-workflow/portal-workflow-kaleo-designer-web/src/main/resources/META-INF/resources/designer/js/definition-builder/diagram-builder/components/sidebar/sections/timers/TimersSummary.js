@@ -15,9 +15,10 @@ import React, {useContext} from 'react';
 
 import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import SidebarPanel from '../../SidebarPanel';
+import CurrentTimers from './CurrentTimers'
 
 const TimersSummary = ({setContentName}) => {
-	const {setSelectedItem} = useContext(DiagramBuilderContext);
+	const {selectedItem, setSelectedItem} = useContext(DiagramBuilderContext);
 
 	const createTimer = () => {
 		setSelectedItem((previousItem) => ({
@@ -29,9 +30,9 @@ const TimersSummary = ({setContentName}) => {
 					delay: [{duration: [''], scale: ['']}],
 					description: [''],
 					name: [''],
-					reassignments: [{}],
-					timerActions: [{}],
-					timerNotifications: [{}],
+					reassignments: [''],
+					timerActions: [''],
+					timerNotifications: [''],
 				},
 			},
 		}));
@@ -39,16 +40,23 @@ const TimersSummary = ({setContentName}) => {
 
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('timers')}>
-			<ClayButton
-				className="mr-3"
-				displayType="secondary"
-				onClick={() => {
-					setContentName('timers');
-					createTimer();
-				}}
-			>
-				{Liferay.Language.get('new')}
-			</ClayButton>
+			{!selectedItem?.data.taskTimers ? (
+				<ClayButton
+					className="mr-3"
+					displayType="secondary"
+					onClick={() => {
+						setContentName('timers');
+						createTimer();
+					}}
+				>
+					{Liferay.Language.get('new')}
+				</ClayButton>
+			) : (
+				<CurrentTimers
+					setContentName={setContentName}
+					taskTimers={selectedItem.data.taskTimers}
+				/>
+			)}
 		</SidebarPanel>
 	);
 };

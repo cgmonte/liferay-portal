@@ -33,17 +33,19 @@ const TimerFields = ({
 	);
 
 	const handleBlur = () => {
-		updateSelectedItem(
-			{
-				delay: {
-					duration: timerValue,
-					scale: timerScale,
+		if (timerScale && timerValue) {
+			updateSelectedItem(
+				{
+					delay: {
+						duration: timerValue,
+						scale: timerScale,
+					},
 				},
-			},
-			{
-				delay: recurrence ? 1 : 0,
-			}
-		);
+				{
+					delay: recurrence ? 1 : 0,
+				}
+			);
+		}
 	};
 
 	return (
@@ -54,14 +56,13 @@ const TimerFields = ({
 				</label>
 
 				<SelectTimeScale
-					recurrence={recurrence}
 					setTimerScale={setTimerScale}
-					setTimerValue={setTimerValue}
 					timerScale={timerScale}
-					updateSelectedItem={updateSelectedItem}
 				/>
 
-				{scaleHelpText && <div className="help-text">{scaleHelpText}</div>}
+				{scaleHelpText && (
+					<div className="help-text">{scaleHelpText}</div>
+				)}
 			</div>
 
 			<div className="form-group-item">

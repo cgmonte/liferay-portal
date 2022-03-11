@@ -12,7 +12,26 @@
 import {removeNewLine, replaceTabSpaces} from '../util/utils';
 import {DEFAULT_LANGUAGE} from './constants';
 
+function parseProperty(data, item, property) {
+	let newProperty = property;
+
+	if (property === 'execution-type') {
+		newProperty = 'executionType';
+	} else if (property === 'template-language') {
+		newProperty = 'templateLanguage';
+	}
+
+	if (Array.isArray(data[newProperty])) {
+		data[newProperty].push(item[property]);
+
+		return data[newProperty];
+	}
+
+	return new Array(item[property]);
+}
+
 export function parseActions(node) {
+	console.log('node:', node)
 	const actions = {};
 
 	node.actions.forEach((item) => {
@@ -24,6 +43,39 @@ export function parseActions(node) {
 	});
 
 	return actions;
+}
+
+export function parseDelay(taskTimer) {
+	const delay = {};
+
+	delay.duration = taskTimer.duration;
+	delay.scale = taskTimer.scale;
+
+	return delay;
+}
+
+export function parseTimers(node) {
+	// console.log('parseTimers node:', node);
+	const taskTimers = {};
+	taskTimers.delay = [];
+	taskTimers.reassignments = [];
+	taskTimers.timerActions = [];
+	taskTimers.timerNotifications = [];
+
+	node.taskTimers.forEach((item, index) => {
+		taskTimers.delay.push(parseDelay(node.taskTimers[index]));
+		taskTimers.reassignments.push({});
+		taskTimers.timerActions.push(
+			parseActions({actions: node.taskTimers[index]['timer-action']})
+		);
+		taskTimers.timerNotifications.push({});
+		taskTimers.name = parseProperty(taskTimers, item, 'name');
+		taskTimers.description = parseProperty(taskTimers, item, 'description');
+		taskTimers.blocking = parseProperty(taskTimers, item, 'blocking');
+	});
+	// console.log('parseTimers return:', taskTimers);
+
+	return taskTimers;
 }
 
 export function parseAssignments(node) {
@@ -39,26 +91,21 @@ export function parseAssignments(node) {
 		if (itemKeys.includes('resource-action')) {
 			assignments.assignmentType = ['resourceActions'];
 			assignments.resourceAction = item['resource-action'];
-		}
-		else if (itemKeys.includes('role-id')) {
+		} else if (itemKeys.includes('role-id')) {
 			assignments.assignmentType = ['roleId'];
 			assignments.roleId = parseInt(item['role-id'], 10);
-		}
-		else if (itemKeys.includes('role-type')) {
+		} else if (itemKeys.includes('role-type')) {
 			assignments.assignmentType = ['roleType'];
 			autoCreateValues.push(item['auto-create']);
 			roleNames.push(item.name);
 			roleTypes.push(item['role-type']);
-		}
-		else if (itemKeys.includes('script')) {
+		} else if (itemKeys.includes('script')) {
 			assignments.assignmentType = ['scriptedAssignment'];
 			assignments.script = [item.script];
 			assignments.scriptLanguage = item['script-language'];
-		}
-		else if (itemKeys.includes('user')) {
+		} else if (itemKeys.includes('user')) {
 			assignments.assignmentType = ['user'];
-		}
-		else if (itemKeys.includes('email-address')) {
+		} else if (itemKeys.includes('email-address')) {
 			assignments.assignmentType = ['user'];
 			users.push(item['email-address']);
 		}
@@ -116,14 +163,12 @@ export function parseNotifications(node) {
 			notifications.recipients[index] = {
 				assignmentType: ['taskAssignees'],
 			};
-		}
-		else if (item.roles) {
+		} else if (item.roles) {
 			notifications.recipients[index] = {
 				assignmentType: ['roleId'],
 				roleId: replaceTabSpaces(removeNewLine(item.roles[0])),
 			};
-		}
-		else if (item['scripted-recipient']) {
+		} else if (item['scripted-recipient']) {
 			let script = item['scripted-recipient'][0];
 
 			script = replaceTabSpaces(
@@ -135,8 +180,7 @@ export function parseNotifications(node) {
 				script: [script],
 				scriptLanguage: [DEFAULT_LANGUAGE],
 			};
-		}
-		else if (item.user) {
+		} else if (item.user) {
 			notifications.recipients[index] = {
 				assignmentType: ['user'],
 			};
@@ -144,23 +188,4 @@ export function parseNotifications(node) {
 	});
 
 	return notifications;
-}
-
-function parseProperty(data, item, property) {
-	let newProperty = property;
-
-	if (property === 'execution-type') {
-		newProperty = 'executionType';
-	}
-	else if (property === 'template-language') {
-		newProperty = 'templateLanguage';
-	}
-
-	if (Array.isArray(data[newProperty])) {
-		data[newProperty].push(item[property]);
-
-		return data[newProperty];
-	}
-
-	return new Array(item[property]);
 }

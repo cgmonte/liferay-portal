@@ -9,18 +9,14 @@
  * distribution rights of the Software.
  */
 
-import {ClayButtonWithIcon} from '@clayui/button';
 import ClayForm, {ClayInput} from '@clayui/form';
-import ClayLayout from '@clayui/layout';
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 
 import SidebarPanel from '../../SidebarPanel';
 
 const TimerInfo = ({
-	deleteTimer,
 	index,
-	sectionsLength,
 	selectedItem,
 	updateSelectedItem,
 }) => {
@@ -33,16 +29,6 @@ const TimerInfo = ({
 
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('information')}>
-			{sectionsLength > 1 && (
-				<ClayLayout.Row justify="end">
-					<ClayButtonWithIcon
-						className="delete-button text-secondary trash-button"
-						displayType="unstyled"
-						onClick={deleteTimer}
-						symbol="trash"
-					/>
-				</ClayLayout.Row>
-			)}
 
 			<ClayForm.Group>
 				<label htmlFor="timerName">
@@ -82,11 +68,11 @@ const TimerInfo = ({
 };
 
 TimerInfo.propTypes = {
-	deleteTimer: PropTypes.func,
-	index: PropTypes.number,
-	sectionsLength: PropTypes.number,
-	selectedItem: PropTypes.object,
-	updateSelectedItem: PropTypes.func,
+	deleteTimer: PropTypes.func.isRequired,
+	index: PropTypes.number.isRequired,
+	sectionsLength: PropTypes.number.isRequired,
+	selectedItem: PropTypes.object.isRequired,
+	updateSelectedItem: PropTypes.func.isRequired,
 };
 
 export default TimerInfo;

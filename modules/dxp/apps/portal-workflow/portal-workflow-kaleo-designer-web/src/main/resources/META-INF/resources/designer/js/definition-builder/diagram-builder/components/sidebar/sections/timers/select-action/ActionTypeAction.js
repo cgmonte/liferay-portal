@@ -9,66 +9,127 @@
  * distribution rights of the Software.
  */
 
-import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
-import React, {useState} from 'react';
+// import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 
+import PropTypes from 'prop-types';
+import React, {useContext, useState} from 'react';
+
+import {DiagramBuilderContext} from '../../../../../DiagramBuilderContext';
 import BaseActionsInfo from '../../shared-components/BaseActionsInfo';
 
-const ActionTypeAction = () => {
-	const [scriptSections, setScriptSections] = useState([
-		{identifier: `${Date.now()}-0`},
+const ActionTypeAction = ({
+	actionSectionsIndex,
+	actionType,
+	executionTypeInput = () => {
+		'';
+	},
+
+	// identifier,
+
+	setActionSections,
+	
+	// timersIndex,
+	// updateSelectedItem,
+}) => {
+	const {selectedItem} = useContext(DiagramBuilderContext);
+	const {taskActions} = selectedItem.data.taskTimers;
+
+	const [template, setTemplate] = useState(taskActions?.script?.[actionSectionsIndex] || '');
+
+	const [description, setDescription] = useState(
+		taskActions?.description?.[actionSectionsIndex] || ''
+	);
+
+	const [executionTypeOptions, setExecutionTypeOptions] = useState([
+		{
+			label: Liferay.Language.get('on-entry'),
+			value: 'onEntry',
+		},
+		{
+			label: Liferay.Language.get('on-exit'),
+			value: 'onExit',
+		},
 	]);
 
-	const deleteSection = (identifier) => {
-		setScriptSections((prevSections) => {
-			const newSections = prevSections.filter(
-				(prevSection) => prevSection.identifier !== identifier
-			);
+	const [executionType, setExecutionType] = useState(
+		taskActions?.executionType?.[actionSectionsIndex] ?? executionTypeOptions[0].value
+	);
+	const [name, setName] = useState(taskActions?.name?.[actionSectionsIndex] || '');
+	const [priority, setPriority] = useState(
+		taskActions?.priority?.[actionSectionsIndex] || 1
+	);
 
-			return newSections;
-		});
+	const updateActionInfo = (item) => {
+		if (item.name && item.template && item.executionType) {
+			setActionSections((previousSections) => {
+				const updatedSections = [...previousSections];
+
+				updatedSections[actionSectionsIndex] = {
+					...previousSections[actionSectionsIndex],
+					...item,
+					actionType,
+				};
+
+				// updateTimerAction(prev);
+
+				return updatedSections;
+			});
+		}
 	};
 
-	return scriptSections.map(({identifier}) => {
-		return (
-			<div key={`section-${identifier}`}>
-				<BaseActionsInfo
-					templateLabel={Liferay.Language.get('script')}
-					templateLabelSecondary={Liferay.Language.get('groovy')}
-				/>
+	// const updateTimerAction = (values) => {
+	// 	updateSelectedItem(
+	// 		{
+	// 			timerActions: {
+	// 				...selectedItem.data.taskTimers.timerActions[timersIndex],
 
-				<div className="section-buttons-area">
-					<ClayButton
-						className="mr-3"
-						displayType="secondary"
-						onClick={() =>
-							setScriptSections((prev) => {
-								return [
-									...prev,
-									{
-										identifier: `${Date.now()}-${
-											prev.length
-										}`,
-									},
-								];
-							})
-						}
-					>
-						{Liferay.Language.get('new-section')}
-					</ClayButton>
+	// 				// the following code overwrites the entire spread with values only from current action
 
-					{scriptSections.length > 1 && (
-						<ClayButtonWithIcon
-							className="delete-button"
-							displayType="unstyled"
-							onClick={() => deleteSection(identifier)}
-							symbol="trash"
-						/>
-					)}
-				</div>
-			</div>
-		);
-	});
+	// 				description: values.map(({description}) => description),
+	// 				executionType: values.map(
+	// 					({executionType}) => executionType
+	// 				),
+	// 				name: values.map(({name}) => name),
+	// 				priority: values.map(({priority}) => priority),
+	// 				script: values.map(({template}) => template),
+	// 				sectionsData: values.map((values) => values),
+	// 			},
+	// 		},
+	// 		{actionSectionsIndex}
+	// 	);
+	// };
+
+	return (
+		<BaseActionsInfo
+		description={description}
+		executionType={executionType}
+		executionTypeInput={executionTypeInput}
+		executionTypeOptions={executionTypeOptions}
+		index={actionSectionsIndex}
+		name={name}
+		placeholderName={Liferay.Language.get('my-action')}
+		placeholderTemplate="${userName} sent you a ${entryType} for review in the workflow."
+		priority={priority}
+		selectedItem={selectedItem}
+		setDescription={setDescription}
+		setExecutionType={setExecutionType}
+		setExecutionTypeOptions={setExecutionTypeOptions}
+		setName={setName}
+		setPriority={setPriority}
+		setTemplate={setTemplate}
+		template={template}
+		templateLabel={Liferay.Language.get('template')}
+		templateLabelSecondary={Liferay.Language.get('groovy')}
+		updateActionInfo={updateActionInfo}
+		/>
+	);
+};
+
+ActionTypeAction.propTypes = {
+	actionSectionsIndex: PropTypes.number.isRequired,
+	actionSubSectionsIndex: PropTypes.number.isRequired,
+	timersIndex: PropTypes.number.isRequired,
+	updateSelectedItem: PropTypes.func.isRequired,
 };
 
 export default ActionTypeAction;
