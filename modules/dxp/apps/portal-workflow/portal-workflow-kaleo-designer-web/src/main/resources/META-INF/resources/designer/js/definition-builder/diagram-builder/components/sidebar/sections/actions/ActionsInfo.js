@@ -50,9 +50,7 @@ const ActionsInfo = ({
 		actions?.executionType?.[index] ?? executionTypeOptions[0].value
 	);
 	const [name, setName] = useState(actions?.name?.[index] || '');
-	const [priority, setPriority] = useState(
-		actions?.priority?.[index] || 1
-	);
+	const [priority, setPriority] = useState(actions?.priority?.[index] || 1);
 
 	const deleteSection = () => {
 		setSections((prevSections) => {

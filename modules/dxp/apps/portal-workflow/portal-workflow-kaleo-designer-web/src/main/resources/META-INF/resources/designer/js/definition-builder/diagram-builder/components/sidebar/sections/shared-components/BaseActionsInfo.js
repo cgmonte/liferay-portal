@@ -19,7 +19,6 @@ import {limitValue, sortElements} from '../utils';
 const DEFAULT_LIMIT = 1;
 const MIN_PRIORITY = 1;
 
-
 const BaseActionsInfo = ({
 	description,
 	executionType,
@@ -41,7 +40,6 @@ const BaseActionsInfo = ({
 	templateLabelSecondary,
 	updateActionInfo,
 }) => {
-
 	useEffect(() => {
 		if (
 			selectedItem.type === 'task' &&
@@ -58,9 +56,11 @@ const BaseActionsInfo = ({
 		sortElements(executionTypeOptions, 'value');
 
 		return function cleanup() {
-			setExecutionTypeOptions(executionTypeOptions.filter(({value}) => {
-				return value !== 'onAssignment';
-			}));
+			setExecutionTypeOptions(
+				executionTypeOptions.filter(({value}) => {
+					return value !== 'onAssignment';
+				})
+			);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

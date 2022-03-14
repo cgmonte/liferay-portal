@@ -64,6 +64,10 @@ function appendXMLActions(
 		!isObjectEmpty(notifications.recipients);
 	const xmlActions = XMLUtil.createObj(wrapperNodeName || 'actions');
 
+	// console.log('hasAction', hasAction);
+	// console.log('hasAssignment', hasAssignment);
+	// console.log('hasAssignment', hasAssignment);
+
 	if (hasAction || hasNotification || hasAssignment) {
 		buffer.push(xmlActions.open);
 	}
@@ -544,8 +548,6 @@ function serializeDefinition(
 		buffer.push(XMLUtil.create('metadata', cdata(jsonStringify(metadata))));
 
 		appendXMLActions(buffer, item.data.actions, item.data.notifications);
-
-		appendXMLTaskTimers(buffer, item.data.taskTimers);
 
 		if (initial) {
 			buffer.push(XMLUtil.create('initial', initial));

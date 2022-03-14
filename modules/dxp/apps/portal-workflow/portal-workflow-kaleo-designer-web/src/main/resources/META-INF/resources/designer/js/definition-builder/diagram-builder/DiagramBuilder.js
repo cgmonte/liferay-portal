@@ -66,6 +66,10 @@ export default function DiagramBuilder({version}) {
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
 
+	useEffect(() => {
+		console.log('data:', selectedItem?.data);
+	}, [selectedItem]);
+
 	const onConnect = (params) => {
 		if (
 			elements.filter(
@@ -292,6 +296,8 @@ export default function DiagramBuilder({version}) {
 
 			const elements = deserializeUtil.getElements();
 
+			// console.log('elements:', elements);
+
 			const metadata = deserializeUtil.getMetadata();
 
 			setDefinitionDescription(metadata.description);
@@ -319,6 +325,8 @@ export default function DiagramBuilder({version}) {
 					deserializeUtil.updateXMLDefinition(content);
 
 					const elements = deserializeUtil.getElements();
+
+					// console.log('elements:', elements);
 
 					setElements(elements);
 
@@ -373,5 +381,5 @@ export default function DiagramBuilder({version}) {
 }
 
 DiagramBuilder.propTypes = {
-	version: PropTypes.string.isRequired,
+	version: PropTypes.number.isRequired,
 };

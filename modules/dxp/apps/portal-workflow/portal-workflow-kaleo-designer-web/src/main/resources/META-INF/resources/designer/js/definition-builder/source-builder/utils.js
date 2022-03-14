@@ -12,6 +12,25 @@
 import {removeNewLine, replaceTabSpaces} from '../util/utils';
 import {DEFAULT_LANGUAGE} from './constants';
 
+function parseProperty(data, item, property) {
+	let newProperty = property;
+
+	if (property === 'execution-type') {
+		newProperty = 'executionType';
+	}
+	else if (property === 'template-language') {
+		newProperty = 'templateLanguage';
+	}
+
+	if (Array.isArray(data[newProperty])) {
+		data[newProperty].push(item[property]);
+
+		return data[newProperty];
+	}
+
+	return new Array(item[property]);
+}
+
 export function parseActions(node) {
 	const actions = {};
 
@@ -24,6 +43,37 @@ export function parseActions(node) {
 	});
 
 	return actions;
+}
+
+export function parseDelay(taskTimer) {
+	const delay = {};
+
+	delay.duration = taskTimer.duration;
+	delay.scale = taskTimer.scale;
+
+	return delay;
+}
+
+export function parseTimers(node) {
+	const taskTimers = {};
+	taskTimers.delay = [];
+	taskTimers.reassignments = [];
+	taskTimers.timerActions = [];
+	taskTimers.timerNotifications = [];
+
+	node.taskTimers.forEach((item, index) => {
+		taskTimers.delay.push(parseDelay(node.taskTimers[index]));
+		taskTimers.reassignments.push({});
+		taskTimers.timerActions.push(
+			parseActions({actions: node.taskTimers[index]['timer-action']})
+		);
+		taskTimers.timerNotifications.push({});
+		taskTimers.name = parseProperty(taskTimers, item, 'name');
+		taskTimers.description = parseProperty(taskTimers, item, 'description');
+		taskTimers.blocking = parseProperty(taskTimers, item, 'blocking');
+	});
+
+	return taskTimers;
 }
 
 export function parseAssignments(node) {
@@ -144,23 +194,4 @@ export function parseNotifications(node) {
 	});
 
 	return notifications;
-}
-
-function parseProperty(data, item, property) {
-	let newProperty = property;
-
-	if (property === 'execution-type') {
-		newProperty = 'executionType';
-	}
-	else if (property === 'template-language') {
-		newProperty = 'templateLanguage';
-	}
-
-	if (Array.isArray(data[newProperty])) {
-		data[newProperty].push(item[property]);
-
-		return data[newProperty];
-	}
-
-	return new Array(item[property]);
 }
