@@ -40,7 +40,10 @@ function getChildAttributes(childNodes) {
 }
 
 function getLocationValue(field, context) {
-	const locator = field.locator || field.key || field;
+	let locator = field.locator || field.key || field;
+	if (locator === 'taskTimers') {
+		locator = 'task-timers';
+	}
 	const xmlDoc = context.ownerDocument || context;
 	let result;
 	let res;
@@ -90,6 +93,8 @@ function getLocationValue(field, context) {
 					else {
 						for (const item of child.children) {
 							if (item.children.length) {
+								const grandChildren = [];
+
 								for (const itemChild of item.children) {
 									const childNodesAttributes = getChildAttributes(
 										itemChild.childNodes
@@ -121,17 +126,31 @@ function getLocationValue(field, context) {
 
 										break;
 									}
+									else if (itemChild.children.length) {
+										const subItemContent = {};
+
+										for (const itemGrandChild of itemChild.children) {
+											subItemContent[
+												itemGrandChild.tagName
+											] = itemGrandChild.textContent;
+										}
+										grandChildren.push(subItemContent);
+										childContent[
+											itemChild.tagName
+										] = grandChildren;
+									}
 									else {
 										itemContent = itemChild.textContent;
-									}
+										if (!childContent[itemChild.tagName]) {
+											childContent[
+												itemChild.tagName
+											] = [];
+										}
 
-									if (!childContent[itemChild.tagName]) {
-										childContent[itemChild.tagName] = [];
+										childContent[itemChild.tagName].push(
+											itemContent
+										);
 									}
-
-									childContent[itemChild.tagName].push(
-										itemContent
-									);
 								}
 							}
 							else {
@@ -160,7 +179,6 @@ function getLocationValue(field, context) {
 							}
 						}
 					}
-
 					content.push(childContent);
 				}
 
