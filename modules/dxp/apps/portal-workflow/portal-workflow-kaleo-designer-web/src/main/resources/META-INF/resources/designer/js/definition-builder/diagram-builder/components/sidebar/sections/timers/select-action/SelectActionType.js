@@ -28,9 +28,8 @@ const options = [
 ];
 
 const SelectActionType = ({
-	actionSection,
-	setActionSection,
-	setActionSections,
+	actionType,
+	setActionType,
 }) => {
 	return (
 		<ClayForm.Group>
@@ -38,17 +37,16 @@ const SelectActionType = ({
 
 			<ClaySelect
 				aria-label="Select"
+				defaultValue={actionType}
 				id="action-type"
 				onChange={(event) => {
-					setActionSection(event.target.value);
-					setActionSections([{identifier: `${Date.now()}-0`}]);
+					setActionType(event.target.value);
 				}}
 			>
 				{options.map((item) => (
 					<ClaySelect.Option
 						key={item.actionType}
 						label={item.label}
-						selected={item.actionType === actionSection}
 						value={item.actionType}
 					/>
 				))}
