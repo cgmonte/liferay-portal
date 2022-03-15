@@ -31,7 +31,6 @@ const TimerAction = ({
 	sectionsLength,
 	setActionSections,
 	timersIndex,
-	updateSelectedItem,
 }) => {
 	const [actionType, setActionType] = useState('actions');
 
@@ -69,7 +68,6 @@ const TimerAction = ({
 				sectionsLength={sectionsLength}
 				setActionSections={setActionSections}
 				timersIndex={timersIndex}
-				updateSelectedItem={updateSelectedItem}
 			/>
 			
 			<div className="autofit-float autofit-padded-no-gutters-x autofit-row autofit-row-center mb-3">
@@ -101,7 +99,11 @@ const TimerAction = ({
 };
 
 TimerAction.propTypes = {
-	updateSelectedItem: PropTypes.func.isRequired,
+	actionSectionsIndex: PropTypes.number.isRequired,
+	identifier: PropTypes.string.isRequired,
+	sectionsLength: PropTypes.number.isRequired,
+	setActionSections: PropTypes.func.isRequired,
+	timersIndex: PropTypes.number.isRequired,
 };
 
 export default TimerAction;
