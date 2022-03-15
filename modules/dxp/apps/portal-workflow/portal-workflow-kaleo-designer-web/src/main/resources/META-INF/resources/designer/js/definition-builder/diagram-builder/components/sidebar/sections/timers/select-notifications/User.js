@@ -11,14 +11,10 @@
 
 import React from 'react';
 
-import Notifications from '../select-notifications/Notifications';
+import BaseUser from '../../shared-components/BaseUser';
 
-const ActionTypeNotification = (props) => {
-	return (
-		<>
-			<Notifications {...props} />
-		</>
-	);
+const User = (props) => {
+	return <BaseUser {...props} />;
 };
 
-export default ActionTypeNotification;
+export default User;

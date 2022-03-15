@@ -23,7 +23,7 @@ const actionSectionComponents = {
 	reassignments: ActionTypeReassignment,
 };
 
-const TimerAction = ({setContentName, updateSelectedItem}) => {
+const TimerAction = ({setContentName, timerIndex, updateSelectedItem}) => {
 	const [actionSection, setActionSection] = useState('actions');
 	const [actionSections, setActionSections] = useState([
 		{identifier: `${Date.now()}-0`},
@@ -50,6 +50,7 @@ const TimerAction = ({setContentName, updateSelectedItem}) => {
 							sectionsLength={actionSections?.length}
 							setContentName={setContentName}
 							setSections={setActionSections}
+							timerIndex={timerIndex}
 							updateSelectedItem={updateSelectedItem}
 						/>
 					)

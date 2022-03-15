@@ -20,7 +20,7 @@ import TimerInfo from './TimerInfo';
 
 const Timer = ({
 	identifier,
-	index,
+	index: timerIndex,
 	sectionsLength,
 	setContentName,
 	setSections,
@@ -39,19 +39,18 @@ const Timer = ({
 			const [key, value] = Object.entries(values)[0];
 
 			if (key === 'delay') {
-				itemCopy.data.taskTimers.delay[index].duration.splice(
+				itemCopy.data.taskTimers.delay[timerIndex].duration.splice(
 					options.delay,
 					1,
 					value.duration
 				);
-				itemCopy.data.taskTimers.delay[index].scale.splice(
+				itemCopy.data.taskTimers.delay[timerIndex].scale.splice(
 					options.delay,
 					1,
 					value.scale
 				);
-			}
-			else {
-				itemCopy.data.taskTimers[key].splice(index, 1, value);
+			} else {
+				itemCopy.data.taskTimers[key].splice(timerIndex, 1, value);
 			}
 
 			return itemCopy;
@@ -65,7 +64,7 @@ const Timer = ({
 			};
 
 			for (const key of Object.keys(itemCopy.data.taskTimers)) {
-				itemCopy.data.taskTimers[key].splice(index, 1);
+				itemCopy.data.taskTimers[key].splice(timerIndex, 1);
 			}
 
 			return itemCopy;
@@ -121,14 +120,14 @@ const Timer = ({
 		<div className="panel">
 			<TimerInfo
 				deleteTimer={deleteTimer}
-				index={index}
+				index={timerIndex}
 				sectionsLength={sectionsLength}
 				selectedItem={selectedItem}
 				updateSelectedItem={updateSelectedItem}
 			/>
 
 			<TimerDuration
-				index={index}
+				index={timerIndex}
 				selectedItem={selectedItem}
 				setSelectedItem={setSelectedItem}
 				updateSelectedItem={updateSelectedItem}
@@ -142,6 +141,7 @@ const Timer = ({
 					sectionsLength={subSections?.length}
 					selectedItem={selectedItem}
 					setContentName={setContentName}
+					timerIndex={timerIndex}
 					updateSelectedItem={updateSelectedItem}
 				/>
 			))}
