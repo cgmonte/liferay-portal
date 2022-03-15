@@ -545,8 +545,6 @@ function serializeDefinition(
 
 		appendXMLActions(buffer, item.data.actions, item.data.notifications);
 
-		appendXMLTaskTimers(buffer, item.data.taskTimers);
-
 		if (initial) {
 			buffer.push(XMLUtil.create('initial', initial));
 		}
