@@ -67,8 +67,7 @@ function getLocationValue(field, context) {
 
 			if (resNodesAttributes.length) {
 				value.content = resNodesAttributes;
-			}
-			else if (res.children.length) {
+			} else if (res.children.length) {
 				const content = [];
 
 				for (const child of res.children) {
@@ -83,18 +82,17 @@ function getLocationValue(field, context) {
 
 						if (childNodesAttributes.length) {
 							itemContent = childNodesAttributes;
-						}
-						else {
+						} else {
 							itemContent = child.textContent;
 						}
 
 						childContent[child.tagName] = itemContent;
-					}
-					else {
+					} else {
 						for (const item of child.children) {
 							if (item.children.length) {
 								let childNodesAttributes = [];
-								const grandChildren = [];
+								let grandChildren = [];
+								let currentTagName;
 
 								for (const itemChild of item.children) {
 									childNodesAttributes = getChildAttributes(
@@ -128,8 +126,7 @@ function getLocationValue(field, context) {
 
 									if (childNodesAttributes.length) {
 										itemContent = childNodesAttributes;
-									}
-									else if (
+									} else if (
 										itemChildNodesAttributes.length
 									) {
 										itemContent = itemChildNodesAttributes;
@@ -145,8 +142,15 @@ function getLocationValue(field, context) {
 										}
 
 										break;
-									}
-									else if (itemChild.children.length) {
+									} else if (itemChild.children.length) {
+										if (!currentTagName) {
+											currentTagName = itemChild.tagName;
+										} else if (
+											currentTagName !== itemChild.tagName
+										) {
+											grandChildren = [];
+										}
+										currentTagName = itemChild.tagName;
 										const subItemContent = {};
 
 										for (const itemGrandChild of itemChild.children) {
@@ -156,10 +160,9 @@ function getLocationValue(field, context) {
 										}
 										grandChildren.push(subItemContent);
 										childContent[
-											itemChild.tagName
+											currentTagName
 										] = grandChildren;
-									}
-									else {
+									} else {
 										itemContent = itemChild.textContent;
 										if (!childContent[itemChild.tagName]) {
 											childContent[
@@ -172,8 +175,7 @@ function getLocationValue(field, context) {
 										);
 									}
 								}
-							}
-							else {
+							} else {
 								const childNodesAttributes = getChildAttributes(
 									item.childNodes
 								);
@@ -182,8 +184,7 @@ function getLocationValue(field, context) {
 
 								if (childNodesAttributes.length) {
 									itemContent = childNodesAttributes;
-								}
-								else {
+								} else {
 									itemContent = item.textContent;
 								}
 
@@ -192,8 +193,7 @@ function getLocationValue(field, context) {
 										childContent[item.tagName],
 										itemContent,
 									];
-								}
-								else {
+								} else {
 									childContent[item.tagName] = itemContent;
 								}
 							}
@@ -203,8 +203,7 @@ function getLocationValue(field, context) {
 				}
 
 				value.content = content;
-			}
-			else {
+			} else {
 				value.content = res.textContent;
 			}
 		}
@@ -245,7 +244,6 @@ function parseResults(schema, xmldoc_in, data_out) {
 		let j;
 
 		if (nodeList.length) {
-
 			// Loop through each result node
 
 			for (i = nodeList.length - 1; i >= 0; i--) {
@@ -270,8 +268,7 @@ function parseResults(schema, xmldoc_in, data_out) {
 			}
 
 			data_out.results = results;
-		}
-		else {
+		} else {
 			data_out.error = new Error(
 				'XML schema result nodes retrieval failure'
 			);
@@ -297,8 +294,7 @@ const XMLSchemaUtil = {
 			data_out = parseResults(schema, xmlDoc, data_out);
 
 			data_out = parseMeta(schema.metaFields, xmlDoc, data_out);
-		}
-		else {
+		} else {
 			data_out.error = new Error('XML schema parse failure');
 		}
 

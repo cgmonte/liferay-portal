@@ -121,7 +121,7 @@ const CurrentTimers = ({setContentName, taskTimers}) => {
 
 CurrentTimers.propTypes = {
 	setContentName: PropTypes.func.isRequired,
-	taskTimers:PropTypes.object.isRequired
+	taskTimers: PropTypes.object.isRequired,
 };
 
 export default CurrentTimers;

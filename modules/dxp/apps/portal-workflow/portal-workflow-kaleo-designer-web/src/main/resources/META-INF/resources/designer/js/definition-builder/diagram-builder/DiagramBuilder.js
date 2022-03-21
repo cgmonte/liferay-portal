@@ -64,6 +64,10 @@ export default function DiagramBuilder() {
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
 
+	// useEffect(() => {
+	// 	console.log('taskTimers', selectedItem?.data);
+	// }, [selectedItem]);
+
 	const onConnect = (params) => {
 		if (
 			elements.filter(

@@ -24,6 +24,7 @@ const BaseUser = ({
 	identifier,
 	index,
 	notificationIndex,
+	reassignment,
 	screenName = '',
 	sectionsLength,
 	setSections,
@@ -250,31 +251,37 @@ const BaseUser = ({
 				</ClayForm.FeedbackItem>
 			</ClayForm.Group>
 
-			<div className="section-buttons-area">
-				<ClayButton
-					className="mr-3"
-					displayType="secondary"
-					onClick={() =>
-						setSections((prev) => {
-							return [
-								...prev,
-								{identifier: `${Date.now()}-${prev.length}`},
-							];
-						})
-					}
-				>
-					{Liferay.Language.get('new-section')}
-				</ClayButton>
+			{!reassignment && (
+				<div className="section-buttons-area">
+					<ClayButton
+						className="mr-3"
+						displayType="secondary"
+						onClick={() =>
+							setSections((prev) => {
+								return [
+									...prev,
+									{
+										identifier: `${Date.now()}-${
+											prev.length
+										}`,
+									},
+								];
+							})
+						}
+					>
+						{Liferay.Language.get('new-section')}
+					</ClayButton>
 
-				{sectionsLength > 1 && (
-					<ClayButtonWithIcon
-						className="delete-button"
-						displayType="unstyled"
-						onClick={deleteSection}
-						symbol="trash"
-					/>
-				)}
-			</div>
+					{sectionsLength > 1 && (
+						<ClayButtonWithIcon
+							className="delete-button"
+							displayType="unstyled"
+							onClick={deleteSection}
+							symbol="trash"
+						/>
+					)}
+				</div>
+			)}
 		</>
 	);
 };

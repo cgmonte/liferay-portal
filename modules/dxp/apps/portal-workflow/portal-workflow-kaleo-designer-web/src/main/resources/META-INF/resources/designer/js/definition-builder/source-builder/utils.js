@@ -39,26 +39,21 @@ export function parseAssignments(node) {
 		if (itemKeys.includes('resource-action')) {
 			assignments.assignmentType = ['resourceActions'];
 			assignments.resourceAction = item['resource-action'];
-		}
-		else if (itemKeys.includes('role-id')) {
+		} else if (itemKeys.includes('role-id')) {
 			assignments.assignmentType = ['roleId'];
 			assignments.roleId = parseInt(item['role-id'], 10);
-		}
-		else if (itemKeys.includes('role-type')) {
+		} else if (itemKeys.includes('role-type')) {
 			assignments.assignmentType = ['roleType'];
 			autoCreateValues.push(item['auto-create']);
 			roleNames.push(item.name);
 			roleTypes.push(item['role-type']);
-		}
-		else if (itemKeys.includes('script')) {
+		} else if (itemKeys.includes('script')) {
 			assignments.assignmentType = ['scriptedAssignment'];
 			assignments.script = [item.script];
 			assignments.scriptLanguage = item['script-language'];
-		}
-		else if (itemKeys.includes('user')) {
+		} else if (itemKeys.includes('user')) {
 			assignments.assignmentType = ['user'];
-		}
-		else if (itemKeys.includes('email-address')) {
+		} else if (itemKeys.includes('email-address')) {
 			assignments.assignmentType = ['user'];
 			users.push(item['email-address']);
 		}
@@ -106,8 +101,7 @@ export function parseNotifications(node) {
 			});
 
 			notificationTypes = typeArray;
-		}
-		else {
+		} else {
 			notificationTypes = [{notificationType: notificationTypes[0]}];
 		}
 
@@ -150,8 +144,7 @@ export function parseNotifications(node) {
 				assignmentType: ['roleId'],
 				roleId: replaceTabSpaces(removeNewLine(item.roles[0])),
 			};
-		}
-		else if (item['scripted-recipient']) {
+		} else if (item['scripted-recipient']) {
 			let script = item['scripted-recipient'][0];
 
 			script = replaceTabSpaces(
@@ -174,8 +167,7 @@ function parseProperty(data, item, property) {
 
 	if (property === 'execution-type') {
 		newProperty = 'executionType';
-	}
-	else if (property === 'template-language') {
+	} else if (property === 'template-language') {
 		newProperty = 'templateLanguage';
 	}
 
@@ -200,15 +192,25 @@ export function parseTimers(node) {
 			duration: node.taskTimers[index].duration,
 			scale: node.taskTimers[index].scale,
 		});
-		taskTimers.reassignments.push({});
+		taskTimers.reassignments.push(
+			node.taskTimers[index]['reassignments']
+				? parseAssignments({
+						assignments: node.taskTimers[index]['reassignments'],
+				  })
+				: {}
+		);
 		taskTimers.timerActions.push(
-			parseActions({actions: node.taskTimers[index]['timer-action']})
+			node.taskTimers[index]['timer-action']
+				? parseActions({
+						actions: node.taskTimers[index]['timer-action'],
+				  })
+				: {}
 		);
 		taskTimers.timerNotifications.push({});
 		taskTimers.name = parseProperty(taskTimers, item, 'name');
 		taskTimers.description = parseProperty(taskTimers, item, 'description');
 		taskTimers.blocking = parseProperty(taskTimers, item, 'blocking');
 	});
-
+	
 	return taskTimers;
 }
