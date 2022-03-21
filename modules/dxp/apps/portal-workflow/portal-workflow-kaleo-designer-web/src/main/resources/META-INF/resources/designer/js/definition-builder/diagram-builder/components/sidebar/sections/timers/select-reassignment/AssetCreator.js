@@ -11,12 +11,14 @@
 
 import {useEffect} from 'react';
 
-const AssetCreator = ({updateSelectedItem}) => {
+const AssetCreator = ({actionSectionsIndex, setActionSections}) => {
 	useEffect(() => {
-		updateSelectedItem({
-			reassignments: {
-				assignmentType: ['user'],
-			},
+		setActionSections((currentSections) => {
+			const updatedSections = [...currentSections];
+
+			updatedSections[actionSectionsIndex].assignmentType = 'user';
+
+			return updatedSections;
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

@@ -29,36 +29,38 @@ const assignmentSectionComponents = {
 	user: User,
 };
 
-const ActionTypeReassignment = (props) => {
+const ActionTypeReassignment = ({
+	actionSectionsIndex,
+	identifier,
+	sectionsLength,
+	setActionSections,
+}) => {
 	const {selectedItem} = useContext(DiagramBuilderContext);
-	const assignmentType = selectedItem?.data?.assignments;
-	const [section, setSection] = useState(assignmentType || 'assetCreator');
-	const [sections, setSections] = useState([{identifier: `${Date.now()}-0`}]);
-	const ReassignmentSectionComponent = assignmentSectionComponents[section];
+	const assignmentType =
+		selectedItem?.data.taskTimers?.reassignments?.assignmentType;
+	const [reassignmentType, setReassignmentType] = useState(
+		assignmentType || 'assetCreator'
+	);
+
+	const ReassignmentSectionComponent =
+		assignmentSectionComponents[reassignmentType];
 
 	return (
 		<>
 			<SelectReassignment
-				section={section}
-				setSection={setSection}
-				setSections={setSections}
+				section={reassignmentType}
+				setSection={setReassignmentType}
 			/>
 
-			{sections.map(({identifier, ...restProps}, index) => {
-				return (
-					ReassignmentSectionComponent && (
-						<ReassignmentSectionComponent
-							{...props}
-							{...restProps}
-							identifier={identifier}
-							index={index}
-							key={`section-${identifier}`}
-							sectionsLength={sections?.length}
-							setSections={setSections}
-						/>
-					)
-				);
-			})}
+			{ReassignmentSectionComponent && (
+				<ReassignmentSectionComponent
+					actionSectionsIndex={actionSectionsIndex}
+					identifier={identifier}
+					key={`section-${identifier}`}
+					sectionsLength={sectionsLength}
+					setActionSections={setActionSections}
+				/>
+			)}
 		</>
 	);
 };

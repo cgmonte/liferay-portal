@@ -14,11 +14,11 @@ import React from 'react';
 
 const options = [
 	{
-		actionType: 'actions',
+		actionType: 'timerActions',
 		label: Liferay.Language.get('action'),
 	},
 	{
-		actionType: 'notifications',
+		actionType: 'timerNotifications',
 		label: Liferay.Language.get('notification'),
 	},
 	{
@@ -28,9 +28,23 @@ const options = [
 ];
 
 const SelectActionType = ({
+	actionSectionsIndex,
 	actionType,
-	setActionType,
+	setActionSections,
 }) => {
+	function handleChange(value) {
+		setActionSections((previousSections) => {
+			const updatedSections = [...previousSections];
+
+			updatedSections.splice(actionSectionsIndex, 1, {
+				actionType: value,
+				identifier: `${Date.now()}-${actionSectionsIndex}`,
+			});
+
+			return updatedSections;
+		});
+	}
+
 	return (
 		<ClayForm.Group>
 			<label htmlFor="action-type">{Liferay.Language.get('type')}</label>
@@ -40,7 +54,7 @@ const SelectActionType = ({
 				defaultValue={actionType}
 				id="action-type"
 				onChange={(event) => {
-					setActionType(event.target.value);
+					handleChange(event.target.value);
 				}}
 			>
 				{options.map((item) => (
