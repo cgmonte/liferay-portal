@@ -73,7 +73,6 @@ const TimerDuration = ({
 				>
 					<ClayIcon
 						className="text-muted"
-						symbol="question-circle-full"
 					/>
 				</span>
 			</div>

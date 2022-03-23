@@ -72,6 +72,51 @@ export function parseAssignments(node) {
 	return assignments;
 }
 
+export function parseReassignments(node) {
+	const assignments = {};
+	const autoCreateValues = [];
+	const roleNames = [];
+	const roleTypes = [];
+	const users = [];
+
+	node.assignments.forEach((item) => {
+		const itemKeys = Object.keys(item);
+		if (itemKeys.includes('resource-actions')) {
+			assignments.assignmentType = ['resourceActions'];
+			assignments.resourceAction = item['resource-actions'];
+		} else if (itemKeys.includes('roles')) {
+			assignments.assignmentType = ['roleId'];
+			assignments.roleId = parseInt(item['roles'], 10);
+		} else if (itemKeys.includes('role-type')) {
+			assignments.assignmentType = ['roleType'];
+			autoCreateValues.push(item['auto-create']);
+			roleNames.push(item.name);
+			roleTypes.push(item['role-type']);
+		} else if (itemKeys.includes('script')) {
+			assignments.assignmentType = ['scriptedAssignment'];
+			assignments.script = [item.script];
+			assignments.scriptLanguage = item['script-language'];
+		} else if (itemKeys.includes('user')) {
+			assignments.assignmentType = ['user'];
+		} else if (itemKeys.includes('email-address')) {
+			assignments.assignmentType = ['user'];
+			users.push(item['email-address']);
+		}
+	});
+
+	if (users.length) {
+		assignments.emailAddress = users;
+	}
+
+	if (assignments.assignmentType[0] === 'roleType') {
+		assignments.autoCreate = autoCreateValues[0];
+		assignments.roleName = roleNames[0];
+		assignments.roleType = roleTypes[0];
+	}
+
+	return assignments;
+}
+
 export function parseNotifications(node) {
 	const notifications = {notificationTypes: [], recipients: []};
 
@@ -177,7 +222,7 @@ export function parseTimers(node) {
 		});
 		taskTimers.reassignments.push(
 			node.taskTimers[index]['reassignments']
-				? parseAssignments({
+				? parseReassignments({
 						assignments: node.taskTimers[index]['reassignments'],
 				  })
 				: {}
@@ -194,6 +239,6 @@ export function parseTimers(node) {
 		taskTimers.description = parseProperty(taskTimers, item, 'description');
 		taskTimers.blocking = parseProperty(taskTimers, item, 'blocking');
 	});
-	
+
 	return taskTimers;
 }

@@ -54,14 +54,15 @@ const BaseUser = ({
 		setUser(item);
 
 		setSections((prev) => {
-			prev[index] = {
-				...prev[index],
+			const updatedSections = [...prev];
+			updatedSections[index] = {
+				...updatedSections[index],
 				...item,
 			};
 
-			updateSelectedItem(prev);
-
-			return prev;
+			updateSelectedItem(updatedSections);
+			console.log('updatedSections', updatedSections)
+			return updatedSections;
 		});
 
 		setSearch('');
@@ -178,37 +179,35 @@ const BaseUser = ({
 				/>
 			</ClayForm.Group>
 
-			{!reassignment && (
-				<div className="section-buttons-area">
-					<ClayButton
-						className="mr-3"
-						displayType="secondary"
-						onClick={() =>
-							setSections((prev) => {
-								return [
-									...prev,
-									{
-										identifier: `${Date.now()}-${
-											prev.length
-										}`,
-									},
-								];
-							})
-						}
-					>
-						{Liferay.Language.get('new-section')}
-					</ClayButton>
+			<div className="section-buttons-area">
+				<ClayButton
+					className="mr-3"
+					displayType="secondary"
+					onClick={() =>
+						setSections((prev) => {
+							return [
+								...prev,
+								{
+									identifier: `${Date.now()}-${prev.length}`,
+								},
+							];
+						})
+					}
+				>
+					{reassignment
+						? Liferay.Language.get('new-user')
+						: Liferay.Language.get('new-section')}
+				</ClayButton>
 
-					{sectionsLength > 1 && (
-						<ClayButtonWithIcon
-							className="delete-button"
-							displayType="unstyled"
-							onClick={deleteSection}
-							symbol="trash"
-						/>
-					)}
-				</div>
-			)}
+				{sectionsLength > 1 && (
+					<ClayButtonWithIcon
+						className="delete-button"
+						displayType="unstyled"
+						onClick={deleteSection}
+						symbol="trash"
+					/>
+				)}
+			</div>
 		</>
 	);
 };

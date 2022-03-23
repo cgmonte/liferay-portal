@@ -21,6 +21,7 @@ const Timers = () => {
 	]);
 
 	useEffect(() => {
+		console.log('timerSections', timerSections);
 		const serializebleSections = timerSections.filter(
 			(section) =>
 				section.duration &&
@@ -61,13 +62,42 @@ const Timers = () => {
 					const filteredTimerActions = timerActions.filter(
 						({actionType}) => actionType === 'reassignments'
 					);
-
+					console.log('filteredTimerActions 1', filteredTimerActions);
 					if (filteredTimerActions.length) {
-						return {
-							assignmentType: filteredTimerActions.map(
-								({assignmentType}) => assignmentType
-							),
-						};
+						const reassignments = {};
+
+						reassignments.assignmentType = filteredTimerActions.map(
+							({assignmentType}) => assignmentType
+						);
+
+						if (
+							reassignments.assignmentType[0] ===
+							'resourceActions'
+						) {
+							reassignments.resourceAction = filteredTimerActions.map(
+								({resourceAction}) => resourceAction
+							);
+						} else if (
+							reassignments.assignmentType[0] === 'roleId'
+						) {
+							reassignments.roleId = filteredTimerActions.map(
+								({roleId}) => roleId
+							);
+						} else if (
+							reassignments.assignmentType[0] === 'user' &&
+							Object.keys(filteredTimerActions).includes('users')
+						) {
+							console.log('foo');
+							console.log(
+								'filteredTimerActions 2',
+								filteredTimerActions
+							);
+							// reassignments.roleId = filteredTimerActions.map(
+							// 	({roleId}) => roleId
+							// );
+						}
+
+						return reassignments;
 					}
 
 					return {};
@@ -103,6 +133,7 @@ const Timers = () => {
 		} else {
 			taskTimers = null;
 		}
+
 		setSelectedItem((previousItem) => ({
 			...previousItem,
 			data: {...previousItem.data, taskTimers},
@@ -129,11 +160,23 @@ const Timers = () => {
 			const data = allTimerActions.reassignments;
 			for (let index = 0; index < data[0][1].length; index++) {
 				const section = {};
+
 				section.actionType = 'reassignments';
 				section.identifier = `${Date.now()}-${index}`;
 				section.assignmentType = data.find(
 					(entry) => entry[0] === 'assignmentType'
 				)[1][index];
+
+				if (section.assignmentType === `resourceActions`) {
+					section.resourceAction = data.find(
+						(entry) => entry[0] === 'resourceAction'
+					)[1][index];
+				} else if (section.assignmentType === 'roleId') {
+					section.roleId = data.find(
+						(entry) => entry[0] === 'roleId'
+					)[1];
+				}
+
 				sections.push(section);
 			}
 		}
@@ -143,6 +186,7 @@ const Timers = () => {
 			const data = allTimerActions.timerActions;
 			for (let index = 0; index < data[0][1].length; index++) {
 				const section = {};
+
 				section.actionType = 'timerActions';
 				section.description = data.find(
 					(entry) => entry[0] === 'description'
@@ -150,7 +194,9 @@ const Timers = () => {
 				section.executionType = data.find(
 					(entry) => entry[0] === 'executionType'
 				)[1][index];
-				section.identifier = `${Date.now()}-${index + reassignmentsLength}`;
+				section.identifier = `${Date.now()}-${
+					index + reassignmentsLength
+				}`;
 				section.name = data.find((entry) => entry[0] === 'name')[1][
 					index
 				];
@@ -170,6 +216,7 @@ const Timers = () => {
 	useEffect(() => {
 		if (selectedItem.data.taskTimers?.delay) {
 			const desserializedSections = [];
+
 			for (
 				let index = 0;
 				index < selectedItem.data.taskTimers.delay.length;
@@ -199,6 +246,7 @@ const Timers = () => {
 
 				desserializedSections.push(section);
 			}
+
 			setTimerSections(desserializedSections);
 		}
 

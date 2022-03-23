@@ -28,10 +28,12 @@ const actionSectionComponents = {
 const TimerAction = ({
 	actionData,
 	actionSectionsIndex,
+	reassignments,
 	sectionsLength,
 	setActionSections,
 	timersIndex,
 }) => {
+	// console.log('actionData', actionData)
 	const ActionSectionComponent =
 		actionSectionComponents[actionData.actionType];
 
@@ -58,6 +60,7 @@ const TimerAction = ({
 			<SelectActionType
 				actionSectionsIndex={actionSectionsIndex}
 				actionType={actionData.actionType}
+				reassignments={reassignments}
 				setActionSections={setActionSections}
 				timersIndex={timersIndex}
 			/>
