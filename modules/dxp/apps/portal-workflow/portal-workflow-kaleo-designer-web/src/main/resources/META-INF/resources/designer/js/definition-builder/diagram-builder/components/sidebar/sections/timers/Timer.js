@@ -40,6 +40,7 @@ const Timer = ({
 	);
 
 	useEffect(() => {
+		console.log('actionSections', actionSections)
 		if (actionSections.length) {
 			const filteredActionSections = [];
 
@@ -114,6 +115,9 @@ const Timer = ({
 					actionData={actionData}
 					actionSectionsIndex={index}
 					key={`section-${actionData.identifier}`}
+					reassignments={actionSections.some(
+						({actionType}) => actionType === 'reassignments'
+					)}
 					sectionsLength={actionSections?.length}
 					setActionSections={setActionSections}
 					timersIndex={timersIndex}

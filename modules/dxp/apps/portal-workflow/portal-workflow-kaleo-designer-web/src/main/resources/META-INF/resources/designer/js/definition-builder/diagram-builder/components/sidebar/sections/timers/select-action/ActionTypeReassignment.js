@@ -9,9 +9,9 @@
  * distribution rights of the Software.
  */
 
-import React, {useContext, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {DiagramBuilderContext} from '../../../../../DiagramBuilderContext';
+import {getAssignmentType} from '../../assignments/utils';
 import AssetCreator from '../select-reassignment/AssetCreator';
 import ResourceActions from '../select-reassignment/ResourceActions';
 import Role from '../select-reassignment/Role';
@@ -30,17 +30,37 @@ const assignmentSectionComponents = {
 };
 
 const ActionTypeReassignment = ({
+	actionData,
 	actionSectionsIndex,
 	identifier,
 	sectionsLength,
 	setActionSections,
 }) => {
-	const {selectedItem} = useContext(DiagramBuilderContext);
-	const assignmentType =
-		selectedItem?.data.taskTimers?.reassignments?.assignmentType;
-	const [reassignmentType, setReassignmentType] = useState(
-		assignmentType || 'assetCreator'
-	);
+	const assignmentType = getAssignmentType({
+		assignmentType: actionData.assignmentType
+			? [actionData.assignmentType]
+			: ['user'],
+	});
+	const [reassignmentType, setReassignmentType] = useState(assignmentType);
+	const [subSections, setSubSections] = useState([
+		{identifier: `${Date.now()}-0`},
+	]);
+
+	useEffect(() => {
+		console.log('foo', assignmentType)
+		if (assignmentType === 'user') {
+			setActionSections((currentSections) => {
+				const updatedSections = [...currentSections];
+
+				updatedSections[actionSectionsIndex].assignmentType = 'user';
+				updatedSections[actionSectionsIndex].users = subSections;
+
+				return updatedSections;
+			});
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [subSections]);
 
 	const ReassignmentSectionComponent =
 		assignmentSectionComponents[reassignmentType];
@@ -48,19 +68,29 @@ const ActionTypeReassignment = ({
 	return (
 		<>
 			<SelectReassignment
-				section={reassignmentType}
+				currentAssignmentType={assignmentType}
 				setSection={setReassignmentType}
 			/>
 
-			{ReassignmentSectionComponent && (
-				<ReassignmentSectionComponent
-					actionSectionsIndex={actionSectionsIndex}
-					identifier={identifier}
-					key={`section-${identifier}`}
-					sectionsLength={sectionsLength}
-					setActionSections={setActionSections}
-				/>
-			)}
+			{subSections.map(({identifier: subSectionIdentifier}, index) => {
+				return (
+					ReassignmentSectionComponent && (
+						<ReassignmentSectionComponent
+							actionData={actionData}
+							actionSectionsIndex={actionSectionsIndex}
+							currentAssignmentType={assignmentType}
+							identifier={identifier}
+							index={index}
+							key={`section-${identifier}`}
+							sectionsLength={sectionsLength}
+							setActionSections={setActionSections}
+							setSections={setSubSections}
+							subSectionIdentifier={subSectionIdentifier}
+							subSectionsLength={subSections.length}
+						/>
+					)
+				);
+			})}
 		</>
 	);
 };

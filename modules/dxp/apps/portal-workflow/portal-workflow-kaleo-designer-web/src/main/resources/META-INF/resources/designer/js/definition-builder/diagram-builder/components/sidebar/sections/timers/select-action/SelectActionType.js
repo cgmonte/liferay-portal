@@ -15,14 +15,17 @@ import React from 'react';
 const options = [
 	{
 		actionType: 'timerActions',
+		disabled: false,
 		label: Liferay.Language.get('action'),
 	},
 	{
 		actionType: 'timerNotifications',
+		disabled: false,
 		label: Liferay.Language.get('notification'),
 	},
 	{
 		actionType: 'reassignments',
+		disabled: false,
 		label: Liferay.Language.get('reassignment'),
 	},
 ];
@@ -30,8 +33,10 @@ const options = [
 const SelectActionType = ({
 	actionSectionsIndex,
 	actionType,
+	reassignments,
 	setActionSections,
 }) => {
+	options[2].disabled = reassignments;
 	function handleChange(value) {
 		setActionSections((previousSections) => {
 			const updatedSections = [...previousSections];
@@ -59,6 +64,7 @@ const SelectActionType = ({
 			>
 				{options.map((item) => (
 					<ClaySelect.Option
+						disabled={item.disabled}
 						key={item.actionType}
 						label={item.label}
 						value={item.actionType}

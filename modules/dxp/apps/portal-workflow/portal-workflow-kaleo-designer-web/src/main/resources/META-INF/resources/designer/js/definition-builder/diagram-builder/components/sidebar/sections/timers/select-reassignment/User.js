@@ -15,31 +15,13 @@ import SidebarPanel from '../../../SidebarPanel';
 import BaseUser from '../../shared-components/BaseUser';
 
 const User = (props) => {
-
-	// console.log('props:', props);
-
-	const updateSelectedItem = (values) => {
-
-		// console.log('values:', values);
-		// props.setSections((previousSections) => {
-		// 	console.log('previousSections:', previousSections);
-		// 	return previousSections;
-		// 	// return {
-		// 	// 	sectionsData: values.map((values) => ({
-		// 	// 		...values,
-		// 	// 		assignmentType: 'user',
-		// 	// 	})),
-		// 	// };
-		// });
-
-	};
-
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('section')}>
 			<BaseUser
 				{...props}
+				identifier={props.subSectionIdentifier}
 				reassignment
-				updateSelectedItem={updateSelectedItem}
+				sectionsLength={props.subSectionsLength}
 			/>
 		</SidebarPanel>
 	);

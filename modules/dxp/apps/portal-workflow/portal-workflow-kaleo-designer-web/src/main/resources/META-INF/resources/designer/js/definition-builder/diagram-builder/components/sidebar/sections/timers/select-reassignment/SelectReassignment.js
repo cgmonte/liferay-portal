@@ -13,8 +13,6 @@ import ClayForm, {ClaySelect} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import React from 'react';
 
-import SidebarPanel from '../../../SidebarPanel';
-
 const options = [
 	{
 		assignmentType: 'assetCreator',
@@ -42,7 +40,7 @@ const options = [
 	},
 ];
 
-const SelectReassignment = ({section, setSection}) => {
+const SelectReassignment = ({currentAssignmentType, setSection}) => {
 	return (
 		<ClayForm.Group>
 			<label htmlFor="reassignment-type">
@@ -61,20 +59,16 @@ const SelectReassignment = ({section, setSection}) => {
 
 			<ClaySelect
 				aria-label="Select"
+				defaultValue={currentAssignmentType}
 				id="reassignment-type"
 				onChange={(event) => {
 					setSection(event.target.value);
-
-					// setSections([{identifier: `${Date.now()}-0`}]);
-
 				}}
 			>
 				{options.map((item) => (
 					<ClaySelect.Option
-						disabled={item?.disabled}
 						key={item.assignmentType}
 						label={item.label}
-						selected={item.assignmentType === section}
 						value={item.assignmentType}
 					/>
 				))}
