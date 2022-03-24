@@ -36,19 +36,22 @@ const ActionTypeReassignment = ({
 	sectionsLength,
 	setActionSections,
 }) => {
-	const assignmentType = getAssignmentType({
-		assignmentType: actionData.assignmentType
-			? [actionData.assignmentType]
-			: ['user'],
-	});
-	const [reassignmentType, setReassignmentType] = useState(assignmentType);
+	console.log('actionData', actionData);
+	// const assignmentType = getAssignmentType({
+	// 	assignmentType: actionData.assignmentType
+	// 		? [actionData.assignmentType]
+	// 		: ['user'],
+	// });
+	const [reassignmentType, setReassignmentType] = useState( actionData?.assignmentType || 'assetCreator');
 	const [subSections, setSubSections] = useState([
 		{identifier: `${Date.now()}-0`},
 	]);
 
+
+
 	useEffect(() => {
-		console.log('foo', assignmentType)
-		if (assignmentType === 'user') {
+		console.log('reassignmentType', reassignmentType);
+		if (reassignmentType === 'user') {
 			setActionSections((currentSections) => {
 				const updatedSections = [...currentSections];
 
@@ -68,7 +71,7 @@ const ActionTypeReassignment = ({
 	return (
 		<>
 			<SelectReassignment
-				currentAssignmentType={assignmentType}
+				currentAssignmentType={reassignmentType}
 				setSection={setReassignmentType}
 			/>
 
@@ -78,7 +81,7 @@ const ActionTypeReassignment = ({
 						<ReassignmentSectionComponent
 							actionData={actionData}
 							actionSectionsIndex={actionSectionsIndex}
-							currentAssignmentType={assignmentType}
+							currentAssignmentType={reassignmentType}
 							identifier={identifier}
 							index={index}
 							key={`section-${identifier}`}

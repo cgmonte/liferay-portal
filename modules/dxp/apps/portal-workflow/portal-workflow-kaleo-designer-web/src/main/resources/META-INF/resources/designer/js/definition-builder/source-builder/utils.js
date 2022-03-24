@@ -27,6 +27,8 @@ export function parseActions(node) {
 }
 
 export function parseAssignments(node) {
+	console.log('parseAssignments node', node);
+
 	const assignments = {};
 	const autoCreateValues = [];
 	const roleNames = [];
@@ -73,6 +75,7 @@ export function parseAssignments(node) {
 }
 
 export function parseReassignments(node) {
+	console.log('parseReassignments node', node);
 	const assignments = {};
 	const autoCreateValues = [];
 	const roleNames = [];

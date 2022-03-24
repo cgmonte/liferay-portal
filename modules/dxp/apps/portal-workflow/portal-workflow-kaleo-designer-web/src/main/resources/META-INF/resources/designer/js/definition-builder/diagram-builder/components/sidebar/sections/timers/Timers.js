@@ -21,7 +21,6 @@ const Timers = () => {
 	]);
 
 	useEffect(() => {
-		console.log('timerSections', timerSections);
 		const serializebleSections = timerSections.filter(
 			(section) =>
 				section.duration &&
@@ -62,7 +61,6 @@ const Timers = () => {
 					const filteredTimerActions = timerActions.filter(
 						({actionType}) => actionType === 'reassignments'
 					);
-					console.log('filteredTimerActions 1', filteredTimerActions);
 					if (filteredTimerActions.length) {
 						const reassignments = {};
 
@@ -85,16 +83,13 @@ const Timers = () => {
 							);
 						} else if (
 							reassignments.assignmentType[0] === 'user' &&
-							Object.keys(filteredTimerActions).includes('users')
+							Object.keys(filteredTimerActions[0]).includes(
+								'users'
+							)
 						) {
-							console.log('foo');
-							console.log(
-								'filteredTimerActions 2',
-								filteredTimerActions
+							reassignments.emailAddress = filteredTimerActions[0].users.map(
+								({emailAddress}) => emailAddress
 							);
-							// reassignments.roleId = filteredTimerActions.map(
-							// 	({roleId}) => roleId
-							// );
 						}
 
 						return reassignments;
@@ -158,6 +153,7 @@ const Timers = () => {
 
 		if (allTimerActions.reassignments.length) {
 			const data = allTimerActions.reassignments;
+			console.log('data', data)
 			for (let index = 0; index < data[0][1].length; index++) {
 				const section = {};
 
