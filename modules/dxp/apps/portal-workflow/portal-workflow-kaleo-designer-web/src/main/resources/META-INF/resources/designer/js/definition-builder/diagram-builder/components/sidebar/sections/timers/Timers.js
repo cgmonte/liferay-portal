@@ -14,7 +14,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import Timer from './Timer';
 
-const Timers = ({setErrors}) => {
+const Timers = ({setContentName, setErrors}) => {
 	const {selectedItem, setSelectedItem} = useContext(DiagramBuilderContext);
 	const [timerSections, setTimerSections] = useState([
 		{identifier: `${Date.now()}-0`},
@@ -75,15 +75,13 @@ const Timers = ({setErrors}) => {
 							reassignments.resourceAction = filteredTimerActions.map(
 								({resourceAction}) => resourceAction
 							);
-						}
-						else if (
+						} else if (
 							reassignments.assignmentType[0] === 'roleId'
 						) {
 							reassignments.roleId = filteredTimerActions.map(
 								({roleId}) => roleId
 							);
-						}
-						else if (
+						} else if (
 							reassignments.assignmentType[0] === 'user' &&
 							Object.keys(filteredTimerActions[0]).includes(
 								'users'
@@ -91,6 +89,13 @@ const Timers = ({setErrors}) => {
 						) {
 							reassignments.emailAddress = filteredTimerActions[0].users.map(
 								({emailAddress}) => emailAddress
+							);
+						} else if (
+							reassignments.assignmentType[0] === 'roleType'
+						) {
+							console.log(
+								'filteredTimerActions',
+								filteredTimerActions
 							);
 						}
 
@@ -127,8 +132,7 @@ const Timers = ({setErrors}) => {
 
 				timerNotifications: serializebleSections.map(() => ({})),
 			};
-		}
-		else {
+		} else {
 			taskTimers = null;
 		}
 
@@ -168,13 +172,11 @@ const Timers = ({setErrors}) => {
 					section.resourceAction = data.find(
 						(entry) => entry[0] === 'resourceAction'
 					)[1];
-				}
-				else if (section.assignmentType === 'roleId') {
+				} else if (section.assignmentType === 'roleId') {
 					section.roleId = data.find(
 						(entry) => entry[0] === 'roleId'
 					)[1];
-				}
-				else if (
+				} else if (
 					section.assignmentType === 'user' &&
 					data.some((entry) => entry[0] === 'emailAddress')
 				) {
@@ -184,8 +186,7 @@ const Timers = ({setErrors}) => {
 							emailAddress: email,
 							identifier: `${Date.now()}-${index}`,
 						}));
-				}
-				else {
+				} else {
 					section.assignmentType = 'assetCreator';
 				}
 
@@ -275,6 +276,7 @@ const Timers = ({setErrors}) => {
 			recurrence={timerData.recurrence}
 			recurrenceScale={timerData.recurrenceScale}
 			sectionsLength={timerSections?.length}
+			setContentName={setContentName}
 			setErrors={setErrors}
 			setTimerSections={setTimerSections}
 			timerActions={timerData.timerActions}
