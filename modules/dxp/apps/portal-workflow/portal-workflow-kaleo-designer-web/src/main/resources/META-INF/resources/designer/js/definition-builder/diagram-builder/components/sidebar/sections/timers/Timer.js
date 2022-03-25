@@ -95,8 +95,9 @@ const Timer = ({
 			{actionSections.map(({identifier}, index) => (
 				<TimerAction
 					actionSectionsIndex={index}
-					identifier={identifier}
-					key={`section-${identifier}`}
+					reassignments={actionSections.some(
+						({actionType}) => actionType === 'reassignments'
+					)}
 					sectionsLength={actionSections?.length}
 					setActionSections={setActionSections}
 					timersIndex={timersIndex}

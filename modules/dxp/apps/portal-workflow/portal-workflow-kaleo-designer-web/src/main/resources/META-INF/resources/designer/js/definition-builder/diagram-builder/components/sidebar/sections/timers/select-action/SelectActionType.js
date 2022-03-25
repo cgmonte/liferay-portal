@@ -14,23 +14,42 @@ import React from 'react';
 
 const options = [
 	{
-		actionType: 'actions',
+		actionType: 'timerActions',
+		disabled: false,
 		label: Liferay.Language.get('action'),
 	},
 	{
-		actionType: 'notifications',
+		actionType: 'timerNotifications',
+		disabled: false,
 		label: Liferay.Language.get('notification'),
 	},
 	{
 		actionType: 'reassignments',
+		disabled: false,
 		label: Liferay.Language.get('reassignment'),
 	},
 ];
 
 const SelectActionType = ({
+	actionSectionsIndex,
 	actionType,
-	setActionType,
+	reassignments,
+	setActionSections,
 }) => {
+	options[2].disabled = reassignments;
+	function handleChange(value) {
+		setActionSections((previousSections) => {
+			const updatedSections = [...previousSections];
+
+			updatedSections.splice(actionSectionsIndex, 1, {
+				actionType: value,
+				identifier: `${Date.now()}-${actionSectionsIndex}`,
+			});
+
+			return updatedSections;
+		});
+	}
+
 	return (
 		<ClayForm.Group>
 			<label htmlFor="action-type">{Liferay.Language.get('type')}</label>
@@ -40,11 +59,12 @@ const SelectActionType = ({
 				defaultValue={actionType}
 				id="action-type"
 				onChange={(event) => {
-					setActionType(event.target.value);
+					handleChange(event.target.value);
 				}}
 			>
 				{options.map((item) => (
 					<ClaySelect.Option
+						disabled={item.disabled}
 						key={item.actionType}
 						label={item.label}
 						value={item.actionType}
