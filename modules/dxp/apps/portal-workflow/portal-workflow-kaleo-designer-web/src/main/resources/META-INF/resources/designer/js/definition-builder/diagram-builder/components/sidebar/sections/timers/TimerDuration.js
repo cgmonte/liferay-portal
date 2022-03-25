@@ -18,13 +18,17 @@ import SidebarPanel from '../../SidebarPanel';
 import TimerFields from './TimerFields';
 
 const TimerDuration = ({
+	duration: durationValue,
+	durationScale: durationScaleValue,
+	recurrence: recurrenceValue,
+	recurrenceScale: recurrenceScaleValue,
 	selectedItem,
 	setTimerSections,
 	timerIdentifier,
 	timersIndex,
 }) => {
 	const [recurrence, setRecurrence] = useState(
-		selectedItem?.data.taskTimers?.delay[timersIndex]?.scale.length > 1
+		!!recurrenceValue && !!recurrenceScaleValue
 	);
 
 	const handleToggle = () => {
@@ -47,6 +51,8 @@ const TimerDuration = ({
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('duration')}>
 			<TimerFields
+				durationScaleValue={durationScaleValue}
+				durationValue={durationValue}
 				selectedItem={selectedItem}
 				setTimerSections={setTimerSections}
 				timerIdentifier={timerIdentifier}
@@ -66,15 +72,14 @@ const TimerDuration = ({
 						'repeat-the-action-at-a-given-duration-until-the-workflow-task-is-completed'
 					)}
 				>
-					<ClayIcon
-						className="text-muted"
-						symbol="question-circle-full"
-					/>
+					<ClayIcon className="text-muted" />
 				</span>
 			</div>
 
 			{recurrence && (
 				<TimerFields
+					durationScaleValue={recurrenceScaleValue}
+					durationValue={recurrenceValue}
 					recurrence
 					scaleHelpText={Liferay.Language.get('recurrence')}
 					selectedItem={selectedItem}
