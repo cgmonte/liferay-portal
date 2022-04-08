@@ -14,20 +14,31 @@
 
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
-import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
-import React, {FormEvent, useEffect, useState} from 'react';
+import ClayModal, { ClayModalProvider, useModal } from '@clayui/modal';
+import { fetch } from 'frontend-js-web';
+import React, { FormEvent, useEffect, useState } from 'react';
 
+import { toCamelCase } from '../utils/string';
 import CustomSelect from './Form/CustomSelect/CustomSelect';
 import Input from './Form/Input';
 
 const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId() as Liferay.Language.Locale;
 const requiredLabel = Liferay.Language.get('required');
+const objectValidationTypes = [{ label: 'Groovy', validationType: 'groovy' }];
+const headers = new Headers({
+	'Accept': 'application/json',
+	'Content-Type': 'application/json',
+});
 
 function ModalAddObjectValidation({
-	objectValidationTypes,
+	apiURL,
+	// objectValidationTypes,
 	observer,
 	onClose,
 }: IModal) {
+	console.log('apiURL', apiURL);
+	console.log('objectValidationTypes', objectValidationTypes);
+
 	const [typeValue, setTypeValue] = useState<ObjectValidationType>({
 		label: '',
 		validationType: '',
@@ -39,11 +50,11 @@ function ModalAddObjectValidation({
 		labelError: '',
 		typeError: '',
 	});
+	const [showError, setShowError] = useState<boolean>(false);
 
-	const handleSubmit = (event: FormEvent) => {
-		event.preventDefault();
+	useEffect(() => {
 		setErrors((currentErrors) => {
-			const updatedErrors = {...currentErrors};
+			const updatedErrors = { ...currentErrors };
 			updatedErrors.labelError =
 				labelValue[defaultLanguageId] === '' ? requiredLabel : '';
 			updatedErrors.typeError =
@@ -51,6 +62,46 @@ function ModalAddObjectValidation({
 
 			return updatedErrors;
 		});
+	}, [labelValue, typeValue])
+
+	const handleSubmit = async (event: FormEvent) => {
+		event.preventDefault();
+		if (Object.values(errors).some((error) => error !== '')) {
+			setShowError(true)
+		} else {
+			setShowError(false)
+			const response = await fetch(apiURL, {
+				body: JSON.stringify({
+					active: false,
+					engine: typeValue.validationType,
+					name: {
+						[defaultLanguageId]: labelValue[defaultLanguageId]
+					},
+					objectDefinitionId: 42724,
+					script: '',
+				}),
+				headers,
+				method: 'POST',
+			});
+
+			if (response.status === 401) {
+				window.location.reload();
+			}
+			else if (response.ok) {
+				console.log('response', response)
+				onClose();
+
+				window.location.reload();
+			}
+
+			// else {
+			// 	const {type} = (await response.json()) as any;
+			// 	const errorMessage =
+			// 		ERRORS[type] ?? Liferay.Language.get('an-error-occurred');
+
+			// 	setError(errorMessage);
+			// }
+		}
 	};
 
 	const handleTypeChange = (option: ObjectValidationType) => {
@@ -64,6 +115,8 @@ function ModalAddObjectValidation({
 		setLabelValue(label);
 	};
 
+
+
 	return (
 		<ClayModal observer={observer}>
 			<ClayForm onSubmit={handleSubmit}>
@@ -74,19 +127,19 @@ function ModalAddObjectValidation({
 				<ClayModal.Body>
 					<Input
 						autoComplete="off"
-						error={errors.labelError}
+						error={showError && errors.labelError !== '' ? errors.labelError : ''}
 						id="objectFieldLabel"
 						label={Liferay.Language.get('label')}
 						name="label"
-						onChange={({target: {value}}) => {
-							handleLabelChange({[defaultLanguageId]: value});
+						onChange={({ target: { value } }) => {
+							handleLabelChange({ [defaultLanguageId]: value });
 						}}
 						required
 						value={labelValue[defaultLanguageId]}
 					/>
 
 					<CustomSelect<ObjectValidationType>
-						error={errors.typeError}
+						error={showError && errors.typeError !== '' ? errors.typeError : ''}
 						label={Liferay.Language.get('type')}
 						onChange={handleTypeChange}
 						options={objectValidationTypes}
@@ -121,10 +174,9 @@ export default function ModalWithProvider({
 	objectValidationTypes,
 }: IProps) {
 	const [isVisible, setVisibility] = useState<boolean>(false);
-	const {observer, onClose} = useModal({onClose: () => setVisibility(false)});
+	const { observer, onClose } = useModal({ onClose: () => setVisibility(false) });
 
 	useEffect(() => {
-		objectValidationTypes.push({label: 'Groovy', validationType: 'groovy'});
 		Liferay.on('addObjectValidation', () => setVisibility(true));
 
 		return () => Liferay.detach('addObjectValidation');

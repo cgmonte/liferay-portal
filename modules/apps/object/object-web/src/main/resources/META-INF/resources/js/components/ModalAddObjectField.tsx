@@ -39,6 +39,7 @@ function ModalAddObjectField({
 	onClose,
 	showDocumentsAndMediaOption,
 }: IModal) {
+	console.log('apiURL', apiURL)
 	const [error, setError] = useState<string>('');
 
 	const initialValues: Partial<ObjectField> = {
