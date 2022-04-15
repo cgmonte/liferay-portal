@@ -14,53 +14,37 @@
 
 import React, {ChangeEventHandler, ReactNode} from 'react';
 import {FormError} from '../hooks/useForm';
-export default function ObjectFieldFormBase({
-	allowMaxLength,
+export default function ObjectValidationFormBase({
 	children,
 	disabled,
-	errors,
 	handleChange,
-	objectField: values,
-	objectFieldTypes,
+	objectValidationTypes,
 	setValues,
+	values,
 }: IProps): JSX.Element;
-export declare function useObjectFieldForm({
+export declare function useObjectValidationForm({
 	initialValues,
 	onSubmit,
-}: IUseObjectFieldForm): {
-	errors: FormError<
-		ObjectField & {
-			acceptedFileExtensions: any;
-			fileSource: any;
-			maximumFileSize: any;
-			maxLength: any;
-			showCounter: any;
-		}
-	>;
+}: IUseObjectValidationForm): {
+	errors: FormError<ObjectValidation>;
 	handleChange: React.ChangeEventHandler<HTMLInputElement>;
 	handleSubmit: React.FormEventHandler<HTMLFormElement> &
 		React.MouseEventHandler<HTMLButtonElement>;
-	setValues: (values: Partial<ObjectField>) => void;
-	values: Partial<ObjectField>;
+	setValues: (values: Partial<ObjectValidation>) => void;
+	values: Partial<ObjectValidation>;
 };
-interface IUseObjectFieldForm {
-	initialValues: Partial<ObjectField>;
-	onSubmit: (field: ObjectField) => void;
+interface IUseObjectValidationForm {
+	initialValues: Partial<ObjectValidation>;
+	onSubmit: (validation: ObjectValidation) => void;
 }
 interface IProps {
-	allowMaxLength?: boolean;
 	children?: ReactNode;
-	disabled?: boolean;
-	errors: ObjectFieldErrors;
+	disabled: boolean;
+	errors: ObjectValidationErrors;
 	handleChange: ChangeEventHandler<HTMLInputElement>;
-	objectField: Partial<ObjectField>;
-	objectFieldTypes: ObjectFieldType[];
-	setValues: (values: Partial<ObjectField>) => void;
+	objectValidationTypes: ObjectValidationType[];
+	setValues: (values: Partial<ObjectValidation>) => void;
+	values: Partial<ObjectValidation>;
 }
-export declare type ObjectFieldErrors = FormError<
-	ObjectField &
-		{
-			[key in ObjectFieldSettingName]: any;
-		}
->;
+export declare type ObjectValidationErrors = FormError<ObjectValidation>;
 export {};
