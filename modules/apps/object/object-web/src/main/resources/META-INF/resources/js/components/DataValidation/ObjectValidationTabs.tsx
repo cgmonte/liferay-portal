@@ -13,15 +13,32 @@
  */
 
 import ClayForm from '@clayui/form';
-import React, {ChangeEventHandler, useEffect, useState} from 'react';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
 
 import Editor from '../Editor/Editor';
+import Sidebar from '../Editor/Sidebar/Sidebar';
 import InputLocalized from '../Form/InputLocalized/InputLocalized';
 import Select from '../Form/Select';
 import ObjectValidationFormBase, {
 	ObjectValidationErrors,
 } from '../ObjectValidationFormBase';
-import {getTranslations} from './utils';
+import { getTranslations } from './utils';
+
+const elementsList = [{
+	items: [{
+		content: "<#if (title.getData())??>\n\t${title.getData()}\n</#if>",
+		label: "Title",
+		repeatable: false,
+		tooltip: "<p>Title</p>",
+	}], label: 'Fields'
+}, {
+	items: [{
+		content: "<#if (authorProfileImage.getData())?? && authorProfileImage.getData() != \"\">\n\t<img src=\"${authorProfileImage.getData()}\" />\n</#if>",
+		label: "Author Profile Image",
+		repeatable: false,
+		tooltip: "<p>Author Profile</p>",
+	}], label: 'Operators'
+}]
 
 function BasicInfo({
 	componentLabel,
@@ -44,7 +61,7 @@ function BasicInfo({
 		if (typeof values.name === 'string') {
 			const nameTranslations = getTranslations(values.name, 'Name');
 
-			setValues({name: nameTranslations});
+			setValues({ name: nameTranslations });
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,7 +78,7 @@ function BasicInfo({
 					label={Liferay.Language.get('label')}
 					locales={locales}
 					onSelectedLocaleChange={setSelectedLocale}
-					onTranslationsChange={(label) => setValues({name: label})}
+					onTranslationsChange={(label) => setValues({ name: label })}
 					required
 					selectedLocale={locale}
 					translations={values.name as LocalizedValue<string>}
@@ -111,7 +128,7 @@ function Conditions({
 				'ErrorLabel'
 			);
 
-			setValues({errorLabel: errorLabelTranslations});
+			setValues({ errorLabel: errorLabelTranslations });
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,6 +146,10 @@ function Conditions({
 					disabled={disabled}
 					setValues={setValues}
 				/>
+
+				<Sidebar
+					elementsList={elementsList}
+				/>
 			</div>
 
 			<div className="mt-4 sheet">
@@ -143,7 +164,7 @@ function Conditions({
 					locales={locales}
 					onSelectedLocaleChange={setSelectedLocale}
 					onTranslationsChange={(message) =>
-						setValues({errorLabel: message})
+						setValues({ errorLabel: message })
 					}
 					required
 					selectedLocale={locale}
@@ -154,7 +175,7 @@ function Conditions({
 	);
 }
 
-function TriggerEventContainer({disabled, eventTypes}: ITriggerEventProps) {
+function TriggerEventContainer({ disabled, eventTypes }: ITriggerEventProps) {
 	return (
 		<div className="mt-4 sheet">
 			<h2 className="sheet-title">
@@ -177,7 +198,7 @@ interface ITriggerEventProps {
 
 interface IBasicInfo {
 	componentLabel: string;
-	defaultLocale: {label: string; symbol: string};
+	defaultLocale: { label: string; symbol: string };
 	disabled: boolean;
 	errors: ObjectValidationErrors;
 	handleChange: ChangeEventHandler<HTMLInputElement>;
@@ -187,7 +208,7 @@ interface IBasicInfo {
 }
 
 interface IConditions {
-	defaultLocale: {label: string; symbol: string};
+	defaultLocale: { label: string; symbol: string };
 	disabled: boolean;
 	errors: ObjectValidationErrors;
 	handleChange: ChangeEventHandler<HTMLInputElement>;
@@ -196,4 +217,4 @@ interface IConditions {
 	values: Partial<ObjectValidation>;
 }
 
-export {BasicInfo, Conditions};
+export { BasicInfo, Conditions };
