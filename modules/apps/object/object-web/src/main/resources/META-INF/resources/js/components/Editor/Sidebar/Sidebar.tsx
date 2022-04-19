@@ -19,7 +19,7 @@ import { ElementsSidebarPanel } from './ElementsSidebarPanel';
 // import './Sidebar.scss';
 
 export default function Sidebar({
-	elementsList = [],
+	elementsList = [], inputChannel,
 }: IElementsSidebarPanel) {
 	return (
 		<div className="ddm_template_editor__App-sidebar">
@@ -29,6 +29,7 @@ export default function Sidebar({
 				<ElementsSidebarPanel
 					className="ddm_template_editor__App-sidebar-title my-3"
 					elementsList={elementsList}
+					inputChannel={inputChannel}
 				/>
 			</div>
 		</div>
@@ -38,6 +39,7 @@ export default function Sidebar({
 interface IElementsSidebarPanel {
 	className?: string;
 	elementsList: IElement[];
+	inputChannel: inputChannelObject;
 }
 
 interface IElement {
@@ -50,4 +52,8 @@ interface IItem {
 	label: string;
 	repeatable: boolean;
 	tooltip: string;
+}
+
+interface inputChannelObject {
+	sendData: Function;
 }

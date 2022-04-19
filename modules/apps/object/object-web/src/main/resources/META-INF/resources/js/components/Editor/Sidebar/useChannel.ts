@@ -14,12 +14,12 @@
 
 import {useState} from 'react';
 
-export function useChannel() {
+export function useChannel(): inputChannelObject {
 	const [channel] = useState(() => {
 		const listeners = new Set();
 
 		return {
-			onData(callback: any) {
+			onData(callback: Function): Function {
 				listeners.add(callback);
 
 				return () => {
@@ -27,7 +27,7 @@ export function useChannel() {
 				};
 			},
 
-			sendData(data: any) {
+			sendData(data: string): void {
 				listeners.forEach((callback: any) => {
 					callback(data);
 				});
@@ -36,4 +36,9 @@ export function useChannel() {
 	});
 
 	return channel;
+}
+
+interface inputChannelObject {
+	onData: Function;
+	sendData: Function;
 }

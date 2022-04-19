@@ -17,6 +17,7 @@ import React, { ChangeEventHandler, useEffect, useState } from 'react';
 
 import Editor from '../Editor/Editor';
 import Sidebar from '../Editor/Sidebar/Sidebar';
+import { useChannel } from '../Editor/Sidebar/useChannel';
 import InputLocalized from '../Form/InputLocalized/InputLocalized';
 import Select from '../Form/Select';
 import ObjectValidationFormBase, {
@@ -120,6 +121,7 @@ function Conditions({
 			symbol: string;
 		}
 	);
+	const inputChannel = useChannel();
 
 	useEffect(() => {
 		if (typeof values.errorLabel === 'string') {
@@ -144,11 +146,13 @@ function Conditions({
 				<Editor
 					content={values.script}
 					disabled={disabled}
+					inputChannel={inputChannel}
 					setValues={setValues}
 				/>
 
 				<Sidebar
 					elementsList={elementsList}
+					inputChannel={inputChannel}
 				/>
 			</div>
 

@@ -34,11 +34,16 @@ import './Editor.scss';
 export default function Editor({
 	content,
 	disabled,
+	inputChannel,
 	setValues,
 }: EditorProps): JSX.Element;
 interface EditorProps {
 	content: string | undefined;
 	disabled: boolean;
+	inputChannel: inputChannelObject;
 	setValues: (values: Partial<ObjectValidation>) => void;
+}
+interface inputChannelObject {
+	onData: Function;
 }
 export {};

@@ -16,10 +16,12 @@
 
 export default function Sidebar({
 	elementsList,
+	inputChannel,
 }: IElementsSidebarPanel): JSX.Element;
 interface IElementsSidebarPanel {
 	className?: string;
 	elementsList: IElement[];
+	inputChannel: inputChannelObject;
 }
 interface IElement {
 	items: IItem[];
@@ -30,5 +32,8 @@ interface IItem {
 	label: string;
 	repeatable: boolean;
 	tooltip: string;
+}
+interface inputChannelObject {
+	sendData: Function;
 }
 export {};

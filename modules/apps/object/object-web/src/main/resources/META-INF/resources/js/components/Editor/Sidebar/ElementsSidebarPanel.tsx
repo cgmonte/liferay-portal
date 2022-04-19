@@ -18,9 +18,8 @@ import React from 'react';
 // import { AppContext } from './AppContext';
 
 import { CollapsableButtonList } from './CollapsableButtonList';
-import { useChannel } from './useChannel';
 
-export function ElementsSidebarPanel({ className, elementsList }: IElementsSidebarPanel) {
+export function ElementsSidebarPanel({ className, elementsList, inputChannel }: IElementsSidebarPanel) {
 	// const {
 	// 	inputChannel,
 	// 	templateVariableGroups: initialTemplateVariableGroups,
@@ -32,8 +31,6 @@ export function ElementsSidebarPanel({ className, elementsList }: IElementsSideb
 			item.repeatable ? { ...item, label: `${item.label}*` } : item
 		),
 	}));
-
-	const inputChannel = useChannel();
 
 	const onButtonClick = (item: IItem) => inputChannel.sendData(item.content);
 
@@ -60,6 +57,7 @@ export function ElementsSidebarPanel({ className, elementsList }: IElementsSideb
 interface IElementsSidebarPanel {
 	className: string;
 	elementsList: IElement[];
+	inputChannel: inputChannelObject;
 }
 
 interface IElement {
@@ -72,4 +70,8 @@ interface IItem {
 	label: string;
 	repeatable: boolean;
 	tooltip: string;
+}
+
+interface inputChannelObject {
+	sendData: Function;
 }

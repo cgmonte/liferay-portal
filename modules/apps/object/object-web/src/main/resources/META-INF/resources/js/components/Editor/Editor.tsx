@@ -52,7 +52,7 @@ import CodeMirror from 'codemirror';
 
 import './Editor.scss';
 
-export default function Editor({content, disabled, setValues}: EditorProps) {
+export default function Editor({content, disabled, inputChannel, setValues}: EditorProps) {
 	const defaultContent = `<#-- Insert a Groovy Script to define your validation. -->`;
 
 	const [editor, setEditor] = useState<any>();
@@ -108,6 +108,16 @@ export default function Editor({content, disabled, setValues}: EditorProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [editor, setScript, setValues]);
 
+	useEffect(() => {
+		if (inputChannel) {
+			const removeListener = inputChannel.onData((data: any) => {
+				editor?.replaceSelection(data);
+			});
+
+			return removeListener;
+		}
+	}, [editor, inputChannel]);
+
 	return (
 		<div
 			className="lfr-objects__editor__CodeMirrorEditor"
@@ -119,5 +129,10 @@ export default function Editor({content, disabled, setValues}: EditorProps) {
 interface EditorProps {
 	content: string | undefined;
 	disabled: boolean;
+	inputChannel: inputChannelObject;
 	setValues: (values: Partial<ObjectValidation>) => void;
+}
+
+interface inputChannelObject {
+	onData: Function;
 }

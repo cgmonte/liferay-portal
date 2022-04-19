@@ -12,7 +12,9 @@
  * details.
  */
 
-export declare function useChannel(): {
-	onData(callback: any): () => void;
-	sendData(data: any): void;
-};
+export declare function useChannel(): inputChannelObject;
+interface inputChannelObject {
+	onData: Function;
+	sendData: Function;
+}
+export {};
