@@ -14,13 +14,12 @@
 
 /// <reference types="react" />
 
+import '../Editor.scss';
 export declare function ElementsSidebarPanel({
-	className,
 	elementsList,
 	inputChannel,
 }: IElementsSidebarPanel): JSX.Element;
 interface IElementsSidebarPanel {
-	className: string;
 	elementsList: IElement[];
 	inputChannel: inputChannelObject;
 }

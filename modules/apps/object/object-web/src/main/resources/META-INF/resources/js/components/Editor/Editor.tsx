@@ -69,6 +69,7 @@ export default function Editor({content, disabled, inputChannel, setValues}: Edi
 				indentWithTabs: true,
 				inputStyle: 'contenteditable',
 				lineNumbers: true,
+				lineWrapping: true,
 				matchBrackets: true,
 				readOnly: disabled,
 				showHint: true,

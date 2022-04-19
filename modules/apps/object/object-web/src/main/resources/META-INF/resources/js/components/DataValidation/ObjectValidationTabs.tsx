@@ -25,6 +25,8 @@ import ObjectValidationFormBase, {
 } from '../ObjectValidationFormBase';
 import { getTranslations } from './utils';
 
+import '../Editor/Editor.scss'
+
 const elementsList = [{
 	items: [{
 		content: "<#if (title.getData())??>\n\t${title.getData()}\n</#if>",
@@ -138,22 +140,28 @@ function Conditions({
 
 	return (
 		<ClayForm className="lfr-objects__groovy-field">
-			<div className="sheet">
-				<h2 className="sheet-title">
-					{Liferay.Language.get('groovy')}
-				</h2>
+			<div className="alt-sheet">
 
-				<Editor
-					content={values.script}
-					disabled={disabled}
-					inputChannel={inputChannel}
-					setValues={setValues}
-				/>
+				<div className="title-divider">
+					<h2 className="sheet-title">
+						{Liferay.Language.get('groovy')}
+					</h2>
+				</div>
 
-				<Sidebar
-					elementsList={elementsList}
-					inputChannel={inputChannel}
-				/>
+				<div className="editor-container">
+					<Editor
+						content={values.script}
+						disabled={disabled}
+						inputChannel={inputChannel}
+						setValues={setValues}
+					/>
+
+					<Sidebar
+						elementsList={elementsList}
+						inputChannel={inputChannel}
+					/>
+				</div>
+
 			</div>
 
 			<div className="mt-4 sheet">

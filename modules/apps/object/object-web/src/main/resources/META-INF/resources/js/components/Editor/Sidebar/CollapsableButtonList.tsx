@@ -22,9 +22,11 @@ import { ButtonList } from './ButtonList';
 
 export function CollapsableButtonList({ items, label, onButtonClick }: IElement) {
 	return (
-		<Collapse label={label} open>
-			<ButtonList items={items} onButtonClick={onButtonClick} />
-		</Collapse>
+		<div className="collapsable-button-list">
+			<Collapse label={label} open>
+				<ButtonList items={items} onButtonClick={onButtonClick} />
+			</Collapse>
+		</div>
 	);
 }
 

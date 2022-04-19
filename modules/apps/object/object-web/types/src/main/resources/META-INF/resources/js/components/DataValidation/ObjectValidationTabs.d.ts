@@ -14,6 +14,7 @@
 
 import {ChangeEventHandler} from 'react';
 import {ObjectValidationErrors} from '../ObjectValidationFormBase';
+import '../Editor/Editor.scss';
 declare function BasicInfo({
 	componentLabel,
 	defaultLocale,

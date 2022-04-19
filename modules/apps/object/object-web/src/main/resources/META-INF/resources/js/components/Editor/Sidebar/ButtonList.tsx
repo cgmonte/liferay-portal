@@ -20,7 +20,6 @@ import { Button } from './Button';
 export function ButtonList({ items, onButtonClick }: IElement) {
 	return (
 		<>
-
 			{items.map((item) => (
 				<Button
 					key={item.label}
@@ -29,12 +28,8 @@ export function ButtonList({ items, onButtonClick }: IElement) {
 					tooltip={item.tooltip}
 				/>
 			))}
-
 		</>
-
 	)
-
-
 }
 
 ButtonList.propTypes = {

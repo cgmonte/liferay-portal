@@ -16,22 +16,15 @@ import React from 'react';
 
 import { ElementsSidebarPanel } from './ElementsSidebarPanel';
 
-// import './Sidebar.scss';
-
 export default function Sidebar({
 	elementsList = [], inputChannel,
 }: IElementsSidebarPanel) {
 	return (
-		<div className="ddm_template_editor__App-sidebar">
-			<div
-				className="ddm_template_editor__App-sidebar-content"
-			>
-				<ElementsSidebarPanel
-					className="ddm_template_editor__App-sidebar-title my-3"
-					elementsList={elementsList}
-					inputChannel={inputChannel}
-				/>
-			</div>
+		<div className="editor-sidebar">
+			<ElementsSidebarPanel
+				elementsList={elementsList}
+				inputChannel={inputChannel}
+			/>
 		</div>
 	);
 }

@@ -12,19 +12,13 @@
  * details.
  */
 
-import classNames from 'classnames';
 import React from 'react';
-
-// import { AppContext } from './AppContext';
 
 import { CollapsableButtonList } from './CollapsableButtonList';
 
-export function ElementsSidebarPanel({ className, elementsList, inputChannel }: IElementsSidebarPanel) {
-	// const {
-	// 	inputChannel,
-	// 	templateVariableGroups: initialTemplateVariableGroups,
-	// } = useContext(AppContext);
+import '../Editor.scss'
 
+export function ElementsSidebarPanel({ elementsList, inputChannel }: IElementsSidebarPanel) {
 	elementsList = elementsList.map((group) => ({
 		...group,
 		items: group.items.map((item) =>
@@ -35,10 +29,10 @@ export function ElementsSidebarPanel({ className, elementsList, inputChannel }: 
 	const onButtonClick = (item: IItem) => inputChannel.sendData(item.content);
 
 	return (
-		<div className={classNames(className, 'px-3')}>
-			<h1 className="ddm_template_editor__App-sidebar-title my-3">
+		<div className="px-3">
+			<h5 className="my-3">
 				{Liferay.Language.get('elements')}
-			</h1>
+			</h5>
 
 			{
 				elementsList.map(({ items, label }) => (
@@ -55,7 +49,6 @@ export function ElementsSidebarPanel({ className, elementsList, inputChannel }: 
 }
 
 interface IElementsSidebarPanel {
-	className: string;
 	elementsList: IElement[];
 	inputChannel: inputChannelObject;
 }
