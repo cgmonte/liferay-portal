@@ -49,11 +49,6 @@ function ModalAddObjectValidation({
 	});
 	const [showError, setShowError] = useState<boolean>(false);
 
-	const scriptType =
-		typeSelection.name === 'groovy'
-			? Liferay.Language.get('groovy')
-			: Liferay.Language.get('ddm');
-
 	useEffect(() => {
 		setFieldErrors((currentErrors) => {
 			const updatedErrors = {...currentErrors};
@@ -80,7 +75,10 @@ function ModalAddObjectValidation({
 					name: {
 						[defaultLanguageId]: labelInput[defaultLanguageId],
 					},
-					script: `'<#-- Insert a ${scriptType} Script to define your validation. -->`,
+					script:
+						typeSelection.name === 'groovy'
+							? '<#-- Insert a Groovy Script to define your validation. -->'
+							: '<#-- Add elements from the sidebar to define your validation. -->',
 				}),
 				headers,
 				method: 'POST',

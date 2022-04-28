@@ -36,20 +36,26 @@ export default function Sidebar({
 		tooltip: '',
 	}));
 
-	const memoizedValue = useMemo(
-		() => objectValidationRuleElements[0].items.concat(metadatas),
+	const objectFields = {...objectValidationRuleElements[0]};
+
+	objectFields.items = useMemo(
+		() => objectFields.items.concat(metadatas),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
 
-	objectValidationRuleElements[0].items = memoizedValue;
+	const elements = objectValidationRuleElements.filter(
+		(_, index) => index !== 0
+	);
+
+	elements.unshift(objectFields);
 
 	return (
 		<div className="lfr-objects__object-editor-sidebar">
 			<div className="px-3">
 				<h5 className="my-3">{Liferay.Language.get('elements')}</h5>
 
-				{objectValidationRuleElements.map(({items, label}) => (
+				{elements.map(({items, label}) => (
 					<Collapsable key={label} label={label}>
 						<Element items={items} onItemClick={onItemClick} />
 					</Collapsable>

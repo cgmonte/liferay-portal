@@ -60,11 +60,9 @@ export default function Editor({
 	inputChannel,
 	setValues,
 }: EditorProps) {
-	const defaultContent = `<#-- Insert a Groovy Script to define your validation. -->`;
-
 	const [editor, setEditor] = useState<any>();
 	const [editorWrapper, setEditorWrapper] = useState<any>();
-	const [script, setScript] = useState(content || defaultContent);
+	const [script, setScript] = useState(content);
 
 	useEffect(() => {
 		setEditor(
@@ -99,10 +97,7 @@ export default function Editor({
 		const handleChange = () => {
 			setScript(editor.getValue());
 
-			if (!editor.getValue().trim()) {
-				setValues({script: defaultContent});
-			}
-			else {
+			if (editor.getValue().trim()) {
 				setValues({script: editor.getValue()});
 			}
 		};

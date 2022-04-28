@@ -31,7 +31,6 @@ function BasicInfo({
 	defaultLocale,
 	disabled,
 	errors,
-	handleChange,
 	locales,
 	setValues,
 	values,
@@ -63,7 +62,6 @@ function BasicInfo({
 				<ObjectValidationFormBase
 					disabled={disabled}
 					errors={errors}
-					handleChange={handleChange}
 					objectValidationTypes={[
 						{
 							label: values.engineLabel,

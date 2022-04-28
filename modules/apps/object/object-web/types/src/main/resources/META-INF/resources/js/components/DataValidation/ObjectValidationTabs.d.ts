@@ -20,7 +20,6 @@ declare function BasicInfo({
 	defaultLocale,
 	disabled,
 	errors,
-	handleChange,
 	locales,
 	setValues,
 	values,
