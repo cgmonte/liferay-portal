@@ -88,7 +88,7 @@ export default function CustomSelect<T extends CustomItem = CustomItem>({
 
 export interface CustomItem {
 	description?: string;
-	label: string;
+	label?: string;
 	value?: string;
 }
 interface IProps<T extends CustomItem = CustomItem> {
