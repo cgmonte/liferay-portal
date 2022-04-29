@@ -22,6 +22,8 @@ import ObjectValidationFormBase, {
 	ObjectValidationErrors,
 } from '../ObjectValidationFormBase';
 
+import '../Editor/Editor.scss';
+
 function BasicInfo({
 	componentLabel,
 	defaultLocale,
