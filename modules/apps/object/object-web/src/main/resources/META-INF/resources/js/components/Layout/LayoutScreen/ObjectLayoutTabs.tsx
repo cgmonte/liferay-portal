@@ -15,29 +15,29 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
-import {useModal} from '@clayui/modal';
-import React, {useContext, useState} from 'react';
+import { useModal } from '@clayui/modal';
+import React, { useContext, useState } from 'react';
 
-import {defaultLanguageId} from '../../../utils/locale';
+import { defaultLanguageId } from '../../../utils/locale';
 import Panel from '../../Panel/Panel';
-import LayoutContext, {TYPES} from '../context';
+import LayoutContext, { TYPES } from '../context';
 import HeaderDropdown from './HeaderDropdown';
 import ModalAddObjectLayoutBox from './ModalAddObjectLayoutBox';
 import ObjectLayoutBox from './ObjectLayoutBox';
 import ObjectLayoutRelationship from './ObjectLayoutRelationship';
 
 const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
-	const [{isViewOnly, objectLayout}, dispatch] = useContext(LayoutContext);
+	const [{ isViewOnly, objectLayout }, dispatch] = useContext(LayoutContext);
 	const [visibleModal, setVisibleModal] = useState(false);
 	const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-	const {observer, onClose} = useModal({
+	const { observer, onClose } = useModal({
 		onClose: () => setVisibleModal(false),
 	});
 
 	return (
 		<>
 			{objectLayout?.objectLayoutTabs?.map(
-				({name, objectLayoutBoxes, objectRelationshipId}, tabIndex) => {
+				({ name, objectLayoutBoxes, objectRelationshipId }, tabIndex) => {
 					const isRelationshipType = objectRelationshipId !== 0;
 					const labelDisplayType = isRelationshipType
 						? 'warning'
@@ -53,8 +53,8 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 									<ClayLabel displayType={labelDisplayType}>
 										{isRelationshipType
 											? Liferay.Language.get(
-													'relationships'
-											  )
+												'relationships'
+											)
 											: Liferay.Language.get('fields')}
 									</ClayLabel>
 								}
@@ -83,6 +83,15 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										)}
 
 										<HeaderDropdown
+											addCategorization={() => {
+												dispatch({
+													payload: {
+														tabIndex,
+													},
+													type:
+														TYPES.DELETE_OBJECT_LAYOUT_TAB,
+												});
+											}}
 											deleteElement={() => {
 												dispatch({
 													payload: {
