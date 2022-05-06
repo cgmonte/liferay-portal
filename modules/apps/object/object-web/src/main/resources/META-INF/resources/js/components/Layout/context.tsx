@@ -136,7 +136,7 @@ const layoutReducer = (state: TState, action: TAction) => {
 				objectLayoutRows: [],
 				priority: 0,
 			});
-
+			
 			return newState;
 		}
 		case TYPES.ADD_OBJECT_FIELDS: {

@@ -86,10 +86,15 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 											addCategorization={() => {
 												dispatch({
 													payload: {
+														name: {
+															[defaultLanguageId]: Liferay.Language.get(
+																'categorization'
+															),
+														},
 														tabIndex,
 													},
 													type:
-														TYPES.DELETE_OBJECT_LAYOUT_TAB,
+														TYPES.ADD_OBJECT_LAYOUT_BOX,
 												});
 											}}
 											deleteElement={() => {
