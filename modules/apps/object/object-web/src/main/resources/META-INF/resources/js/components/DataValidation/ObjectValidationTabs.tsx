@@ -13,6 +13,7 @@
  */
 
 import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
 import {useFeatureFlag} from 'data-engine-js-components-web';
 import React, {ChangeEventHandler, useState} from 'react';
 
@@ -118,8 +119,18 @@ function Conditions({
 
 				<div className="lfr-objects__object-data-validation-editor-container">
 					<Editor
+						className={classNames({
+							'lfr-objects__script-editor--rtl':
+
+								// @ts-ignore
+
+								Liferay.Language.direction[locale.label] ===
+								'rtl',
+						})}
 						content={values.script}
 						disabled={disabled}
+						engine={values.engine!}
+						error={errors.script}
 						inputChannel={inputChannel}
 						setValues={setValues}
 					/>

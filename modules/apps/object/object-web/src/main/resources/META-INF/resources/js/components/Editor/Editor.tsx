@@ -12,9 +12,12 @@
  * details.
  */
 
+import {FieldFeedback} from 'data-engine-js-components-web';
 import React, {useEffect, useState} from 'react';
 
 import 'codemirror/addon/display/autorefresh';
+
+import 'codemirror/addon/display/placeholder';
 
 import 'codemirror/addon/edit/closebrackets';
 
@@ -57,12 +60,16 @@ import './Sidebar/Sidebar.scss';
 export default function Editor({
 	content,
 	disabled,
+	engine,
+	error: errorMessage,
 	inputChannel,
 	setValues,
 }: EditorProps) {
 	const [editor, setEditor] = useState<any>();
 	const [editorWrapper, setEditorWrapper] = useState<any>();
-	const [script, setScript] = useState(content);
+	const [script, setScript] = useState(
+		content === 'script_placeholder' && ''
+	);
 
 	useEffect(() => {
 		setEditor(
@@ -76,6 +83,14 @@ export default function Editor({
 				lineNumbers: true,
 				lineWrapping: true,
 				matchBrackets: true,
+				placeholder:
+					engine === 'ddm'
+						? Liferay.Language.get(
+								'add-elements-from-the-sidebar-to-define-your-validation'
+						  )
+						: Liferay.Language.get(
+								'insert-a-groovy-script-to-define-your-validation'
+						  ),
 				readOnly: disabled,
 				showHint: true,
 				tabSize: 2,
@@ -83,6 +98,7 @@ export default function Editor({
 				viewportMargin: Infinity,
 			})
 		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [disabled, editorWrapper]);
 
 	useEffect(() => {
@@ -122,16 +138,24 @@ export default function Editor({
 	}, [editor, inputChannel]);
 
 	return (
-		<div
-			className="lfr-objects__object-editor__CodeMirrorEditor"
-			ref={setEditorWrapper}
-		/>
+		<>
+			<div
+				className="lfr-objects__object-editor__CodeMirrorEditor"
+				ref={setEditorWrapper}
+			/>
+			<div className="has-error">
+				<FieldFeedback errorMessage={errorMessage} />
+			</div>
+		</>
 	);
 }
 
 interface EditorProps {
+	className?: string;
 	content: string | undefined;
 	disabled: boolean;
+	engine: string;
+	error?: string;
 	inputChannel: inputChannelObject;
 	setValues: (values: Partial<ObjectValidation>) => void;
 }

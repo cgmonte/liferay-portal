@@ -15,6 +15,7 @@
 /// <reference types="react" />
 
 import 'codemirror/addon/display/autorefresh';
+import 'codemirror/addon/display/placeholder';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/matchbrackets';
@@ -35,12 +36,17 @@ import './Sidebar/Sidebar.scss';
 export default function Editor({
 	content,
 	disabled,
+	engine,
+	error: errorMessage,
 	inputChannel,
 	setValues,
 }: EditorProps): JSX.Element;
 interface EditorProps {
+	className?: string;
 	content: string | undefined;
 	disabled: boolean;
+	engine: string;
+	error?: string;
 	inputChannel: inputChannelObject;
 	setValues: (values: Partial<ObjectValidation>) => void;
 }
