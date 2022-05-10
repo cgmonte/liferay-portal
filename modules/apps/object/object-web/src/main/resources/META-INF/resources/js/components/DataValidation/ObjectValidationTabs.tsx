@@ -12,15 +12,14 @@
  * details.
  */
 
-import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
-import {useFeatureFlag} from 'data-engine-js-components-web';
-import React, {ChangeEventHandler, useState} from 'react';
+import { useFeatureFlag } from 'data-engine-js-components-web';
+import React, { ChangeEventHandler, useState } from 'react';
 
 import Card from '../Card/Card';
 import Editor from '../Editor/Editor';
 import Sidebar from '../Editor/Sidebar/Sidebar';
-import {useChannel} from '../Editor/Sidebar/useChannel';
+import { useChannel } from '../Editor/Sidebar/useChannel';
 import InputLocalized from '../Form/InputLocalized/InputLocalized';
 import Select from '../Form/Select';
 import ObjectValidationFormBase, {
@@ -54,7 +53,7 @@ function BasicInfo({
 					label={Liferay.Language.get('label')}
 					locales={locales}
 					onSelectedLocaleChange={setSelectedLocale}
-					onTranslationsChange={(label) => setValues({name: label})}
+					onTranslationsChange={(label) => setValues({ name: label })}
 					placeholder={Liferay.Language.get('add-a-label')}
 					required
 					selectedLocale={locale}
@@ -96,57 +95,51 @@ function Conditions({
 	const inputChannel = useChannel();
 	const flags = useFeatureFlag();
 
+	const ddmTooltip = {
+		content: Liferay.Language.get('use-the-expression-builder-to-define-the-format-of-a-valid-object-entry'),
+		symbol: 'question-circle-full'
+	}
+
 	return (
 		<>
-			<div className="lfr-objects__object-data-validation-alt-sheet">
-				<div className="lfr-objects__object-data-validation-title-container">
-					<h2 className="sheet-title">{values.engineLabel}</h2>
-					&nbsp;
-					{values.engine === 'ddm' && (
-						<span
-							data-tooltip-align="top"
-							title={Liferay.Language.get(
-								'use-the-expression-builder-to-define-the-format-of-a-valid-object-entry'
-							)}
-						>
-							<ClayIcon
-								className="lfr-objects__edit-object-field-tooltip-icon"
-								symbol="question-circle-full"
+			<div className="lfr-objects__no-padding-card">
+				<Card
+					title={values.engineLabel!}
+					tooltip={values.engine === 'ddm' ? ddmTooltip : null}
+				>
+					<div className="lfr-objects__object-data-validation-editor-sidebar">
+						<div className='lfr-objects__object-data-validation-editor-container'>
+							<Editor
+								className={classNames({
+									'lfr-objects__script-editor--rtl':
+
+										// @ts-ignore
+
+										Liferay.Language.direction[locale.label] ===
+										'rtl',
+								})}
+								content={values.script}
+								disabled={disabled}
+								engine={values.engine!}
+								error={errors.script}
+								inputChannel={inputChannel}
+								setValues={setValues}
 							/>
-						</span>
-					)}
-				</div>
+						</div>
 
-				<div className="lfr-objects__object-data-validation-editor-container">
-					<Editor
-						className={classNames({
-							'lfr-objects__script-editor--rtl':
-
-								// @ts-ignore
-
-								Liferay.Language.direction[locale.label] ===
-								'rtl',
-						})}
-						content={values.script}
-						disabled={disabled}
-						engine={values.engine!}
-						error={errors.script}
-						inputChannel={inputChannel}
-						setValues={setValues}
-					/>
-
-					{flags['LPS-147651'] && (
-						<Sidebar
-							inputChannel={inputChannel}
-							objectValidationRuleElements={
-								objectValidationRuleElements
-							}
-						/>
-					)}
-				</div>
+						{flags['LPS-147651'] && (
+							<Sidebar
+								inputChannel={inputChannel}
+								objectValidationRuleElements={
+									objectValidationRuleElements
+								}
+							/>
+						)}
+					</div>
+				</Card>
 			</div>
 
-			<Card title={Liferay.Language.get('error-message')}>
+			< Card title={Liferay.Language.get('error-message')} >
 				<InputLocalized
 					disabled={disabled}
 					error={errors.errorLabel}
@@ -154,19 +147,19 @@ function Conditions({
 					locales={locales}
 					onSelectedLocaleChange={setSelectedLocale}
 					onTranslationsChange={(message) =>
-						setValues({errorLabel: message})
+						setValues({ errorLabel: message })
 					}
 					placeholder={Liferay.Language.get('add-an-error-message')}
 					required
 					selectedLocale={locale}
 					translations={values.errorLabel as LocalizedValue<string>}
 				/>
-			</Card>
+			</Card >
 		</>
 	);
 }
 
-function TriggerEventContainer({disabled, eventTypes}: ITriggerEventProps) {
+function TriggerEventContainer({ disabled, eventTypes }: ITriggerEventProps) {
 	return (
 		<Card title={Liferay.Language.get('trigger-event')}>
 			<Select
@@ -185,7 +178,7 @@ interface ITriggerEventProps {
 }
 
 interface ITabs {
-	defaultLocale: {label: string; symbol: string};
+	defaultLocale: { label: string; symbol: string };
 	disabled: boolean;
 	errors: ObjectValidationErrors;
 	handleChange: ChangeEventHandler<HTMLInputElement>;
@@ -202,4 +195,4 @@ interface IConditions extends ITabs {
 	objectValidationRuleElements: ObjectValidationRuleElement[];
 }
 
-export {BasicInfo, Conditions};
+export { BasicInfo, Conditions };
