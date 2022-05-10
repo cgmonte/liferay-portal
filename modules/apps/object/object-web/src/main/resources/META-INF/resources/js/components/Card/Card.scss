@@ -13,9 +13,17 @@
 	&-header {
 		border-bottom: 1px solid $gray-300;
 		padding: 1.5rem;
+		align-items: baseline;
+		display: flex;
 	}
 
 	&-title {
 		margin: 0;
+	}
+}
+
+.lfr-objects__no-padding-card {
+	.lfr-objects__card-body {
+			padding: 0 !important;
 	}
 }
