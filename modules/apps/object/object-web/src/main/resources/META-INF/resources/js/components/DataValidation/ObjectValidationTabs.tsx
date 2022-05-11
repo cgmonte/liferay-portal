@@ -120,6 +120,8 @@ function Conditions({
 					<Editor
 						content={values.script}
 						disabled={disabled}
+								engine={values.engine!}
+								error={errors.script}
 						inputChannel={inputChannel}
 						setValues={setValues}
 					/>
