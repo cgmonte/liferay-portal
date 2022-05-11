@@ -62,7 +62,9 @@ export default function Editor({
 }: EditorProps) {
 	const [editor, setEditor] = useState<any>();
 	const [editorWrapper, setEditorWrapper] = useState<any>();
-	const [script, setScript] = useState(content);
+	const [script, setScript] = useState(
+		content === 'script_placeholder' ? '' : content
+	);
 
 	useEffect(() => {
 		setEditor(
