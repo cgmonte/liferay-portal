@@ -12,7 +12,7 @@
  * details.
  */
 
-import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
 import {useFeatureFlag} from 'data-engine-js-components-web';
 import React, {ChangeEventHandler, useState} from 'react';
 
@@ -95,46 +95,51 @@ function Conditions({
 	const inputChannel = useChannel();
 	const flags = useFeatureFlag();
 
+	const ddmTooltip = {
+		content: Liferay.Language.get(
+			'use-the-expression-builder-to-define-the-format-of-a-valid-object-entry'
+		),
+		symbol: 'question-circle-full',
+	};
+
 	return (
 		<>
-			<div className="lfr-objects__object-data-validation-alt-sheet">
-				<div className="lfr-objects__object-data-validation-title-container">
-					<h2 className="sheet-title">{values.engineLabel}</h2>
-					&nbsp;
-					{values.engine === 'ddm' && (
-						<span
-							data-tooltip-align="top"
-							title={Liferay.Language.get(
-								'use-the-expression-builder-to-define-the-format-of-a-valid-object-entry'
-							)}
-						>
-							<ClayIcon
-								className="lfr-objects__edit-object-field-tooltip-icon"
-								symbol="question-circle-full"
-							/>
-						</span>
-					)}
-				</div>
+			<div className="lfr-objects__no-padding-card">
+				<Card
+					title={values.engineLabel!}
+					tooltip={values.engine === 'ddm' ? ddmTooltip : null}
+				>
+					<div className="lfr-objects__object-data-validation-editor-sidebar">
+						<div className="lfr-objects__object-data-validation-editor-container">
+							<Editor
+								className={classNames({
+									'lfr-objects__script-editor--rtl':
 
-				<div className="lfr-objects__object-data-validation-editor-container">
-					<Editor
-						content={values.script}
-						disabled={disabled}
+										// @ts-ignore
+
+										Liferay.Language.direction[
+											locale.label
+										] === 'rtl',
+								})}
+								content={values.script}
+								disabled={disabled}
 								engine={values.engine!}
 								error={errors.script}
-						inputChannel={inputChannel}
-						setValues={setValues}
-					/>
+								inputChannel={inputChannel}
+								setValues={setValues}
+							/>
+						</div>
 
-					{flags['LPS-147651'] && (
-						<Sidebar
-							inputChannel={inputChannel}
-							objectValidationRuleElements={
-								objectValidationRuleElements
-							}
-						/>
-					)}
-				</div>
+						{flags['LPS-147651'] && (
+							<Sidebar
+								inputChannel={inputChannel}
+								objectValidationRuleElements={
+									objectValidationRuleElements
+								}
+							/>
+						)}
+					</div>
+				</Card>
 			</div>
 
 			<Card title={Liferay.Language.get('error-message')}>
