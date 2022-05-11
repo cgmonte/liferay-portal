@@ -11,11 +11,19 @@
 	}
 
 	&-header {
+		align-items: baseline;
 		border-bottom: 1px solid $gray-300;
+		display: flex;
 		padding: 1.5rem;
 	}
 
 	&-title {
 		margin: 0;
+	}
+}
+
+.lfr-objects__no-padding-card {
+	.lfr-objects__card-body {
+		padding: 0 !important;
 	}
 }
