@@ -42,6 +42,7 @@ export default function Editor({
 	setValues,
 }: EditorProps): JSX.Element;
 interface EditorProps {
+	className?: string;
 	content: string | undefined;
 	disabled: boolean;
 	engine: string;

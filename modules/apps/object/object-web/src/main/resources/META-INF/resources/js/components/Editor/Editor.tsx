@@ -12,6 +12,8 @@
  * details.
  */
 
+import classNames from 'classnames';
+import {FieldFeedback} from 'data-engine-js-components-web';
 import React, {useEffect, useState} from 'react';
 
 import 'codemirror/addon/display/autorefresh';
@@ -111,10 +113,7 @@ export default function Editor({
 
 		const handleChange = () => {
 			setScript(editor.getValue());
-
-			if (editor.getValue().trim()) {
-				setValues({script: editor.getValue()});
-			}
+			setValues({script: editor.getValue()});
 		};
 
 		editor.on('change', handleChange);
@@ -137,14 +136,24 @@ export default function Editor({
 	}, [editor, inputChannel]);
 
 	return (
-		<div
-			className="lfr-objects__object-editor__CodeMirrorEditor"
-			ref={setEditorWrapper}
-		/>
+		<>
+			<div
+				className={classNames(
+					'lfr-objects__object-editor__CodeMirrorEditor',
+					errorMessage &&
+						'lfr-objects__object-editor__CodeMirrorEditor--error'
+				)}
+				ref={setEditorWrapper}
+			/>
+			<div className="has-error mb-3">
+				<FieldFeedback errorMessage={errorMessage} />
+			</div>
+		</>
 	);
 }
 
 interface EditorProps {
+	className?: string;
 	content: string | undefined;
 	disabled: boolean;
 	engine: string;
