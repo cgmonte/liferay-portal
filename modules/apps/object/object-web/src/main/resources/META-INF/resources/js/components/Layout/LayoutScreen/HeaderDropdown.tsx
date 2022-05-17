@@ -14,6 +14,7 @@
 
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
+import {useFeatureFlag} from 'data-engine-js-components-web';
 import React, {FC, MouseEventHandler, useContext, useState} from 'react';
 
 import LayoutContext from '../context';
@@ -22,6 +23,8 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 	addCategorization,
 	deleteElement,
 }) => {
+	const flags = useFeatureFlag();
+	
 	const [active, setActive] = useState<boolean>(false);
 	const [{isViewOnly}] = useContext(LayoutContext);
 
@@ -44,7 +47,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 					{Liferay.Language.get('delete')}
 				</ClayDropDown.Item>
 
-				{addCategorization && (
+				{flags['LPS-149014'] && addCategorization && (
 					<ClayDropDown.Item
 						disabled={isViewOnly}
 						onClick={addCategorization}

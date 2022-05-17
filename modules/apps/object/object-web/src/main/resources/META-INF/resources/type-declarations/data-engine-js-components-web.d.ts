@@ -28,4 +28,4 @@ declare module 'data-engine-js-components-web' {
 	};
 }
 
-type Flags = '';
+type Flags = 'LPS-149014';
