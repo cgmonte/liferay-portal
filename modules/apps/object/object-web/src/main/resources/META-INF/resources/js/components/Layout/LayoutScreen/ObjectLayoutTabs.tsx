@@ -83,6 +83,20 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										)}
 
 										<HeaderDropdown
+											addCategorization={() => {
+												dispatch({
+													payload: {
+														name: {
+															[defaultLanguageId]: Liferay.Language.get(
+																'categorization'
+															),
+														},
+														tabIndex,
+													},
+													type:
+														TYPES.ADD_OBJECT_LAYOUT_BOX,
+												});
+											}}
 											deleteElement={() => {
 												dispatch({
 													payload: {
