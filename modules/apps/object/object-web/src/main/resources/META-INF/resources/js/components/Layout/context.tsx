@@ -124,18 +124,32 @@ const layoutReducer = (state: TState, action: TAction) => {
 			};
 		}
 		case TYPES.ADD_OBJECT_LAYOUT_BOX: {
-			const {name, tabIndex} = action.payload;
+			const {boxType, name, tabIndex} = action.payload;
 
 			const newState = {...state};
 
-			newState.objectLayout.objectLayoutTabs[
-				tabIndex
-			].objectLayoutBoxes.push({
+			const objectLayoutBoxes =
+				newState.objectLayout.objectLayoutTabs[tabIndex]
+					.objectLayoutBoxes;
+
+			const newBox = {
+				boxType,
 				collapsable: false,
 				name,
 				objectLayoutRows: [],
 				priority: 0,
-			});
+			};
+
+			const frameworkIndex = objectLayoutBoxes.findIndex(
+				(box) => box.boxType !== 'regular'
+			);
+
+			if (boxType === 'regular' && frameworkIndex >= 0) {
+				objectLayoutBoxes.splice(frameworkIndex, 0, newBox);
+			}
+			else {
+				objectLayoutBoxes.push(newBox);
+			}
 
 			return newState;
 		}
