@@ -99,8 +99,8 @@ const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 							/>
 						</>
 					}
-					displayCollapseIcon
-					displayDragIcon
+					displayCollapseIcon={displayAddButton}
+					displayDragIcon={displayAddButton}
 					title={label}
 				/>
 
