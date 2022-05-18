@@ -24,7 +24,6 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 	deleteElement,
 }) => {
 	const flags = useFeatureFlag();
-
 	const [active, setActive] = useState<boolean>(false);
 	const [
 		{
@@ -32,6 +31,10 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 			objectLayout: {objectLayoutTabs},
 		},
 	] = useContext(LayoutContext);
+	const handleOnClick = (handler: Function) => {
+		handler();
+		setActive(false);
+	};
 	const isThereFramework = (framework: string): boolean => {
 		for (const tab of objectLayoutTabs) {
 			if (
@@ -58,7 +61,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 			<ClayDropDown.ItemList>
 				<ClayDropDown.Item
 					disabled={isViewOnly}
-					onClick={deleteElement}
+					onClick={() => handleOnClick(deleteElement)}
 				>
 					{Liferay.Language.get('delete')}
 				</ClayDropDown.Item>
@@ -66,8 +69,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 				{flags['LPS-149014'] && addCategorization && (
 					<ClayDropDown.Item
 						disabled={isThereFramework('categorization')}
-						disabled={isViewOnly}
-						onClick={addCategorization}
+						onClick={() => handleOnClick(addCategorization)}
 					>
 						{Liferay.Language.get('add-categorization')}
 					</ClayDropDown.Item>
