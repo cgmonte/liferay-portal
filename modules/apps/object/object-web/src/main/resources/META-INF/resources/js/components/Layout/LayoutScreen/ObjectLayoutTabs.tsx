@@ -86,6 +86,8 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 											addCategorization={() => {
 												dispatch({
 													payload: {
+														boxType:
+															'categorization',
 														name: {
 															[defaultLanguageId]: Liferay.Language.get(
 																'categorization'
@@ -120,6 +122,7 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										{objectLayoutBoxes.map(
 											(
 												{
+													boxType,
 													collapsable,
 													name,
 													objectLayoutRows,
@@ -129,7 +132,9 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 												<ObjectLayoutBox
 													boxIndex={boxIndex}
 													collapsable={collapsable}
-													displayAddButton
+													displayAddButton={
+														boxType === 'regular'
+													}
 													key={`box_${boxIndex}`}
 													label={
 														name[defaultLanguageId]
