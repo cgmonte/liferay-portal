@@ -59,13 +59,6 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 			}
 		>
 			<ClayDropDown.ItemList>
-				<ClayDropDown.Item
-					disabled={isViewOnly}
-					onClick={() => handleOnClick(deleteElement)}
-				>
-					{Liferay.Language.get('delete')}
-				</ClayDropDown.Item>
-
 				{flags['LPS-149014'] && addCategorization && (
 					<ClayDropDown.Item
 						disabled={isThereFramework('categorization')}
@@ -74,6 +67,13 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 						{Liferay.Language.get('add-categorization')}
 					</ClayDropDown.Item>
 				)}
+
+				<ClayDropDown.Item
+					disabled={isViewOnly}
+					onClick={() => handleOnClick(deleteElement)}
+				>
+					{Liferay.Language.get('delete')}
+				</ClayDropDown.Item>
 			</ClayDropDown.ItemList>
 		</ClayDropDown>
 	);
