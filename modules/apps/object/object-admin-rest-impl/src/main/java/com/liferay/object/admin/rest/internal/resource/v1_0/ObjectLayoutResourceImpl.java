@@ -21,6 +21,7 @@ import com.liferay.object.admin.rest.dto.v1_0.ObjectLayoutRow;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectLayoutTab;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectLayoutUtil;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectLayoutResource;
+import com.liferay.object.constants.ObjectLayoutBoxConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectLayoutService;
 import com.liferay.object.service.persistence.ObjectLayoutBoxPersistence;
@@ -166,6 +167,17 @@ public class ObjectLayoutResourceImpl extends BaseObjectLayoutResourceImpl {
 				this::_toObjectLayoutRow));
 		serviceBuilderObjectLayoutBox.setPriority(
 			objectLayoutBox.getPriority());
+
+		String objectLayoutBoxType = objectLayoutBox.getTypeAsString();
+
+		if (objectLayoutBoxType == null) {
+			serviceBuilderObjectLayoutBox.setType(
+				ObjectLayoutBoxConstants.TYPE_REGULAR);
+
+			return serviceBuilderObjectLayoutBox;
+		}
+
+		serviceBuilderObjectLayoutBox.setType(objectLayoutBoxType);
 
 		return serviceBuilderObjectLayoutBox;
 	}
