@@ -45,6 +45,10 @@ $bgColor: #fff;
 		&__content-right {
 			align-items: center;
 			display: flex;
+
+			.simple-toggle-switch.toggle-switch {
+				display: contents;
+			}
 		}
 	}
 
