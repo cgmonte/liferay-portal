@@ -314,6 +314,7 @@
 		<column name="collapsable" type="boolean" />
 		<column localized="true" name="name" type="String" />
 		<column name="priority" type="int" />
+		<column name="type" type="String" />
 
 		<!-- Finder methods -->
 
