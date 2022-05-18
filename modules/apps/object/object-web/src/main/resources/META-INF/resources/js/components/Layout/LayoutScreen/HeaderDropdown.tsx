@@ -24,9 +24,25 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 	deleteElement,
 }) => {
 	const flags = useFeatureFlag();
-	
+
 	const [active, setActive] = useState<boolean>(false);
-	const [{isViewOnly}] = useContext(LayoutContext);
+	const [
+		{
+			isViewOnly,
+			objectLayout: {objectLayoutTabs},
+		},
+	] = useContext(LayoutContext);
+	const isThereFramework = (framework: string): boolean => {
+		for (const tab of objectLayoutTabs) {
+			if (
+				tab.objectLayoutBoxes.some((box) => box.boxType === framework)
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	};
 
 	return (
 		<ClayDropDown
@@ -49,6 +65,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 
 				{flags['LPS-149014'] && addCategorization && (
 					<ClayDropDown.Item
+						disabled={isThereFramework('categorization')}
 						disabled={isViewOnly}
 						onClick={addCategorization}
 					>
