@@ -224,6 +224,9 @@ components:
                 priority:
                     format: int32
                     type: integer
+                type:
+                    enum: [categorization, regular]
+                    type: string
         ObjectLayoutColumn:
             properties:
                 id:
