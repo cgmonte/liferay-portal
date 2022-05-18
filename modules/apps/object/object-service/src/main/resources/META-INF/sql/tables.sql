@@ -130,7 +130,8 @@ create table ObjectLayoutBox (
 	objectLayoutTabId LONG,
 	collapsable BOOLEAN,
 	name STRING null,
-	priority INTEGER
+	priority INTEGER,
+	type_ VARCHAR(75) null
 );
 
 create table ObjectLayoutColumn (

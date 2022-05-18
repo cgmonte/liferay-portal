@@ -138,6 +138,7 @@
 		<field name="collapsable" type="boolean" />
 		<field localized="true" name="name" type="String" />
 		<field name="priority" type="int" />
+		<field name="type" type="String" />
 	</model>
 	<model name="com.liferay.object.model.ObjectLayoutColumn">
 		<field name="mvccVersion" type="long" />
