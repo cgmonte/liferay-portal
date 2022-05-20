@@ -102,6 +102,8 @@ public class ObjectLayoutUtil {
 					ObjectLayoutUtil::_toObjectLayoutRow,
 					ObjectLayoutRow.class);
 				priority = serviceBuilderObjectLayoutBox.getPriority();
+				type = ObjectLayoutBox.Type.create(
+					serviceBuilderObjectLayoutBox.getType());
 			}
 		};
 	}
