@@ -16,6 +16,7 @@ import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import {useModal} from '@clayui/modal';
+import {useFeatureFlag} from 'data-engine-js-components-web';
 import React, {useContext, useState} from 'react';
 
 import {defaultLanguageId} from '../../../utils/locale';
@@ -33,6 +34,7 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	const {observer, onClose} = useModal({
 		onClose: () => setVisibleModal(false),
 	});
+	const flags = useFeatureFlag();
 
 	return (
 		<>
@@ -86,14 +88,13 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 											addCategorization={() => {
 												dispatch({
 													payload: {
-														type:
-															'categorization',
 														name: {
 															[defaultLanguageId]: Liferay.Language.get(
 																'categorization'
 															),
 														},
 														tabIndex,
+														type: 'categorization',
 													},
 													type:
 														TYPES.ADD_OBJECT_LAYOUT_BOX,
@@ -122,10 +123,10 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										{objectLayoutBoxes.map(
 											(
 												{
-													type,
 													collapsable,
 													name,
 													objectLayoutRows,
+													type,
 												},
 												boxIndex
 											) => (
@@ -133,7 +134,9 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 													boxIndex={boxIndex}
 													collapsable={collapsable}
 													displayAddButton={
-														type === 'regular'
+														type === 'regular' ||
+														(!flags['LPS-149014'] &&
+															type === undefined)
 													}
 													key={`box_${boxIndex}`}
 													label={

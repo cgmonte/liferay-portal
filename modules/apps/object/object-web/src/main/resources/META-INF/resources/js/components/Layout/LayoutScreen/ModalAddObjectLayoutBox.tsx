@@ -15,6 +15,7 @@
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal from '@clayui/modal';
+import {useFeatureFlag} from 'data-engine-js-components-web';
 import React, {useContext} from 'react';
 
 import useForm from '../../../hooks/useForm';
@@ -42,18 +43,32 @@ const ModalAddObjectLayoutBox: React.FC<IModalAddObjectLayoutBoxProps> = ({
 	const initialValues: TInitialValues = {
 		name: '',
 	};
+	const flags = useFeatureFlag();
 
 	const onSubmit = (values: any) => {
-		dispatch({
-			payload: {
-				type: 'regular',
-				name: {
-					[defaultLanguageId]: values.name,
+		if (flags['LPS-149014']) {
+			dispatch({
+				payload: {
+					name: {
+						[defaultLanguageId]: values.name,
+					},
+					tabIndex,
+					type: 'regular',
 				},
-				tabIndex,
-			},
-			type: TYPES.ADD_OBJECT_LAYOUT_BOX,
-		});
+				type: TYPES.ADD_OBJECT_LAYOUT_BOX,
+			});
+		}
+		else {
+			dispatch({
+				payload: {
+					name: {
+						[defaultLanguageId]: values.name,
+					},
+					tabIndex,
+				},
+				type: TYPES.ADD_OBJECT_LAYOUT_BOX,
+			});
+		}
 
 		onClose();
 	};
