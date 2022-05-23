@@ -46,7 +46,7 @@ const ModalAddObjectLayoutBox: React.FC<IModalAddObjectLayoutBoxProps> = ({
 	const onSubmit = (values: any) => {
 		dispatch({
 			payload: {
-				boxType: 'regular',
+				type: 'regular',
 				name: {
 					[defaultLanguageId]: values.name,
 				},

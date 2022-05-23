@@ -124,7 +124,7 @@ const layoutReducer = (state: TState, action: TAction) => {
 			};
 		}
 		case TYPES.ADD_OBJECT_LAYOUT_BOX: {
-			const {boxType, name, tabIndex} = action.payload;
+			const {type, name, tabIndex} = action.payload;
 
 			const newState = {...state};
 
@@ -133,7 +133,7 @@ const layoutReducer = (state: TState, action: TAction) => {
 					.objectLayoutBoxes;
 
 			const newBox = {
-				boxType,
+				type,
 				collapsable: false,
 				name,
 				objectLayoutRows: [],
@@ -141,10 +141,10 @@ const layoutReducer = (state: TState, action: TAction) => {
 			};
 
 			const frameworkIndex = objectLayoutBoxes.findIndex(
-				(box) => box.boxType !== 'regular'
+				(box) => box.type !== 'regular'
 			);
 
-			if (boxType === 'regular' && frameworkIndex >= 0) {
+			if (type === 'regular' && frameworkIndex >= 0) {
 				objectLayoutBoxes.splice(frameworkIndex, 0, newBox);
 			}
 			else {

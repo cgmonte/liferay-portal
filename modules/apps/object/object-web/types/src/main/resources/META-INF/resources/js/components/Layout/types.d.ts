@@ -27,7 +27,7 @@ export declare type TObjectLayoutTab = {
 	priority: number;
 };
 export declare type TObjectLayoutBox = {
-	boxType: string;
+	type: string;
 	collapsable: boolean;
 	name: TName;
 	objectLayoutRows: TObjectLayoutRow[];
