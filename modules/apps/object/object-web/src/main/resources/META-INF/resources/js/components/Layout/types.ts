@@ -30,7 +30,7 @@ export type TObjectLayoutTab = {
 };
 
 export type TObjectLayoutBox = {
-	type: string;
+	type: 'regular' | 'categorization';
 	collapsable: boolean;
 	name: TName;
 	objectLayoutRows: TObjectLayoutRow[];
