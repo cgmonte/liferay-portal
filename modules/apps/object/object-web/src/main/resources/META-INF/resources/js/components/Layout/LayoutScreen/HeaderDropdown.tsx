@@ -37,9 +37,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 	};
 	const isThereFramework = (framework: string): boolean => {
 		for (const tab of objectLayoutTabs) {
-			if (
-				tab.objectLayoutBoxes.some((box) => box.type === framework)
-			) {
+			if (tab.objectLayoutBoxes.some((box) => box.type === framework)) {
 				return true;
 			}
 		}

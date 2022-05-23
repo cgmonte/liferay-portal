@@ -124,7 +124,7 @@ const layoutReducer = (state: TState, action: TAction) => {
 			};
 		}
 		case TYPES.ADD_OBJECT_LAYOUT_BOX: {
-			const {type, name, tabIndex} = action.payload;
+			const {name, tabIndex, type} = action.payload;
 
 			const newState = {...state};
 
@@ -133,11 +133,11 @@ const layoutReducer = (state: TState, action: TAction) => {
 					.objectLayoutBoxes;
 
 			const newBox = {
-				type,
 				collapsable: false,
 				name,
 				objectLayoutRows: [],
 				priority: 0,
+				type,
 			};
 
 			const frameworkIndex = objectLayoutBoxes.findIndex(
