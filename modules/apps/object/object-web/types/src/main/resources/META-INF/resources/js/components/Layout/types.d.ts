@@ -26,12 +26,13 @@ export declare type TObjectLayoutTab = {
 	objectRelationshipId: number;
 	priority: number;
 };
+export declare type BoxType = 'regular' | 'categorization';
 export declare type TObjectLayoutBox = {
 	collapsable: boolean;
 	name: TName;
 	objectLayoutRows: TObjectLayoutRow[];
 	priority: number;
-	type: 'regular' | 'categorization';
+	type: BoxType;
 };
 export declare type TObjectLayoutRow = {
 	objectLayoutColumns: TObjectLayoutColumn[];

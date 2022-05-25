@@ -31,6 +31,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 			objectLayout: {objectLayoutTabs},
 		},
 	] = useContext(LayoutContext);
+
 	const handleOnClick = (handler: Function) => {
 		handler();
 		setActive(false);

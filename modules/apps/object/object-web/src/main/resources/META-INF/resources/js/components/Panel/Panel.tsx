@@ -16,6 +16,7 @@ import {ClayButtonWithIcon} from '@clayui/button';
 import classNames from 'classnames';
 import React, {useContext} from 'react';
 
+import {BoxType} from '../Layout/types';
 import PanelContextProvider, {PanelContext, TYPES} from './context';
 
 import './Panel.scss';
@@ -61,17 +62,15 @@ const PanelBody: React.FC<IPanelBodyProps> = ({children, className}) => {
 interface IPanelHeaderProps extends React.HTMLAttributes<HTMLElement> {
 	contentLeft?: React.ReactNode;
 	contentRight?: React.ReactNode;
-	displayCollapseIcon?: boolean;
-	displayDragIcon?: boolean;
 	title: string;
+	type: BoxType;
 }
 
 const PanelHeader: React.FC<IPanelHeaderProps> = ({
 	contentLeft,
 	contentRight,
-	displayCollapseIcon,
-	displayDragIcon,
 	title,
+	type,
 }) => {
 	const [{expanded}, dispatch] = useContext(PanelContext);
 
@@ -82,13 +81,13 @@ const PanelHeader: React.FC<IPanelHeaderProps> = ({
 			})}
 		>
 			<div className="object-admin-panel__header__content-left">
-				{displayDragIcon && (
+				{type === 'regular' && (
 					<ClayButtonWithIcon displayType="unstyled" symbol="drag" />
 				)}
 
 				<h3
 					className={classNames('object-admin-panel__title', {
-						'ml-3': !displayDragIcon,
+						'ml-3': type !== 'regular',
 					})}
 				>
 					{title}
@@ -108,7 +107,7 @@ const PanelHeader: React.FC<IPanelHeaderProps> = ({
 					</span>
 				)}
 
-				{displayCollapseIcon && (
+				{type === 'regular' && (
 					<ClayButtonWithIcon
 						displayType="unstyled"
 						onClick={() =>

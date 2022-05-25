@@ -112,9 +112,8 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										/>
 									</>
 								}
-								displayCollapseIcon
-								displayDragIcon
 								title={name[defaultLanguageId]}
+								type="regular"
 							/>
 
 							{!!objectLayoutBoxes?.length &&
@@ -133,11 +132,6 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 												<ObjectLayoutBox
 													boxIndex={boxIndex}
 													collapsable={collapsable}
-													displayAddButton={
-														type === 'regular' ||
-														(!flags['LPS-149014'] &&
-															type === undefined)
-													}
 													key={`box_${boxIndex}`}
 													label={
 														name[defaultLanguageId]
@@ -146,6 +140,11 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 														objectLayoutRows
 													}
 													tabIndex={tabIndex}
+													type={
+														!flags['LPS-149014']
+															? 'regular'
+															: type
+													}
 												/>
 											)
 										)}

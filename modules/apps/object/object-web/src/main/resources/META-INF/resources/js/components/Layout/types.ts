@@ -29,12 +29,14 @@ export type TObjectLayoutTab = {
 	priority: number;
 };
 
+export type BoxType = 'regular' | 'categorization';
+
 export type TObjectLayoutBox = {
 	collapsable: boolean;
 	name: TName;
 	objectLayoutRows: TObjectLayoutRow[];
 	priority: number;
-	type: 'regular' | 'categorization';
+	type: BoxType;
 };
 
 export type TObjectLayoutRow = {

@@ -13,6 +13,7 @@
  */
 
 import React from 'react';
+import {BoxType} from '../Layout/types';
 import './Panel.scss';
 declare const Panel: React.FC<React.HTMLAttributes<HTMLElement>> & {
 	Body: React.FC<IPanelBodyProps>;
@@ -23,9 +24,8 @@ interface IPanelBodyProps extends React.HTMLAttributes<HTMLElement> {}
 interface IPanelHeaderProps extends React.HTMLAttributes<HTMLElement> {
 	contentLeft?: React.ReactNode;
 	contentRight?: React.ReactNode;
-	displayCollapseIcon?: boolean;
-	displayDragIcon?: boolean;
 	title: string;
+	type: BoxType;
 }
 interface IPanelSimpleBodyProps extends React.HTMLAttributes<HTMLElement> {
 	contentRight?: React.ReactNode;

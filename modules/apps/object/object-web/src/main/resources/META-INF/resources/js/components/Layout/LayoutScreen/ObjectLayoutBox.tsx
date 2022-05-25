@@ -19,7 +19,7 @@ import React, {useContext, useState} from 'react';
 
 import Panel from '../../Panel/Panel';
 import LayoutContext, {TYPES} from '../context';
-import {TObjectLayoutRow} from '../types';
+import {BoxType, TObjectLayoutRow} from '../types';
 import HeaderDropdown from './HeaderDropdown';
 import ModalAddObjectLayoutField from './ModalAddObjectLayoutField';
 import ObjectLayoutRows from './ObjectLayoutRows';
@@ -27,19 +27,19 @@ import ObjectLayoutRows from './ObjectLayoutRows';
 interface IObjectLayoutBoxProps extends React.HTMLAttributes<HTMLElement> {
 	boxIndex: number;
 	collapsable: boolean;
-	displayAddButton?: boolean;
 	label: string;
 	objectLayoutRows?: TObjectLayoutRow[];
 	tabIndex: number;
+	type: BoxType;
 }
 
 const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 	boxIndex,
 	collapsable,
-	displayAddButton,
 	label,
 	objectLayoutRows,
 	tabIndex,
+	type,
 }) => {
 	const [{isViewOnly}, dispatch] = useContext(LayoutContext);
 	const [visibleModal, setVisibleModal] = useState(false);
@@ -74,7 +74,7 @@ const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 								toggled={collapsable}
 							/>
 
-							{displayAddButton && (
+							{type === 'regular' && (
 								<ClayButton
 									className="ml-4"
 									disabled={isViewOnly}
@@ -99,9 +99,8 @@ const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 							/>
 						</>
 					}
-					displayCollapseIcon={displayAddButton}
-					displayDragIcon={displayAddButton}
 					title={label}
+					type={type}
 				/>
 
 				{!!objectLayoutRows?.length && (
