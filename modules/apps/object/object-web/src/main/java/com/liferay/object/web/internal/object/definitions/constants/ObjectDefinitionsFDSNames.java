@@ -17,7 +17,7 @@ package com.liferay.object.web.internal.object.definitions.constants;
 import com.liferay.object.constants.ObjectPortletKeys;
 
 /**
- * @author Gabriel Albuquerque
+ * @author Carlos Montenegro
  */
 public class ObjectDefinitionsFDSNames {
 
@@ -35,6 +35,9 @@ public class ObjectDefinitionsFDSNames {
 
 	public static final String OBJECT_RELATIONSHIPS =
 		ObjectPortletKeys.OBJECT_DEFINITIONS + "-objectRelationships";
+
+	public static final String OBJECT_STATE_MANAGER =
+		ObjectPortletKeys.OBJECT_DEFINITIONS + "-objectStateManager";
 
 	public static final String OBJECT_VALIDATIONS =
 		ObjectPortletKeys.OBJECT_DEFINITIONS + "-objectValidations";
