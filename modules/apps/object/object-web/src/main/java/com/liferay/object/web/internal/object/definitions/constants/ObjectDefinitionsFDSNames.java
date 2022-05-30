@@ -36,6 +36,9 @@ public class ObjectDefinitionsFDSNames {
 	public static final String OBJECT_RELATIONSHIPS =
 		ObjectPortletKeys.OBJECT_DEFINITIONS + "-objectRelationships";
 
+	public static final String OBJECT_STATES =
+		ObjectPortletKeys.OBJECT_DEFINITIONS + "-objectStates";
+
 	public static final String OBJECT_VALIDATIONS =
 		ObjectPortletKeys.OBJECT_DEFINITIONS + "-objectValidations";
 
