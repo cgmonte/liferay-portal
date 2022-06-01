@@ -21,7 +21,10 @@ import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.web.internal.object.definitions.constants.ObjectDefinitionsScreenNavigationEntryConstants;
 import com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsStateManagerDisplayContext;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
@@ -51,7 +54,7 @@ public class ObjectDefinitionsStatesScreenNavigationCategory
 	@Override
 	public String getCategoryKey() {
 		return ObjectDefinitionsScreenNavigationEntryConstants.
-			CATEGORY_KEY_STATES;
+			CATEGORY_KEY_STATE_MANAGER;
 	}
 
 	@Override
@@ -72,6 +75,10 @@ public class ObjectDefinitionsStatesScreenNavigationCategory
 
 	@Override
 	public boolean isVisible(User user, ObjectDefinition objectDefinition) {
+		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-152677"))) {
+			return false;
+		}
+
 		return !objectDefinition.isSystem();
 	}
 
