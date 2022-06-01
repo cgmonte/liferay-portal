@@ -15,8 +15,7 @@
 package com.liferay.object.web.internal.object.definitions.constants;
 
 /**
- * @author Marco Leo
- * @author Gabriel Albuquerque
+ * @author Carlos Montenegro
  */
 public class ObjectDefinitionsScreenNavigationEntryConstants {
 
