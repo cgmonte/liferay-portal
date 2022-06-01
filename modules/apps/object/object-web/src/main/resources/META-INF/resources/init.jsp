@@ -58,6 +58,7 @@ page import="com.liferay.object.web.internal.object.definitions.display.context.
 page import="com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsFieldsDisplayContext" %><%@
 page import="com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsLayoutsDisplayContext" %><%@
 page import="com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsRelationshipsDisplayContext" %><%@
+page import="com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsStatesDisplayContext" %><%@
 page import="com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsValidationsDisplayContext" %><%@
 page import="com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsViewsDisplayContext" %><%@
 page import="com.liferay.object.web.internal.object.definitions.display.context.ViewObjectDefinitionsDisplayContext" %><%@
