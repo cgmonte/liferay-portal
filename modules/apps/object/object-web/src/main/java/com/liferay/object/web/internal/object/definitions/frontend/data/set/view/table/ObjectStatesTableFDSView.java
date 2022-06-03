@@ -27,8 +27,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Marco Leo
- * @author Gabriel Albuquerque
+ * @author Carlos Montenegro
  */
 @Component(
 	property = "frontend.data.set.name=" + ObjectDefinitionsFDSNames.OBJECT_STATES,

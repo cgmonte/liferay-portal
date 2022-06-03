@@ -14,4 +14,4 @@
 
 /// <reference types="react" />
 
-export default function EditObjectStateField(): JSX.Element;
+export default function EditObjectStateField(props: any): JSX.Element;
