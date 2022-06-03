@@ -50,8 +50,7 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Marco Leo
- * @author Gabriel Albuquerque
+ * @author Carlos Montenegro
  */
 public class ObjectDefinitionsStatesDisplayContext
 	extends BaseObjectDefinitionsDisplayContext {
@@ -80,14 +79,14 @@ public class ObjectDefinitionsStatesDisplayContext
 			return creationMenu;
 		}
 
-		creationMenu.addDropdownItem(
-			dropdownItem -> {
-				dropdownItem.setHref("addObjectField");
-				dropdownItem.setLabel(
-					LanguageUtil.get(
-						objectRequestHelper.getRequest(), "add-object-field"));
-				dropdownItem.setTarget("event");
-			});
+		// creationMenu.addDropdownItem(
+		// 	dropdownItem -> {
+		// 		dropdownItem.setHref("addObjectField");
+		// 		dropdownItem.setLabel(
+		// 			LanguageUtil.get(
+		// 				objectRequestHelper.getRequest(), "add-object-field"));
+		// 		dropdownItem.setTarget("event");
+		// 	});
 
 		return creationMenu;
 	}
@@ -115,49 +114,7 @@ public class ObjectDefinitionsStatesDisplayContext
 				"delete", "delete", "async"));
 	}
 
-	public String[] getForbiddenLastCharacters() {
-		List<String> forbiddenLastCharacters = new ArrayList<>();
-
-		for (String forbiddenLastCharacter :
-				PropsValues.DL_CHAR_LAST_BLACKLIST) {
-
-			if (forbiddenLastCharacter.startsWith(
-					UnicodeFormatter.UNICODE_PREFIX)) {
-
-				forbiddenLastCharacter = UnicodeFormatter.parseString(
-					forbiddenLastCharacter);
-			}
-
-			forbiddenLastCharacters.add(forbiddenLastCharacter);
-		}
-
-		return forbiddenLastCharacters.toArray(new String[0]);
-	}
-
-	public List<Map<String, String>> getObjectFieldBusinessTypeMaps(
-		boolean includeRelationshipObjectFieldBusinessType, Locale locale) {
-
-		List<ObjectFieldBusinessType> objectFieldBusinessTypes =
-			_objectFieldBusinessTypeServicesTracker.
-				getObjectFieldBusinessTypes();
-
-		Stream<ObjectFieldBusinessType> stream =
-			objectFieldBusinessTypes.stream();
-
-		return ObjectFieldBusinessTypeUtil.getObjectFieldBusinessTypeMaps(
-			locale,
-			stream.filter(
-				objectFieldBusinessType ->
-					objectFieldBusinessType.isVisible() &&
-					(!StringUtil.equals(
-						objectFieldBusinessType.getName(),
-						ObjectFieldConstants.BUSINESS_TYPE_RELATIONSHIP) ||
-					 includeRelationshipObjectFieldBusinessType)
-			).collect(
-				Collectors.toList()
-			));
-	}
-
+	
 	public JSONObject getObjectFieldJSONObject(ObjectField objectField) {
 		return JSONUtil.put(
 
@@ -181,6 +138,8 @@ public class ObjectDefinitionsStatesDisplayContext
 			Long.valueOf(objectField.getListTypeDefinitionId())
 		).put(
 			"name", objectField.getName()
+		).put(
+			"objectDefinitionId", objectField.getObjectDefinitionId()
 		).put(
 			"objectFieldSettings", _getObjectFieldSettingsJSONArray(objectField)
 		).put(

@@ -14,6 +14,7 @@
 
 import React from 'react';
 
-export default function EditObjectStateField() {
+export default function EditObjectStateField(props: any) {
+	console.log('props', props)
 	return <></>;
 }

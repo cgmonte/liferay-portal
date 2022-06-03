@@ -17,8 +17,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
-ObjectDefinition objectDefinition = (ObjectDefinition)request.getAttribute(ObjectWebKeys.OBJECT_DEFINITION);
-ObjectDefinitionsFieldsDisplayContext objectDefinitionsFieldsDisplayContext = (ObjectDefinitionsFieldsDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+ObjectDefinitionsStatesDisplayContext objectDefinitionsStatesDisplayContext = (ObjectDefinitionsStatesDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+
 ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT_FIELD);
 %>
 
@@ -26,21 +26,7 @@ ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT
 	module="js/components/EditObjectStateField"
 	props='<%=
 		HashMapBuilder.<String, Object>put(
-			"forbiddenChars", PropsUtil.getArray(PropsKeys.DL_CHAR_BLACKLIST)
-		).put(
-			"forbiddenLastChars", objectDefinitionsFieldsDisplayContext.getForbiddenLastCharacters()
-		).put(
-			"forbiddenNames", PropsUtil.getArray(PropsKeys.DL_NAME_BLACKLIST)
-		).put(
-			"isApproved", objectDefinition.isApproved()
-		).put(
-			"objectField", objectDefinitionsFieldsDisplayContext.getObjectFieldJSONObject(objectField)
-		).put(
-			"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(Validator.isNotNull(objectField.getRelationshipType()), locale)
-		).put(
-			"objectName", objectDefinition.getShortName()
-		).put(
-			"readOnly", !objectDefinitionsFieldsDisplayContext.hasUpdateObjectDefinitionPermission()
+			"objectField", objectDefinitionsStatesDisplayContext.getObjectFieldJSONObject(objectField)
 		).build()
 	%>'
 />
