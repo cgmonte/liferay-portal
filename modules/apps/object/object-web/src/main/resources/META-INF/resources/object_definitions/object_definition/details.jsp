@@ -182,6 +182,37 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 				</clay:row>
 			</clay:sheet-section>
 
+			<clay:sheet-section cssClass='<%= objectDefinition.getName().equals("AccountEntry") ? "hide" : "" %>'>
+				<h3 class="sheet-subtitle">
+					<%= LanguageUtil.get(request, "account-restriction") %>
+				</h3>
+
+				<aui:field-wrapper cssClass="form-group lfr-input-text-container">
+					<aui:input disabled="<%= false %>" label="" labelOff='<%= LanguageUtil.get(request, "inactive") %>' labelOn='<%= LanguageUtil.get(request, "active") %>' name="accountEntryRestricted" onChange='<%= "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "handleAccountRestrictionToggleChange();" %>' type="toggle-switch" value="<%= objectDefinition.isAccountEntryRestricted() %>" />
+				</aui:field-wrapper>
+
+				<clay:row>
+					<clay:col
+						md="11"
+					>
+						<aui:select disabled="<%= !objectDefinition.isAccountEntryRestricted() %>" name="accountEntryRestrictedObjectFieldId" showEmptyOption="<%= false %>">
+							<aui:option label='<%= LanguageUtil.get(request, "id") %>' selected="<%= true %>" value="" />
+
+							<%
+							for (ObjectField objectField : objectFields) {
+							%>
+
+								<aui:option label="<%= objectField.getLabel(locale) %>" selected="<%= Objects.equals(objectField.getObjectFieldId(), objectDefinition.getTitleObjectFieldId()) %>" value="<%= objectField.getObjectFieldId() %>" />
+
+							<%
+							}
+							%>
+
+						</aui:select>
+					</clay:col>
+				</clay:row>
+			</clay:sheet-section>
+
 			<clay:sheet-section>
 				<h3 class="sheet-subtitle">
 					<%= LanguageUtil.get(request, "display") %>
@@ -249,5 +280,18 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 		}
 
 		submitForm(form);
+	}
+
+	let accountRestrictionToggleState = false;
+	const accountRestrictionSelectElement = document.getElementById("<portlet:namespace />accountEntryRestrictedObjectFieldId");
+	function <portlet:namespace />handleAccountRestrictionToggleChange() {
+		accountRestrictionToggleState = !accountRestrictionToggleState;
+		if (accountRestrictionToggleState) {
+			accountRestrictionSelectElement.removeAttribute('disabled');
+			accountRestrictionSelectElement.className = 'form-control';
+		} else {
+			accountRestrictionSelectElement.setAttribute('disabled', '');
+			accountRestrictionSelectElement.className ='form-control disabled';
+		}
 	}
 </script>
