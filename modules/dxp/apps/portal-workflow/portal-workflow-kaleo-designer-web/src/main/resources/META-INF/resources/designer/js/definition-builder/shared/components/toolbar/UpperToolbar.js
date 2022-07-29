@@ -16,6 +16,7 @@ import {ClayInput} from '@clayui/form';
 import ClayLayout from '@clayui/layout';
 import ClayToolbar from '@clayui/toolbar';
 import {TranslationAdminSelector} from 'frontend-js-components-web';
+import {createRenderURL} from 'frontend-js-web';
 import PropTypes from 'prop-types';
 import React, {useContext, useEffect, useRef} from 'react';
 import {isEdge, isNode} from 'react-flow-renderer';
@@ -33,7 +34,12 @@ import {
 } from '../../../util/fetchUtil';
 import {isObjectEmpty} from '../../../util/utils';
 
-export default function UpperToolbar({displayNames, isView, languageIds}) {
+export default function UpperToolbar({
+	displayNames,
+	isView,
+	languageIds,
+	portletKey,
+}) {
 	const {
 		active,
 		alertMessage,
@@ -153,6 +159,27 @@ export default function UpperToolbar({displayNames, isView, languageIds}) {
 
 	const definitionNotPublished = version === 0 || !active;
 
+	const redirectOnFirstSave = (name, version) => {
+		if (Number(version) === 1) {
+			const currentURL = new URL(window.location.href);
+			const renderURL = createRenderURL(
+				Liferay.ThemeDisplay.getCanonicalURL(),
+				{
+					clearSessionMessage: true,
+					draftVersion: '1.0',
+					mvcPath: '/designer/edit_workflow_definition.jsp',
+					name,
+					p_p_auth: currentURL.searchParams.get('p_p_auth'),
+					p_p_id: portletKey,
+					p_p_mode: 'view',
+					p_p_state: 'maximized',
+				}
+			);
+
+			window.location.replace(renderURL.href);
+		}
+	};
+
 	const publishDefinition = () => {
 		let alertMessage;
 
@@ -203,6 +230,7 @@ export default function UpperToolbar({displayNames, isView, languageIds}) {
 					response.json().then(({name, version}) => {
 						setDefinitionId(name);
 						setVersion(parseInt(version, 10));
+						redirectOnFirstSave(name, version);
 					});
 				}
 				else {
@@ -246,6 +274,7 @@ export default function UpperToolbar({displayNames, isView, languageIds}) {
 					response.json().then(({name, version}) => {
 						setDefinitionId(name);
 						setVersion(parseInt(version, 10));
+						redirectOnFirstSave(name, version);
 					});
 				}
 			});
