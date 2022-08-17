@@ -15,6 +15,18 @@
 type Locale = Liferay.Language.Locale;
 type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
 
+interface ListTypeDefinition {
+	active: boolean;
+	description?: string;
+	engine: string;
+	engineLabel: string;
+	errorLabel: LocalizedValue<string>;
+	id: number;
+	lineCount?: number;
+	name: LocalizedValue<string>;
+	script: string;
+}
+
 type NotificationTemplate = {
 	attachmentObjectFieldIds: string[] | number[];
 	bcc: string;

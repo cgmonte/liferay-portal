@@ -54,10 +54,33 @@ interface PickListItem {
 }
 
 interface PickList {
+	actions: Actions;
 	id: number;
 	listTypeEntries: PickListItem[];
 	name: string;
+	name_i18n: {[key in Locale]?: string}
 }
+
+interface Actions {
+	delete: HTTPMethods;
+	get: HTTPMethods;
+	permissions: HTTPMethods;
+	update: HTTPMethods;
+}
+
+interface HTTPMethods {
+	href: string;
+	method: string;
+}
+
+// type Locale = "ar_SA" | "ca_ES" | "de_DE" | "en_US" | "es_ES" | "fi_FI" | "fr_FR" | "hu_HU" | "nl_NL" | "ja_JP" | "pt_BR" | "sv_SE" | "zh_CN"
+
+// interface PickList {
+// 	id: number;
+// 	listTypeEntries: PickListItem[];
+// 	name: string;
+// 	name_i18n: {[key in Locale]?: string}
+// }
 
 const headers = new Headers({
 	'Accept': 'application/json',
@@ -125,6 +148,12 @@ export async function getObjectFields(objectDefinitionId: number) {
 export async function getObjectRelationships(objectDefinitionId: number) {
 	return await getList<ObjectRelationship>(
 		`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/object-relationships`
+	);
+}
+
+export async function getPickList(pickListId: number) {
+	return await fetchJSON<PickList>(
+		`/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}`
 	);
 }
 

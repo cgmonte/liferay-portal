@@ -46,9 +46,23 @@ interface PickListItem {
 	name: string;
 }
 interface PickList {
+	actions: Actions;
 	id: number;
 	listTypeEntries: PickListItem[];
 	name: string;
+	name_i18n: {
+		[key in Locale]?: string;
+	};
+}
+interface Actions {
+	delete: HTTPMethods;
+	get: HTTPMethods;
+	permissions: HTTPMethods;
+	update: HTTPMethods;
+}
+interface HTTPMethods {
+	href: string;
+	method: string;
 }
 export declare function deleteObjectDefinitions(id: number): Promise<void>;
 export declare function deleteObjectRelationships(id: number): Promise<void>;
@@ -70,6 +84,7 @@ export declare function getObjectFields(
 export declare function getObjectRelationships(
 	objectDefinitionId: number
 ): Promise<ObjectRelationship[]>;
+export declare function getPickList(pickListId: number): Promise<PickList>;
 export declare function getPickLists(): Promise<PickList[]>;
 export declare function getPickListItems(
 	pickListId: number
