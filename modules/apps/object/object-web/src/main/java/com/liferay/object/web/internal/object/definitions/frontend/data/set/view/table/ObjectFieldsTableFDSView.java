@@ -20,8 +20,6 @@ import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
 import com.liferay.object.web.internal.object.definitions.constants.ObjectDefinitionsFDSNames;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.util.Locale;
 
@@ -43,7 +41,7 @@ public class ObjectFieldsTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		fdsTableSchemaBuilder.add(
+		return fdsTableSchemaBuilder.add(
 			"label.LANG", "label",
 			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
 				"actionLink")
@@ -53,16 +51,11 @@ public class ObjectFieldsTableFDSView extends BaseTableFDSView {
 			"required", "mandatory",
 			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
 				"boolean")
-		);
-
-		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-158456"))) {
-			fdsTableSchemaBuilder.add(
-				"system", "source",
-				fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
-					"objectFieldSourceDataRenderer"));
-		}
-
-		return fdsTableSchemaBuilder.build();
+		).add(
+			"system", "source",
+			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
+				"objectFieldSourceDataRenderer")
+		).build();
 	}
 
 	@Reference
