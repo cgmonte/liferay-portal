@@ -25,7 +25,7 @@ import {useObjectFieldForm} from './ObjectField/useObjectFieldForm';
 import StateDefinition from './StateManager/StateDefinition';
 
 export default function EditObjectStateField({objectField, readOnly}: IProps) {
-	const [pickListItems, setPickListItems] = useState<PickListItem[]>([]);
+	const [pickListItems, setPickListItems] = useState<ListTypeEntry[]>([]);
 
 	useEffect(() => {
 		API.getPickListItems(objectField.listTypeDefinitionId).then(

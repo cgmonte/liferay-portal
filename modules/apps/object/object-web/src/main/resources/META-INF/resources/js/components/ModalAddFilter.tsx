@@ -125,12 +125,12 @@ export function ModalAddFilter({
 		return newItemsValues;
 	};
 
-	const getCheckedPickListItems = (itemValues: PickListItem[]): IItem[] => {
+	const getCheckedPickListItems = (itemValues: ListTypeEntry[]): IItem[] => {
 		let newItemsValues: IItem[] = [];
 
 		const valuesArray = setEditingFilterType() as string[];
 
-		newItemsValues = (itemValues as PickListItem[]).map((itemValue) => {
+		newItemsValues = (itemValues as ListTypeEntry[]).map((itemValue) => {
 			const item = {
 				checked: false,
 				label: itemValue.name,

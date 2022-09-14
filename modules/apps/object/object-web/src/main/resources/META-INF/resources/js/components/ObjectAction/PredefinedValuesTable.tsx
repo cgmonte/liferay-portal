@@ -218,7 +218,7 @@ export default function PredefinedValuesTable({
 			parentWindow.Liferay.fire('openModalAddColumns', {
 				disableRequired: true,
 				getName: ({name}: ObjectField) => name,
-				header: Liferay.Language.get('add-fields'),
+				header: Liferay.Language.get('add-fieldssssss'),
 				items: currentObjectDefinitionFields,
 				onSave: (items: ObjectField[]) => {
 					const predefinedValuesMap = new Map<

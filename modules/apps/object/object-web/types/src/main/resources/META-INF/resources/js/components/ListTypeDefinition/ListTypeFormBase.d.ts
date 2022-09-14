@@ -14,26 +14,20 @@
 
 /// <reference types="react" />
 
-import './StateDefinition.scss';
-export default function StateDefinition({
-	currentKey,
-	disabled,
-	index,
+import {FormError} from '@liferay/object-js-components-web';
+export declare function useListTypeForm({
 	initialValues,
-	setValues,
-	stateName,
-	values,
-}: IProps): JSX.Element;
-interface IOption extends ListTypeEntry {
-	checked: boolean;
+	onSubmit,
+}: IUseListTypeForm): {
+	errors: FormError<ListTypeDefinition>;
+	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
+	handleSubmit: import('react').FormEventHandler<HTMLFormElement>;
+	setValues: (values: Partial<ListTypeDefinition>) => void;
+	values: Partial<ListTypeDefinition>;
+};
+interface IUseListTypeForm {
+	initialValues: Partial<ListTypeDefinition>;
+	onSubmit: (picklist: ListTypeDefinition) => void;
 }
-interface IProps {
-	currentKey: string;
-	disabled: boolean;
-	index: number;
-	initialValues: IOption[];
-	setValues: (values: Partial<ObjectField>) => void;
-	stateName: string;
-	values: Partial<ObjectField>;
-}
+export declare type ObjectValidationErrors = FormError<ListTypeDefinition>;
 export {};

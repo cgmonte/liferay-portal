@@ -19,7 +19,10 @@ export function onActionDropdownItemClick<T>({
 	action: FDSAction;
 	itemData: T;
 }) {
+	console.log('oi')
 	if (action.target === 'event') {
+		console.log('action.id', action.id);
+		console.log('itemData', itemData);
 		Liferay.fire(action.id, {itemData});
 	}
 }

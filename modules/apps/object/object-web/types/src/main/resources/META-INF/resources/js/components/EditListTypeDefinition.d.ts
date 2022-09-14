@@ -14,26 +14,12 @@
 
 /// <reference types="react" />
 
-import './StateDefinition.scss';
-export default function StateDefinition({
-	currentKey,
-	disabled,
-	index,
-	initialValues,
-	setValues,
-	stateName,
-	values,
+export default function EditListTypeDefinition({
+	listTypeDefinitionId,
+	readOnly,
 }: IProps): JSX.Element;
-interface IOption extends ListTypeEntry {
-	checked: boolean;
-}
 interface IProps {
-	currentKey: string;
-	disabled: boolean;
-	index: number;
-	initialValues: IOption[];
-	setValues: (values: Partial<ObjectField>) => void;
-	stateName: string;
-	values: Partial<ObjectField>;
+	listTypeDefinitionId: string;
+	readOnly: boolean;
 }
 export {};

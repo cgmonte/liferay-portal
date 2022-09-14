@@ -145,6 +145,8 @@ export default function EditObjectField({
 		onSubmit,
 	});
 
+	// const disableLabel = !!(readOnly || values.relationshipType);
+
 	const disableFieldFormBase = !!(
 		isApproved ||
 		values.system ||
