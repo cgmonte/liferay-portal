@@ -200,6 +200,8 @@ export async function save(
 	});
 
 	if (response.ok) {
+		console.log('response.json()', response.json());
+
 		return response.json();
 	}
 

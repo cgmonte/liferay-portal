@@ -59,7 +59,7 @@ System.out.println("   ");
 	/>
 </div>
 
-<div id="<portlet:namespace />EditListTypeEntry">
+<!-- <div id="<portlet:namespace />EditListTypeEntry">
 	<react:component
 		module="js/components/ModalEditListTypeEntry"
 		props='<%=
@@ -68,4 +68,4 @@ System.out.println("   ");
 			).build()
 		%>'
 	/>
-</div>
+</div> -->

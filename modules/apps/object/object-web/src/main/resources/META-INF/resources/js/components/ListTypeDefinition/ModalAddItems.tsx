@@ -39,6 +39,8 @@ interface IModalState extends Partial<ListTypeEntry> {
 }
 
 function ModalAddItems() {
+	// console.log('ModalAddItems');
+
 	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 	const [
@@ -47,6 +49,15 @@ function ModalAddItems() {
 	] = useState<IModalState>({});
 
 	// console.log('name_i18n:', name_i18n);
+
+	useEffect(() => {
+		console.log('header:', header);
+		console.log('id:', id);
+		console.log('itemKey:', itemKey);
+		console.log('modalType:', modalType);
+		console.log('name_i18n:', name_i18n);
+		console.log('values:', values);
+	}, [header, id, itemKey, modalType, name_i18n, values]);
 
 	const [keyChanged, setKeyChanged] = useState(false);
 
@@ -146,6 +157,8 @@ function ModalAddItems() {
 					});
 				});
 			} else if (modalType === 'edit') {
+				console.log('id:', id);
+				console.log('name_i18n:', name_i18n);
 				response = API.updatePickListItems({id, name_i18n});
 				response.then((response) => {
 					{
@@ -189,7 +202,7 @@ function ModalAddItems() {
 					required
 					translations={
 						name_i18n
-							? (name_i18n as LocalizedValue<string>)
+							? (fixLocaleKeys(name_i18n) as LocalizedValue<string>)
 							: {[defaultLanguageId]: ''}
 					}
 				/>

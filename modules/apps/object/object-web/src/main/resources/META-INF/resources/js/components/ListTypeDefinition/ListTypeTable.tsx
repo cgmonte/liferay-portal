@@ -44,7 +44,10 @@ interface deleteListTypeItem {
 }
 
 interface ItemData {
+	id: number;
+	key: string;
 	name: Name;
+	name_i18n: LocalizedValue<string>;
 }
 
 interface Name {
@@ -114,13 +117,14 @@ export default function ListTypeTable({
 		</div>
 	);
 }
+
 function TableItem(props: any) {
 	const handleEditItems = () => {
-		console.log('event onCLick', props);
+		console.log('props.itemData.name_i18n:', props.itemData.name_i18n);
 
 		const parentWindow = Liferay.Util.getOpener();
 
-		parentWindow.Liferay.fire('addListTypeEntry', {
+		parentWindow.Liferay.fire('openModalAddItems', {
 			header: Liferay.Language.get('edit-item'),
 			id: props.itemData.id,
 			itemKey: props.itemData.key,
@@ -136,9 +140,27 @@ function TableItem(props: any) {
 	);
 }
 
+const dropdownItemViewAction = (prop: any) => {
+	console.log('prop:', prop);
+
+	if (prop.action.id === 'addListTypeEntry') {
+		const parentWindow = Liferay.Util.getOpener();
+
+		parentWindow.Liferay.fire('openModalAddItems', {
+			header: Liferay.Language.get('edit-item'),
+			id: prop.itemData.id,
+			itemKey: prop.itemData.key,
+			modalType: 'edit',
+			name_i18n: prop.itemData.name_i18n,
+		});
+	}
+};
+
 function getDataSetProps(
 	values: Partial<ListTypeDefinition>
 ): IFrontendDataSetProps {
+	// console.log('values:', values);
+
 	return {
 		actionParameterName: '',
 		activeViewSettings: null,
@@ -189,7 +211,7 @@ function getDataSetProps(
 			'_com_liferay_object_web_internal_list_type_portlet_portlet_ListTypeDefinitionsPortlet_',
 		nestedItemsKey: null,
 		nestedItemsReferenceKey: null,
-		onActionDropdownItemClick,
+		onActionDropdownItemClick: dropdownItemViewAction,
 		pagination: {
 			deltas: [
 				{

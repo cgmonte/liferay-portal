@@ -40,8 +40,8 @@ ViewListTypeDefinitionsDisplayContext viewListTypeDefinitionsDisplayContext = (V
 	/>
 </div>
 
-<!-- <div>
+<div>
 	<react:component
 		module="js/components/ListTypeDefinition/ModalAddItems"
 	/>
-</div> -->
+</div>
