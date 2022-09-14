@@ -120,7 +120,7 @@ function TableItem(props: any) {
 
 		const parentWindow = Liferay.Util.getOpener();
 
-		parentWindow.Liferay.fire('openModalAddItems', {
+		parentWindow.Liferay.fire('addListTypeEntry', {
 			header: Liferay.Language.get('edit-item'),
 			id: props.itemData.id,
 			itemKey: props.itemData.key,
@@ -166,9 +166,9 @@ function getDataSetProps(
 		initialSelectedItemsValues: null,
 		itemsActions: [
 			{
-				href: 'editListTypeEntry',
+				href: 'addListTypeEntry',
 				icon: 'view',
-				id: 'editListTypeEntry',
+				id: 'addListTypeEntry',
 				label: Liferay.Language.get('view'),
 				target: 'event',
 			},
