@@ -11,23 +11,18 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-import {FormError} from '@liferay/object-js-components-web';
-export declare function useObjectValidationForm({
-	initialValues,
-	onSubmit,
-}: IUseObjectValidationForm): {
-	errors: FormError<ObjectValidation>;
-	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
-	handleSubmit: import('react').FormEventHandler<HTMLFormElement>;
-	setValues: (values: Partial<ObjectValidation>) => void;
-	values: Partial<ObjectValidation>;
+import { FormError } from '@liferay/object-js-components-web';
+export declare function useObjectValidationForm({ initialValues, onSubmit, }: IUseObjectValidationForm): {
+    errors: FormError<ObjectValidation>;
+    handleChange: import("react").ChangeEventHandler<HTMLInputElement>;
+    handleSubmit: import("react").FormEventHandler<HTMLFormElement>;
+    setValues: (values: Partial<ObjectValidation>) => void;
+    values: Partial<ObjectValidation>;
 };
 interface IUseObjectValidationForm {
-	initialValues: Partial<ObjectValidation>;
-	onSubmit: (validation: ObjectValidation) => void;
+    initialValues: Partial<ObjectValidation>;
+    onSubmit: (validation: ObjectValidation) => void;
 }
 export declare type ObjectValidationErrors = FormError<ObjectValidation>;
 export {};

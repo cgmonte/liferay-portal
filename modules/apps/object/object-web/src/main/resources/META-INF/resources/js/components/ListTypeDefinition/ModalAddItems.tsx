@@ -34,30 +34,18 @@ interface IModalState extends Partial<ListTypeEntry> {
 	id?: number;
 	itemKey?: string;
 	modalType?: 'add' | 'edit';
+	reload?: () => void;
 	setValues?: (values: Partial<ListTypeDefinition>) => void;
 	values?: Partial<ListTypeDefinition>;
 }
 
 function ModalAddItems() {
-	// console.log('ModalAddItems');
-
 	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 	const [
 		{header, id, itemKey, modalType, name_i18n, setValues, values},
 		setState,
 	] = useState<IModalState>({});
-
-	// console.log('name_i18n:', name_i18n);
-
-	useEffect(() => {
-		console.log('header:', header);
-		console.log('id:', id);
-		console.log('itemKey:', itemKey);
-		console.log('modalType:', modalType);
-		console.log('name_i18n:', name_i18n);
-		console.log('values:', values);
-	}, [header, id, itemKey, modalType, name_i18n, values]);
 
 	const [keyChanged, setKeyChanged] = useState(false);
 
@@ -131,6 +119,37 @@ function ModalAddItems() {
 		return errors;
 	};
 
+	const reload = () => {
+		const layoutURL = Liferay.ThemeDisplay.getLayoutURL();
+		const iframes = document.getElementsByTagName('iframe');
+		const iframesArray = [...iframes];
+		if (iframes?.length) {
+			const sideBarIFrame = iframesArray.find((iframe) => {
+				if (iframe.src?.includes(layoutURL)) {
+					const iframeURL = new URL(iframe.src);
+					const iframeURLParams = new URLSearchParams(
+						iframeURL.search
+					);
+					const portletPageId = iframeURLParams.get('p_p_id');
+					const listTypeDefinitionId = iframeURLParams.get(
+						'_' + portletPageId + '_listTypeDefinitionId'
+					);
+					if (
+						listTypeDefinitionId &&
+						parseInt(listTypeDefinitionId, 10) === values?.id
+					) {
+						return true;
+					}
+				}
+
+				return false;
+			});
+			if (sideBarIFrame?.contentWindow) {
+				sideBarIFrame.contentWindow.location.reload();
+			}
+		}
+	};
+
 	const handleSave = () => {
 		const errors: ObjectValidationErrors = validate({
 			key: itemKey,
@@ -155,10 +174,10 @@ function ModalAddItems() {
 							name_i18n: fixLocaleKeys(entry.name_i18n),
 						})),
 					});
+
+					reload();
 				});
 			} else if (modalType === 'edit') {
-				console.log('id:', id);
-				console.log('name_i18n:', name_i18n);
 				response = API.updatePickListItems({id, name_i18n});
 				response.then((response) => {
 					{
@@ -179,6 +198,8 @@ function ModalAddItems() {
 								}
 							),
 						});
+
+						reload();
 					}
 				});
 			}
@@ -202,7 +223,9 @@ function ModalAddItems() {
 					required
 					translations={
 						name_i18n
-							? (fixLocaleKeys(name_i18n) as LocalizedValue<string>)
+							? (fixLocaleKeys(name_i18n) as LocalizedValue<
+									string
+							  >)
 							: {[defaultLanguageId]: ''}
 					}
 				/>

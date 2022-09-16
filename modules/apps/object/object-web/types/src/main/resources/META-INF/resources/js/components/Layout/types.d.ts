@@ -11,40 +11,39 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 export declare type BoxType = 'regular' | 'categorization' | 'comments';
 export declare type TName = LocalizedValue<string>;
 export declare type TObjectLayout = {
-	defaultObjectLayout: boolean;
-	name: TName;
-	objectDefinitionId: number;
-	objectLayoutTabs: TObjectLayoutTab[];
+    defaultObjectLayout: boolean;
+    name: TName;
+    objectDefinitionId: number;
+    objectLayoutTabs: TObjectLayoutTab[];
 };
 export declare type TObjectLayoutTab = {
-	name: LocalizedValue<string>;
-	objectLayoutBoxes: TObjectLayoutBox[];
-	objectRelationshipId: number;
-	priority: number;
+    name: LocalizedValue<string>;
+    objectLayoutBoxes: TObjectLayoutBox[];
+    objectRelationshipId: number;
+    priority: number;
 };
 export declare type TObjectLayoutBox = {
-	collapsable: boolean;
-	name: TName;
-	objectLayoutRows: TObjectLayoutRow[];
-	priority: number;
-	type: BoxType;
+    collapsable: boolean;
+    name: TName;
+    objectLayoutRows: TObjectLayoutRow[];
+    priority: number;
+    type: BoxType;
 };
 export declare type TObjectLayoutRow = {
-	objectLayoutColumns: TObjectLayoutColumn[];
-	priority: number;
+    objectLayoutColumns: TObjectLayoutColumn[];
+    priority: number;
 };
 export declare type TObjectLayoutColumn = {
-	objectFieldId: number;
-	priority: number;
-	size: number;
+    objectFieldId: number;
+    priority: number;
+    size: number;
 };
 export interface TObjectField extends ObjectField {
-	inLayout?: boolean;
+    inLayout?: boolean;
 }
 export interface TObjectRelationship extends ObjectRelationship {
-	inLayout?: boolean;
+    inLayout?: boolean;
 }

@@ -11,15 +11,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-export default function EditListTypeDefinition({
-	listTypeDefinitionId,
-	readOnly,
-}: IProps): JSX.Element;
+export default function EditListTypeDefinition({ listTypeDefinitionId, readOnly, }: IProps): JSX.Element;
 interface IProps {
-	listTypeDefinitionId: string;
-	readOnly: boolean;
+    listTypeDefinitionId: string;
+    readOnly: boolean;
 }
 export {};

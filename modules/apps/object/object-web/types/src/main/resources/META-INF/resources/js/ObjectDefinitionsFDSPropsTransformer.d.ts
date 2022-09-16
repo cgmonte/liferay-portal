@@ -11,23 +11,17 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-export default function propsTransformer({
-	...otherProps
-}: {
-	[x: string]: any;
+export default function propsTransformer({ ...otherProps }: {
+    [x: string]: any;
 }): {
-	onActionDropdownItemClick({
-		action,
-		itemData,
-	}: {
-		action: {
-			data: {
-				id: string;
-			};
-		};
-		itemData: {
-			id: string;
-		};
-	}): void;
+    onActionDropdownItemClick({ action, itemData, }: {
+        action: {
+            data: {
+                id: string;
+            };
+        };
+        itemData: {
+            id: string;
+        };
+    }): void;
 };

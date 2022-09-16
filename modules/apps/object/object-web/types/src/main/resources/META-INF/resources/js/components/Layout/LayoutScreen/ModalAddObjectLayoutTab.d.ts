@@ -11,14 +11,12 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {Observer} from '@clayui/modal/lib/types';
+import { Observer } from '@clayui/modal/lib/types';
 import React from 'react';
 import './ModalAddObjectLayoutTab.scss';
-interface IModalAddObjectLayoutTabProps
-	extends React.HTMLAttributes<HTMLElement> {
-	observer: Observer;
-	onClose: () => void;
+interface IModalAddObjectLayoutTabProps extends React.HTMLAttributes<HTMLElement> {
+    observer: Observer;
+    onClose: () => void;
 }
 declare const ModalAddObjectLayoutTab: React.FC<IModalAddObjectLayoutTabProps>;
 export default ModalAddObjectLayoutTab;

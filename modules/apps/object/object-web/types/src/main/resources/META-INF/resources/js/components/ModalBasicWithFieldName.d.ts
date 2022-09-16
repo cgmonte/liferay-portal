@@ -11,21 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {Observer} from '@clayui/modal/lib/types';
+import { Observer } from '@clayui/modal/lib/types';
 import React from 'react';
 interface IProps extends React.HTMLAttributes<HTMLElement> {
-	apiURL: string;
-	inputId: string;
-	label: string;
-	observer: Observer;
-	onClose: () => void;
+    apiURL: string;
+    inputId: string;
+    label: string;
+    observer: Observer;
+    onClose: () => void;
 }
-export declare function ModalBasicWithFieldName({
-	apiURL,
-	inputId,
-	label,
-	observer,
-	onClose,
-}: IProps): JSX.Element;
+export declare function ModalBasicWithFieldName({ apiURL, inputId, label, observer, onClose, }: IProps): JSX.Element;
 export default ModalBasicWithFieldName;

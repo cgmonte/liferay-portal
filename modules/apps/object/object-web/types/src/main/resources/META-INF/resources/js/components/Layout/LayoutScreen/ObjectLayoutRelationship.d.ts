@@ -11,11 +11,9 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 import React from 'react';
-interface IObjectLayoutRelationshipProps
-	extends React.HTMLAttributes<HTMLElement> {
-	objectRelationshipId: number;
+interface IObjectLayoutRelationshipProps extends React.HTMLAttributes<HTMLElement> {
+    objectRelationshipId: number;
 }
 declare const ObjectLayoutRelationship: React.FC<IObjectLayoutRelationshipProps>;
 export default ObjectLayoutRelationship;

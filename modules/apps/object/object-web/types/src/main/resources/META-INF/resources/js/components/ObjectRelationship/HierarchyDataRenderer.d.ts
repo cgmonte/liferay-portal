@@ -11,11 +11,9 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-export declare function HierarchyDataRenderer({value}: IProps): JSX.Element;
+export declare function HierarchyDataRenderer({ value }: IProps): JSX.Element;
 interface IProps {
-	value: boolean;
+    value: boolean;
 }
 export {};

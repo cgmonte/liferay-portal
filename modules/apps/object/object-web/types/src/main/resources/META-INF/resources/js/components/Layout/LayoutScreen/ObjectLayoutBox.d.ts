@@ -11,16 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 import React from 'react';
-import {BoxType, TObjectLayoutRow} from '../types';
+import { BoxType, TObjectLayoutRow } from '../types';
 interface IObjectLayoutBoxProps extends React.HTMLAttributes<HTMLElement> {
-	boxIndex: number;
-	collapsable: boolean;
-	label: string;
-	objectLayoutRows?: TObjectLayoutRow[];
-	tabIndex: number;
-	type: BoxType;
+    boxIndex: number;
+    collapsable: boolean;
+    label: string;
+    objectLayoutRows?: TObjectLayoutRow[];
+    tabIndex: number;
+    type: BoxType;
 }
 declare const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps>;
 export default ObjectLayoutBox;

@@ -11,20 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-export default function EditObjectStateField({
-	objectField,
-	readOnly,
-}: IProps): JSX.Element;
+export default function EditObjectStateField({ objectField, readOnly }: IProps): JSX.Element;
 interface IProps {
-	forbiddenChars: string[];
-	forbiddenLastChars: string[];
-	forbiddenNames: string[];
-	isApproved: boolean;
-	objectField: ObjectField;
-	objectName: string;
-	readOnly: boolean;
+    forbiddenChars: string[];
+    forbiddenLastChars: string[];
+    forbiddenNames: string[];
+    isApproved: boolean;
+    objectField: ObjectField;
+    objectName: string;
+    readOnly: boolean;
 }
 export {};

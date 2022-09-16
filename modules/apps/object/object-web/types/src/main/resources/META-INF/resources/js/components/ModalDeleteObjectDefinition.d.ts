@@ -11,11 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-export default function ModalWithProvider({
-	baseResourceURL,
-}: {
-	baseResourceURL: string;
+export default function ModalWithProvider({ baseResourceURL, }: {
+    baseResourceURL: string;
 }): JSX.Element;

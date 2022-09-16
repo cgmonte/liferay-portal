@@ -11,14 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 import React from 'react';
-import {TObjectLayoutColumn} from '../types';
+import { TObjectLayoutColumn } from '../types';
 interface IObjectLayoutColumnsProps extends React.HTMLAttributes<HTMLElement> {
-	boxIndex: number;
-	objectLayoutColumns?: TObjectLayoutColumn[];
-	rowIndex: number;
-	tabIndex: number;
+    boxIndex: number;
+    objectLayoutColumns?: TObjectLayoutColumn[];
+    rowIndex: number;
+    tabIndex: number;
 }
 declare const ObjectLayoutColumns: React.FC<IObjectLayoutColumnsProps>;
 export default ObjectLayoutColumns;

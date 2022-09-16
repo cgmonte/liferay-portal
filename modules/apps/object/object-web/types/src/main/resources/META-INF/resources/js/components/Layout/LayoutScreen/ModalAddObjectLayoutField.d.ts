@@ -11,19 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {Observer} from '@clayui/modal/lib/types';
+import { Observer } from '@clayui/modal/lib/types';
 import React from 'react';
 interface IProps extends React.HTMLAttributes<HTMLElement> {
-	boxIndex: number;
-	observer: Observer;
-	onClose: () => void;
-	tabIndex: number;
+    boxIndex: number;
+    observer: Observer;
+    onClose: () => void;
+    tabIndex: number;
 }
-export default function ModalAddObjectLayoutField({
-	boxIndex,
-	observer,
-	onClose,
-	tabIndex,
-}: IProps): JSX.Element;
+export default function ModalAddObjectLayoutField({ boxIndex, observer, onClose, tabIndex, }: IProps): JSX.Element;
 export {};

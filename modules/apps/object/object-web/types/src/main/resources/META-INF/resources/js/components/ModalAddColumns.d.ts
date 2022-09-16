@@ -11,15 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
 import './ModalAddColumns.scss';
 declare function ModalAddColumns<T extends ModalItem>(): JSX.Element | null;
 export default ModalAddColumns;
 interface ModalItem {
-	checked?: boolean;
-	id?: unknown;
-	label: LocalizedValue<string>;
-	required?: boolean;
+    checked?: boolean;
+    id?: unknown;
+    label: LocalizedValue<string>;
+    required?: boolean;
 }

@@ -25,7 +25,7 @@ import React, {useEffect, useState} from 'react';
 
 import {useListTypeForm} from './ListTypeFormBase';
 import ListTypeTable from './ListTypeTable';
-import { fixLocaleKeys } from './utils';
+import {fixLocaleKeys} from './utils';
 
 export default function EditListTypeDefinition({
 	listTypeDefinitionId,
@@ -105,6 +105,7 @@ export default function EditListTypeDefinition({
 						</ClayAlert>
 
 						<ListTypeTable
+
 							// currentObjectDefinitionFields={
 							// 	currentObjectDefinitionFields
 							// }
@@ -116,6 +117,7 @@ export default function EditListTypeDefinition({
 							// objectFieldsMap={objectFieldsMap}
 
 							setValues={setValues}
+							
 							// validateExpressionURL={validateExpressionURL}
 
 							values={values}

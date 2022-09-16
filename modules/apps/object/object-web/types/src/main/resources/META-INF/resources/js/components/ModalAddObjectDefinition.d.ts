@@ -11,14 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {Observer} from '@clayui/modal/lib/types';
+import { Observer } from '@clayui/modal/lib/types';
 import React from 'react';
 interface IProps extends React.HTMLAttributes<HTMLElement> {
-	apiURL: string;
-	observer: Observer;
-	onClose: () => void;
-	storageTypes: string[];
+    apiURL: string;
+    observer: Observer;
+    onClose: () => void;
+    storageTypes: string[];
 }
 declare const ModalWithProvider: React.FC<IProps>;
 export default ModalWithProvider;

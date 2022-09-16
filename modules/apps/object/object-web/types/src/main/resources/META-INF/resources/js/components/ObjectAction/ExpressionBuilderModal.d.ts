@@ -11,14 +11,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-import {SidebarCategory} from '@liferay/object-js-components-web';
-export default function ExpressionBuilderModal({
-	sidebarElements,
-}: IProps): JSX.Element;
+import { SidebarCategory } from '@liferay/object-js-components-web';
+export default function ExpressionBuilderModal({ sidebarElements }: IProps): JSX.Element;
 interface IProps {
-	sidebarElements: SidebarCategory[];
+    sidebarElements: SidebarCategory[];
 }
 export {};

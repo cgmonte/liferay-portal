@@ -11,18 +11,12 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-import {SidebarCategory} from '@liferay/object-js-components-web';
-export default function EditObjectValidation({
-	objectValidationRule: initialValues,
-	objectValidationRuleElements,
-	readOnly,
-}: IProps): JSX.Element;
+import { SidebarCategory } from '@liferay/object-js-components-web';
+export default function EditObjectValidation({ objectValidationRule: initialValues, objectValidationRuleElements, readOnly, }: IProps): JSX.Element;
 interface IProps {
-	objectValidationRule: ObjectValidation;
-	objectValidationRuleElements: SidebarCategory[];
-	readOnly: boolean;
+    objectValidationRule: ObjectValidation;
+    objectValidationRuleElements: SidebarCategory[];
+    readOnly: boolean;
 }
 export {};

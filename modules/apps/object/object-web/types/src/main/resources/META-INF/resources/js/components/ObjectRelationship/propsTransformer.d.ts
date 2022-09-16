@@ -11,25 +11,19 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {HierarchyDataRenderer} from './HierarchyDataRenderer';
-export default function propsTransformer({
-	...otherProps
-}: {
-	[x: string]: any;
+import { HierarchyDataRenderer } from './HierarchyDataRenderer';
+export default function propsTransformer({ ...otherProps }: {
+    [x: string]: any;
 }): {
-	customDataRenderers: {
-		hierarchyDataRenderer: typeof HierarchyDataRenderer;
-	};
-	onActionDropdownItemClick({
-		action,
-		itemData,
-	}: {
-		action: {
-			data: {
-				id: string;
-			};
-		};
-		itemData: ObjectRelationship;
-	}): void;
+    customDataRenderers: {
+        hierarchyDataRenderer: typeof HierarchyDataRenderer;
+    };
+    onActionDropdownItemClick({ action, itemData, }: {
+        action: {
+            data: {
+                id: string;
+            };
+        };
+        itemData: ObjectRelationship;
+    }): void;
 };

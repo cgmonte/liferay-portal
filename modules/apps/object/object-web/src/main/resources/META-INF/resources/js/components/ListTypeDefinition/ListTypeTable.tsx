@@ -18,23 +18,15 @@ import {
 	FrontendDataSet,
 	IFrontendDataSetProps,
 } from '@liferay/frontend-data-set-web';
-import {
-	API,
-	onActionDropdownItemClick,
-} from '@liferay/object-js-components-web';
-import React, {useEffect} from 'react';
+import {API} from '@liferay/object-js-components-web';
+import React, {useEffect, useState} from 'react';
 
 import './ListTypeTable.scss';
 
 interface IProps {
+	
 	// errors: {[key: string]: string};
 
-	setValues: (values: Partial<ListTypeDefinition>) => void;
-	values: Partial<ListTypeDefinition>;
-}
-
-interface TableItem extends Partial<ListTypeEntry> {
-	itemKey: string;
 	setValues: (values: Partial<ListTypeDefinition>) => void;
 	values: Partial<ListTypeDefinition>;
 }
@@ -64,9 +56,12 @@ export default function ListTypeTable({
 	setValues,
 	values,
 }: IProps) {
-	const props = getDataSetProps(values);
-
+	const [dataSetProps, setDataSetProps] = useState(
+		getDataSetProps(setValues, values)
+	);
 	useEffect(() => {
+		setDataSetProps(getDataSetProps(setValues, values));
+
 		const handleAddItems = () => {
 			const parentWindow = Liferay.Util.getOpener();
 
@@ -113,53 +108,52 @@ export default function ListTypeTable({
 
 	return (
 		<div className="lfr-object-web__predefined-values-table">
-			<FrontendDataSet {...props} />
+			<FrontendDataSet {...dataSetProps} />
 		</div>
 	);
 }
 
-function TableItem(props: any) {
-	const handleEditItems = () => {
-		console.log('props.itemData.name_i18n:', props.itemData.name_i18n);
-
-		const parentWindow = Liferay.Util.getOpener();
-
-		parentWindow.Liferay.fire('openModalAddItems', {
-			header: Liferay.Language.get('edit-item'),
-			id: props.itemData.id,
-			itemKey: props.itemData.key,
-			modalType: 'edit',
-			name_i18n: props.itemData.name_i18n,
-		});
-	};
-
-	return (
-		<a href="#" onClick={handleEditItems}>
-			{props.value}
-		</a>
-	);
-}
-
-const dropdownItemViewAction = (prop: any) => {
-	console.log('prop:', prop);
-
-	if (prop.action.id === 'addListTypeEntry') {
-		const parentWindow = Liferay.Util.getOpener();
-
-		parentWindow.Liferay.fire('openModalAddItems', {
-			header: Liferay.Language.get('edit-item'),
-			id: prop.itemData.id,
-			itemKey: prop.itemData.key,
-			modalType: 'edit',
-			name_i18n: prop.itemData.name_i18n,
-		});
-	}
-};
-
 function getDataSetProps(
+	setValues: (values: Partial<ListTypeDefinition>) => void,
 	values: Partial<ListTypeDefinition>
 ): IFrontendDataSetProps {
-	// console.log('values:', values);
+	const dropdownItemViewAction = (prop: any) => {
+		if (prop.action.id === 'addListTypeEntry') {
+			const parentWindow = Liferay.Util.getOpener();
+
+			parentWindow.Liferay.fire('openModalAddItems', {
+				header: Liferay.Language.get('edit-item'),
+				id: prop.itemData.id,
+				itemKey: prop.itemData.key,
+				modalType: 'edit',
+				name_i18n: prop.itemData.name_i18n,
+				setValues,
+				values,
+			});
+		}
+	};
+
+	function TableItem(props: any) {
+		const handleEditItems = () => {
+			const parentWindow = Liferay.Util.getOpener();
+
+			parentWindow.Liferay.fire('openModalAddItems', {
+				header: Liferay.Language.get('edit-item'),
+				id: props.itemData.id,
+				itemKey: props.itemData.key,
+				modalType: 'edit',
+				name_i18n: props.itemData.name_i18n,
+				setValues,
+				values,
+			});
+		};
+
+		return (
+			<a href="#" onClick={handleEditItems}>
+				{props.value}
+			</a>
+		);
+	}
 
 	return {
 		actionParameterName: '',

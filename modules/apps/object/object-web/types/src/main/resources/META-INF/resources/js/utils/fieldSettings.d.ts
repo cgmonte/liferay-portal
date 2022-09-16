@@ -11,108 +11,18 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-export declare function normalizeFieldSettings(
-	objectFieldSettings: ObjectFieldSetting[] | undefined
-): {
-	function?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	acceptedFileExtensions?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	fileSource?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	filters?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	maxLength?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	maximumFileSize?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	objectFieldName?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	objectRelationshipName?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	showCounter?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	showFilesInDocumentsAndMedia?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	stateFlow?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
-	storageDLFolderPath?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldPicklistSetting
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| undefined;
+export declare function normalizeFieldSettings(objectFieldSettings: ObjectFieldSetting[] | undefined): {
+    function?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    maxLength?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    acceptedFileExtensions?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    fileSource?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    filters?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    maximumFileSize?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    objectFieldName?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    objectRelationshipName?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    showCounter?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    showFilesInDocumentsAndMedia?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    stateFlow?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
+    storageDLFolderPath?: string | number | boolean | ObjectFieldPicklistSetting | NameValueObject[] | ObjectFieldFilterSetting[] | undefined;
 };
-export declare function updateFieldSettings(
-	objectFieldSettings: ObjectFieldSetting[] | undefined,
-	{name, value}: ObjectFieldSetting
-): ObjectFieldSetting[];
+export declare function updateFieldSettings(objectFieldSettings: ObjectFieldSetting[] | undefined, { name, value }: ObjectFieldSetting): ObjectFieldSetting[];

@@ -11,12 +11,11 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 import React from 'react';
 interface IProps {
-	importObjectDefinitionURL: string;
-	nameMaxLength: string;
-	portletNamespace: string;
+    importObjectDefinitionURL: string;
+    nameMaxLength: string;
+    portletNamespace: string;
 }
 declare const ModalImportObjectDefinition: React.FC<IProps>;
 export default ModalImportObjectDefinition;

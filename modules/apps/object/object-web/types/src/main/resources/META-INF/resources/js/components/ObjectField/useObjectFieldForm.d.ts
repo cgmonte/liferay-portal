@@ -11,43 +11,33 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
 /// <reference types="src/main/resources/META-INF/resources/ts_modules/object-js-components-web" />
-
 interface IUseObjectFieldForm {
-	forbiddenChars?: string[];
-	forbiddenLastChars?: string[];
-	forbiddenNames?: string[];
-	initialValues: Partial<ObjectField>;
-	onSubmit: (field: ObjectField) => void;
+    forbiddenChars?: string[];
+    forbiddenLastChars?: string[];
+    forbiddenNames?: string[];
+    initialValues: Partial<ObjectField>;
+    onSubmit: (field: ObjectField) => void;
 }
-export declare function useObjectFieldForm({
-	forbiddenChars,
-	forbiddenLastChars,
-	forbiddenNames,
-	initialValues,
-	onSubmit,
-}: IUseObjectFieldForm): {
-	errors: import('@liferay/object-js-components-web').FormError<
-		ObjectField & {
-			function: unknown;
-			filters: unknown;
-			maxLength: unknown;
-			acceptedFileExtensions: unknown;
-			fileSource: unknown;
-			maximumFileSize: unknown;
-			objectFieldName: unknown;
-			objectRelationshipName: unknown;
-			showCounter: unknown;
-			showFilesInDocumentsAndMedia: unknown;
-			stateFlow: unknown;
-			storageDLFolderPath: unknown;
-		}
-	>;
-	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
-	handleSubmit: import('react').FormEventHandler<HTMLFormElement>;
-	setValues: (values: Partial<ObjectField>) => void;
-	values: Partial<ObjectField>;
+export declare function useObjectFieldForm({ forbiddenChars, forbiddenLastChars, forbiddenNames, initialValues, onSubmit, }: IUseObjectFieldForm): {
+    errors: import("@liferay/object-js-components-web").FormError<ObjectField & {
+        function: unknown;
+        maxLength: unknown;
+        acceptedFileExtensions: unknown;
+        fileSource: unknown;
+        filters: unknown;
+        maximumFileSize: unknown;
+        objectFieldName: unknown;
+        objectRelationshipName: unknown;
+        showCounter: unknown;
+        showFilesInDocumentsAndMedia: unknown;
+        stateFlow: unknown;
+        storageDLFolderPath: unknown;
+    }>;
+    handleChange: import("react").ChangeEventHandler<HTMLInputElement>;
+    handleSubmit: import("react").FormEventHandler<HTMLFormElement>;
+    setValues: (values: Partial<ObjectField>) => void;
+    values: Partial<ObjectField>;
 };
 export {};

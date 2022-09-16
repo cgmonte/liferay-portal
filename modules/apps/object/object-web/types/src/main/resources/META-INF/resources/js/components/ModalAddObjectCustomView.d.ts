@@ -11,12 +11,11 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 import React from 'react';
 interface IProps extends React.HTMLAttributes<HTMLElement> {
-	apiURL: string;
-	observer: unknown;
-	onClose: () => void;
+    apiURL: string;
+    observer: unknown;
+    onClose: () => void;
 }
 declare const ModalWithProvider: React.FC<IProps>;
 export default ModalWithProvider;

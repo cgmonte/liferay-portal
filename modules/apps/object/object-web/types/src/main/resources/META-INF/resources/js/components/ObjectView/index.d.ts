@@ -11,14 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 import React from 'react';
-import {TWorkflowStatus} from './types';
+import { TWorkflowStatus } from './types';
 interface ICustomViewWrapperProps extends React.HTMLAttributes<HTMLElement> {
-	filterOperators: TFilterOperators;
-	isViewOnly: boolean;
-	objectViewId: string;
-	workflowStatusJSONArray: TWorkflowStatus[];
+    filterOperators: TFilterOperators;
+    isViewOnly: boolean;
+    objectViewId: string;
+    workflowStatusJSONArray: TWorkflowStatus[];
 }
 declare const CustomViewWrapper: React.FC<ICustomViewWrapperProps>;
 export default CustomViewWrapper;

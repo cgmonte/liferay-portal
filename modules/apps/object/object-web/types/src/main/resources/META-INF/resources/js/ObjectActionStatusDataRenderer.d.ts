@@ -11,17 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 /// <reference types="react" />
-
-export default function ObjectActionStatusDataRenderer({
-	value,
-}: IProps): JSX.Element | null;
+export default function ObjectActionStatusDataRenderer({ value }: IProps): JSX.Element | null;
 interface IProps {
-	value: {
-		code: number;
-		label: string;
-		label_i18n: string;
-	};
+    value: {
+        code: number;
+        label: string;
+        label_i18n: string;
+    };
 }
 export {};

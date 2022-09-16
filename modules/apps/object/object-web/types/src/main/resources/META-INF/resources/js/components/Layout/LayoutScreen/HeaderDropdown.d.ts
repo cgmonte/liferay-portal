@@ -11,13 +11,12 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {FC, MouseEventHandler} from 'react';
+import { FC, MouseEventHandler } from 'react';
 declare const HeaderDropdown: FC<IHeaderDropdown>;
 interface IHeaderDropdown {
-	addCategorization?: MouseEventHandler;
-	addComments?: MouseEventHandler;
-	deleteElement: MouseEventHandler;
-	disabled?: boolean;
+    addCategorization?: MouseEventHandler;
+    addComments?: MouseEventHandler;
+    deleteElement: MouseEventHandler;
+    disabled?: boolean;
 }
 export default HeaderDropdown;
