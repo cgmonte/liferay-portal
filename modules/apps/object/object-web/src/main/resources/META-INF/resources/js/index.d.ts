@@ -262,15 +262,30 @@ type ObjectValidationType = {
 };
 
 interface PickList {
+	actions: Actions;
 	id: number;
 	listTypeEntries: PickListItem[];
 	name: string;
+	name_i18n: LocalizedValue<string>;
 }
 
 interface PickListItem {
 	id: number;
 	key: string;
 	name: string;
+	name_i18n: LocalizedValue<string>;
+}
+
+interface Actions {
+	delete: HTTPMethods;
+	get: HTTPMethods;
+	permissions: HTTPMethods;
+	update: HTTPMethods;
+}
+
+interface HTTPMethods {
+	href: string;
+	method: string;
 }
 
 interface PredefinedValue {
