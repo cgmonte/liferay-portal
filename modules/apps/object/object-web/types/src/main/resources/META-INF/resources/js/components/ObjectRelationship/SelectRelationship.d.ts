@@ -11,12 +11,20 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-export default function SelectRelationship({ error, objectDefinitionId, onChange, value, ...otherProps }: IProps): JSX.Element;
+
+export default function SelectRelationship({
+	error,
+	objectDefinitionId,
+	onChange,
+	value,
+	...otherProps
+}: IProps): JSX.Element;
 interface IProps {
-    error?: string;
-    objectDefinitionId?: number;
-    onChange?: (objectFieldId: number) => void;
-    value?: number;
+	error?: string;
+	objectDefinitionId?: number;
+	onChange?: (objectFieldId: number) => void;
+	value?: number;
 }
 export {};

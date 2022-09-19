@@ -11,21 +11,36 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
+
 import './EditObjectField.scss';
 interface IProps {
-    filterOperators: TFilterOperators;
-    forbiddenChars: string[];
-    forbiddenLastChars: string[];
-    forbiddenNames: string[];
-    isApproved: boolean;
-    isDefaultStorageType: boolean;
-    objectDefinitionId: number;
-    objectField: ObjectField;
-    objectFieldTypes: ObjectFieldType[];
-    objectName: string;
-    readOnly: boolean;
-    workflowStatusJSONArray: LabelValueObject[];
+	filterOperators: TFilterOperators;
+	forbiddenChars: string[];
+	forbiddenLastChars: string[];
+	forbiddenNames: string[];
+	isApproved: boolean;
+	isDefaultStorageType: boolean;
+	objectDefinitionId: number;
+	objectField: ObjectField;
+	objectFieldTypes: ObjectFieldType[];
+	objectName: string;
+	readOnly: boolean;
+	workflowStatusJSONArray: LabelValueObject[];
 }
-export default function EditObjectField({ filterOperators, forbiddenChars, forbiddenLastChars, forbiddenNames, isApproved, isDefaultStorageType, objectDefinitionId, objectField: initialValues, objectFieldTypes, objectName, readOnly, workflowStatusJSONArray, }: IProps): JSX.Element;
+export default function EditObjectField({
+	filterOperators,
+	forbiddenChars,
+	forbiddenLastChars,
+	forbiddenNames,
+	isApproved,
+	isDefaultStorageType,
+	objectDefinitionId,
+	objectField: initialValues,
+	objectFieldTypes,
+	objectName,
+	readOnly,
+	workflowStatusJSONArray,
+}: IProps): JSX.Element;
 export {};

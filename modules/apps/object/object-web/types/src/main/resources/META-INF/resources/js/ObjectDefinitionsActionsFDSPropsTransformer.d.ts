@@ -11,11 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import ObjectActionStatusDataRenderer from './ObjectActionStatusDataRenderer';
-export default function propsTransformer({ ...otherProps }: {
-    [x: string]: any;
+export default function propsTransformer({
+	...otherProps
+}: {
+	[x: string]: any;
 }): {
-    customDataRenderers: {
-        objectActionStatusDataRenderer: typeof ObjectActionStatusDataRenderer;
-    };
+	customDataRenderers: {
+		objectActionStatusDataRenderer: typeof ObjectActionStatusDataRenderer;
+	};
 };

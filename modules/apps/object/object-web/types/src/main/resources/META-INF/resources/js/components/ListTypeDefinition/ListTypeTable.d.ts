@@ -11,11 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
+
 import './ListTypeTable.scss';
 interface IProps {
-    setValues: (values: Partial<ListTypeDefinition>) => void;
-    values: Partial<ListTypeDefinition>;
+	setValues: (values: Partial<ListTypeDefinition>) => void;
+	values: Partial<ListTypeDefinition>;
 }
-export default function ListTypeTable({ setValues, values, }: IProps): JSX.Element;
+export default function ListTypeTable({setValues, values}: IProps): JSX.Element;
 export {};

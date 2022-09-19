@@ -11,10 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-export default function ModalWithProvider({ apiURL, objectValidationRuleEngines, }: IProps): JSX.Element;
+
+export default function ModalWithProvider({
+	apiURL,
+	objectValidationRuleEngines,
+}: IProps): JSX.Element;
 interface IProps {
-    apiURL: string;
-    objectValidationRuleEngines: ObjectValidationType[];
+	apiURL: string;
+	objectValidationRuleEngines: ObjectValidationType[];
 }
 export {};

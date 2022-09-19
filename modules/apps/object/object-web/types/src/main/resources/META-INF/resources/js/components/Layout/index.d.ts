@@ -11,11 +11,12 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import React from 'react';
 interface ILayoutWrapperProps extends React.HTMLAttributes<HTMLElement> {
-    isViewOnly: boolean;
-    objectFieldTypes: ObjectFieldType[];
-    objectLayoutId: string;
+	isViewOnly: boolean;
+	objectFieldTypes: ObjectFieldType[];
+	objectLayoutId: string;
 }
 declare const LayoutWrapper: React.FC<ILayoutWrapperProps>;
 export default LayoutWrapper;

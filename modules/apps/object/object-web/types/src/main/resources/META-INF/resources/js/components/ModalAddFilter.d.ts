@@ -11,63 +11,95 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-import { Observer } from '@clayui/modal/lib/types';
+
+import {Observer} from '@clayui/modal/lib/types';
 import './ModalAddFilter.scss';
-export declare function ModalAddFilter({ currentFilters, disableDateValues, editingFilter, editingObjectFieldName, filterOperators, filterTypeRequired, header, objectFields, observer, onClose, onSave, validate, workflowStatusJSONArray, }: IProps): JSX.Element;
+export declare function ModalAddFilter({
+	currentFilters,
+	disableDateValues,
+	editingFilter,
+	editingObjectFieldName,
+	filterOperators,
+	filterTypeRequired,
+	header,
+	objectFields,
+	observer,
+	onClose,
+	onSave,
+	validate,
+	workflowStatusJSONArray,
+}: IProps): JSX.Element;
 interface IProps {
-    currentFilters: TCurrentFilter[];
-    disableDateValues?: boolean;
-    editingFilter: boolean;
-    editingObjectFieldName: string;
-    filterOperators: TFilterOperators;
-    filterTypeRequired?: boolean;
-    header: string;
-    objectFields: ObjectField[];
-    observer: Observer;
-    onClose: () => void;
-    onSave: (objectFieldName: string, filterBy?: string, fieldLabel?: LocalizedValue<string>, objectFieldBusinessType?: string, filterType?: string, valueList?: IItem[], value?: string) => void;
-    validate: ({ checkedItems, disableDateValues, items, selectedFilterBy, selectedFilterType, setErrors, value, }: FilterValidation) => FilterErrors;
-    workflowStatusJSONArray: TWorkflowStatus[];
+	currentFilters: TCurrentFilter[];
+	disableDateValues?: boolean;
+	editingFilter: boolean;
+	editingObjectFieldName: string;
+	filterOperators: TFilterOperators;
+	filterTypeRequired?: boolean;
+	header: string;
+	objectFields: ObjectField[];
+	observer: Observer;
+	onClose: () => void;
+	onSave: (
+		objectFieldName: string,
+		filterBy?: string,
+		fieldLabel?: LocalizedValue<string>,
+		objectFieldBusinessType?: string,
+		filterType?: string,
+		valueList?: IItem[],
+		value?: string
+	) => void;
+	validate: ({
+		checkedItems,
+		disableDateValues,
+		items,
+		selectedFilterBy,
+		selectedFilterType,
+		setErrors,
+		value,
+	}: FilterValidation) => FilterErrors;
+	workflowStatusJSONArray: TWorkflowStatus[];
 }
 interface IItem extends LabelValueObject {
-    checked?: boolean;
+	checked?: boolean;
 }
 export declare type FilterErrors = {
-    endDate?: string;
-    items?: string;
-    selectedFilterBy?: string;
-    selectedFilterType?: string;
-    startDate?: string;
-    value?: string;
+	endDate?: string;
+	items?: string;
+	selectedFilterBy?: string;
+	selectedFilterType?: string;
+	startDate?: string;
+	value?: string;
 };
 export declare type FilterValidation = {
-    checkedItems: IItem[];
-    disableDateValues?: boolean;
-    items: IItem[];
-    selectedFilterBy?: ObjectField;
-    selectedFilterType?: LabelValueObject | null;
-    setErrors: (value: FilterErrors) => void;
-    value?: string;
+	checkedItems: IItem[];
+	disableDateValues?: boolean;
+	items: IItem[];
+	selectedFilterBy?: ObjectField;
+	selectedFilterType?: LabelValueObject | null;
+	setErrors: (value: FilterErrors) => void;
+	value?: string;
 };
 declare type TCurrentFilter = {
-    definition: {
-        [key: string]: string[] | number[];
-    } | null;
-    fieldLabel?: string;
-    filterBy?: string;
-    filterType: string | null;
-    label: TName;
-    objectFieldBusinessType?: string;
-    objectFieldName?: string;
-    value?: string;
-    valueList?: LabelValueObject[];
+	definition: {
+		[key: string]: string[] | number[];
+	} | null;
+	fieldLabel?: string;
+	filterBy?: string;
+	filterType: string | null;
+	label: TName;
+	objectFieldBusinessType?: string;
+	objectFieldName?: string;
+	value?: string;
+	valueList?: LabelValueObject[];
 };
 declare type TWorkflowStatus = {
-    label: string;
-    value: string;
+	label: string;
+	value: string;
 };
 declare type TName = {
-    [key: string]: string;
+	[key: string]: string;
 };
 export {};

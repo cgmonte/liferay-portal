@@ -11,15 +11,24 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-import { CustomItem, SidebarCategory } from '@liferay/object-js-components-web';
-export default function AddObjectAction({ apiURL, objectActionCodeEditorElements, objectActionExecutors, objectActionTriggers, objectDefinitionsRelationshipsURL, validateExpressionURL, }: IProps): JSX.Element;
+
+import {CustomItem, SidebarCategory} from '@liferay/object-js-components-web';
+export default function AddObjectAction({
+	apiURL,
+	objectActionCodeEditorElements,
+	objectActionExecutors,
+	objectActionTriggers,
+	objectDefinitionsRelationshipsURL,
+	validateExpressionURL,
+}: IProps): JSX.Element;
 interface IProps {
-    apiURL: string;
-    objectActionCodeEditorElements: SidebarCategory[];
-    objectActionExecutors: CustomItem[];
-    objectActionTriggers: CustomItem[];
-    objectDefinitionsRelationshipsURL: string;
-    validateExpressionURL: string;
+	apiURL: string;
+	objectActionCodeEditorElements: SidebarCategory[];
+	objectActionExecutors: CustomItem[];
+	objectActionTriggers: CustomItem[];
+	objectDefinitionsRelationshipsURL: string;
+	validateExpressionURL: string;
 }
 export {};

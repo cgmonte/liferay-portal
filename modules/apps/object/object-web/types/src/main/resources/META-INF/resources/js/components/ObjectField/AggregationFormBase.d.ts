@@ -11,17 +11,28 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-import { ObjectFieldErrors } from './ObjectFieldFormBase';
+
+import {ObjectFieldErrors} from './ObjectFieldFormBase';
 interface IAggregationSourcePropertyProps {
-    disabled?: boolean;
-    editingField?: boolean;
-    errors: ObjectFieldErrors;
-    objectDefinitionId: number;
-    objectFieldSettings: ObjectFieldSetting[];
-    onAggregationFilterChange?: (aggregationFilterArray: []) => void;
-    onRelationshipChange?: (objectDefinitionId2: number) => void;
-    setValues: (values: Partial<ObjectField>) => void;
+	disabled?: boolean;
+	editingField?: boolean;
+	errors: ObjectFieldErrors;
+	objectDefinitionId: number;
+	objectFieldSettings: ObjectFieldSetting[];
+	onAggregationFilterChange?: (aggregationFilterArray: []) => void;
+	onRelationshipChange?: (objectDefinitionId2: number) => void;
+	setValues: (values: Partial<ObjectField>) => void;
 }
-export declare function AggregationFormBase({ disabled, errors, editingField, onAggregationFilterChange, onRelationshipChange, objectDefinitionId, objectFieldSettings, setValues, }: IAggregationSourcePropertyProps): JSX.Element;
+export declare function AggregationFormBase({
+	disabled,
+	errors,
+	editingField,
+	onAggregationFilterChange,
+	onRelationshipChange,
+	objectDefinitionId,
+	objectFieldSettings,
+	setValues,
+}: IAggregationSourcePropertyProps): JSX.Element;
 export {};

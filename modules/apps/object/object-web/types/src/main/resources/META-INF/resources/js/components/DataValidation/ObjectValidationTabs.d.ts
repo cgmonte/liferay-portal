@@ -11,23 +11,36 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import 'codemirror/mode/groovy/groovy';
-import { SidebarCategory } from '@liferay/object-js-components-web';
-import { ChangeEventHandler } from 'react';
-import { ObjectValidationErrors } from '../ObjectValidationFormBase';
-export declare function BasicInfo({ componentLabel, disabled, errors, setValues, values, }: IBasicInfo): JSX.Element;
-export declare function Conditions({ disabled, errors, objectValidationRuleElements, setValues, values, }: IConditions): JSX.Element;
+import {SidebarCategory} from '@liferay/object-js-components-web';
+import {ChangeEventHandler} from 'react';
+import {ObjectValidationErrors} from '../ObjectValidationFormBase';
+export declare function BasicInfo({
+	componentLabel,
+	disabled,
+	errors,
+	setValues,
+	values,
+}: IBasicInfo): JSX.Element;
+export declare function Conditions({
+	disabled,
+	errors,
+	objectValidationRuleElements,
+	setValues,
+	values,
+}: IConditions): JSX.Element;
 interface ITabs {
-    disabled: boolean;
-    errors: ObjectValidationErrors;
-    handleChange: ChangeEventHandler<HTMLInputElement>;
-    setValues: (values: Partial<ObjectValidation>) => void;
-    values: Partial<ObjectValidation>;
+	disabled: boolean;
+	errors: ObjectValidationErrors;
+	handleChange: ChangeEventHandler<HTMLInputElement>;
+	setValues: (values: Partial<ObjectValidation>) => void;
+	values: Partial<ObjectValidation>;
 }
 interface IBasicInfo extends ITabs {
-    componentLabel: string;
+	componentLabel: string;
 }
 interface IConditions extends ITabs {
-    objectValidationRuleElements: SidebarCategory[];
+	objectValidationRuleElements: SidebarCategory[];
 }
 export {};

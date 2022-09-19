@@ -11,6 +11,9 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-export declare function fixLocaleKeys(name_i18n: LocalizedValue<string>): {
-    [key: string]: string;
+
+export declare function fixLocaleKeys(
+	name_i18n: LocalizedValue<string>
+): {
+	[key: string]: string;
 };

@@ -11,12 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import React from 'react';
-import { TObjectLayoutRow } from '../types';
+import {TObjectLayoutRow} from '../types';
 interface IObjectLayoutRowsProps extends React.HTMLAttributes<HTMLElement> {
-    boxIndex: number;
-    objectLayoutRows: TObjectLayoutRow[];
-    tabIndex: number;
+	boxIndex: number;
+	objectLayoutRows: TObjectLayoutRow[];
+	tabIndex: number;
 }
 declare const ObjectLayoutRows: React.FC<IObjectLayoutRowsProps>;
 export default ObjectLayoutRows;

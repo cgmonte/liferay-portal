@@ -11,25 +11,42 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-import { FormError } from '@liferay/object-js-components-web';
-import { ChangeEventHandler, ReactNode } from 'react';
+
+import {FormError} from '@liferay/object-js-components-web';
+import {ChangeEventHandler, ReactNode} from 'react';
 import './ObjectFieldFormBase.scss';
 interface IProps {
-    children?: ReactNode;
-    disabled?: boolean;
-    editingField?: boolean;
-    errors: ObjectFieldErrors;
-    handleChange: ChangeEventHandler<HTMLInputElement>;
-    objectDefinitionId: number;
-    objectField: Partial<ObjectField>;
-    objectFieldTypes: ObjectFieldType[];
-    objectName: string;
-    onAggregationFilterChange?: (aggregationFilterArray: []) => void;
-    onRelationshipChange?: (objectDefinitionId2: number) => void;
-    setValues: (values: Partial<ObjectField>) => void;
+	children?: ReactNode;
+	disabled?: boolean;
+	editingField?: boolean;
+	errors: ObjectFieldErrors;
+	handleChange: ChangeEventHandler<HTMLInputElement>;
+	objectDefinitionId: number;
+	objectField: Partial<ObjectField>;
+	objectFieldTypes: ObjectFieldType[];
+	objectName: string;
+	onAggregationFilterChange?: (aggregationFilterArray: []) => void;
+	onRelationshipChange?: (objectDefinitionId2: number) => void;
+	setValues: (values: Partial<ObjectField>) => void;
 }
-export declare type ObjectFieldErrors = FormError<ObjectField & {
-    [key in ObjectFieldSettingName]: unknown;
-}>;
-export default function ObjectFieldFormBase({ children, disabled, editingField, errors, handleChange, objectDefinitionId, objectField: values, objectFieldTypes, objectName, onAggregationFilterChange, onRelationshipChange, setValues, }: IProps): JSX.Element;
+export declare type ObjectFieldErrors = FormError<
+	ObjectField &
+		{
+			[key in ObjectFieldSettingName]: unknown;
+		}
+>;
+export default function ObjectFieldFormBase({
+	children,
+	disabled,
+	editingField,
+	errors,
+	handleChange,
+	objectDefinitionId,
+	objectField: values,
+	objectFieldTypes,
+	objectName,
+	onAggregationFilterChange,
+	onRelationshipChange,
+	setValues,
+}: IProps): JSX.Element;
 export {};

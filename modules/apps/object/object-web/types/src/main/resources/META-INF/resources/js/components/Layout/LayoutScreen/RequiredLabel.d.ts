@@ -11,9 +11,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import React from 'react';
 interface IRequiredLabelProps extends React.HTMLAttributes<HTMLElement> {
-    required?: boolean;
+	required?: boolean;
 }
 declare const RequiredLabel: React.FC<IRequiredLabelProps>;
 export default RequiredLabel;

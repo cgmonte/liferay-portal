@@ -11,12 +11,19 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
+
 interface IProps {
-    apiURL: string;
-    objectDefinitionId: number;
-    objectFieldTypes: ObjectFieldType[];
-    objectName: string;
+	apiURL: string;
+	objectDefinitionId: number;
+	objectFieldTypes: ObjectFieldType[];
+	objectName: string;
 }
-export default function AddObjectField({ apiURL, objectDefinitionId, objectFieldTypes, objectName, }: IProps): JSX.Element;
+export default function AddObjectField({
+	apiURL,
+	objectDefinitionId,
+	objectFieldTypes,
+	objectName,
+}: IProps): JSX.Element;
 export {};

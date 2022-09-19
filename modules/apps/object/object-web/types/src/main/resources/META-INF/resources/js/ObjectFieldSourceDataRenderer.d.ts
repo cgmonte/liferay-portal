@@ -11,9 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-export default function ObjectFieldSourceDataRenderer({ value }: IProps): JSX.Element;
+
+export default function ObjectFieldSourceDataRenderer({
+	value,
+}: IProps): JSX.Element;
 interface IProps {
-    value: boolean;
+	value: boolean;
 }
 export {};

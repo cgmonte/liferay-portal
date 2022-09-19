@@ -11,15 +11,22 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
-import { Observer } from '@clayui/modal/lib/types';
-export default function AddRelationship({ apiURL, ffOneToOneRelationshipConfigurationEnabled, objectDefinitionId, parameterRequired, }: IProps): JSX.Element;
+
+import {Observer} from '@clayui/modal/lib/types';
+export default function AddRelationship({
+	apiURL,
+	ffOneToOneRelationshipConfigurationEnabled,
+	objectDefinitionId,
+	parameterRequired,
+}: IProps): JSX.Element;
 interface IProps {
-    apiURL: string;
-    ffOneToOneRelationshipConfigurationEnabled: boolean;
-    objectDefinitionId: number;
-    observer: Observer;
-    onClose: () => void;
-    parameterRequired: boolean;
+	apiURL: string;
+	ffOneToOneRelationshipConfigurationEnabled: boolean;
+	objectDefinitionId: number;
+	observer: Observer;
+	onClose: () => void;
+	parameterRequired: boolean;
 }
 export {};

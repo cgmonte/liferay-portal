@@ -11,17 +11,27 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-import { Observer } from '@clayui/modal/lib/types';
+
+import {Observer} from '@clayui/modal/lib/types';
 import React from 'react';
-export default function DangerModal({ children, errorMessage, observer, onClose, onDelete, placeholder, title, token, }: IProps): JSX.Element;
+export default function DangerModal({
+	children,
+	errorMessage,
+	observer,
+	onClose,
+	onDelete,
+	placeholder,
+	title,
+	token,
+}: IProps): JSX.Element;
 interface IProps {
-    children?: React.ReactNode;
-    errorMessage: string;
-    observer: Observer;
-    onClose: () => void;
-    onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    placeholder?: string;
-    title: string;
-    token: string;
+	children?: React.ReactNode;
+	errorMessage: string;
+	observer: Observer;
+	onClose: () => void;
+	onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	placeholder?: string;
+	title: string;
+	token: string;
 }
 export {};

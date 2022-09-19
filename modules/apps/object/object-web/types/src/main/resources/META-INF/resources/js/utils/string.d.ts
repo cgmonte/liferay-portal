@@ -11,27 +11,33 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /**
  * Format string removing spaces and special characters
  */
 export declare function removeAllSpecialCharacters(str: string): string;
+
 /**
  * Transform first letter in lowercase
  */
 export declare function firstLetterLowercase(str: string): string;
+
 /**
  * Transform first letter in uppercase
  */
 export declare function firstLetterUppercase(str: string): string;
+
 /**
  * Normalize languageId to be used in the
  * frontend with themeDisplay.getDefaultLanguageId()
  */
 export declare function normalizeLanguageId(languageId: string): string;
+
 /**
  * Normalize string in camel case pattern.
  */
 export declare function toCamelCase(str: string): string;
+
 /**
  * Separate CamelCase string
  */

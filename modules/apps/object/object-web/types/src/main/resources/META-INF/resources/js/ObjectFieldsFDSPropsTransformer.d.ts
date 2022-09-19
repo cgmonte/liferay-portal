@@ -11,11 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import ObjectFieldSourceDataRenderer from './ObjectFieldSourceDataRenderer';
-export default function propsTransformer({ ...otherProps }: {
-    [x: string]: any;
+export default function propsTransformer({
+	...otherProps
+}: {
+	[x: string]: any;
 }): {
-    customDataRenderers: {
-        objectFieldSourceDataRenderer: typeof ObjectFieldSourceDataRenderer;
-    };
+	customDataRenderers: {
+		objectFieldSourceDataRenderer: typeof ObjectFieldSourceDataRenderer;
+	};
 };

@@ -11,18 +11,21 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-/// <reference types="react" />
-import { FormError } from '@liferay/object-js-components-web';
-export declare function useListTypeForm({ initialValues, onSubmit }: IUseListTypeForm): {
-    errors: FormError<ListTypeDefinition>;
-    handleChange: import("react").ChangeEventHandler<HTMLInputElement>;
-    handleSubmit: import("react").FormEventHandler<HTMLFormElement>;
-    setValues: (values: Partial<ListTypeDefinition>) => void;
-    values: Partial<ListTypeDefinition>;
+
+import {FormError} from '@liferay/object-js-components-web';
+export declare function useListTypeForm({
+	initialValues,
+	onSubmit,
+}: IUseListTypeForm): {
+	errors: FormError<ListTypeDefinition>;
+	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
+	handleSubmit: import('react').FormEventHandler<HTMLFormElement>;
+	setValues: (values: Partial<ListTypeDefinition>) => void;
+	values: Partial<ListTypeDefinition>;
 };
 interface IUseListTypeForm {
-    initialValues: Partial<ListTypeDefinition>;
-    onSubmit: (picklist: ListTypeDefinition) => void;
+	initialValues: Partial<ListTypeDefinition>;
+	onSubmit: (picklist: ListTypeDefinition) => void;
 }
 export declare type ObjectValidationErrors = FormError<ListTypeDefinition>;
 export {};

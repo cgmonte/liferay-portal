@@ -11,13 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 import React from 'react';
 interface IObjectLayoutFieldProps extends React.HTMLAttributes<HTMLElement> {
-    boxIndex: number;
-    columnIndex: number;
-    objectFieldId: number;
-    rowIndex: number;
-    tabIndex: number;
+	boxIndex: number;
+	columnIndex: number;
+	objectFieldId: number;
+	rowIndex: number;
+	tabIndex: number;
 }
 declare const ObjectLayoutField: React.FC<IObjectLayoutFieldProps>;
 export default ObjectLayoutField;

@@ -11,7 +11,9 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 /// <reference types="react" />
+
 import './ModalAddItems.scss';
 declare function ModalAddItems(): JSX.Element | null;
 export default ModalAddItems;

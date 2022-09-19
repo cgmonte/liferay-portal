@@ -11,14 +11,21 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-import { FormError } from '@liferay/object-js-components-web';
+
+import {FormError} from '@liferay/object-js-components-web';
 import React from 'react';
-export default function BasicInfo({ errors, handleChange, readOnly, setValues, values, }: IPros): JSX.Element;
+export default function BasicInfo({
+	errors,
+	handleChange,
+	readOnly,
+	setValues,
+	values,
+}: IPros): JSX.Element;
 interface IPros {
-    errors: FormError<ObjectAction & ObjectActionParameters>;
-    handleChange: React.ChangeEventHandler<HTMLInputElement>;
-    readOnly?: boolean;
-    setValues: (values: Partial<ObjectAction>) => void;
-    values: Partial<ObjectAction>;
+	errors: FormError<ObjectAction & ObjectActionParameters>;
+	handleChange: React.ChangeEventHandler<HTMLInputElement>;
+	readOnly?: boolean;
+	setValues: (values: Partial<ObjectAction>) => void;
+	values: Partial<ObjectAction>;
 }
 export {};
