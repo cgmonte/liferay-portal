@@ -19,8 +19,8 @@
 <%
 ListTypeDefinition listTypeDefinition = (ListTypeDefinition)request.getAttribute(ObjectWebKeys.LIST_TYPE_DEFINITION);
 ViewListTypeEntriesDisplayContext viewListTypeEntriesDisplayContext = (ViewListTypeEntriesDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
-
-System.out.println("   ");
+%>
+<!-- System.out.println("   ");
 System.out.println("apiURL:");
 System.out.println(viewListTypeEntriesDisplayContext.getAPIURL());
 System.out.println("   ");
@@ -33,9 +33,9 @@ System.out.println("   ");
 System.out.println("id:");
 System.out.println(ListTypeFDSNames.LIST_TYPE_DEFINITION_ITEMS);
 System.out.println("   ");
-%>
+%> -->
 
-<div id="<portlet:namespace />addListTypeEntry">
+<!-- <div id="<portlet:namespace />addListTypeEntry"> -->
 	<react:component
 		module="js/components/ListTypeDefinition/EditListTypeDefinition"
 		props='<%=
@@ -46,9 +46,9 @@ System.out.println("   ");
 			).build()
 		%>'
 	/>
-</div>
+<!-- </div> -->
 
-<div id="<portlet:namespace />addListTypeEntry">
+<!-- <div id="<portlet:namespace />addListTypeEntry">
 	<react:component
 		module="js/components/ModalAddListTypeEntry"
 		props='<%=
@@ -57,9 +57,10 @@ System.out.println("   ");
 			).build()
 		%>'
 	/>
-</div>
+</div> -->
 
-<!-- <div id="<portlet:namespace />EditListTypeEntry">
+<!-- 
+<div id="<portlet:namespace />EditListTypeEntry">
 	<react:component
 		module="js/components/ModalEditListTypeEntry"
 		props='<%=

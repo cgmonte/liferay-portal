@@ -24,7 +24,6 @@ import React, {useEffect, useState} from 'react';
 import './ListTypeTable.scss';
 
 interface IProps {
-	
 	// errors: {[key: string]: string};
 
 	setValues: (values: Partial<ListTypeDefinition>) => void;
@@ -149,9 +148,11 @@ function getDataSetProps(
 		};
 
 		return (
-			<a href="#" onClick={handleEditItems}>
-				{props.value}
-			</a>
+			<div className="table-list-title">
+				<a href="#" onClick={handleEditItems}>
+					{props.value}
+				</a>
+			</div>
 		);
 	}
 
@@ -163,7 +164,8 @@ function getDataSetProps(
 		creationMenu: {
 			primaryItems: [
 				{
-					href: 'addListTypeEntry',
+					href: 'handleAddItems',
+					// id: 'handleAddItems',
 					label: Liferay.Language.get('add-items'),
 					target: 'event',
 					type: 'item',
@@ -182,7 +184,7 @@ function getDataSetProps(
 		initialSelectedItemsValues: null,
 		itemsActions: [
 			{
-				href: 'addListTypeEntry',
+				// href: 'addListTypeEntryknkjnkj',	ss
 				icon: 'view',
 				id: 'addListTypeEntry',
 				label: Liferay.Language.get('view'),

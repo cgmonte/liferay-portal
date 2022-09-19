@@ -234,6 +234,7 @@ declare module Liferay {
 		export function getBCP47LanguageId(): string;
 		export function getDefaultLanguageId(): Language.Locale;
 		export function getLanguageId(): Language.Locale;
+		export function getLayoutURL(): string;
 		export function getPathThemeImages(): string;
 		export function getSiteGroupId(): number;
 		export function isControlPanel(): boolean;

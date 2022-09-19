@@ -29,7 +29,7 @@ ViewListTypeDefinitionsDisplayContext viewListTypeDefinitionsDisplayContext = (V
 	style="fluid"
 />
 
-<!-- <div id="<portlet:namespace />addListTypeDefinition">
+<div id="<portlet:namespace />addListTypeDefinition">
 	<react:component
 		module="js/components/ModalAddListTypeDefinition"
 		props='<%=
@@ -38,7 +38,7 @@ ViewListTypeDefinitionsDisplayContext viewListTypeDefinitionsDisplayContext = (V
 			).build()
 		%>'
 	/>
-</div> -->
+</div>
 
 <div>
 	<react:component
