@@ -72,6 +72,10 @@ const headers = new Headers({
 async function deleteItem(url: string) {
 	const response = await fetch(url, {headers, method: 'DELETE'});
 
+	if (response.ok) {
+		return response;
+	}
+
 	if (response.status === 401) {
 		window.location.reload();
 	}
@@ -174,6 +178,10 @@ export async function save(
 		headers,
 		method,
 	});
+
+	if (response.ok) {
+		return response.json();
+	}
 
 	if (response.status === 401) {
 		window.location.reload();
