@@ -44,14 +44,35 @@ interface PickListItem {
 	id: number;
 	key: string;
 	name: string;
+	name_i18n: {
+		[key in Locale]?: string;
+	};
 }
 interface PickList {
+	actions: Actions;
 	id: number;
 	listTypeEntries: PickListItem[];
 	name: string;
+	name_i18n: {
+		[key in Locale]?: string;
+	};
 }
-export declare function deleteObjectDefinitions(id: number): Promise<void>;
-export declare function deleteObjectRelationships(id: number): Promise<void>;
+interface Actions {
+	delete: HTTPMethods;
+	get: HTTPMethods;
+	permissions: HTTPMethods;
+	update: HTTPMethods;
+}
+interface HTTPMethods {
+	href: string;
+	method: string;
+}
+export declare function deleteObjectDefinitions(
+	id: number
+): Promise<Response | undefined>;
+export declare function deleteObjectRelationships(
+	id: number
+): Promise<Response | undefined>;
 export declare function fetchJSON<T>(
 	input: RequestInfo,
 	init?: RequestInit
@@ -76,6 +97,7 @@ export declare function getObjectFields(
 export declare function getObjectRelationships(
 	objectDefinitionId: number
 ): Promise<ObjectRelationship[]>;
+export declare function getPickList(pickListId: number): Promise<PickList>;
 export declare function getPickLists(): Promise<PickList[]>;
 export declare function getPickListItems(
 	pickListId: number
@@ -84,10 +106,29 @@ export declare function save(
 	url: string,
 	item: unknown,
 	method?: 'PUT' | 'POST'
-): Promise<void>;
+): Promise<any>;
 export declare function updateRelationship({
 	objectRelationshipId,
 	...others
-}: ObjectRelationship): Promise<void>;
+}: ObjectRelationship): Promise<any>;
 export declare function getRelationship<T>(relationshipId: number): Promise<T>;
+export declare function updatePickList({
+	id,
+	name_i18n,
+}: Partial<PickListItem>): Promise<any>;
+export declare function deletePickList(
+	pickListId: number
+): Promise<Response | undefined>;
+export declare function addPickListItem({
+	id,
+	key,
+	name_i18n,
+}: Partial<PickListItem>): Promise<any>;
+export declare function deletePickListItem(
+	id: number
+): Promise<Response | undefined>;
+export declare function updatePickListItem({
+	id,
+	name_i18n,
+}: Partial<PickListItem>): Promise<any>;
 export {};
