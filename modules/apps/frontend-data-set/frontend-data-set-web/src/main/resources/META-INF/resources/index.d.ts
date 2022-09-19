@@ -52,7 +52,7 @@ export function FrontendDataSet({
 
 interface IFrontendDataSetProps {
 	actionParameterName?: string;
-	activeViewSettings?: string;
+	activeViewSettings?: string | null;
 	apiURL?: string;
 	appURL?: string;
 	bulkActions?: any[];
@@ -67,10 +67,10 @@ interface IFrontendDataSetProps {
 		defaultBodyContent?: object;
 	};
 	filters?: any;
-	formId?: string;
+	formId?: string | null;
 	formName?: string;
 	id: string;
-	initialSelectedItemsValues?: any[];
+	initialSelectedItemsValues?: any[] | null;
 	inlineAddingSettings?: {
 		apiURL: string;
 		defaultBodyContent: object;
@@ -85,23 +85,19 @@ interface IFrontendDataSetProps {
 	items?: any[];
 	itemsActions?: TItemsActions[];
 	namespace?: string;
-	nestedItemsKey?: string;
-	nestedItemsReferenceKey?: string;
+	nestedItemsKey?: string | null;
+	nestedItemsReferenceKey?: string | null;
 	onActionDropdownItemClick?: any;
 	onBulkActionItemClick?: any;
 	overrideEmptyResultView?: boolean;
 	pagination?: {
-		deltas?: [
-			{
-				href?: string;
-				label: number;
-			}
-		];
+		deltas: TDeltas[];
 		initialDelta: number;
+		initialPageNumber: number;
 	};
 	portletId?: string;
-	selectedItemsKey?: string;
-	selectionType?: ['single', 'multiple'];
+	selectedItemsKey?: string | null;
+	selectionType?: ['single', 'multiple'] | null;
 	showManagementBar?: boolean;
 	showPagination?: boolean;
 	showSearch?: boolean;
@@ -118,8 +114,10 @@ interface IFrontendDataSetProps {
 			component?: any;
 			contentRenderer?: string;
 			contentRendererModuleURL?: string;
+			default?: boolean;
 			label?: string;
 			name?: string;
+			quickActionsEnabled?: boolean;
 			schema?: object;
 			thumbnail?: string;
 		}
@@ -131,11 +129,17 @@ type TItemsActions = {
 		confirmationMessage?: string;
 		id?: string;
 		method?: 'delete' | 'get';
-		permissionKey?: string;
+		permissionKey?: string | null;
 	};
 	href?: string;
 	icon?: string;
 	id?: string;
 	label?: string;
 	target?: 'async' | 'headless' | 'link' | 'modal' | 'sidePanel' | 'event';
+	type?: string;
+};
+
+type TDeltas = {
+	href?: string | null;
+	label: number;
 };
