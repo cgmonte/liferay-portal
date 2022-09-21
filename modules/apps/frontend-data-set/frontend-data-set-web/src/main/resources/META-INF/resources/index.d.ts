@@ -110,7 +110,7 @@ interface IFrontendDataSetProps {
 			key?: string;
 		}
 	];
-	style?: ['default', 'fluid', 'stacked'];
+	style?: 'default' | 'fluid' | 'stacked';
 	views: [
 		{
 			component?: any;
