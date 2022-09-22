@@ -18,13 +18,12 @@ import {
 	FrontendDataSet,
 	IFrontendDataSetProps,
 } from '@liferay/frontend-data-set-web';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {IModalState} from './ListTypeEntriesModal';
 
 interface IProps {
-	setValues: (values: Partial<PickList>) => void;
-	values: Partial<PickList>;
+	pickListId: number;
 }
 
 interface Props {
@@ -51,53 +50,57 @@ interface fdsItem {
 	value: string;
 }
 
-export default function ListTypeTable({setValues, values}: IProps) {
+export default function ListTypeTable({pickListId}: IProps) {
 	const fireModal = (modalProps: IModalState) => {
 		const parentWindow = Liferay.Util.getOpener();
 
 		parentWindow.Liferay.fire('openListTypeEntriesModal', {
 			...modalProps,
-			setValues,
-			values,
 		});
 	};
+
+	const [dataSetProps, setDataSetProps] = useState<IFrontendDataSetProps>();
 
 	useEffect(() => {
 		const handleAddItems = () => {
 			fireModal({
 				header: Liferay.Language.get('new-item'),
-				id: values.id,
 				modalType: 'add',
+				pickListId,
 			});
 		};
 
 		Liferay.on('handleAddItems', handleAddItems);
+
+		setDataSetProps(getDataSetProps(fireModal, pickListId!));
 
 		return () => {
 			Liferay.detach('handleAddItems');
 		};
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [values]);
+	}, [pickListId]);
 
-	let dataSetProps;
+	// let dataSetProps;
 
-	if (values?.id) {
-		dataSetProps = getDataSetProps(fireModal, values.id);
-	}
+	// if (pickListId) {
+	// 	dataSetProps = getDataSetProps(fireModal, pickListId);
+	// }
 
-	return dataSetProps ? <FrontendDataSet {...dataSetProps} /> : null;
+	return dataSetProps && Object.keys(dataSetProps).length ? (
+		<FrontendDataSet {...dataSetProps} />
+	) : null;
 }
 
 function getDataSetProps(
 	fireModal: (modalProps: IModalState) => void,
-	pickListID: number
+	pickListId: number
 ): IFrontendDataSetProps {
 	const onActionDropdownItemClick = ({action, itemData}: fdsItem) => {
 		if (action.id === 'addListTypeEntry') {
 			fireModal({
 				header: Liferay.Language.get('edit-item'),
-				id: itemData.id,
+				itemId: itemData.id,
 				itemKey: itemData.key,
 				modalType: 'edit',
 				name_i18n: itemData.name_i18n,
@@ -122,7 +125,7 @@ function getDataSetProps(
 
 	return {
 		actionParameterName: '',
-		apiURL: `/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListID}/list-type-entries`,
+		apiURL: `/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}/list-type-entries`,
 		appURL: 'http://localhost:8080/o/frontend-data-set-taglib/app',
 		creationMenu: {
 			primaryItems: [

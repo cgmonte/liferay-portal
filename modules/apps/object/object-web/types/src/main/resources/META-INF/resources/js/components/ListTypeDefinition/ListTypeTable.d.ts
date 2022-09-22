@@ -15,11 +15,7 @@
 /// <reference types="react" />
 
 interface IProps {
-	setValues: (values: Partial<PickList>) => void;
-	values: Partial<PickList>;
+	pickListId: number;
 }
-export default function ListTypeTable({
-	setValues,
-	values,
-}: IProps): JSX.Element | null;
+export default function ListTypeTable({pickListId}: IProps): JSX.Element | null;
 export {};

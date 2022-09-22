@@ -23,6 +23,7 @@ export function fixLocaleKeys(name_i18n: LocalizedValue<string>) {
 }
 
 export function getPickListSideBarIFrame(pickListId: number | undefined) {
+	debugger;
 	if (pickListId) {
 		const iframes = document.getElementsByTagName('iframe');
 		if (iframes?.length) {

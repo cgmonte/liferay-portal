@@ -31,22 +31,25 @@ const REQUIRED_MSG = Liferay.Language.get('required');
 const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 export interface IModalState extends Partial<PickListItem> {
 	header?: string;
-	id?: number;
+	itemId?: number;
 	itemKey?: string;
 	modalType?: 'add' | 'edit';
+	pickListId?: number;
 	reload?: () => void;
-	setValues?: (values: Partial<PickList>) => void;
-	values?: Partial<PickList>;
+
+	// setValues?: (values: Partial<PickList>) => void;
+	// values?: Partial<PickList>;
+	
 }
 
 function ListTypeEntriesModal() {
 	const [
-		{header, id, itemKey, modalType, name_i18n, values},
+		{header, itemId, itemKey, modalType, name_i18n, pickListId},
 		setState,
 	] = useState<IModalState>({});
 
-	const sideBarIframe = useMemo(() => getPickListSideBarIFrame(values?.id), [
-		values?.id,
+	const sideBarIframe = useMemo(() => getPickListSideBarIFrame(pickListId), [
+		pickListId,
 	]);
 
 	const [keyChanged, setKeyChanged] = useState(false);
@@ -105,6 +108,16 @@ function ListTypeEntriesModal() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	// useEffect(() => {
+	// 	if (modalType === 'edit' && values) {
+	// 		console.log('values:', values);
+	// 		setState((previousValues) => ({
+	// 			...previousValues,
+	// 			name_i18n: {...values.name_i18n},
+	// 		}));
+	// 	}
+	// }, [modalType, values]);
+
 	useEffect(() => {
 		if (APIError) {
 			openToast({
@@ -112,6 +125,7 @@ function ListTypeEntriesModal() {
 				type: 'danger',
 			});
 		}
+		setAPIError('');
 	}, [APIError]);
 
 	const validate = (entry: Partial<PickListItem>): ObjectValidationErrors => {
@@ -149,7 +163,7 @@ function ListTypeEntriesModal() {
 			try {
 				if (modalType === 'add') {
 					await API.addPickListItem({
-						id,
+						id: pickListId,
 						key: itemKey,
 						name_i18n,
 					});
@@ -160,7 +174,7 @@ function ListTypeEntriesModal() {
 						type: 'success',
 					});
 				} else if (modalType === 'edit') {
-					await API.updatePickListItem({id, name_i18n});
+					await API.updatePickListItem({id: itemId, name_i18n});
 					openToast({
 						message: Liferay.Language.get(
 							'the-picklist-item-was-updated-successfully'

@@ -21,7 +21,7 @@ import {
 	openToast,
 	saveAndReload,
 } from '@liferay/object-js-components-web';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 
 import {useListTypeForm} from './ListTypeFormBase';
 import ListTypeTable from './ListTypeTable';
@@ -31,13 +31,13 @@ export default function EditListTypeDefinition({
 	listTypeDefinitionId,
 	readOnly,
 }: IProps) {
-	const [pickList, setPickList] = useState<Partial<PickList>>({});
+	// const [pickList, setPickList] = useState<Partial<PickList>>({});
 
-	const onSubmit = async () => {
+	const onSubmit = async (values: any) => {
 		try {
 			await API.updatePickList({
 				id: parseInt(listTypeDefinitionId, 10),
-				name_i18n: pickList.name_i18n,
+				name_i18n: values.name_i18n,
 			});
 			saveAndReload();
 
@@ -52,7 +52,7 @@ export default function EditListTypeDefinition({
 	};
 
 	const {errors, handleSubmit, setValues, values} = useListTypeForm({
-		initialValues: pickList,
+		initialValues: {},
 		onSubmit,
 	});
 
@@ -68,11 +68,11 @@ export default function EditListTypeDefinition({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {
-		if (Object.keys(values).length) {
-			setPickList({...values});
-		}
-	}, [values]);
+	// useEffect(() => {
+	// 	if (Object.keys(values).length) {
+	// 		setPickList({...values});
+	// 	}
+	// }, [values]);
 
 	return (
 		<SidePanelForm
@@ -103,7 +103,7 @@ export default function EditListTypeDefinition({
 							</ClayAlert>
 						</div>
 
-						<ListTypeTable setValues={setValues} values={values} />
+						{values.id && <ListTypeTable pickListId={values.id} />}
 					</Card>
 				</>
 			)}

@@ -16,12 +16,11 @@
 
 export interface IModalState extends Partial<PickListItem> {
 	header?: string;
-	id?: number;
+	itemId?: number;
 	itemKey?: string;
 	modalType?: 'add' | 'edit';
+	pickListId?: number;
 	reload?: () => void;
-	setValues?: (values: Partial<PickList>) => void;
-	values?: Partial<PickList>;
 }
 declare function ListTypeEntriesModal(): JSX.Element | null;
 export default ListTypeEntriesModal;
