@@ -13,19 +13,19 @@
  */
 
 import {FormError} from '@liferay/object-js-components-web';
-export declare function useObjectValidationForm({
+export declare function useListTypeForm({
 	initialValues,
 	onSubmit,
-}: IUseObjectValidationForm): {
-	errors: FormError<ObjectValidation>;
+}: IUseListTypeForm): {
+	errors: FormError<PickList>;
 	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
 	handleSubmit: import('react').FormEventHandler<HTMLFormElement>;
-	setValues: (values: Partial<ObjectValidation>) => void;
-	values: Partial<ObjectValidation>;
+	setValues: (values: Partial<PickList>) => void;
+	values: Partial<PickList>;
 };
-interface IUseObjectValidationForm {
-	initialValues: Partial<ObjectValidation>;
-	onSubmit: (validation: ObjectValidation) => void;
+interface IUseListTypeForm {
+	initialValues: Partial<PickList>;
+	onSubmit: (picklist: PickList) => void;
 }
-export declare type ObjectValidationErrors = FormError<ObjectValidation>;
+export declare type ObjectValidationErrors = FormError<PickList>;
 export {};
