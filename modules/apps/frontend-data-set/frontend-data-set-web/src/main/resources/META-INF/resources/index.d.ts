@@ -93,13 +93,9 @@ interface IFrontendDataSetProps {
 	onBulkActionItemClick?: any;
 	overrideEmptyResultView?: boolean;
 	pagination?: {
-		deltas?: [
-			{
-				href?: string;
-				label: number;
-			}
-		];
+		deltas?: IDelta[];
 		initialDelta: number;
+		initialPageNumber: number;
 	};
 	portletId?: string;
 	selectedItemsKey?: string;
@@ -114,7 +110,7 @@ interface IFrontendDataSetProps {
 			key?: string;
 		}
 	];
-	style?: ['default', 'fluid', 'stacked'];
+	style?: 'default' | 'fluid' | 'stacked';
 	views: [
 		{
 			component?: any;
@@ -126,6 +122,11 @@ interface IFrontendDataSetProps {
 			thumbnail?: string;
 		}
 	];
+}
+
+interface IDelta {
+	href?: string;
+	label: number;
 }
 
 type TItemsActions = {
