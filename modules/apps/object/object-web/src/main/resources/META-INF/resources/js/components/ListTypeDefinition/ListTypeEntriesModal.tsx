@@ -21,11 +21,11 @@ import {
 	invalidateRequired,
 } from '@liferay/object-js-components-web';
 import {openToast} from 'frontend-js-web';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {toCamelCase} from '../../utils/string';
 import {ObjectValidationErrors} from './ListTypeFormBase';
-import {fixLocaleKeys, getPickListSideBarIFrame} from './utils';
+import {fixLocaleKeys} from './utils';
 
 const REQUIRED_MSG = Liferay.Language.get('required');
 const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
@@ -51,10 +51,6 @@ function ListTypeEntriesModal() {
 		},
 		setState,
 	] = useState<IModalState>({});
-
-	const sideBarIframe = useMemo(() => getPickListSideBarIFrame(pickListId), [
-		pickListId,
-	]);
 
 	const [keyChanged, setKeyChanged] = useState(false);
 	const [APIError, setAPIError] = useState<string>('');
@@ -136,12 +132,6 @@ function ListTypeEntriesModal() {
 		}
 
 		return errors;
-	};
-
-	const reload = () => {
-		if (sideBarIframe?.contentWindow) {
-			sideBarIframe.contentWindow.location.reload();
-		}
 	};
 
 	const handleSave = async () => {
