@@ -21,38 +21,3 @@ export function fixLocaleKeys(name_i18n: LocalizedValue<string>) {
 
 	return newTranslationsObject;
 }
-
-export function getPickListSideBarIFrame(pickListId: number | undefined) {
-	debugger;
-	if (pickListId) {
-		const iframes = document.getElementsByTagName('iframe');
-		if (iframes?.length) {
-			const sideBarIFrame = [...iframes].find((iframe) => {
-				if (iframe.src?.includes(Liferay.ThemeDisplay.getLayoutURL())) {
-					const iframeURL = new URL(iframe.src);
-					const iframeURLParams = new URLSearchParams(
-						iframeURL.search
-					);
-					const listTypeDefinitionId = iframeURLParams.get(
-						'_' +
-							iframeURLParams.get('p_p_id') +
-							'_listTypeDefinitionId'
-					);
-					if (
-						listTypeDefinitionId &&
-						parseInt(listTypeDefinitionId, 10) === pickListId
-					) {
-						return true;
-					}
-				}
-
-				return false;
-			});
-
-			return sideBarIFrame;
-		}
-	}
-	else {
-		return null;
-	}
-}

@@ -20,7 +20,7 @@ export interface IModalState extends Partial<PickListItem> {
 	itemKey?: string;
 	modalType?: 'add' | 'edit';
 	pickListId?: number;
-	reload?: () => void;
+	reloadIframeWindow?: () => void;
 }
 declare function ListTypeEntriesModal(): JSX.Element | null;
 export default ListTypeEntriesModal;

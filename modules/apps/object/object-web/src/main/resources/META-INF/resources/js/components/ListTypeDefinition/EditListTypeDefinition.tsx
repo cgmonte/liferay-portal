@@ -31,8 +31,6 @@ export default function EditListTypeDefinition({
 	listTypeDefinitionId,
 	readOnly,
 }: IProps) {
-	// const [pickList, setPickList] = useState<Partial<PickList>>({});
-
 	const onSubmit = async (values: any) => {
 		try {
 			await API.updatePickList({
@@ -65,14 +63,8 @@ export default function EditListTypeDefinition({
 			}));
 			setValues(response);
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	// useEffect(() => {
-	// 	if (Object.keys(values).length) {
-	// 		setPickList({...values});
-	// 	}
-	// }, [values]);
 
 	return (
 		<SidePanelForm

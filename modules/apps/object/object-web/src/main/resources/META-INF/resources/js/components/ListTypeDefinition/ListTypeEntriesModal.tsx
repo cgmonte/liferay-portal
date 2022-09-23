@@ -35,16 +35,20 @@ export interface IModalState extends Partial<PickListItem> {
 	itemKey?: string;
 	modalType?: 'add' | 'edit';
 	pickListId?: number;
-	reload?: () => void;
-
-	// setValues?: (values: Partial<PickList>) => void;
-	// values?: Partial<PickList>;
-	
+	reloadIframeWindow?: () => void;
 }
 
 function ListTypeEntriesModal() {
 	const [
-		{header, itemId, itemKey, modalType, name_i18n, pickListId},
+		{
+			header,
+			itemId,
+			itemKey,
+			modalType,
+			name_i18n,
+			pickListId,
+			reloadIframeWindow,
+		},
 		setState,
 	] = useState<IModalState>({});
 
@@ -107,16 +111,6 @@ function ListTypeEntriesModal() {
 			Liferay.detach('openListTypeEntriesModal', openModal as () => void);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	// useEffect(() => {
-	// 	if (modalType === 'edit' && values) {
-	// 		console.log('values:', values);
-	// 		setState((previousValues) => ({
-	// 			...previousValues,
-	// 			name_i18n: {...values.name_i18n},
-	// 		}));
-	// 	}
-	// }, [modalType, values]);
 
 	useEffect(() => {
 		if (APIError) {
@@ -183,7 +177,9 @@ function ListTypeEntriesModal() {
 					});
 				}
 				onClose();
-				reload();
+				if (reloadIframeWindow) {
+					reloadIframeWindow();
+				}
 			} catch (error) {
 				setAPIError((error as Error).message);
 			}

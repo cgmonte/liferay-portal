@@ -51,22 +51,25 @@ interface fdsItem {
 }
 
 export default function ListTypeTable({pickListId}: IProps) {
-	const fireModal = (modalProps: IModalState) => {
-		const parentWindow = Liferay.Util.getOpener();
-
-		parentWindow.Liferay.fire('openListTypeEntriesModal', {
-			...modalProps,
-		});
-	};
-
 	const [dataSetProps, setDataSetProps] = useState<IFrontendDataSetProps>();
 
 	useEffect(() => {
+		const fireModal = (modalProps: IModalState) => {
+			const parentWindow = Liferay.Util.getOpener();
+
+			parentWindow.Liferay.fire('openListTypeEntriesModal', {
+				...modalProps,
+				pickListId,
+				reloadIframeWindow: window.location.reload.bind(
+					window.location
+				),
+			});
+		};
+
 		const handleAddItems = () => {
 			fireModal({
 				header: Liferay.Language.get('new-item'),
 				modalType: 'add',
-				pickListId,
 			});
 		};
 
@@ -77,15 +80,7 @@ export default function ListTypeTable({pickListId}: IProps) {
 		return () => {
 			Liferay.detach('handleAddItems');
 		};
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pickListId]);
-
-	// let dataSetProps;
-
-	// if (pickListId) {
-	// 	dataSetProps = getDataSetProps(fireModal, pickListId);
-	// }
 
 	return dataSetProps && Object.keys(dataSetProps).length ? (
 		<FrontendDataSet {...dataSetProps} />
