@@ -108,11 +108,11 @@ export declare function updateRelationship({
 export declare function getRelationship<T>(
 	objectRelationshipId: number
 ): Promise<T>;
-export declare function updatePickList({
-	externalReferenceCode,
+declare let updatePickList: ({
 	id,
 	name_i18n,
-}: Partial<PickList>): Promise<void>;
+}: Partial<PickList>) => Promise<void>;
+export {updatePickList};
 export declare function deletePickList(pickListId: number): Promise<void>;
 export declare function addPickListItem({
 	id,
@@ -124,4 +124,3 @@ export declare function updatePickListItem({
 	id,
 	name_i18n,
 }: Partial<PickListItem>): Promise<void>;
-export {};

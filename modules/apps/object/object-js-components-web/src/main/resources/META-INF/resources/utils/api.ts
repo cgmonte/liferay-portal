@@ -246,17 +246,29 @@ export async function getRelationship<T>(objectRelationshipId: number) {
 	);
 }
 
-export async function updatePickList({
-	externalReferenceCode,
-	id,
-	name_i18n,
-}: Partial<PickList>) {
+let updatePickList = async ({id, name_i18n}: Partial<PickList>) => {
 	return await save(
 		`/o/headless-admin-list-type/v1.0/list-type-definitions/${id}`,
-		{externalReferenceCode, name_i18n},
+		{name_i18n},
 		'PUT'
 	);
+};
+
+if (Liferay.FeatureFlags['LPS-164994']) {
+	updatePickList = async ({
+		externalReferenceCode,
+		id,
+		name_i18n,
+	}: Partial<PickList>) => {
+		return await save(
+			`/o/headless-admin-list-type/v1.0/list-type-definitions/${id}`,
+			{externalReferenceCode, name_i18n},
+			'PUT'
+		);
+	};
 }
+
+export {updatePickList};
 
 export async function deletePickList(pickListId: number) {
 	return await deleteItem(
