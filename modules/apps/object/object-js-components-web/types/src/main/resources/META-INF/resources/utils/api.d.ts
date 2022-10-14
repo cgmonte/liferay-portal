@@ -97,7 +97,7 @@ export declare function getObjectRelationships(
 export declare function getPickList(pickListId: number): Promise<PickList>;
 export declare function getPickLists(): Promise<PickList[]>;
 export declare function getPickListItems(
-	pickListId: number
+	pickListId: number | undefined
 ): Promise<PickListItem[]>;
 export declare function save(
 	url: string,

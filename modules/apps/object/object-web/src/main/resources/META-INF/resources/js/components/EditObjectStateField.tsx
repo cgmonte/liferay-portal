@@ -63,6 +63,7 @@ export default function EditObjectStateField({objectField, readOnly}: IProps) {
 	};
 
 	const onSubmit = async ({id, ...objectField}: ObjectField) => {
+		delete objectField.listTypeDefinitionId;
 		delete objectField.system;
 
 		try {
