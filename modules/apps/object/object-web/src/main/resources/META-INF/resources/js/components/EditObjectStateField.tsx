@@ -28,9 +28,11 @@ export default function EditObjectStateField({objectField, readOnly}: IProps) {
 	const [pickListItems, setPickListItems] = useState<PickListItem[]>([]);
 
 	useEffect(() => {
-		API.getPickListItems(objectField.listTypeDefinitionId).then(
-			setPickListItems
-		);
+		if (objectField?.listTypeDefinitionId) {
+			API.getPickListItems(objectField.listTypeDefinitionId).then(
+				setPickListItems
+			);
+		}
 	}, [objectField.listTypeDefinitionId, setPickListItems]);
 
 	const isStateOptionChecked = ({

@@ -186,7 +186,7 @@ export async function getPickLists() {
 	);
 }
 
-export async function getPickListItems(pickListId: number | undefined) {
+export async function getPickListItems(pickListId: number) {
 	return await getList<PickListItem>(
 		`/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}/list-type-entries`
 	);
