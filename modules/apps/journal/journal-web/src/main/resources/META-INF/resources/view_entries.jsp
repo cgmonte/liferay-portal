@@ -140,7 +140,10 @@ Map<String, Object> componentContext = journalDisplayContext.getComponentContext
 						</liferay-ui:search-container-column-text>
 
 						<liferay-ui:search-container-column-text>
+							<!-- LPS-165677 HR_74 -->
+							<p>HR_74</p>
 							<clay:dropdown-actions
+								aria-label='<%= LanguageUtil.get(request, "actions") %>'
 								additionalProps='<%=
 									HashMapBuilder.<String, Object>put(
 										"trashEnabled", componentContext.get("trashEnabled")
