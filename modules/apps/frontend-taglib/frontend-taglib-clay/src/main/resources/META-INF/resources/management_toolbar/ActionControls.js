@@ -120,11 +120,13 @@ const ActionControls = ({
 						<ClayDropDownWithItems
 							items={items}
 							trigger={
+								// LPS-165701 HR_139
 								<ClayButtonWithIcon
 									className="nav-link nav-link-monospaced"
 									disabled={disabled}
 									displayType="unstyled"
 									symbol="ellipsis-v"
+									title={Liferay.Language.get('actions')}
 								/>
 							}
 						/>
