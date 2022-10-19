@@ -46,6 +46,7 @@ const InfoPanelControl = ({infoPanelId, onInfoButtonClick, separator}) => {
 	}, [infoButtonRef, infoPanelId]);
 
 	return (
+		// LPS-165399 HR_62
 		<ManagementToolbar.Item
 			className={
 				showDesignImprovements &&
@@ -61,6 +62,7 @@ const InfoPanelControl = ({infoPanelId, onInfoButtonClick, separator}) => {
 				onClick={onInfoButtonClick}
 				ref={infoButtonRef}
 				symbol="info-circle-open"
+				title={Liferay.Language.get('toggle-info-panel')}
 			/>
 		</ManagementToolbar.Item>
 	);
