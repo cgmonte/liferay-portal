@@ -196,6 +196,9 @@ const updateFieldProperty = ({
  */
 export default function fieldEditableReducer(state, action, config) {
 	switch (action.type) {
+		case EVENT_TYPES.TARGET.SET: {
+			return {insertPoint: action.payload};
+		}
 		case EVENT_TYPES.FIELD.ADD: {
 			const {data, fieldType, indexes} = action.payload;
 			const {

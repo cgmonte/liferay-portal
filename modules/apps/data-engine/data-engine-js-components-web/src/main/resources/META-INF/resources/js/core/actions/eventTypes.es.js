@@ -60,6 +60,10 @@ const LANGUAGE = {
 	UPDATE: 'language_update',
 };
 
+const TARGET = {
+	SET: 'target_set',
+};
+
 export const EVENT_TYPES = {
 	...LEGACY_EVENTS,
 	DATA_LAYOUT,
@@ -69,4 +73,5 @@ export const EVENT_TYPES = {
 	LANGUAGE,
 	PAGE,
 	SECTION,
+	TARGET,
 };
