@@ -78,8 +78,17 @@ const FieldTypeList = ({
 	keywords,
 	onClick,
 	onDelete,
+	setPanelLabel,
 	showEmptyState = true,
 }) => {
+	if (typeof setPanelLabel === 'function') {
+		setPanelLabel(
+			Liferay.Language.get(
+				'list-of-fields-navigate-with-the-tab-key-and-press-enter-to-add-a-field-to-the-form'
+			)
+		);
+	}
+
 	const {fieldTypes} = useConfig();
 	const regex = getSearchRegex(keywords);
 
@@ -147,6 +156,7 @@ const FieldTypeList = ({
 				<div className="field-type-list" key={index}>
 					<CollapsablePanel
 						Header={Header}
+						aria-hidden="true"
 						className={classNames({
 							'field-type-fieldgroup': !isFieldSet,
 							'field-type-fieldset': isFieldSet,

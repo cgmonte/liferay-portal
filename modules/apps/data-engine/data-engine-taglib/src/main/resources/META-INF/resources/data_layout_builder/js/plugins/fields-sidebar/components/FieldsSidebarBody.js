@@ -13,7 +13,7 @@
  */
 
 import {useConfig} from 'data-engine-js-components-web';
-import React from 'react';
+import React, {useState} from 'react';
 
 import FieldSetList from '../../../components/field-sets/FieldSetList';
 import FieldTypeList from '../../../components/field-types/FieldTypeList.es';
@@ -21,11 +21,17 @@ import Sidebar from '../../../components/sidebar/Sidebar.es';
 
 export default function FieldsSidebarBody({keywords, setKeywords}) {
 	const {allowFieldSets, tabs = []} = useConfig();
+	const [panelLabel, setPanelLabel] = useState('');
 
 	const sidebarTabs = [
 		{
 			label: Liferay.Language.get('fields'),
-			render: () => <FieldTypeList keywords={keywords} />,
+			render: () => (
+				<FieldTypeList
+					keywords={keywords}
+					setPanelLabel={setPanelLabel}
+				/>
+			),
 		},
 	];
 
@@ -40,6 +46,7 @@ export default function FieldsSidebarBody({keywords, setKeywords}) {
 
 	return (
 		<Sidebar.Tabs
+			panelLabel={panelLabel}
 			searchTerm={keywords}
 			setKeywords={setKeywords}
 			tabs={sidebarTabs}

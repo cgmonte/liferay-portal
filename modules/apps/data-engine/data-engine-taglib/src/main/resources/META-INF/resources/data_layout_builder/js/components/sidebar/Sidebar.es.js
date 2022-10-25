@@ -66,6 +66,7 @@ const SidebarSearchInput = ({children, onSearch, searchText}) => (
 
 const SidebarTabs = ({
 	initialSelectedTab = 0,
+	panelLabel,
 	searchTerm,
 	setKeywords = () => {},
 	tabs,
@@ -83,7 +84,7 @@ const SidebarTabs = ({
 				tabs={tabs}
 			/>
 
-			<SidebarTabContent>
+			<SidebarTabContent panelLabel={panelLabel}>
 				{tabs[selectedTab].render({searchTerm})}
 			</SidebarTabContent>
 		</>
@@ -121,9 +122,13 @@ const SidebarTab = ({onTabClick, selectedTab, tabs}) => {
 	);
 };
 
-const SidebarTabContent = ({children}) => {
+const SidebarTabContent = ({children, panelLabel}) => {
 	return (
-		<div className="tab-content">
+		<div
+			aria-label={panelLabel}
+			className="tab-content"
+			tabIndex="0"
+		>
 			<div className="active fade mt-3 show tab-pane" role="tabpanel">
 				{children}
 			</div>
