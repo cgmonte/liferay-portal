@@ -37,9 +37,9 @@ const FieldTypeWrapper = ({
 	const formState = useFormState();
 	const {activePage, insertPoint, pages} = formState;
 
-	useEffect(() => {
-		console.log('formState', formState);
-	}, [formState]);
+	// useEffect(() => {
+	// 	console.log('formState', formState);
+	// }, [formState]);
 
 	const dispatch = useForm();
 	const addField = (fieldName) => {

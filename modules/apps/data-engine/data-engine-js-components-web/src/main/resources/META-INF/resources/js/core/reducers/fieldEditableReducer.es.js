@@ -72,7 +72,6 @@ export function deleteField({
 }
 
 function isParameterRelatedToField(parameter, fieldName) {
-
 	/* TODO: enforce parameter type consistency and remove this normalization */
 	const json =
 		typeof parameter === 'string' ? parameter : JSON.stringify(parameter);
@@ -195,6 +194,9 @@ const updateFieldProperty = ({
  * were made only to adapt to the reducer.
  */
 export default function fieldEditableReducer(state, action, config) {
+	console.log('action:', action);
+	console.log('state:', state);
+	console.log('config', config);
 	switch (action.type) {
 		case EVENT_TYPES.TARGET.SET: {
 			return {insertPoint: action.payload};
@@ -539,8 +541,7 @@ export default function fieldEditableReducer(state, action, config) {
 					true,
 					true
 				);
-			}
-			else {
+			} else {
 				const {pageIndex, rowIndex} = FormSupport.getFieldIndexes(
 					pages,
 					originalField.fieldName
