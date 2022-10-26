@@ -14,9 +14,11 @@
 
 import ClayLayout from '@clayui/layout';
 import classnames from 'classnames';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 
+import {EVENT_TYPES} from '../actions/eventTypes.es';
 import {DND_ORIGIN_TYPE, useDrop} from '../hooks/useDrop.es';
+import {useForm} from '../hooks/useForm.es';
 import {ParentFieldContext} from './Field/ParentFieldContext.es';
 
 export function Placeholder({columnIndex, isRow, pageIndex, rowIndex, size}) {
@@ -28,6 +30,8 @@ export function Placeholder({columnIndex, isRow, pageIndex, rowIndex, size}) {
 		parentField,
 		rowIndex,
 	});
+	const [insertPoint, setInsertPoint] = useState(false);
+	const dispatch = useForm();
 
 	const Content = (
 		<ClayLayout.Col
@@ -36,12 +40,33 @@ export function Placeholder({columnIndex, isRow, pageIndex, rowIndex, size}) {
 			data-ddm-field-page={pageIndex}
 			data-ddm-field-row={rowIndex}
 			md={size}
+			onKeyDown={({key}) => {
+				if (key === ' ' || key === 'Enter' || key === 'Spacebar') {
+					// const newInsertPoint = {
+					// 	columnIndex: target.getAttribute('data-ddm-field-column'),
+					// 	pageIndex: target.getAttribute('data-ddm-field-page'),
+					// 	rowIndex: target.getAttribute('data-ddm-field-row'),
+					// };
+
+					const newInsertPoint = {
+						columnIndex,
+						pageIndex,
+						rowIndex,
+					};
+
+					setInsertPoint(newInsertPoint);
+					dispatch({
+						payload: newInsertPoint,
+						type: EVENT_TYPES.TARGET.SET,
+					});
+				}
+			}}
+			tabIndex="0"
 		>
 			<div
 				className={classnames('ddm-target', {
 					'target-over targetOver':
-						overTarget &&
-						canDrop &&
+						((overTarget && canDrop) || insertPoint) &&
 						!parentField.root?.ddmStructureId,
 				})}
 				ref={!parentField.root?.ddmStructureId ? drop : undefined}
