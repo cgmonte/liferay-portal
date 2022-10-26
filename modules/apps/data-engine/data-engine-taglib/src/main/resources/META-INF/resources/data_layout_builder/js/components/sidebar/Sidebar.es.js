@@ -127,6 +127,7 @@ const SidebarTabContent = ({children, panelLabel}) => {
 		<div
 			aria-label={panelLabel}
 			className="tab-content"
+			id="sidebarTabContent"
 			tabIndex="0"
 		>
 			<div className="active fade mt-3 show tab-pane" role="tabpanel">

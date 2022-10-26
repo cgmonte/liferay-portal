@@ -59,6 +59,7 @@ export function Placeholder({columnIndex, isRow, pageIndex, rowIndex, size}) {
 						payload: newInsertPoint,
 						type: EVENT_TYPES.TARGET.SET,
 					});
+					document.getElementById('sidebarTabContent').focus();
 				}
 			}}
 			tabIndex="0"
