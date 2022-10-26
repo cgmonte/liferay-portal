@@ -20,7 +20,7 @@ import {
 	useForm,
 	useFormState,
 } from 'data-engine-js-components-web';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {sub} from '../../utils/lang.es';
 import {getSearchRegex} from '../../utils/search.es';
@@ -34,8 +34,54 @@ const FieldTypeWrapper = ({
 	showArrows,
 	...otherProps
 }) => {
+	const formState = useFormState();
+	const {activePage, insertPoint, pages} = formState;
+
+	useEffect(() => {
+		console.log('formState', formState);
+	}, [formState]);
+
 	const dispatch = useForm();
-	const {activePage, pages} = useFormState();
+	const addField = (fieldName) => {
+		dispatch({
+			payload: {
+				fieldType: {
+					...fieldTypes.find(
+						({name: typeName}) => typeName === fieldName
+					),
+					editable: true,
+				},
+				indexes: {
+					columnIndex: 0,
+					pageIndex: activePage,
+					rowIndex: pages[activePage].rows.length,
+				},
+			},
+			type: CORE_EVENT_TYPES.FIELD.ADD,
+		});
+	};
+
+	const addFieldWithKey = (fieldName) => {
+		if (insertPoint) {
+			console.log('insertPoint', insertPoint);
+			dispatch({
+				payload: {
+					fieldType: {
+						...fieldTypes.find(
+							({name: typeName}) => typeName === fieldName
+						),
+						editable: true,
+					},
+					indexes: {
+						...insertPoint,
+					},
+				},
+				type: CORE_EVENT_TYPES.FIELD.ADD,
+			});
+		} else {
+			addField(fieldName);
+		}
+	};
 
 	const getIcon = () => {
 		if (showArrows) {
@@ -46,29 +92,30 @@ const FieldTypeWrapper = ({
 	};
 
 	return (
-		<FieldType
-			{...otherProps}
-			{...fieldType}
-			icon={getIcon()}
-			onDoubleClick={({name}) => {
-				dispatch({
-					payload: {
-						fieldType: {
-							...fieldTypes.find(
-								({name: typeName}) => typeName === name
-							),
-							editable: true,
-						},
-						indexes: {
-							columnIndex: 0,
-							pageIndex: activePage,
-							rowIndex: pages[activePage].rows.length,
-						},
-					},
-					type: CORE_EVENT_TYPES.FIELD.ADD,
-				});
+		<div
+			aria-disabled="false"
+			// aria-label={`${fieldType.name} ${fieldType.description}`}
+			id={fieldType.name}
+			onKeyDown={({key}) => {
+				if (
+					(key === ' ' || key === 'Enter' || key === 'Spacebar') &&
+					fieldType?.name
+				) {
+					addFieldWithKey(fieldType.name);
+				}
 			}}
-		/>
+			role="application"
+			tabIndex="0"
+		>
+			<FieldType
+				{...otherProps}
+				{...fieldType}
+				icon={getIcon()}
+				onDoubleClick={(event) => {
+					addField(event.name);
+				}}
+			/>
+		</div>
 	);
 };
 
