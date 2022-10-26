@@ -17,6 +17,7 @@ import React, {useEffect} from 'react';
 import {sortElements} from '../utils';
 
 const BaseActionsInfo = ({
+	clientExtensions,
 	description,
 	executionType,
 	executionTypeInput,
@@ -117,6 +118,7 @@ const BaseActionsInfo = ({
 					id="script-language"
 					onChange={({target}) => {
 						setScriptLanguage(target.value);
+						setScript();
 					}}
 					onClickCapture={() =>
 						updateActionInfo({
@@ -140,34 +142,79 @@ const BaseActionsInfo = ({
 				</ClaySelect>
 			</ClayForm.Group>
 
-			<ClayForm.Group>
-				<label htmlFor="script">
-					{Liferay.Language.get('script')}
+			{scriptLanguage !== 'clientExtensions' ? (
+				<ClayForm.Group>
+					<label htmlFor="script">
+						{Liferay.Language.get('script')}
 
-					<span className="ml-1 mr-1 text-warning">*</span>
-				</label>
+						<span className="ml-1 mr-1 text-warning">*</span>
+					</label>
 
-				<ClayInput
-					component="textarea"
-					id="script"
-					onBlur={() =>
-						updateActionInfo({
-							description,
-							executionType,
-							name,
-							priority,
-							script,
-							scriptLanguage,
-						})
-					}
-					onChange={({target}) => {
-						setScript(target.value);
-					}}
-					placeholder={placeholderScript}
-					type="text"
-					value={script}
-				/>
-			</ClayForm.Group>
+					<ClayInput
+						component="textarea"
+						id="script"
+						onBlur={() =>
+							updateActionInfo({
+								description,
+								executionType,
+								name,
+								priority,
+								script,
+								scriptLanguage,
+							})
+						}
+						onChange={({target}) => {
+							setScript(target.value);
+						}}
+						placeholder={placeholderScript}
+						type="text"
+						value={script}
+					/>
+				</ClayForm.Group>
+			) : (
+				<ClayForm.Group>
+					<label htmlFor="client-extensions">
+						{Liferay.Language.get('client-extensions')}
+					</label>
+
+					<ClaySelect
+						aria-label="Select"
+						defaultValue="placeholder"
+						disabled={!clientExtensions.length}
+						onChange={({target}) => {
+							setScript(target.value);
+						}}
+						onClickCapture={() =>
+							updateActionInfo({
+								description,
+								executionType,
+								name,
+								priority,
+								script,
+								scriptLanguage,
+							})
+						}
+						placeholder="Select an option"
+					>
+						<ClaySelect.Option
+							disabled
+							label={Liferay.Language.get(
+								'select-a-client-extension'
+							)}
+							value="placeholder"
+						/>
+
+						{clientExtensions &&
+							clientExtensions.map((item) => (
+								<ClaySelect.Option
+									key={item.value}
+									label={item.name}
+									value={item.value}
+								/>
+							))}
+					</ClaySelect>
+				</ClayForm.Group>
+			)}
 
 			{typeof executionTypeInput !== 'undefined' && (
 				<ClayForm.Group>
@@ -252,6 +299,7 @@ const BaseActionsInfo = ({
 };
 
 BaseActionsInfo.propTypes = {
+	clientExtensions: PropTypes.array,
 	description: PropTypes.string,
 	executionType: PropTypes.string,
 	executionTypeInput: PropTypes.func,

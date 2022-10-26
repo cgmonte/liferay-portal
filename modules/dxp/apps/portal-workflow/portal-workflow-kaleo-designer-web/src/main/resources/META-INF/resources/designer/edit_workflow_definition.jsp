@@ -38,8 +38,6 @@ if (kaleoDefinitionVersion != null) {
 		titleKey = "view-workflow-definition";
 	}
 }
-
-renderResponse.setTitle(LanguageUtil.get(request, titleKey));
 %>
 
 <react:component
@@ -47,6 +45,19 @@ renderResponse.setTitle(LanguageUtil.get(request, titleKey));
 	props='<%=
 		HashMapBuilder.<String, Object>put(
 			"accountEntryId", ParamUtil.getLong(liferayPortletRequest, "accountEntryId")
+		).put(
+			"clientExtensions",
+			JSONUtil.putAll(
+				JSONUtil.put(
+					"name", "Client Extension 1"
+				).put(
+					"value", "function#ce-1"
+				),
+				JSONUtil.put(
+					"name", "Client Extension 2"
+				).put(
+					"value", "function#ce-2"
+				))
 		).put(
 			"definitionName", (kaleoDefinitionVersion == null) ? null : kaleoDefinitionVersion.getName()
 		).put(

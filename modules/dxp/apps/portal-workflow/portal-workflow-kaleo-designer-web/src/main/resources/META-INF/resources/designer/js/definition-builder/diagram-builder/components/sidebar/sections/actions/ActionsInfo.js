@@ -27,6 +27,10 @@ const scriptLanguageOptions = [
 		label: Liferay.Language.get('java'),
 		value: 'java',
 	},
+	{
+		label: Liferay.Language.get('client-extensions'),
+		value: 'clientExtensions',
+	},
 ];
 
 const ActionsInfo = ({
