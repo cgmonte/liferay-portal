@@ -124,11 +124,7 @@ const BaseActionsInfo = ({
 								(item) => item.value === target.value
 							)
 						);
-						setScript(
-							selectedActionType.type === 'script'
-								? ''
-								: 'clientExtension'
-						);
+						setScript('');
 					}}
 					onClickCapture={() =>
 						updateActionInfo({
