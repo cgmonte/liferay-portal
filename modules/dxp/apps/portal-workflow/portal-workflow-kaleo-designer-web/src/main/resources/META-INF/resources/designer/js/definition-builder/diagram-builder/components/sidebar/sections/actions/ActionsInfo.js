@@ -18,21 +18,6 @@ import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import SidebarPanel from '../../SidebarPanel';
 import BaseActionsInfo from '../shared-components/BaseActionsInfo';
 
-const scriptLanguageOptions = [
-	{
-		label: Liferay.Language.get('groovy'),
-		value: 'groovy',
-	},
-	{
-		label: Liferay.Language.get('java'),
-		value: 'java',
-	},
-	{
-		label: Liferay.Language.get('client-extensions'),
-		value: 'clientExtensions',
-	},
-];
-
 const ActionsInfo = ({
 	identifier,
 	index,
@@ -64,8 +49,39 @@ const ActionsInfo = ({
 		},
 	]);
 
+	const actionTypeOptions = [
+		{
+			label: Liferay.Language.get('groovy'),
+			type: 'script',
+			value: 'groovy',
+		},
+		{
+			label: Liferay.Language.get('java'),
+			type: 'script',
+			value: 'java',
+		},
+		...clientExtensions.map((item) => {
+			const itemCopy = {...item};
+			itemCopy.type = 'clientExtension';
+			itemCopy.label = item.name;
+			delete itemCopy.name;
+
+			return Object.keys(itemCopy)
+				.sort()
+				.reduce((accumulator, key) => {
+					accumulator[key] = itemCopy[key];
+
+					return accumulator;
+				}, {});
+		}),
+	];
+
 	const [scriptLanguage, setScriptLanguage] = useState(
 		actions?.scriptLanguage?.[index] || DEFAULT_LANGUAGE
+	);
+
+	const [selectedActionType, setSelectedActionType] = useState(
+		actionTypeOptions.find((item) => item.value === scriptLanguage)
 	);
 
 	if (
@@ -98,7 +114,11 @@ const ActionsInfo = ({
 	};
 
 	const updateActionInfo = (item) => {
-		if (item.name && item.script && item.executionType) {
+		if (
+			item.name &&
+			(item.script || item.script === '') &&
+			item.executionType
+		) {
 			setSections((prev) => {
 				prev[index] = {
 					...prev[index],
@@ -137,7 +157,7 @@ const ActionsInfo = ({
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('information')}>
 			<BaseActionsInfo
-				clientExtensions={clientExtensions}
+				actionTypes={actionTypeOptions}
 				description={description}
 				executionType={executionType}
 				executionTypeInput={executionTypeInput}
@@ -149,7 +169,7 @@ const ActionsInfo = ({
 				priority={priority}
 				script={script}
 				scriptLanguage={scriptLanguage}
-				scriptLanguageOptions={scriptLanguageOptions}
+				selectedActionType={selectedActionType}
 				selectedItem={selectedItem}
 				setDescription={setDescription}
 				setExecutionType={setExecutionType}
@@ -158,6 +178,7 @@ const ActionsInfo = ({
 				setPriority={setPriority}
 				setScript={setScript}
 				setScriptLanguage={setScriptLanguage}
+				setSelectedActionType={setSelectedActionType}
 				updateActionInfo={updateActionInfo}
 			/>
 

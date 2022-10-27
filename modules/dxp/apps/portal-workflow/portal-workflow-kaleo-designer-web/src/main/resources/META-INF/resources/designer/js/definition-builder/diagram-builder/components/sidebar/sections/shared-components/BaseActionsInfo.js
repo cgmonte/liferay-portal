@@ -17,7 +17,7 @@ import React, {useEffect} from 'react';
 import {sortElements} from '../utils';
 
 const BaseActionsInfo = ({
-	clientExtensions,
+	actionTypes,
 	description,
 	executionType,
 	executionTypeInput,
@@ -28,7 +28,7 @@ const BaseActionsInfo = ({
 	priority,
 	script,
 	scriptLanguage,
-	scriptLanguageOptions,
+	selectedActionType,
 	setDescription,
 	setExecutionType,
 	setExecutionTypeOptions,
@@ -36,8 +36,10 @@ const BaseActionsInfo = ({
 	setPriority,
 	setScript,
 	setScriptLanguage,
+	setSelectedActionType,
 	updateActionInfo,
 }) => {
+	// console.log('actionTypes', actionTypes);
 	useEffect(() => {
 		if (executionTypeOptions) {
 			sortElements(executionTypeOptions, 'value');
@@ -52,6 +54,26 @@ const BaseActionsInfo = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	// useEffect(() => {
+	// 	if (selectedActionType.type === 'clientExtension') {
+	// 		console.log('selectedActionType', selectedActionType);
+	// 		setScript('');
+	// 		updateActionInfo({
+	// 			description,
+	// 			executionType,
+	// 			name,
+	// 			priority,
+	// 			script,
+	// 			scriptLanguage,
+	// 		});
+	// 	}
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [selectedActionType]);
+
+	// useEffect(() => {
+	// 	console.log('script', script);
+	// }, [script]);
 
 	return (
 		<>
@@ -108,8 +130,8 @@ const BaseActionsInfo = ({
 			</ClayForm.Group>
 
 			<ClayForm.Group>
-				<label htmlFor="script-language">
-					{Liferay.Language.get('script-language')}
+				<label htmlFor="script-type">
+					{Liferay.Language.get('script-type')}
 				</label>
 
 				<ClaySelect
@@ -118,7 +140,12 @@ const BaseActionsInfo = ({
 					id="script-language"
 					onChange={({target}) => {
 						setScriptLanguage(target.value);
-						setScript();
+						setSelectedActionType(
+							actionTypes.find(
+								(item) => item.value === target.value
+							)
+						);
+						setScript('');
 					}}
 					onClickCapture={() =>
 						updateActionInfo({
@@ -131,10 +158,10 @@ const BaseActionsInfo = ({
 						})
 					}
 				>
-					{scriptLanguageOptions &&
-						scriptLanguageOptions.map((item) => (
+					{actionTypes &&
+						actionTypes.map((item, index) => (
 							<ClaySelect.Option
-								key={item.value}
+								key={index}
 								label={item.label}
 								value={item.value}
 							/>
@@ -142,7 +169,7 @@ const BaseActionsInfo = ({
 				</ClaySelect>
 			</ClayForm.Group>
 
-			{scriptLanguage !== 'clientExtensions' ? (
+			{selectedActionType.type === 'script' && (
 				<ClayForm.Group>
 					<label htmlFor="script">
 						{Liferay.Language.get('script')}
@@ -170,49 +197,6 @@ const BaseActionsInfo = ({
 						type="text"
 						value={script}
 					/>
-				</ClayForm.Group>
-			) : (
-				<ClayForm.Group>
-					<label htmlFor="client-extensions">
-						{Liferay.Language.get('client-extensions')}
-					</label>
-
-					<ClaySelect
-						aria-label="Select"
-						defaultValue="placeholder"
-						disabled={!clientExtensions.length}
-						onChange={({target}) => {
-							setScript(target.value);
-						}}
-						onClickCapture={() =>
-							updateActionInfo({
-								description,
-								executionType,
-								name,
-								priority,
-								script,
-								scriptLanguage,
-							})
-						}
-						placeholder="Select an option"
-					>
-						<ClaySelect.Option
-							disabled
-							label={Liferay.Language.get(
-								'select-a-client-extension'
-							)}
-							value="placeholder"
-						/>
-
-						{clientExtensions &&
-							clientExtensions.map((item) => (
-								<ClaySelect.Option
-									key={item.value}
-									label={item.name}
-									value={item.value}
-								/>
-							))}
-					</ClaySelect>
 				</ClayForm.Group>
 			)}
 
@@ -299,7 +283,7 @@ const BaseActionsInfo = ({
 };
 
 BaseActionsInfo.propTypes = {
-	clientExtensions: PropTypes.array,
+	actionTypes: PropTypes.array,
 	description: PropTypes.string,
 	executionType: PropTypes.string,
 	executionTypeInput: PropTypes.func,
