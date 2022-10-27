@@ -68,7 +68,7 @@ export default function DiagramBuilder() {
 	const [defaultPosition, setDefaultPosition] = useState(null);
 
 	useEffect(() => {
-		console.log('selectedItem actions:', selectedItem.data.actions);
+		console.log('selectedItem data:', selectedItem?.data);
 	  }, [selectedItem]);	
 
 	const onConnect = (params) => {
