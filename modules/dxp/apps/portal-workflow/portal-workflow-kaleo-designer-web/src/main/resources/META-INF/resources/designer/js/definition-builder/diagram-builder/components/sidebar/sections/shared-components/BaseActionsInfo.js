@@ -39,7 +39,6 @@ const BaseActionsInfo = ({
 	setSelectedActionType,
 	updateActionInfo,
 }) => {
-	// console.log('actionTypes', actionTypes);
 	useEffect(() => {
 		if (executionTypeOptions) {
 			sortElements(executionTypeOptions, 'value');
@@ -54,26 +53,6 @@ const BaseActionsInfo = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	// useEffect(() => {
-	// 	if (selectedActionType.type === 'clientExtension') {
-	// 		console.log('selectedActionType', selectedActionType);
-	// 		setScript('');
-	// 		updateActionInfo({
-	// 			description,
-	// 			executionType,
-	// 			name,
-	// 			priority,
-	// 			script,
-	// 			scriptLanguage,
-	// 		});
-	// 	}
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [selectedActionType]);
-
-	// useEffect(() => {
-	// 	console.log('script', script);
-	// }, [script]);
 
 	return (
 		<>
@@ -145,7 +124,11 @@ const BaseActionsInfo = ({
 								(item) => item.value === target.value
 							)
 						);
-						setScript('');
+						setScript(
+							selectedActionType.type === 'script'
+								? ''
+								: 'clientExtension'
+						);
 					}}
 					onClickCapture={() =>
 						updateActionInfo({
