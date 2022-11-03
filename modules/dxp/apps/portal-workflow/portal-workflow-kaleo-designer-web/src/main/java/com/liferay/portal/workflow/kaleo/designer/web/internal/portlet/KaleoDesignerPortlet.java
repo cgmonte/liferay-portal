@@ -55,7 +55,7 @@ import com.liferay.portal.kernel.util.comparator.UserFirstNameComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.workflow.configuration.WorkflowDefinitionConfiguration;
 import com.liferay.portal.workflow.kaleo.designer.web.constants.KaleoDesignerPortletKeys;
-import com.liferay.portal.workflow.kaleo.designer.web.internal.client.extension.ClientExtensionTracker;
+import com.liferay.portal.workflow.kaleo.designer.web.internal.client.extension.ActionExecutorClientExtensionTracker;
 import com.liferay.portal.workflow.kaleo.designer.web.internal.constants.KaleoDesignerWebKeys;
 import com.liferay.portal.workflow.kaleo.designer.web.internal.portlet.display.context.KaleoDesignerDisplayContext;
 import com.liferay.portal.workflow.kaleo.exception.DuplicateKaleoDefinitionNameException;
@@ -491,7 +491,7 @@ public class KaleoDesignerPortlet extends MVCPortlet {
 
 		KaleoDesignerDisplayContext kaleoDesignerDisplayContext =
 			new KaleoDesignerDisplayContext(
-				_clientExtensionTracker, renderRequest,
+				_actionExecutorClientExtensionTracker, renderRequest,
 				_kaleoDefinitionVersionLocalService,
 				ResourceBundleLoaderUtil.getPortalResourceBundleLoader(),
 				_userLocalService);
@@ -535,10 +535,11 @@ public class KaleoDesignerPortlet extends MVCPortlet {
 		KaleoDesignerPortlet.class);
 
 	@Reference
-	private ClassNameLocalService _classNameLocalService;
+	private ActionExecutorClientExtensionTracker
+		_actionExecutorClientExtensionTracker;
 
 	@Reference
-	private ClientExtensionTracker _clientExtensionTracker;
+	private ClassNameLocalService _classNameLocalService;
 
 	private volatile boolean _companyAdministratorCanPublish;
 

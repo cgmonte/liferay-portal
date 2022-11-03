@@ -32,8 +32,8 @@ import org.osgi.service.component.annotations.Deactivate;
 /**
  * @author Rafael Praxedes
  */
-@Component(service = ClientExtensionTracker.class)
-public class ClientExtensionTracker {
+@Component(service = ActionExecutorClientExtensionTracker.class)
+public class ActionExecutorClientExtensionTracker {
 
 	public static final String ACTION_EXECUTOR_LANGUAGE_KEY =
 		"com.liferay.portal.workflow.kaleo.runtime.action.executor.language";

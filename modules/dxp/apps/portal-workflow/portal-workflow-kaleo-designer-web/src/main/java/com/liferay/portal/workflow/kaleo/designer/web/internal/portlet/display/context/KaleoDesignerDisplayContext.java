@@ -55,7 +55,7 @@ import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
 import com.liferay.portal.workflow.constants.WorkflowWebKeys;
 import com.liferay.portal.workflow.exception.IncompleteWorkflowInstancesException;
 import com.liferay.portal.workflow.kaleo.designer.web.constants.KaleoDesignerPortletKeys;
-import com.liferay.portal.workflow.kaleo.designer.web.internal.client.extension.ClientExtensionTracker;
+import com.liferay.portal.workflow.kaleo.designer.web.internal.client.extension.ActionExecutorClientExtensionTracker;
 import com.liferay.portal.workflow.kaleo.designer.web.internal.constants.KaleoDesignerActionKeys;
 import com.liferay.portal.workflow.kaleo.designer.web.internal.permission.KaleoDefinitionVersionPermission;
 import com.liferay.portal.workflow.kaleo.designer.web.internal.permission.KaleoDesignerPermission;
@@ -91,13 +91,15 @@ import javax.servlet.jsp.PageContext;
 public class KaleoDesignerDisplayContext {
 
 	public KaleoDesignerDisplayContext(
-		ClientExtensionTracker clientExtensionTracker,
+		ActionExecutorClientExtensionTracker
+			actionExecutorClientExtensionTracker,
 		RenderRequest renderRequest,
 		KaleoDefinitionVersionLocalService kaleoDefinitionVersionLocalService,
 		ResourceBundleLoader resourceBundleLoader,
 		UserLocalService userLocalService) {
 
-		_clientExtensionTracker = clientExtensionTracker;
+		_actionExecutorClientExtensionTracker =
+			actionExecutorClientExtensionTracker;
 
 		_themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -136,7 +138,8 @@ public class KaleoDesignerDisplayContext {
 	}
 
 	public JSONArray getClientExtensionsJSONArray() throws Exception {
-		return _clientExtensionTracker.getClientExtensionsJSONArray();
+		return _actionExecutorClientExtensionTracker.
+			getClientExtensionsJSONArray();
 	}
 
 	public Date getCreatedDate(KaleoDefinitionVersion kaleoDefinitionVersion)
@@ -844,7 +847,8 @@ public class KaleoDesignerDisplayContext {
 	private static final Log _log = LogFactoryUtil.getLog(
 		KaleoDesignerDisplayContext.class);
 
-	private final ClientExtensionTracker _clientExtensionTracker;
+	private final ActionExecutorClientExtensionTracker
+		_actionExecutorClientExtensionTracker;
 	private boolean _companyAdministratorCanPublish;
 	private final KaleoDefinitionVersionLocalService
 		_kaleoDefinitionVersionLocalService;
