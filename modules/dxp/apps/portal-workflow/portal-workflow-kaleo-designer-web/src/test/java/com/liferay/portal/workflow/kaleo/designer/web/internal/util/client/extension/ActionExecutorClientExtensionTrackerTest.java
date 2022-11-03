@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.workflow.kaleo.designer.web.internal.client.extension.ClientExtensionTracker;
+import com.liferay.portal.workflow.kaleo.designer.web.internal.client.extension.ActionExecutorClientExtensionTracker;
 import com.liferay.portal.workflow.kaleo.runtime.action.executor.ActionExecutor;
 
 import java.util.Arrays;
@@ -46,7 +46,7 @@ import org.mockito.Mockito;
  * @author Rafael Praxedes
  */
 @RunWith(Parameterized.class)
-public class ClientExtensionTrackerTest {
+public class ActionExecutorClientExtensionTrackerTest {
 
 	@ClassRule
 	@Rule
@@ -73,7 +73,9 @@ public class ClientExtensionTrackerTest {
 	@Test
 	public void testGetClientExtensionsJSONArray() throws Exception {
 		JSONObject clientExtensionJSONObject = _findClientExtension(
-			_clientExtensionTracker.getClientExtensionsJSONArray(), key);
+			_actionExecutorClientExtensionTracker.
+				getClientExtensionsJSONArray(),
+			key);
 
 		Assert.assertNotNull(clientExtensionJSONObject);
 
@@ -90,7 +92,8 @@ public class ClientExtensionTrackerTest {
 
 	protected static void setUpClientExtensionTracker() {
 		ReflectionTestUtil.setFieldValue(
-			_clientExtensionTracker, "_serviceTrackerMap", _serviceTrackerMap);
+			_actionExecutorClientExtensionTracker, "_serviceTrackerMap",
+			_serviceTrackerMap);
 	}
 
 	protected static void setUpJSONFactoryUtil() {
@@ -146,12 +149,16 @@ public class ClientExtensionTrackerTest {
 		return null;
 	}
 
+	private static final ActionExecutorClientExtensionTracker
+		_actionExecutorClientExtensionTracker =
+			new ActionExecutorClientExtensionTracker();
 	private static final Map<String, Map<String, Object>>
 		_clientExtensionPropertiesMap =
 			HashMapBuilder.<String, Map<String, Object>>put(
 				"function#client-extension-1",
 				HashMapBuilder.<String, Object>put(
-					ClientExtensionTracker.ACTION_EXECUTOR_LANGUAGE_KEY,
+					ActionExecutorClientExtensionTracker.
+						ACTION_EXECUTOR_LANGUAGE_KEY,
 					"function#client-extension-1"
 				).put(
 					"client.extension.description", "Client Extension 1"
@@ -159,20 +166,20 @@ public class ClientExtensionTrackerTest {
 			).put(
 				"function#client-extension-2",
 				HashMapBuilder.<String, Object>put(
-					ClientExtensionTracker.ACTION_EXECUTOR_LANGUAGE_KEY,
+					ActionExecutorClientExtensionTracker.
+						ACTION_EXECUTOR_LANGUAGE_KEY,
 					"function#client-extension-2"
 				).build()
 			).put(
 				"function#client-extension-3",
 				HashMapBuilder.<String, Object>put(
-					ClientExtensionTracker.ACTION_EXECUTOR_LANGUAGE_KEY,
+					ActionExecutorClientExtensionTracker.
+						ACTION_EXECUTOR_LANGUAGE_KEY,
 					"function#client-extension-3"
 				).put(
 					"client.extension.description", StringPool.BLANK
 				).build()
 			).build();
-	private static final ClientExtensionTracker _clientExtensionTracker =
-		new ClientExtensionTracker();
 	private static final ServiceTrackerMap
 		<String, ServiceWrapper<ActionExecutor>> _serviceTrackerMap =
 			Mockito.mock(ServiceTrackerMap.class);
