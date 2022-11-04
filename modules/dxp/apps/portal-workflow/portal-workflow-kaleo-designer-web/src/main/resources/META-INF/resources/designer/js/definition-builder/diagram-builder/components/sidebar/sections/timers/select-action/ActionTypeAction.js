@@ -50,9 +50,7 @@ const ActionTypeAction = ({
 			...functionActionExecutors.map((item) => {
 				const itemCopy = {...item};
 				itemCopy.type = 'functionActionExecutor';
-				itemCopy.label = item.description;
-				delete itemCopy.description;
-				itemCopy.value = item.key;
+				itemCopy.label = itemCopy.value = item.key;
 				delete itemCopy.key;
 
 				return Object.keys(itemCopy)
