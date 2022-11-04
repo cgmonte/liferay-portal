@@ -48,20 +48,12 @@ const ActionTypeAction = ({
 	if (functionActionExecutors?.length) {
 		actionTypeOptions.push(
 			...functionActionExecutors.map((item) => {
-				const itemCopy = {...item};
-				itemCopy.type = 'functionActionExecutor';
-				itemCopy.label = item.description;
-				delete itemCopy.description;
-				itemCopy.value = item.key;
-				delete itemCopy.key;
+				const newItem = {};
+				newItem.label = item;
+				newItem.type = 'functionActionExecutor';
+				newItem.value = item;
 
-				return Object.keys(itemCopy)
-					.sort()
-					.reduce((accumulator, key) => {
-						accumulator[key] = itemCopy[key];
-
-						return accumulator;
-					}, {});
+				return newItem;
 			})
 		);
 	}
