@@ -96,6 +96,16 @@ export function Column({
 		preview(getEmptyImage(), {captureDraggingState: true});
 	}, [preview]);
 
+	useEffect(() => {
+		if (columnRef?.current) {
+			if (overFieldKeyboardTarget) {
+				columnRef.current.focus();
+			} else {
+				columnRef.current.blur();
+			}
+		}
+	}, [overFieldKeyboardTarget]);
+
 	const handleResize = useCallback((resizing) => setResizing(resizing), []);
 
 	if (!column.fields.length) {
@@ -130,6 +140,7 @@ export function Column({
 			field={fieldRootOrCurrent}
 		>
 			<DefaultVariant.Column
+				arial-label="eieieieiieieieieie"
 				className={classNames({
 					'active-drop-child':
 						isFieldSetOrGroup &&
@@ -289,6 +300,7 @@ export function Page({
 						data-ddm-field-row="0"
 					>
 						<div
+							aria-label="Form is empty. Press enter to add a field."
 							className={classNames('ddm-empty-page ddm-target', {
 								'target-droppable':
 									canDrop || overKeyboardTarget,
@@ -302,6 +314,7 @@ export function Page({
 
 								dropTargetRef.current = element;
 							}}
+							tabIndex={0}
 						>
 							<p className="ddm-empty-page-message">
 								{Liferay.Language.get(

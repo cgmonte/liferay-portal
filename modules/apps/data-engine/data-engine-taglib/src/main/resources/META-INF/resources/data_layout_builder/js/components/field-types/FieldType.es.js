@@ -117,8 +117,9 @@ const FieldType = (props) => {
 			onDoubleClick={disabled ? null : handleOnDoubleClick}
 			onKeyDown={disabled ? null : handleOnKeyDown}
 			ref={disabled ? null : drag}
-			role="button"
-			tabIndex={disabled ? -1 : 0}
+			// role="button"
+			role="application"
+			// tabIndex={disabled ? -1 : 0}
 			title={label}
 			verticalAlign="center"
 		>

@@ -123,7 +123,14 @@ const SidebarTab = ({onTabClick, selectedTab, tabs}) => {
 
 const SidebarTabContent = ({children}) => {
 	return (
-		<div className="tab-content">
+		<div
+			aria-label={Liferay.Language.get(
+				'list-of-fields-navigate-with-the-tab-key-and-press-enter-to-add-a-field-to-the-form'
+			)}
+			className="tab-content"
+			id="sidebarTabContent"
+			tabIndex="0"
+		>
 			<div className="active fade mt-3 show tab-pane" role="tabpanel">
 				{children}
 			</div>

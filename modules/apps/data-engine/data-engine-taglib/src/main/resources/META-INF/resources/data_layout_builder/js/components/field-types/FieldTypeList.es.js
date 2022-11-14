@@ -19,6 +19,7 @@ import {
 	useConfig,
 	useForm,
 	useFormState,
+	useSetKeyboardDNDSourceItem,
 } from 'data-engine-js-components-web';
 import React from 'react';
 
@@ -45,30 +46,61 @@ const FieldTypeWrapper = ({
 		return fieldType.icon;
 	};
 
+	const setKeyboardDNDSourceItem = useSetKeyboardDNDSourceItem();
+
+	const handleOnKeyDown = (event) => {
+		if (
+			event.key === ' ' ||
+			event.key === 'Enter' ||
+			event.key === 'Spacebar'
+		) {
+			event.preventDefault();
+
+			setKeyboardDNDSourceItem({
+				dragType: 'add',
+				fieldType: {...otherProps, ...fieldType},
+			});
+		}
+	};
+
 	return (
-		<FieldType
-			{...otherProps}
-			{...fieldType}
-			icon={getIcon()}
-			onDoubleClick={({name}) => {
-				dispatch({
-					payload: {
-						fieldType: {
-							...fieldTypes.find(
-								({name: typeName}) => typeName === name
-							),
-							editable: true,
+		<div
+			aria-disabled="false"
+			aria-label={
+				`${fieldType.label} field. ${fieldType.description} ` +
+				Liferay.Language.get(
+					'press-enter-to-add-this-field-to-the-form'
+				)
+			}
+			id={fieldType.name}
+			onKeyDown={fieldType.disabled ? null : handleOnKeyDown}
+			role="application"
+			tabIndex="0"
+		>
+			<FieldType
+				{...otherProps}
+				{...fieldType}
+				icon={getIcon()}
+				onDoubleClick={({name}) => {
+					dispatch({
+						payload: {
+							fieldType: {
+								...fieldTypes.find(
+									({name: typeName}) => typeName === name
+								),
+								editable: true,
+							},
+							indexes: {
+								columnIndex: 0,
+								pageIndex: activePage,
+								rowIndex: pages[activePage].rows.length,
+							},
 						},
-						indexes: {
-							columnIndex: 0,
-							pageIndex: activePage,
-							rowIndex: pages[activePage].rows.length,
-						},
-					},
-					type: CORE_EVENT_TYPES.FIELD.ADD,
-				});
-			}}
-		/>
+						type: CORE_EVENT_TYPES.FIELD.ADD,
+					});
+				}}
+			/>
+		</div>
 	);
 };
 
@@ -147,6 +179,7 @@ const FieldTypeList = ({
 				<div className="field-type-list" key={index}>
 					<CollapsablePanel
 						Header={Header}
+						aria-hidden="true"
 						className={classNames({
 							'field-type-fieldgroup': !isFieldSet,
 							'field-type-fieldset': isFieldSet,

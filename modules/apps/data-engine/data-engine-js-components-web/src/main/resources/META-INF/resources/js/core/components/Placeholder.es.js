@@ -45,12 +45,17 @@ export function Placeholder({
 	);
 
 	useEffect(() => {
-		if (overKeyboardTarget && placeholderRef.current) {
-			placeholderRef.current.scrollIntoView({
-				behavior: 'auto',
-				block: 'center',
-				inline: 'center',
-			});
+		if (placeholderRef?.current) {
+			if (overKeyboardTarget) {
+				placeholderRef.current.scrollIntoView({
+					behavior: 'auto',
+					block: 'center',
+					inline: 'center',
+				});
+				placeholderRef.current.focus();
+			} else {
+				placeholderRef.current.blur();
+			}
 		}
 	}, [overKeyboardTarget]);
 
@@ -63,6 +68,7 @@ export function Placeholder({
 			md={size}
 		>
 			<div
+				aria-label="oioioioioioioioioi"
 				className={classnames('ddm-target', {
 					'target-over targetOver':
 						(overTarget &&
@@ -77,6 +83,7 @@ export function Placeholder({
 
 					placeholderRef.current = element;
 				}}
+				tabIndex="0"
 			/>
 		</ClayLayout.Col>
 	);
