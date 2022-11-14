@@ -44,6 +44,9 @@ export function Placeholder({
 		keyboardDNDPosition.position
 	);
 
+	console.log('keyboardDNDPosition.itemPath:', keyboardDNDPosition.itemPath);
+	console.log('keyboardDNDPosition.position:', keyboardDNDPosition.position);
+
 	useEffect(() => {
 		if (placeholderRef?.current) {
 			if (overKeyboardTarget) {
@@ -54,6 +57,7 @@ export function Placeholder({
 				});
 				placeholderRef.current.focus();
 			} else {
+				placeholderRef.current.tabIndex = "-1"
 				placeholderRef.current.blur();
 			}
 		}
@@ -68,7 +72,9 @@ export function Placeholder({
 			md={size}
 		>
 			<div
-				aria-label="oioioioioioioioioi"
+				aria-label={
+						`Drop target is a blank space at the top of row ${rowIndex + 1}`
+				}
 				className={classnames('ddm-target', {
 					'target-over targetOver':
 						(overTarget &&

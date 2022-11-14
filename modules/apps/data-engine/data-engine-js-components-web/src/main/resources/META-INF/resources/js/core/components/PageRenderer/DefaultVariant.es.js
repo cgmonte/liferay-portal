@@ -80,7 +80,7 @@ export const Column = forwardRef(
 				onMouseLeave={onMouseLeave}
 				onMouseOver={onMouseOver}
 				ref={ref}
-				role="button"
+				role="text"
 				tabIndex={0}
 			>
 				{!!column.fields.length && (

@@ -104,7 +104,7 @@ export function Column({
 					console.log('rowIndex:', rowIndex);
 					columnRef.current.setAttribute(
 						'aria-label',
-						`Drop target is ${firstField.label} in row ${
+						`Drop target is a ${firstField.label} field in row ${
 							rowIndex + 1
 						}`
 					);
@@ -112,6 +112,7 @@ export function Column({
 
 				columnRef.current.focus();
 			} else {
+				columnRef.current.tabIndex = "-1"
 				columnRef.current.blur();
 			}
 		}
@@ -174,7 +175,7 @@ export function Column({
 				index={columnIndex}
 				pageIndex={pageIndex}
 				ref={columnRef}
-				role="button"
+				// role="button"
 				rowIndex={rowIndex}
 			>
 				{editable && (
