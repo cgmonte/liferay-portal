@@ -256,9 +256,11 @@ export default function fieldEditableReducer(state, action, config) {
 				parentFieldName: data?.parentFieldName,
 			});
 
+			console.log('newField:', newField);
+
 			return {
 				activePage: indexes.pageIndex,
-				focusedField: newField,
+				focusedField: {},
 				pages: updatedPages,
 			};
 		}
