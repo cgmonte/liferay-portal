@@ -151,7 +151,9 @@ export function Column({
 			field={fieldRootOrCurrent}
 		>
 			<DefaultVariant.Column
-				arial-label="eieieieiieieieieie"
+				arial-label={`Drop target is ${firstField.label} in row ${
+					rowIndex + 1
+				}`}
 				className={classNames({
 					'active-drop-child':
 						isFieldSetOrGroup &&
@@ -172,11 +174,13 @@ export function Column({
 				index={columnIndex}
 				pageIndex={pageIndex}
 				ref={columnRef}
+				role="button"
 				rowIndex={rowIndex}
 			>
 				{editable && (
 					<Actions
 						activePage={pageIndex}
+						aria-hidden="true"
 						fieldId={firstField.fieldName}
 						fieldType={firstField.type}
 						isFieldSelected={isFieldSelected}
@@ -188,6 +192,7 @@ export function Column({
 				)}
 
 				<ResizableColumn
+					aria-hidden="true"
 					currentLoc={{columnIndex, pageIndex, rowIndex}}
 					disabled={!isFieldSelected || !editable}
 					instanceId={firstField.instanceId}

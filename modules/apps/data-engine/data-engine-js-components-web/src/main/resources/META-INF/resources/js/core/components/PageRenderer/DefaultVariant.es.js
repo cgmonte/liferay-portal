@@ -80,11 +80,11 @@ export const Column = forwardRef(
 				onMouseLeave={onMouseLeave}
 				onMouseOver={onMouseOver}
 				ref={ref}
+				role="button"
 				tabIndex={0}
 			>
 				{!!column.fields.length && (
 					<div
-						aria-hidden="true"
 						className={classnames(
 							'ddm-field-container ddm-target h-100',
 							{
@@ -134,7 +134,7 @@ export function Page({
 				<span aria-atomic="true" aria-live="polite" className="sr-only">
 					{invalidFormMessage}
 
-					<span aria-hidden="true">{forceAriaUpdate}</span>
+					{/* <span aria-hidden="true">{forceAriaUpdate}</span> */}
 				</span>
 			)}
 

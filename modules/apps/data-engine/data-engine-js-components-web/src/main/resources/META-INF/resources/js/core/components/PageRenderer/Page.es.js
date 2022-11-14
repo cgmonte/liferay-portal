@@ -210,7 +210,10 @@ const Page = ({
 					pageIndex={pageIndex}
 				>
 					{hasFieldRequired && isDDMFormPortletNamespace && (
-						<p aria-hidden="true" className="text-secondary">
+						
+						// aria-labe="true" no p a seguir:
+
+						<p className="text-secondary">
 							<span className="c-mr-1 reference-mark">
 								<ClayIcon symbol="asterisk" />
 							</span>

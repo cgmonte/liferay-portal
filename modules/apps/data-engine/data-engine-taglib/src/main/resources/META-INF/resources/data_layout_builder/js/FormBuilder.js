@@ -153,7 +153,7 @@ export function FormBuilder() {
 			)}
 		>
 			<ClayLayout.Sheet>
-				<div className="ddm-form-builder-wrapper">
+				<div className="ddm-form-builder-wrapper" role="application">
 					<div className="container ddm-form-builder">
 						<DragLayer />
 
