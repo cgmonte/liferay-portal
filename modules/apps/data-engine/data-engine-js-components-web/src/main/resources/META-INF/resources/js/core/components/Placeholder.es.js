@@ -44,9 +44,6 @@ export function Placeholder({
 		keyboardDNDPosition.position
 	);
 
-	console.log('keyboardDNDPosition.itemPath:', keyboardDNDPosition.itemPath);
-	console.log('keyboardDNDPosition.position:', keyboardDNDPosition.position);
-
 	useEffect(() => {
 		if (placeholderRef?.current) {
 			if (overKeyboardTarget) {
@@ -55,8 +52,10 @@ export function Placeholder({
 					block: 'center',
 					inline: 'center',
 				});
+				placeholderRef.current.classList.add('no-focus-outline')
 				placeholderRef.current.focus();
 			} else {
+				placeholderRef.current.classList.remove('no-focus-outline')
 				placeholderRef.current.tabIndex = "-1"
 				placeholderRef.current.blur();
 			}

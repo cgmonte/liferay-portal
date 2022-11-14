@@ -102,6 +102,10 @@
 				width: calc(100% - 4px);
 			}
 		}
+		
+		.no-focus-outline {
+			outline: none;
+		}
 	}
 
 	.ddm-empty-page {

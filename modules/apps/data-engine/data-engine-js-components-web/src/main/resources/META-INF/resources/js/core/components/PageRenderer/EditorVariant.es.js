@@ -100,8 +100,6 @@ export function Column({
 		if (columnRef?.current) {
 			if (overFieldKeyboardTarget) {
 				if (!columnRef.current.getAttribute('aria-label')) {
-					console.log('firstField:', firstField);
-					console.log('rowIndex:', rowIndex);
 					columnRef.current.setAttribute(
 						'aria-label',
 						`Drop target is a ${firstField.label} field in row ${
@@ -109,10 +107,12 @@ export function Column({
 						}`
 					);
 				}
-
+				columnRef.current.classList.add('no-focus-outline');
 				columnRef.current.focus();
 			} else {
-				columnRef.current.tabIndex = "-1"
+				columnRef.current.removeAttribute("aria-label");
+				columnRef.current.classList.remove('no-focus-outline');
+				columnRef.current.tabIndex = '-1';
 				columnRef.current.blur();
 			}
 		}
@@ -175,7 +175,6 @@ export function Column({
 				index={columnIndex}
 				pageIndex={pageIndex}
 				ref={columnRef}
-				// role="button"
 				rowIndex={rowIndex}
 			>
 				{editable && (
