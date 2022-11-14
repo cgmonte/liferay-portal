@@ -99,12 +99,23 @@ export function Column({
 	useEffect(() => {
 		if (columnRef?.current) {
 			if (overFieldKeyboardTarget) {
+				if (!columnRef.current.getAttribute('aria-label')) {
+					console.log('firstField:', firstField);
+					console.log('rowIndex:', rowIndex);
+					columnRef.current.setAttribute(
+						'aria-label',
+						`Drop target is ${firstField.label} in row ${
+							rowIndex + 1
+						}`
+					);
+				}
+
 				columnRef.current.focus();
 			} else {
 				columnRef.current.blur();
 			}
 		}
-	}, [overFieldKeyboardTarget]);
+	}, [firstField, overFieldKeyboardTarget, rowIndex]);
 
 	const handleResize = useCallback((resizing) => setResizing(resizing), []);
 
@@ -194,8 +205,7 @@ export function Column({
 								!rootParentField.ddmStructureId
 							) {
 								drag(drop(node));
-							}
-							else if (!hasFieldSet(parentField)) {
+							} else if (!hasFieldSet(parentField)) {
 								drag(node);
 							}
 							resizeRef.current = node;

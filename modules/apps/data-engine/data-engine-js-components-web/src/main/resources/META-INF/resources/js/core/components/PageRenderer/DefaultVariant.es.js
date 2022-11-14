@@ -84,6 +84,7 @@ export const Column = forwardRef(
 			>
 				{!!column.fields.length && (
 					<div
+						aria-hidden="true"
 						className={classnames(
 							'ddm-field-container ddm-target h-100',
 							{
