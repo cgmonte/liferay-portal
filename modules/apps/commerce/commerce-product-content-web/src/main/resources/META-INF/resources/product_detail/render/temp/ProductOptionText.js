@@ -1,0 +1,56 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import ClayForm, {ClayInput} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
+import React, {useState} from 'react';
+
+const ProductOptionText = ({id, label, name, required}) => {
+	const [errors, setErrors] = useState({});
+
+	const handleBlur = ({target: {value}}) => {
+		if (required && value === '') {
+			setErrors({emptyField: true});
+		}
+		else {
+			setErrors({});
+		}
+	};
+
+	return (
+		<ClayForm.Group className={errors.emptyField ? 'has-error' : ''}>
+			<label htmlFor={id}>
+				{label}
+
+				{required && (
+					<span className="ml-1 reference-mark text-warning">
+						<ClayIcon symbol="asterisk" />
+					</span>
+				)}
+			</label>
+
+			<ClayInput id={id} name={name} onBlur={handleBlur} />
+
+			{errors.emptyField && (
+				<ClayForm.FeedbackItem>
+					<ClayForm.FeedbackIndicator symbol="exclamation-full" />
+
+					{Liferay.Language.get('this-field-is-required')}
+				</ClayForm.FeedbackItem>
+			)}
+		</ClayForm.Group>
+	);
+};
+
+export default ProductOptionText;

@@ -257,6 +257,67 @@ String navReplacementsId = liferayPortletResponse.getNamespace() + "navReplaceme
 String navSpecificationsId = liferayPortletResponse.getNamespace() + "navSpecifications";
 %>
 
+<%@ page import="java.util.Arrays" %>
+
+<%
+List<Map> productOptionValues = Arrays.asList(
+	HashMapBuilder.<String, Object>put(
+		"defaultValue", true
+	).put(
+		"id", 123456
+	).put(
+		"key", "option1Key"
+	).put(
+		"label", "Option 1 Label"
+	).put(
+		"name", "option1Name"
+	).put(
+		"selected", false
+	).put(
+		"value", "option 1 value"
+	).build(),
+	HashMapBuilder.<String, Object>put(
+		"defaultValue", false
+	).put(
+		"id", 1234567
+	).put(
+		"key", "option2Key"
+	).put(
+		"label", "Option 2 Label"
+	).put(
+		"name", "option2Name"
+	).put(
+		"selected", true
+	).put(
+		"value", "option 2 value"
+	).build());
+%>
+
+<div>
+	<react:component
+		module="product_detail/render/temp/ProductOptionSelect"
+		props='<%=
+			HashMapBuilder.<String, Object>put(
+				"id", 12345
+			).put(
+				"key", "optionsKey"
+			).put(
+				"label", "Options Label"
+			).put(
+				"name", "optionsName"
+			).put(
+				"priceContributor", false
+			).put(
+				"productOptionValues", productOptionValues
+			).put(
+				"required", true
+			).put(
+				"skuContributor", false
+			).build()
+		%>'
+	/>
+</div>
+
 <div>
 	<react:component
 		module="product_detail/render/js/Tabs"
