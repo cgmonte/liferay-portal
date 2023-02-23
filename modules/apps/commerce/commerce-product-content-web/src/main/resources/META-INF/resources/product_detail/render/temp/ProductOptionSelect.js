@@ -13,6 +13,7 @@
  */
 
 import ClayForm, {ClaySelect} from '@clayui/form';
+import classnames from 'classnames';
 import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
@@ -44,7 +45,7 @@ const ProductOptionSelect = ({
 
 	return (
 		<ClayForm.Group
-			className={errors.selectedPlaceholder ? 'has-error' : ''}
+			className={classnames({'has-error': errors.selectedPlaceholder})}
 		>
 			<label htmlFor={id}>
 				{label}

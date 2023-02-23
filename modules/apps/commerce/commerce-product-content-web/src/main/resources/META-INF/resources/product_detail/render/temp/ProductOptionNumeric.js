@@ -13,6 +13,7 @@
  */
 
 import ClayForm, {ClayInput} from '@clayui/form';
+import classnames from 'classnames';
 import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
@@ -30,7 +31,9 @@ const ProductOptionNumeric = ({id, label, name, required}) => {
 	};
 
 	return (
-		<ClayForm.Group className={errors.emptyField ? 'has-error' : ''}>
+		<ClayForm.Group
+			className={classnames({'has-error': errors.emptyField})}
+		>
 			<label htmlFor={id}>
 				{label}
 
