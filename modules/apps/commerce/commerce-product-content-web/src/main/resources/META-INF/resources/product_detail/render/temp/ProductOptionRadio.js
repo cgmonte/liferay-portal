@@ -13,8 +13,9 @@
  */
 
 import ClayForm, {ClayRadio, ClayRadioGroup} from '@clayui/form';
-import ClayIcon from '@clayui/icon';
 import React from 'react';
+
+import Asterisk from './Asterisk';
 
 const ProductOptionRadio = ({
 	id,
@@ -50,11 +51,7 @@ const ProductOptionRadio = ({
 			<label htmlFor={id}>
 				{label}
 
-				{required && (
-					<span className="ml-1 reference-mark text-warning">
-						<ClayIcon symbol="asterisk" />
-					</span>
-				)}
+				<Asterisk required={required} />
 			</label>
 
 			<ClayRadioGroup

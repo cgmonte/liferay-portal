@@ -12,35 +12,14 @@
  * details.
  */
 
-import ClayForm, {ClayCheckbox} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
 import React from 'react';
 
-import Asterisk from './Asterisk';
-
-const ProductOptionCheckbox = ({id, label, name, required}) => {
-	const handleChange = ({target: {checked}}) => {
-
-		// This void call is a placeolder. Replace it with the function body.
-
-		void checked;
-	};
-
-	return (
-		<ClayForm.Group>
-			<label htmlFor={id}>
-				{label}
-
-				<Asterisk required={required} />
-			</label>
-
-			<ClayCheckbox
-				id={id}
-				label={label}
-				name={name}
-				onChange={handleChange}
-			/>
-		</ClayForm.Group>
+const Asterisk = ({required}) =>
+	required && (
+		<span className="ml-1 reference-mark text-warning">
+			<ClayIcon symbol="asterisk" />
+		</span>
 	);
-};
 
-export default ProductOptionCheckbox;
+export default Asterisk;

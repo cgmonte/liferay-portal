@@ -13,8 +13,9 @@
  */
 
 import ClayForm, {ClayInput} from '@clayui/form';
-import ClayIcon from '@clayui/icon';
 import React, {useState} from 'react';
+
+import Asterisk from './Asterisk';
 
 const ProductOptionNumeric = ({id, label, name, required}) => {
 	const [errors, setErrors] = useState({});
@@ -33,11 +34,7 @@ const ProductOptionNumeric = ({id, label, name, required}) => {
 			<label htmlFor={id}>
 				{label}
 
-				{required && (
-					<span className="ml-1 reference-mark text-warning">
-						<ClayIcon symbol="asterisk" />
-					</span>
-				)}
+				<Asterisk required={required} />
 			</label>
 
 			<ClayInput id={id} name={name} onBlur={handleBlur} type="number" />

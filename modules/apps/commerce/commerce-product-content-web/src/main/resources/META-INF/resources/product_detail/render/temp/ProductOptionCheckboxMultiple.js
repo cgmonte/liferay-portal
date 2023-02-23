@@ -13,8 +13,9 @@
  */
 
 import ClayForm, {ClayCheckbox} from '@clayui/form';
-import ClayIcon from '@clayui/icon';
 import React, {useState} from 'react';
+
+import Asterisk from './Asterisk';
 
 const ProductOptionCheckboxMultiple = ({
 	label,
@@ -36,11 +37,7 @@ const ProductOptionCheckboxMultiple = ({
 			<label>
 				{label}
 
-				{required && (
-					<span className="ml-1 reference-mark text-warning">
-						<ClayIcon symbol="asterisk" />
-					</span>
-				)}
+				<Asterisk required={required} />
 			</label>
 
 			{options.map(({key, label, name, selected, value}) => (
