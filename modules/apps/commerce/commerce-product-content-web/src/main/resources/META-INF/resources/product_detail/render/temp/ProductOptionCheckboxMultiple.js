@@ -46,14 +46,13 @@ const ProductOptionCheckboxMultiple = ({
 			</label>
 
 			{Object.values(options).map(
-				({id, key, label, name, selected, value}) => (
+				({id, key, label, name, selected}) => (
 					<ClayCheckbox
 						checked={selected}
 						key={key}
 						label={label}
 						name={name}
 						onChange={(event) => handleChange(event, id)}
-						value={value}
 					/>
 				)
 			)}
