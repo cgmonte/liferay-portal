@@ -36,7 +36,12 @@ const ProductOptionCheckbox = ({id, label, name, required}) => {
 				)}
 			</label>
 
-			<ClayCheckbox label={label} name={name} onChange={handleChange} />
+			<ClayCheckbox
+				id={id}
+				label={label}
+				name={name}
+				onChange={handleChange}
+			/>
 		</ClayForm.Group>
 	);
 };
