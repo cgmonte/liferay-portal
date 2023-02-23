@@ -22,14 +22,19 @@ const ProductOptionCheckboxMultiple = ({
 	productOptionValues,
 	required,
 }) => {
-	const [options, setOptions] = useState(productOptionValues);
+	const [options, setOptions] = useState(
+		productOptionValues.reduce((acc, cur) => {
+			acc[cur.id] = cur;
 
-	const handleChange = ({target: {checked, value}}) => {
-		setOptions((previousOptions) =>
-			previousOptions.map((option) =>
-				option.value === value ? {...option, selected: checked} : option
-			)
-		);
+			return acc;
+		}, {})
+	);
+
+	const handleChange = ({target: {checked}}, id) => {
+		setOptions((previousOptions) => ({
+			...previousOptions,
+			[id]: {...previousOptions[id], selected: checked},
+		}));
 	};
 
 	return (
@@ -40,16 +45,18 @@ const ProductOptionCheckboxMultiple = ({
 				<Asterisk required={required} />
 			</label>
 
-			{options.map(({key, label, name, selected, value}) => (
-				<ClayCheckbox
-					checked={selected}
-					key={key}
-					label={label}
-					name={name}
-					onChange={handleChange}
-					value={value}
-				/>
-			))}
+			{Object.values(options).map(
+				({id, key, label, name, selected, value}) => (
+					<ClayCheckbox
+						checked={selected}
+						key={key}
+						label={label}
+						name={name}
+						onChange={(event) => handleChange(event, id)}
+						value={value}
+					/>
+				)
+			)}
 		</ClayForm.Group>
 	);
 };
