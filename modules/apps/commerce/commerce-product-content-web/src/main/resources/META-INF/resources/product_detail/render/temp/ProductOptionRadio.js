@@ -25,7 +25,7 @@ const ProductOptionRadio = ({
 	productOptionValues,
 	required,
 }) => {
-	const getInitialOption = () => {
+	const initialOption = (() => {
 		const selectedOption = productOptionValues.find(
 			(option) => option.selected === true
 		);
@@ -37,9 +37,9 @@ const ProductOptionRadio = ({
 		return productOptionValues.find(
 			(option) => option.defaultValue === true
 		);
-	};
+	})();
 
-	const [selectedOption, setSelectedOption] = useState(getInitialOption());
+	const [selectedOption, setSelectedOption] = useState(initialOption);
 
 	const handleChange = (value) => {
 		const updatedOption = productOptionValues.find(

@@ -22,16 +22,35 @@ const ProductOptionSelect = ({
 	id,
 	label,
 	name,
+	onChange,
 	productOptionValues,
 	required,
 }) => {
+	const initialOption = (() => {
+		const selectedOption = productOptionValues.find(
+			(option) => option.selected === true
+		);
+
+		if (selectedOption) {
+			return selectedOption;
+		}
+
+		return productOptionValues.find(
+			(option) => option.defaultValue === true
+		);
+	})();
+
+	const [selectedOption, setSelectedOption] = useState(initialOption);
+
 	const [errors, setErrors] = useState({});
 
-	const handleChange = ({target: {value}}) => {
+	const handleChange = (value) => {
+		const updatedOption = productOptionValues.find(
+			(option) => option.value === value
+		);
 
-		// This void call is a placeolder. Replace it with the function body.
-
-		void value;
+		setSelectedOption(updatedOption);
+		onChange(updatedOption);
 	};
 
 	const handleBlur = ({target: {selectedIndex}}) => {
@@ -62,7 +81,7 @@ const ProductOptionSelect = ({
 				<ClaySelect.Option
 					disabled={required}
 					label={Liferay.Language.get('choose-an-option')}
-					selected
+					selected={!initialOption}
 				/>
 
 				{productOptionValues.map(({key, label, name, value}) => (
@@ -70,6 +89,7 @@ const ProductOptionSelect = ({
 						key={key}
 						label={label}
 						name={name}
+						selected={selectedOption?.value === value}
 						value={value}
 					/>
 				))}
