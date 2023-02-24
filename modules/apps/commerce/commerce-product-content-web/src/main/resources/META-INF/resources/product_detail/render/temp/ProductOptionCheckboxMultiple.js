@@ -19,6 +19,7 @@ import Asterisk from './Asterisk';
 
 const ProductOptionCheckboxMultiple = ({
 	label,
+	onChange,
 	productOptionValues,
 	required,
 }) => {
@@ -31,10 +32,13 @@ const ProductOptionCheckboxMultiple = ({
 	);
 
 	const handleChange = ({target: {checked}}, id) => {
-		setOptions((previousOptions) => ({
-			...previousOptions,
-			[id]: {...previousOptions[id], selected: checked},
-		}));
+		const updatedOptions = {
+			...options,
+			[id]: {...options[id], selected: checked},
+		};
+
+		setOptions(updatedOptions);
+		onChange(updatedOptions);
 	};
 
 	return (
@@ -45,17 +49,15 @@ const ProductOptionCheckboxMultiple = ({
 				<Asterisk required={required} />
 			</label>
 
-			{Object.values(options).map(
-				({id, key, label, name, selected}) => (
-					<ClayCheckbox
-						checked={selected}
-						key={key}
-						label={label}
-						name={name}
-						onChange={(event) => handleChange(event, id)}
-					/>
-				)
-			)}
+			{Object.values(options).map(({id, key, label, name, selected}) => (
+				<ClayCheckbox
+					checked={selected}
+					key={key}
+					label={label}
+					name={name}
+					onChange={(event) => handleChange(event, id)}
+				/>
+			))}
 		</ClayForm.Group>
 	);
 };

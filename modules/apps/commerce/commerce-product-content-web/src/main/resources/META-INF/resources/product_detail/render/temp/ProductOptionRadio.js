@@ -13,7 +13,7 @@
  */
 
 import ClayForm, {ClayRadio, ClayRadioGroup} from '@clayui/form';
-import React from 'react';
+import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
 
@@ -21,29 +21,33 @@ const ProductOptionRadio = ({
 	id,
 	label,
 	name,
+	onChange,
 	productOptionValues,
 	required,
 }) => {
-	const handleClick = ({target: {value}}) => {
-
-		// This void call is a placeolder. Replace it with the function body.
-
-		void value;
-	};
-	const getPredefinedValue = () => {
+	const getInitialOption = () => {
 		const selectedOption = productOptionValues.find(
 			(option) => option.selected === true
 		);
 
 		if (selectedOption) {
-			return selectedOption.value;
+			return selectedOption;
 		}
 
-		const defaultOption = productOptionValues.find(
+		return productOptionValues.find(
 			(option) => option.defaultValue === true
 		);
+	};
 
-		return defaultOption?.value;
+	const [selectedOption, setSelectedOption] = useState(getInitialOption());
+
+	const handleChange = (value) => {
+		const updatedOption = productOptionValues.find(
+			(option) => option.value === value
+		);
+
+		setSelectedOption(updatedOption);
+		onChange(updatedOption);
 	};
 
 	return (
@@ -55,18 +59,13 @@ const ProductOptionRadio = ({
 			</label>
 
 			<ClayRadioGroup
-				defaultValue={getPredefinedValue()}
 				id={id}
 				name={name}
+				onChange={handleChange}
+				value={selectedOption.value}
 			>
-				{productOptionValues.map(({key, label, name, value}) => (
-					<ClayRadio
-						key={key}
-						label={label}
-						name={name}
-						onClick={handleClick}
-						value={value}
-					/>
+				{productOptionValues.map(({key, label, value}) => (
+					<ClayRadio key={key} label={label} value={value} />
 				))}
 			</ClayRadioGroup>
 		</ClayForm.Group>

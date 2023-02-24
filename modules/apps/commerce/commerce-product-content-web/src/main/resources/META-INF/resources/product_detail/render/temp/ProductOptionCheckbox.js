@@ -13,16 +13,27 @@
  */
 
 import ClayForm, {ClayCheckbox} from '@clayui/form';
-import React from 'react';
+import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
 
-const ProductOptionCheckbox = ({id, label, name, required}) => {
+const ProductOptionCheckbox = ({
+	id,
+	label,
+	onChange,
+	productOptionValues,
+	required,
+}) => {
+	const [option, setOption] = useState(productOptionValues[0]);
+
 	const handleChange = ({target: {checked}}) => {
+		const updatedOption = {
+			...option,
+			selected: checked,
+		};
 
-		// This void call is a placeolder. Replace it with the function body.
-
-		void checked;
+		setOption(updatedOption);
+		onChange(updatedOption);
 	};
 
 	return (
@@ -35,8 +46,8 @@ const ProductOptionCheckbox = ({id, label, name, required}) => {
 
 			<ClayCheckbox
 				id={id}
-				label={label}
-				name={name}
+				label={option.label}
+				name={option.name}
 				onChange={handleChange}
 			/>
 		</ClayForm.Group>
