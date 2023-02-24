@@ -17,6 +17,7 @@ import classnames from 'classnames';
 import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
+import {getInitialOption} from './utils';
 
 const ProductOptionSelect = ({
 	id,
@@ -26,19 +27,7 @@ const ProductOptionSelect = ({
 	productOptionValues,
 	required,
 }) => {
-	const initialOption = (() => {
-		const selectedOption = productOptionValues.find(
-			(option) => option.selected === true
-		);
-
-		if (selectedOption) {
-			return selectedOption;
-		}
-
-		return productOptionValues.find(
-			(option) => option.defaultValue === true
-		);
-	})();
+	const initialOption = getInitialOption(productOptionValues);
 
 	const [selectedOption, setSelectedOption] = useState(initialOption);
 

@@ -45,6 +45,7 @@ const ProductOptionCheckbox = ({
 			</label>
 
 			<ClayCheckbox
+				checked={option.selected}
 				id={id}
 				label={option.label}
 				name={option.name}

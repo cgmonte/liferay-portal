@@ -16,6 +16,7 @@ import ClayForm, {ClayRadio, ClayRadioGroup} from '@clayui/form';
 import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
+import {getInitialOption} from './utils';
 
 const ProductOptionRadio = ({
 	id,
@@ -25,19 +26,7 @@ const ProductOptionRadio = ({
 	productOptionValues,
 	required,
 }) => {
-	const initialOption = (() => {
-		const selectedOption = productOptionValues.find(
-			(option) => option.selected === true
-		);
-
-		if (selectedOption) {
-			return selectedOption;
-		}
-
-		return productOptionValues.find(
-			(option) => option.defaultValue === true
-		);
-	})();
+	const initialOption = getInitialOption(productOptionValues);
 
 	const [selectedOption, setSelectedOption] = useState(initialOption);
 
