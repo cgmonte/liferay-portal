@@ -18,7 +18,15 @@ import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
 
-const ProductOptionNumeric = ({id, label, name, required}) => {
+const ProductOptionNumeric = ({
+	id,
+	label,
+	name,
+	onChange,
+	productOptionValues,
+	required,
+}) => {
+	const [number, setNumber] = useState(productOptionValues[0].value);
 	const [errors, setErrors] = useState({});
 
 	const handleBlur = ({target: {value}}) => {
@@ -27,6 +35,7 @@ const ProductOptionNumeric = ({id, label, name, required}) => {
 		}
 		else {
 			setErrors({});
+			onChange(number);
 		}
 	};
 
@@ -40,7 +49,16 @@ const ProductOptionNumeric = ({id, label, name, required}) => {
 				<Asterisk required={required} />
 			</label>
 
-			<ClayInput id={id} name={name} onBlur={handleBlur} type="number" />
+			<ClayInput
+				id={id}
+				name={name}
+				onBlur={handleBlur}
+				onChange={({target: {value}}) => {
+					setNumber(value);
+				}}
+				type="number"
+				value={number}
+			/>
 
 			{errors.emptyField && (
 				<ClayForm.FeedbackItem>

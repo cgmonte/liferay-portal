@@ -18,7 +18,15 @@ import React, {useState} from 'react';
 
 import Asterisk from './Asterisk';
 
-const ProductOptionText = ({id, label, name, required}) => {
+const ProductOptionText = ({
+	id,
+	label,
+	name,
+	onChange,
+	productOptionValues,
+	required,
+}) => {
+	const [text, setText] = useState(productOptionValues[0].value);
 	const [errors, setErrors] = useState({});
 
 	const handleBlur = ({target: {value}}) => {
@@ -27,6 +35,7 @@ const ProductOptionText = ({id, label, name, required}) => {
 		}
 		else {
 			setErrors({});
+			onChange(text);
 		}
 	};
 
@@ -40,7 +49,15 @@ const ProductOptionText = ({id, label, name, required}) => {
 				<Asterisk required={required} />
 			</label>
 
-			<ClayInput id={id} name={name} onBlur={handleBlur} />
+			<ClayInput
+				id={id}
+				name={name}
+				onBlur={handleBlur}
+				onChange={({target: {value}}) => {
+					setText(value);
+				}}
+				value={text}
+			/>
 
 			{errors.emptyField && (
 				<ClayForm.FeedbackItem>
