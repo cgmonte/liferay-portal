@@ -20,6 +20,12 @@
 CPContentHelper cpContentHelper = (CPContentHelper)request.getAttribute(CPContentWebKeys.CP_CONTENT_HELPER);
 
 CPCatalogEntry cpCatalogEntry = cpContentHelper.getCPCatalogEntry(request);
+
+Long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
+
+List<CPMedia> images = cpContentHelper.getImages(cpDefinitionId, themeDisplay);
+
+CPMedia mainImage = images.get(0);
 %>
 
 <div class="cp-renderer">
@@ -35,17 +41,18 @@ CPCatalogEntry cpCatalogEntry = cpContentHelper.getCPCatalogEntry(request);
 			<a href="<%= productDetailURL %>">
 
 				<%
-				String cpDefinitionCDNURL = cpContentHelper.getCPDefinitionCDNURL(cpCatalogEntry.getCPDefinitionId(), request);
+				String cpDefinitionCDNURL = cpContentHelper.getCPDefinitionCDNURL(cpDefinitionId, request);
 				%>
 
 				<c:choose>
 					<c:when test="<%= Validator.isNotNull(cpDefinitionCDNURL) %>">
-						<img class="img-fluid product-card-picture" src="<%= cpDefinitionCDNURL %>" />
+						<img alt="<%= mainImage.getTitle() %>" class="img-fluid product-card-picture" src="<%= cpDefinitionCDNURL %>" />
 					</c:when>
 					<c:otherwise>
 						<liferay-adaptive-media:img
+							alt="<%= mainImage.getTitle() %>"
 							class="img-fluid product-card-picture"
-							fileVersion="<%= cpContentHelper.getCPDefinitionImageFileVersion(cpCatalogEntry.getCPDefinitionId(), request) %>"
+							fileVersion="<%= cpContentHelper.getCPDefinitionImageFileVersion(cpDefinitionId, request) %>"
 						/>
 					</c:otherwise>
 				</c:choose>
@@ -93,7 +100,7 @@ CPCatalogEntry cpCatalogEntry = cpContentHelper.getCPCatalogEntry(request);
 
 			<div>
 				<c:choose>
-					<c:when test="<%= (cpSku == null) || cpContentHelper.hasCPDefinitionOptionRels(cpCatalogEntry.getCPDefinitionId()) %>">
+					<c:when test="<%= (cpSku == null) || cpContentHelper.hasCPDefinitionOptionRels(cpDefinitionId) %>">
 						<div class="add-to-cart d-flex my-2 pt-5" id="<%= PortalUtil.generateRandomKey(request, "taglib") + StringPool.UNDERLINE %>add_to_cart">
 							<a class="btn btn-block btn-secondary" href="<%= productDetailURL %>" role="button" style="margin-top: 0.35rem;">
 								<liferay-ui:message key="view-all-variants" />
