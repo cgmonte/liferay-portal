@@ -16,6 +16,6 @@
 
 <aui:model-context bean="<%= cpAttachmentFileEntry %>" model="<%= CPAttachmentFileEntry.class %>" />
 
-<aui:input defaultLanguageId="<%= cpAttachmentFileEntriesDisplayContext.getCatalogDefaultLanguageId() %>" helpMessage='<%= LanguageUtil.get(request, "the-title-is-applied-as-the-images-html-alt-attribute") %>' name="title" />
+<aui:input defaultLanguageId="<%= cpAttachmentFileEntriesDisplayContext.getCatalogDefaultLanguageId() %>" helpMessage='<%= LanguageUtil.get(request, "the-title-is-applied-as-the-images-html-alt-attribute") %>' name="title" required="<%= true %>" showRequiredLabel="<%= true %>" />
 
 <aui:input name="priority" />
