@@ -152,16 +152,18 @@ interface ObjectDefinition {
 	titleObjectFieldName: string;
 }
 
+type ObjectFieldSettingValue =
+	| string
+	| number
+	| boolean
+	| NameValueObject[]
+	| ObjectFieldFilterSetting[]
+	| ObjectFieldPicklistSetting;
+
 interface ObjectFieldSetting {
 	name: ObjectFieldSettingName;
 	objectFieldId?: number;
-	value:
-		| string
-		| number
-		| boolean
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| ObjectFieldPicklistSetting;
+	value: ObjectFieldSettingValue;
 }
 
 interface ObjectEntry {
@@ -233,6 +235,8 @@ type TFilterOperators = {
 
 type ObjectFieldSettingName =
 	| 'acceptedFileExtensions'
+	| 'defaultValue'
+	| 'defaultValueType'
 	| 'fileSource'
 	| 'filters'
 	| 'function'
@@ -354,4 +358,12 @@ interface AddObjectEntryDefinitions {
 interface ObjectState {
 	key: string;
 	objectStateTransitions: {key: string}[];
+}
+
+interface InputAsValueFieldComponentProps {
+	creationLanguageId: Liferay.Language.Locale;
+	defaultValue?: ObjectFieldSettingValue;
+	label: string;
+	setValues: (values: Partial<ObjectField>) => void;
+	values: Partial<ObjectField>;
 }

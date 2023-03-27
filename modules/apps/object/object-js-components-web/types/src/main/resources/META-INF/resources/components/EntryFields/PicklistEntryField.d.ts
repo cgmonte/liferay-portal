@@ -14,17 +14,18 @@
 
 /// <reference types="react" />
 
-import {SidebarCategory} from '@liferay/object-js-components-web';
-interface AdvancedTabProps {
-	creationLanguageId: Liferay.Language.Locale;
-	setValues: (value: Partial<ObjectField>) => void;
-	sidebarElements: SidebarCategory[];
-	values: Partial<ObjectField>;
+interface IProps {
+	creationLanguageId?: Liferay.Language.Locale;
+	label: string;
+	onChange: (selected: PickListItem | undefined) => void;
+	picklistItems: PickListItem[];
+	selectedPicklistItemKey?: string;
 }
-export declare function AdvancedTab({
+export declare function PicklistEntryField({
 	creationLanguageId,
-	setValues,
-	sidebarElements,
-	values,
-}: AdvancedTabProps): JSX.Element;
+	label,
+	onChange,
+	picklistItems,
+	selectedPicklistItemKey,
+}: IProps): JSX.Element;
 export {};

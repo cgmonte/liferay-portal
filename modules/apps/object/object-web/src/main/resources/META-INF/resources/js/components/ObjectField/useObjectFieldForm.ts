@@ -189,9 +189,9 @@ export function useObjectFieldForm({
 				errors.listTypeDefinitionId = REQUIRED_MSG;
 			}
 
-			if (field.state && !field.defaultValue) {
-				errors.defaultValue = REQUIRED_MSG;
-			}
+			// if (field.state && !field.defaultValue) {
+			// 	errors.defaultValue = REQUIRED_MSG;
+			// }
 		}
 
 		return errors;

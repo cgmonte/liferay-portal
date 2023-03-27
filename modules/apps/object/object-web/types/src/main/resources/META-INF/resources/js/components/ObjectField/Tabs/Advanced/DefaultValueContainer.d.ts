@@ -15,16 +15,19 @@
 /// <reference types="react" />
 
 import {SidebarCategory} from '@liferay/object-js-components-web';
-interface AdvancedTabProps {
+interface DefaultValueContainerProps {
 	creationLanguageId: Liferay.Language.Locale;
+	disabled?: boolean;
+	objectFieldBusinessType: ObjectFieldBusinessType;
+	objectFieldSettings: ObjectFieldSetting[];
 	setValues: (value: Partial<ObjectField>) => void;
 	sidebarElements: SidebarCategory[];
 	values: Partial<ObjectField>;
 }
-export declare function AdvancedTab({
+export declare function DefaultValueContainer({
 	creationLanguageId,
 	setValues,
 	sidebarElements,
 	values,
-}: AdvancedTabProps): JSX.Element;
+}: DefaultValueContainerProps): JSX.Element;
 export {};

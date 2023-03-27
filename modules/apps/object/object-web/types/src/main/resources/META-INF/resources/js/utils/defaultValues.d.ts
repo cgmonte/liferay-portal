@@ -12,19 +12,21 @@
  * details.
  */
 
-/// <reference types="react" />
-
-import {SidebarCategory} from '@liferay/object-js-components-web';
-interface AdvancedTabProps {
-	creationLanguageId: Liferay.Language.Locale;
-	setValues: (value: Partial<ObjectField>) => void;
-	sidebarElements: SidebarCategory[];
-	values: Partial<ObjectField>;
-}
-export declare function AdvancedTab({
-	creationLanguageId,
-	setValues,
-	sidebarElements,
-	values,
-}: AdvancedTabProps): JSX.Element;
-export {};
+export declare function getDefaultValueFieldSettings(
+	values: Partial<ObjectField>
+): {
+	defaultValue: ObjectFieldSettingValue | undefined;
+	defaultValueType:
+		| string
+		| number
+		| boolean
+		| ObjectFieldPicklistSetting
+		| NameValueObject[]
+		| ObjectFieldFilterSetting[]
+		| undefined;
+};
+export declare function geUpdatedDefaultValueFieldSettings(
+	values: Partial<ObjectField>,
+	newDefaultValue?: ObjectFieldSettingValue,
+	newDefaultValueType?: string
+): ObjectFieldSetting[];
