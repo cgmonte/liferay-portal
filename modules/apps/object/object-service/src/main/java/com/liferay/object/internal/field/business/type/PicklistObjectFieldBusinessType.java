@@ -193,6 +193,9 @@ public class PicklistObjectFieldBusinessType
 			return;
 		}
 
+		ObjectFieldBusinessType.super.validateObjectFieldSettingsDefaultValue(
+			objectField, objectFieldSettings);
+
 		ObjectFieldSetting objectFieldSettingDefaultValue = null;
 
 		for (ObjectFieldSetting objectFieldSetting : objectFieldSettings) {
