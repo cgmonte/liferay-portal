@@ -75,7 +75,7 @@ const PicklistDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 					label={label}
 					onChange={handleChange}
 					picklistItems={picklistItems}
-					placeholder={'select a picklist item'}
+					placeholder={Liferay.Language.get('choose-an-option')}
 					required={required}
 					selectedPicklistItemKey={defaultValue as string | undefined}
 				/>

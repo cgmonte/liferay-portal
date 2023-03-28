@@ -180,15 +180,16 @@ export function useObjectFieldForm({
 			}
 
 			if (
-				field.state &&
-				(Liferay.FeatureFlags['LPS-163716']
-					? !field.objectFieldSettings?.some(
-							(setting) =>
-								setting.name === 'defaultValue' && setting.value
-					  )
-					: !field.defaultValue)
+				!field.objectFieldSettings?.some(
+					(setting) =>
+						setting.name === 'defaultValue' && setting.value
+				)
 			) {
 				errors.defaultValue = REQUIRED_MSG;
+
+				if (!field.id && !field.state) {
+					delete errors.defaultValue;
+				}
 			}
 		}
 

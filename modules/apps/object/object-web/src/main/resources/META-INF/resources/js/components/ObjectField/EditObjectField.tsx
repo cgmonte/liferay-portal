@@ -104,8 +104,10 @@ export default function EditObjectField({
 	});
 
 	useEffect(() => {
-		console.log('values.objectFieldSettings', values.objectFieldSettings);
-		console.log('values.defaultValue', values.defaultValue);
+		// console.log('values.objectFieldSettings', values.objectFieldSettings);
+		// console.log('values.defaultValue', values.defaultValue);
+		// console.log('errors', errors);
+		console.log('values', values)
 	}, [values]);
 
 	if (

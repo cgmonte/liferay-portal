@@ -160,6 +160,7 @@ export function DefaultValueContainer({
 						}
 						error={errors.defaultValue}
 						label={Liferay.Language.get('default-value')}
+						required
 						setValues={setValues}
 						values={values}
 					/>
@@ -168,6 +169,7 @@ export function DefaultValueContainer({
 			{defaultValueToggleEnabled &&
 				defaultValueTypeSelection === 'expressionBuilder' && (
 					<ExpressionBuilder
+						error={errors.defaultValue}
 						feedbackMessage={Liferay.Language.get(
 							'use-expressions-to-create-a-condition'
 						)}
@@ -206,6 +208,7 @@ export function DefaultValueContainer({
 								}
 							);
 						}}
+						required
 						value={
 							defaultValueType === 'expressionBuilder'
 								? (defaultValue as string)

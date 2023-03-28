@@ -97,8 +97,9 @@ function ModalAddObjectField({
 	});
 
 	useEffect(() => {
-		console.log('values.objectFieldSettings', values.objectFieldSettings);
-		console.log('values.defaultValue', values.defaultValue);
+		console.log('values', values);
+		// console.log('values.objectFieldSettings', values.objectFieldSettings);
+		// console.log('values.defaultValue', values.defaultValue);
 	}, [values]);
 
 	const showEnableTranslationToggle =
@@ -181,7 +182,7 @@ function ModalAddObjectField({
 							}
 							error={errors.defaultValue}
 							label={Liferay.Language.get('default-value')}
-							required={values.state}
+							required
 							setValues={setValues}
 							values={values}
 						/>

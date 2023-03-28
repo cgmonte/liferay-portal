@@ -41,7 +41,6 @@ export function ExpressionBuilder({
 	value,
 	...otherProps
 }: IProps) {
-	console.log('oi');
 
 	return (
 		<FieldBase
@@ -85,7 +84,6 @@ export function ExpressionBuilder({
 }
 
 export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
-	console.log('ola');
 	const editorRef = useRef<CodeMirror.Editor>(null);
 	const [
 		{

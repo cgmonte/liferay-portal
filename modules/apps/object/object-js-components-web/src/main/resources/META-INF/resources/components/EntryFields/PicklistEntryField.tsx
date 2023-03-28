@@ -43,11 +43,6 @@ export function PicklistEntryField({
 	required,
 	selectedPicklistItemKey,
 }: IProps) {
-	console.log('selectedPicklistItemKey', selectedPicklistItemKey);
-	console.log('picklistItems', picklistItems);
-	console.log('find', picklistItems.find(
-		(item) => item.key === selectedPicklistItemKey
-	)?.name)
 	const handleChange = (selectedPicklistOption: SelectedPicklistOption) => {
 		onChange(
 			picklistItems.find(
