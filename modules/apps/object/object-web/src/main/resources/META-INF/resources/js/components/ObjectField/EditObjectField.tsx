@@ -20,7 +20,7 @@ import {
 	openToast,
 	saveAndReload,
 } from '@liferay/object-js-components-web';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import './EditObjectField.scss';
 import {AdvancedTab} from './Tabs/Advanced/AdvancedTab';
@@ -103,6 +103,11 @@ export default function EditObjectField({
 		onSubmit,
 	});
 
+	useEffect(() => {
+		console.log('values.objectFieldSettings', values.objectFieldSettings);
+		console.log('values.defaultValue', values.defaultValue);
+	}, [values]);
+
 	if (
 		(Liferay.FeatureFlags['LPS-159913'] ||
 			Liferay.FeatureFlags['LPS-163716']) &&
@@ -156,6 +161,7 @@ export default function EditObjectField({
 					<ClayTabs.TabPane>
 						<AdvancedTab
 							creationLanguageId={creationLanguageId}
+							errors={errors}
 							setValues={setValues}
 							sidebarElements={sidebarElements}
 							values={values}

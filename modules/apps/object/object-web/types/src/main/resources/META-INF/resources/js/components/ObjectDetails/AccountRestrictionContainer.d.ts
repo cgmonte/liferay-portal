@@ -14,7 +14,6 @@
 
 /// <reference types="react" />
 
-import {FormError} from '@liferay/object-js-components-web';
 interface AccountRestrictionContainerProps {
 	errors: FormError<ObjectDefinition>;
 	isApproved: boolean;

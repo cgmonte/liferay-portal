@@ -21,7 +21,9 @@ import {fixLocaleKeys} from '../../ListTypeDefinition/utils';
 const PicklistDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 	creationLanguageId,
 	defaultValue,
+	error,
 	label,
+	required,
 	setValues,
 	values,
 }: InputAsValueFieldComponentProps) => {
@@ -29,6 +31,7 @@ const PicklistDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 
 	const handleChange = (selected?: PickListItem) => {
 		if (selected) {
+			console.log('selected', selected);
 			setValues({
 				objectFieldSettings: geUpdatedDefaultValueFieldSettings(
 					values,
@@ -49,15 +52,15 @@ const PicklistDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 							name_i18n: fixLocaleKeys(item.name_i18n),
 						}))
 					);
-					if (!defaultValue) {
-						setValues({
-							objectFieldSettings: geUpdatedDefaultValueFieldSettings(
-								values,
-								items[0].key,
-								'inputAsValue'
-							),
-						});
-					}
+					// if (!defaultValue) {
+					// 	setValues({
+					// 		objectFieldSettings: geUpdatedDefaultValueFieldSettings(
+					// 			values,
+					// 			items[0].key,
+					// 			'inputAsValue'
+					// 		),
+					// 	});
+					// }
 				}
 			});
 		}
@@ -68,9 +71,12 @@ const PicklistDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 			{picklistItems && values.listTypeDefinitionId && (
 				<PicklistEntryField
 					creationLanguageId={creationLanguageId}
+					error={error}
 					label={label}
 					onChange={handleChange}
 					picklistItems={picklistItems}
+					placeholder={'select a picklist item'}
+					required={required}
 					selectedPicklistItemKey={defaultValue as string | undefined}
 				/>
 			)}

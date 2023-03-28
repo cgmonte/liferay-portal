@@ -15,7 +15,6 @@
 import ClayPanel from '@clayui/panel';
 import {
 	AutoComplete,
-	FormError,
 	SingleSelect,
 	filterArrayByQuery,
 } from '@liferay/object-js-components-web';

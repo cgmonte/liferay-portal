@@ -20,6 +20,7 @@ import {ReadOnlyContainer} from './ReadOnlyContainer';
 
 interface AdvancedTabProps {
 	creationLanguageId: Liferay.Language.Locale;
+	errors: ObjectFieldErrors;
 	setValues: (value: Partial<ObjectField>) => void;
 	sidebarElements: SidebarCategory[];
 	values: Partial<ObjectField>;
@@ -27,6 +28,7 @@ interface AdvancedTabProps {
 
 export function AdvancedTab({
 	creationLanguageId,
+	errors,
 	setValues,
 	sidebarElements,
 	values,
@@ -51,6 +53,7 @@ export function AdvancedTab({
 			{Liferay.FeatureFlags['LPS-163716'] && (
 				<DefaultValueContainer
 					creationLanguageId={creationLanguageId}
+					errors={errors}
 					objectFieldBusinessType={
 						values.businessType as ObjectFieldBusinessType
 					}

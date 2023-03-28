@@ -22,7 +22,6 @@ import {
 import React, {useEffect, useMemo, useState} from 'react';
 
 import {normalizeFieldSettings} from '../../utils/fieldSettings';
-import {ObjectFieldErrors} from './ObjectFieldFormBase';
 
 interface IAggregationSourcePropertyProps {
 	creationLanguageId2: Liferay.Language.Locale;

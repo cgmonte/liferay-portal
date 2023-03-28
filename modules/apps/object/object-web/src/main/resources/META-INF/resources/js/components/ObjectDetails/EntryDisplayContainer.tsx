@@ -14,7 +14,6 @@
 
 import ClayPanel from '@clayui/panel';
 import {
-	FormError,
 	SingleSelect,
 	getLocalizableLabel,
 } from '@liferay/object-js-components-web';

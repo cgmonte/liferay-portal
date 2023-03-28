@@ -18,6 +18,7 @@ import {SidebarCategory} from '@liferay/object-js-components-web';
 interface DefaultValueContainerProps {
 	creationLanguageId: Liferay.Language.Locale;
 	disabled?: boolean;
+	errors: ObjectFieldErrors;
 	objectFieldBusinessType: ObjectFieldBusinessType;
 	objectFieldSettings: ObjectFieldSetting[];
 	setValues: (value: Partial<ObjectField>) => void;
@@ -26,6 +27,7 @@ interface DefaultValueContainerProps {
 }
 export declare function DefaultValueContainer({
 	creationLanguageId,
+	errors,
 	setValues,
 	sidebarElements,
 	values,

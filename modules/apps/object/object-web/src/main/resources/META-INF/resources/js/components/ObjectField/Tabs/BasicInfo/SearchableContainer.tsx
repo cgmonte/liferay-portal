@@ -18,7 +18,6 @@ import {Card, SingleSelect} from '@liferay/object-js-components-web';
 import React, {useMemo} from 'react';
 
 import {defaultLanguageId} from '../../../../utils/constants';
-import {ObjectFieldErrors} from '../../ObjectFieldFormBase';
 
 const languages = Liferay.Language.available;
 const languageLabels = Object.values(languages).map((language) => {

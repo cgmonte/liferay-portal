@@ -14,7 +14,6 @@
 
 /// <reference types="react" />
 
-import {FormError} from '@liferay/object-js-components-web';
 interface EntryDisplayContainerProps {
 	errors: FormError<ObjectDefinition>;
 	nonRelationshipObjectFieldsInfo: {

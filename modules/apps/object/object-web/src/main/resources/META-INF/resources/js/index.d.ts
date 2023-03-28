@@ -266,6 +266,13 @@ interface ObjectValidation {
 	script: string;
 }
 
+type FormError<T> = {
+	[key in keyof T]?: string;
+};
+
+type ObjectFieldErrors = FormError<
+	ObjectField & {[key in ObjectFieldSettingName]: unknown}
+>;
 interface ObjectRelationship {
 	deletionType: string;
 	id: number;
@@ -363,7 +370,10 @@ interface ObjectState {
 interface InputAsValueFieldComponentProps {
 	creationLanguageId: Liferay.Language.Locale;
 	defaultValue?: ObjectFieldSettingValue;
+	error?: string;
 	label: string;
+	placeholder?: string;
+	required?: boolean;
 	setValues: (values: Partial<ObjectField>) => void;
 	values: Partial<ObjectField>;
 }

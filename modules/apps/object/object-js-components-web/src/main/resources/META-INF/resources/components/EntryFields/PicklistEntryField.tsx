@@ -14,9 +14,8 @@
 
 import React from 'react';
 
-import {SingleSelect} from '../Select/SingleSelect';
-
 import {getLocalizableLabel} from '../../utils/string';
+import {SingleSelect} from '../Select/SingleSelect';
 
 type SelectedPicklistOption = {
 	label: string;
@@ -25,19 +24,30 @@ type SelectedPicklistOption = {
 
 interface IProps {
 	creationLanguageId?: Liferay.Language.Locale;
+	error?: string;
 	label: string;
 	onChange: (selected: PickListItem | undefined) => void;
 	picklistItems: PickListItem[];
+	placeholder?: string;
+	required?: boolean;
 	selectedPicklistItemKey?: string;
 }
 
 export function PicklistEntryField({
 	creationLanguageId,
+	error,
 	label,
 	onChange,
 	picklistItems,
+	placeholder,
+	required,
 	selectedPicklistItemKey,
 }: IProps) {
+	console.log('selectedPicklistItemKey', selectedPicklistItemKey);
+	console.log('picklistItems', picklistItems);
+	console.log('find', picklistItems.find(
+		(item) => item.key === selectedPicklistItemKey
+	)?.name)
 	const handleChange = (selectedPicklistOption: SelectedPicklistOption) => {
 		onChange(
 			picklistItems.find(
@@ -50,6 +60,7 @@ export function PicklistEntryField({
 		<>
 			{picklistItems.length ? (
 				<SingleSelect
+					error={error}
 					label={label}
 					onChange={handleChange}
 					options={picklistItems.map((item) => ({
@@ -61,10 +72,12 @@ export function PicklistEntryField({
 							: item.name,
 						value: item.key,
 					}))}
+					placeholder={placeholder}
+					required={required}
 					value={
 						picklistItems.find(
 							(item) => item.key === selectedPicklistItemKey
-						)?.name
+						)?.name ?? ''
 					}
 				/>
 			) : null}

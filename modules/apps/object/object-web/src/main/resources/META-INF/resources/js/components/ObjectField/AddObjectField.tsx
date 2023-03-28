@@ -96,6 +96,11 @@ function ModalAddObjectField({
 		onSubmit,
 	});
 
+	useEffect(() => {
+		console.log('values.objectFieldSettings', values.objectFieldSettings);
+		console.log('values.defaultValue', values.defaultValue);
+	}, [values]);
+
 	const showEnableTranslationToggle =
 		values.businessType === 'LongText' ||
 		values.businessType === 'RichText' ||
@@ -174,7 +179,9 @@ function ModalAddObjectField({
 									(setting) => setting.name === 'defaultValue'
 								)?.value
 							}
+							error={errors.defaultValue}
 							label={Liferay.Language.get('default-value')}
+							required={values.state}
 							setValues={setValues}
 							values={values}
 						/>

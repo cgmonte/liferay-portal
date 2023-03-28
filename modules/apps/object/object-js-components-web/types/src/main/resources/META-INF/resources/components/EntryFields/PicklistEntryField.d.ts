@@ -16,16 +16,22 @@
 
 interface IProps {
 	creationLanguageId?: Liferay.Language.Locale;
+	error?: string;
 	label: string;
 	onChange: (selected: PickListItem | undefined) => void;
 	picklistItems: PickListItem[];
+	placeholder?: string;
+	required?: boolean;
 	selectedPicklistItemKey?: string;
 }
 export declare function PicklistEntryField({
 	creationLanguageId,
+	error,
 	label,
 	onChange,
 	picklistItems,
+	placeholder,
+	required,
 	selectedPicklistItemKey,
 }: IProps): JSX.Element;
 export {};

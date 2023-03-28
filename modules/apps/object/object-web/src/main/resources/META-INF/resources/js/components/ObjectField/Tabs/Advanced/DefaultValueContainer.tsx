@@ -34,6 +34,7 @@ import PicklistDefaultValueSelect from '../../DefaultValueFields/PicklistDefault
 interface DefaultValueContainerProps {
 	creationLanguageId: Liferay.Language.Locale;
 	disabled?: boolean;
+	errors: ObjectFieldErrors;
 	objectFieldBusinessType: ObjectFieldBusinessType;
 	objectFieldSettings: ObjectFieldSetting[];
 
@@ -54,6 +55,7 @@ const InputAsValueFieldComponents: Partial<InputAsValueFieldComponents> = {
 
 export function DefaultValueContainer({
 	creationLanguageId,
+	errors,
 	setValues,
 	sidebarElements,
 	values,
@@ -104,14 +106,16 @@ export function DefaultValueContainer({
 					Liferay.Language.get('click-here-for-documentation')}
 			</ClayAlert>
 
-			<ClayToggle
-				disabled={values.state}
-				label={Liferay.Language.get('use-default-value')}
-				onToggle={(toggled) => {
-					handleToggle(toggled);
-				}}
-				toggled={defaultValueToggleEnabled}
-			/>
+			{!values.state && (
+				<ClayToggle
+					// disabled={values.state}
+					label={Liferay.Language.get('use-default-value')}
+					onToggle={(toggled) => {
+						handleToggle(toggled);
+					}}
+					toggled={defaultValueToggleEnabled}
+				/>
+			)}
 
 			{defaultValueToggleEnabled && (
 				<ClayButton.Group>
@@ -154,6 +158,7 @@ export function DefaultValueContainer({
 						defaultValue={
 							defaultValueType === 'inputAsValue' && defaultValue
 						}
+						error={errors.defaultValue}
 						label={Liferay.Language.get('default-value')}
 						setValues={setValues}
 						values={values}

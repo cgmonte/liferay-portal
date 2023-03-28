@@ -17,12 +17,14 @@
 import {SidebarCategory} from '@liferay/object-js-components-web';
 interface AdvancedTabProps {
 	creationLanguageId: Liferay.Language.Locale;
+	errors: ObjectFieldErrors;
 	setValues: (value: Partial<ObjectField>) => void;
 	sidebarElements: SidebarCategory[];
 	values: Partial<ObjectField>;
 }
 export declare function AdvancedTab({
 	creationLanguageId,
+	errors,
 	setValues,
 	sidebarElements,
 	values,

@@ -12,7 +12,6 @@
  * details.
  */
 
-import {FormError} from '@liferay/object-js-components-web';
 import React from 'react';
 export declare enum ObjectRelationshipType {
 	MANY_TO_MANY = 'manyToMany',

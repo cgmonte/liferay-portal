@@ -16,7 +16,6 @@ import ClayForm, {ClayToggle} from '@clayui/form';
 import {
 	API,
 	AutoComplete,
-	FormError,
 	Input,
 	SingleSelect,
 	stringIncludesQuery,
@@ -68,9 +67,9 @@ type TObjectRelationship = {
 	objectDefinitionExternalReferenceCode2: number;
 };
 
-export type ObjectFieldErrors = FormError<
-	ObjectField & {[key in ObjectFieldSettingName]: unknown}
->;
+// export type ObjectFieldErrors = FormError<
+// 	ObjectField & {[key in ObjectFieldSettingName]: unknown}
+// >;
 
 const fieldSettingsMap = new Map<string, ObjectFieldSetting[]>([
 	[
@@ -482,30 +481,21 @@ export default function ObjectFieldFormBase({
 							onToggle={async (state) => {
 								if (state) {
 									setValues({
-										objectFieldSettings: !values.objectFieldSettings!
-											.length
-											? geUpdatedDefaultValueFieldSettings(
-													values,
-													selectedPicklist
-														?.listTypeEntries?.[0]
-														.key,
-													'inputAsValue'
-											  )
-											: values.objectFieldSettings,
+										// objectFieldSettings: !values.objectFieldSettings!
+										// 	.length
+										// 	? geUpdatedDefaultValueFieldSettings(
+										// 			values,
+										// 			selectedPicklist
+										// 				?.listTypeEntries?.[0]
+										// 				.key,
+										// 			'inputAsValue'
+										// 	  )
+										// 	: values.objectFieldSettings,
+										
 										required: state,
 										state,
 									});
 
-									// setPickLists((previous) => {
-									// 	console.log('values', values);
-									// 	console.log('previous', previous);
-									// 	console.log(
-									// 		'selectedPicklist',
-									// 		selectedPicklist
-									// 	);
-
-									// 	return {...previous};
-									// });
 
 									// setPickListItems(
 									// 	await API.getPickListItems(

@@ -15,7 +15,6 @@
 import ClayForm, {ClayToggle} from '@clayui/form';
 import {
 	Card,
-	FormError,
 	Input,
 	InputLocalized,
 } from '@liferay/object-js-components-web';
