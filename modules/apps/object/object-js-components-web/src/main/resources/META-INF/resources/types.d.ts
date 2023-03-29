@@ -111,3 +111,21 @@ type ObjectFieldSettingName =
 	| 'summarizeField'
 	| 'filters'
 	| 'stateFlow';
+
+interface PickListItem {
+	externalReferenceCode: string;
+	id: number;
+	key: string;
+	name: string;
+	name_i18n: LocalizedValue<string>;
+}
+
+interface PickList {
+	actions: Actions;
+	externalReferenceCode: string;
+	id: number;
+	key: string;
+	listTypeEntries: PickListItem[];
+	name: string;
+	name_i18n: LocalizedValue<string>;
+}
