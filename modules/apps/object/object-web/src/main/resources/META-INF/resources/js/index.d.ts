@@ -152,16 +152,18 @@ interface ObjectDefinition {
 	titleObjectFieldName: string;
 }
 
+type ObjectFieldSettingValue =
+	| string
+	| number
+	| boolean
+	| NameValueObject[]
+	| ObjectFieldFilterSetting[]
+	| ObjectFieldPicklistSetting;
+
 interface ObjectFieldSetting {
 	name: ObjectFieldSettingName;
 	objectFieldId?: number;
-	value:
-		| string
-		| number
-		| boolean
-		| NameValueObject[]
-		| ObjectFieldFilterSetting[]
-		| ObjectFieldPicklistSetting;
+	value: ObjectFieldSettingValue;
 }
 
 interface ObjectEntry {
@@ -262,6 +264,13 @@ interface ObjectValidation {
 	script: string;
 }
 
+type FormError<T> = {
+	[key in keyof T]?: string;
+};
+
+type ObjectFieldErrors = FormError<
+	ObjectField & {[key in ObjectFieldSettingName]: unknown}
+>;
 interface ObjectRelationship {
 	deletionType: string;
 	id: number;
