@@ -15,11 +15,7 @@
 /// <reference types="react" />
 
 import 'codemirror/mode/groovy/groovy';
-import {
-	CustomItem,
-	FormError,
-	SidebarCategory,
-} from '@liferay/object-js-components-web';
+import {CustomItem, SidebarCategory} from '@liferay/object-js-components-web';
 interface ActionProps {
 	isApproved?: boolean;
 	objectAction: Partial<ObjectAction>;

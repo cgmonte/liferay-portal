@@ -34,10 +34,6 @@ interface IUseForm<T, P = {}, K extends Partial<T> = Partial<T>> {
 	values: K;
 }
 
-export type FormError<T> = {
-	[key in keyof T]?: string;
-};
-
 export function useForm<T, P = {}, K extends Partial<T> = Partial<T>>({
 	initialValues,
 	onSubmit,

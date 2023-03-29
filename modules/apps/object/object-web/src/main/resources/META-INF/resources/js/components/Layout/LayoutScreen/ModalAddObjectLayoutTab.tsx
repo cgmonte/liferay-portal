@@ -20,7 +20,6 @@ import {Observer} from '@clayui/modal/lib/types';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {
 	AutoComplete,
-	FormError,
 	Input,
 	REQUIRED_MSG,
 	getLocalizableLabel,

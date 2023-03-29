@@ -12,8 +12,6 @@
  * details.
  */
 
-/// <reference types="react" />
-
 interface IUseObjectFieldForm {
 	forbiddenChars?: string[];
 	forbiddenLastChars?: string[];
@@ -28,10 +26,12 @@ export declare function useObjectFieldForm({
 	initialValues,
 	onSubmit,
 }: IUseObjectFieldForm): {
-	errors: import('@liferay/object-js-components-web').FormError<
+	errors: FormError<
 		ObjectField & {
 			function: unknown;
 			acceptedFileExtensions: unknown;
+			defaultValue: unknown;
+			defaultValueType: unknown;
 			fileSource: unknown;
 			filters: unknown;
 			maxLength: unknown;

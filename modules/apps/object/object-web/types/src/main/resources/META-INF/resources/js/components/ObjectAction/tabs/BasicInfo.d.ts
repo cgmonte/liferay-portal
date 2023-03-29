@@ -12,7 +12,6 @@
  * details.
  */
 
-import {FormError} from '@liferay/object-js-components-web';
 import React from 'react';
 interface BasicInfoProps {
 	errors: FormError<ObjectAction & ObjectActionParameters>;

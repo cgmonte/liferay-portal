@@ -235,6 +235,8 @@ type TFilterOperators = {
 
 type ObjectFieldSettingName =
 	| 'acceptedFileExtensions'
+	| 'defaultValue'
+	| 'defaultValueType'
 	| 'fileSource'
 	| 'filters'
 	| 'function'

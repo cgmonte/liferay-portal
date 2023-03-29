@@ -21,7 +21,6 @@ import {sub} from 'frontend-js-web';
 
 import {defaultLanguageId} from '../../utils/constants';
 import {normalizeFieldSettings} from '../../utils/fieldSettings';
-import {ObjectFieldErrors} from './ObjectFieldFormBase';
 
 interface IUseObjectFieldForm {
 	forbiddenChars?: string[];

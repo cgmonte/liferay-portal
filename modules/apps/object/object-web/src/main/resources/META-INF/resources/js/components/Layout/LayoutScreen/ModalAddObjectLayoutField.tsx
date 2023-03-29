@@ -19,7 +19,6 @@ import ClayModal from '@clayui/modal';
 import {Observer} from '@clayui/modal/lib/types';
 import {
 	AutoComplete,
-	FormError,
 	REQUIRED_MSG,
 	stringIncludesQuery,
 	useForm,

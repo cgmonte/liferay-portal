@@ -13,7 +13,6 @@
  */
 
 import React from 'react';
-import {ObjectFieldErrors} from '../../ObjectFieldFormBase';
 interface BasicInfoProps {
 	errors: ObjectFieldErrors;
 	filterOperators: TFilterOperators;

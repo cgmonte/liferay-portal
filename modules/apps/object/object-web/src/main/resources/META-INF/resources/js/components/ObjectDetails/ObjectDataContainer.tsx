@@ -14,11 +14,7 @@
 
 import {ClayToggle} from '@clayui/form';
 import ClayPanel from '@clayui/panel';
-import {
-	FormError,
-	Input,
-	InputLocalized,
-} from '@liferay/object-js-components-web';
+import {Input, InputLocalized} from '@liferay/object-js-components-web';
 import React, {ChangeEventHandler, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';

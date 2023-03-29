@@ -72,7 +72,17 @@ interface ObjectField {
 	state: boolean;
 	system?: boolean;
 }
+
+type FormError<T> = {
+	[key in keyof T]?: string;
+};
+
+type ObjectFieldErrors = FormError<
+	ObjectField & {[key in ObjectFieldSettingName]: unknown}
+>;
+
 type LabelValueObject = {label: string; value: string};
+
 type ObjectFieldBusinessType =
 	| 'Aggregation'
 	| 'Attachment'

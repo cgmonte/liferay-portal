@@ -12,7 +12,6 @@
  * details.
  */
 
-import {FormError} from '@liferay/object-js-components-web';
 import {ChangeEventHandler} from 'react';
 interface ObjectDataContainerProps {
 	dbTableName: string;

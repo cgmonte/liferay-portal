@@ -13,7 +13,6 @@
  */
 
 import {
-	FormError,
 	REQUIRED_MSG,
 	invalidateRequired,
 	useForm,
