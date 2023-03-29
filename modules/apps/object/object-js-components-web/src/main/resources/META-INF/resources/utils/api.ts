@@ -17,38 +17,8 @@ import {fetch} from 'frontend-js-web';
 import {ERRORS} from './errors';
 import {stringToURLParameterFormat} from './string';
 
-interface HTTPMethod {
-	href: string;
-	method: string;
-}
-
-interface Actions {
-	delete: HTTPMethod;
-	get: HTTPMethod;
-	permissions: HTTPMethod;
-	update: HTTPMethod;
-}
-
 interface ErrorDetails extends Error {
 	detail?: string;
-}
-
-interface PickListItem {
-	externalReferenceCode: string;
-	id: number;
-	key: string;
-	name: string;
-	name_i18n: LocalizedValue<string>;
-}
-
-interface PickList {
-	actions: Actions;
-	externalReferenceCode: string;
-	id: number;
-	key: string;
-	listTypeEntries: PickListItem[];
-	name: string;
-	name_i18n: LocalizedValue<string>;
 }
 
 type NotificationTemplateType = 'email' | 'userNotification';

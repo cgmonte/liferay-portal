@@ -13,6 +13,18 @@
  */
 
 type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+
+interface HTTPMethod {
+	href: string;
+	method: string;
+}
+
+interface Actions {
+	delete: HTTPMethod;
+	get: HTTPMethod;
+	permissions: HTTPMethod;
+	update: HTTPMethod;
+}
 interface ObjectDefinition {
 	active: boolean;
 	dateCreated: string;
@@ -51,6 +63,7 @@ interface ObjectField {
 	indexedAsKeyword: boolean;
 	indexedLanguageId: Liferay.Language.Locale | null;
 	label: LocalizedValue<string>;
+	listTypeDefinitionExternalReferenceCode: string;
 	listTypeDefinitionId: number;
 	name: string;
 	objectFieldSettings?: ObjectFieldSetting[];
