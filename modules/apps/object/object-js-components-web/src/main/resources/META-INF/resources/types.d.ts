@@ -74,18 +74,21 @@ interface ObjectField {
 }
 type LabelValueObject = {label: string; value: string};
 type ObjectFieldBusinessType =
-	| 'Attachment'
-	| 'LongText'
-	| 'Picklist'
-	| 'Relationship'
-	| 'Text'
 	| 'Aggregation'
-	| 'LongInteger'
-	| 'Integer'
+	| 'Attachment'
+	| 'Date'
 	| 'Decimal'
+	| 'Formula'
+	| 'Integer'
+	| 'LongInteger'
+	| 'LongText'
+	| 'MultiselectPicklist'
+	| 'Picklist'
 	| 'PrecisionDecimal'
-	| 'Workflow Status'
-	| 'Date';
+	| 'Relationship'
+	| 'RichText'
+	| 'Text'
+	| 'Workflow Status';
 
 interface ObjectFieldSetting {
 	name: ObjectFieldSettingName;
