@@ -12,21 +12,26 @@
  * details.
  */
 
-import React from 'react';
-interface BasicInfoProps {
-	errors: FormError<ObjectAction & ObjectActionParameters>;
-	handleChange: React.ChangeEventHandler<HTMLInputElement>;
-	isApproved: boolean;
-	readOnly?: boolean;
-	setValues: (values: Partial<ObjectAction>) => void;
-	values: Partial<ObjectAction>;
+/// <reference types="react" />
+
+interface IProps {
+	creationLanguageId?: Liferay.Language.Locale;
+	error?: string;
+	label: string;
+	onChange: (selected: PickListItem | undefined) => void;
+	picklistItems: PickListItem[];
+	placeholder?: string;
+	required?: boolean;
+	selectedPicklistItemKey?: string;
 }
-export default function BasicInfo({
-	errors,
-	handleChange,
-	isApproved,
-	readOnly,
-	setValues,
-	values,
-}: BasicInfoProps): JSX.Element;
+export declare function PicklistEntryField({
+	creationLanguageId,
+	error,
+	label,
+	onChange,
+	picklistItems,
+	placeholder,
+	required,
+	selectedPicklistItemKey,
+}: IProps): JSX.Element;
 export {};

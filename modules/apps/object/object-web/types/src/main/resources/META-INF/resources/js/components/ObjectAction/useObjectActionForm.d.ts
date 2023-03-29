@@ -12,8 +12,6 @@
  * details.
  */
 
-/// <reference types="react" />
-
 import {ActionError} from './index';
 interface UseObjectActionFormProps {
 	initialValues: Partial<ObjectAction>;
@@ -25,9 +23,7 @@ export declare function useObjectActionForm({
 }: UseObjectActionFormProps): {
 	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
 	handleSubmit: import('react').FormEventHandler<HTMLFormElement>;
-	handleValidate: () => import('@liferay/object-js-components-web').FormError<
-		ObjectAction & ObjectActionParameters
-	>;
+	handleValidate: () => FormError<ObjectAction & ObjectActionParameters>;
 	setValues: (values: Partial<ObjectAction>) => void;
 	validateSubmit: () => void;
 	errors: ActionError;

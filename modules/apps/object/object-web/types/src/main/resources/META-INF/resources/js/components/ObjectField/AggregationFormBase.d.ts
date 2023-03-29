@@ -14,7 +14,6 @@
 
 /// <reference types="react" />
 
-import {ObjectFieldErrors} from './ObjectFieldFormBase';
 interface IAggregationSourcePropertyProps {
 	creationLanguageId2: Liferay.Language.Locale;
 	disabled?: boolean;

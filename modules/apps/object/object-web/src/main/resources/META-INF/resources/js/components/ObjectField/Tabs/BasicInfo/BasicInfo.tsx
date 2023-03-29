@@ -16,9 +16,7 @@ import {Card, Input, InputLocalized} from '@liferay/object-js-components-web';
 import React, {useState} from 'react';
 
 import {updateFieldSettings} from '../../../../utils/fieldSettings';
-import ObjectFieldFormBase, {
-	ObjectFieldErrors,
-} from '../../ObjectFieldFormBase';
+import ObjectFieldFormBase from '../../ObjectFieldFormBase';
 import {AggregationFilterContainer} from './AggregationFilterContainer';
 import {AttachmentProperties} from './AttachmentProperties';
 import {FormulaContainer} from './FormulaContainer';

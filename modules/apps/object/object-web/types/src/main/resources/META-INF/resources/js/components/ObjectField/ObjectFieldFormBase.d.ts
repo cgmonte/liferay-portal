@@ -12,7 +12,6 @@
  * details.
  */
 
-import {FormError} from '@liferay/object-js-components-web';
 import {ChangeEventHandler, ReactNode} from 'react';
 import './ObjectFieldFormBase.scss';
 interface IProps {
@@ -33,12 +32,6 @@ interface IProps {
 	) => void;
 	setValues: (values: Partial<ObjectField>) => void;
 }
-export declare type ObjectFieldErrors = FormError<
-	ObjectField &
-		{
-			[key in ObjectFieldSettingName]: unknown;
-		}
->;
 export default function ObjectFieldFormBase({
 	children,
 	creationLanguageId2,

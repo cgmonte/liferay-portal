@@ -13,6 +13,18 @@
  */
 
 type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+
+interface HTTPMethod {
+	href: string;
+	method: string;
+}
+
+interface Actions {
+	delete: HTTPMethod;
+	get: HTTPMethod;
+	permissions: HTTPMethod;
+	update: HTTPMethod;
+}
 interface ObjectDefinition {
 	active: boolean;
 	dateCreated: string;
@@ -51,6 +63,7 @@ interface ObjectField {
 	indexedAsKeyword: boolean;
 	indexedLanguageId: Liferay.Language.Locale | null;
 	label: LocalizedValue<string>;
+	listTypeDefinitionExternalReferenceCode: string;
 	listTypeDefinitionId: number;
 	name: string;
 	objectFieldSettings?: ObjectFieldSetting[];
@@ -59,20 +72,33 @@ interface ObjectField {
 	state: boolean;
 	system?: boolean;
 }
+
+type FormError<T> = {
+	[key in keyof T]?: string;
+};
+
+type ObjectFieldErrors = FormError<
+	ObjectField & {[key in ObjectFieldSettingName]: unknown}
+>;
+
 type LabelValueObject = {label: string; value: string};
+
 type ObjectFieldBusinessType =
-	| 'Attachment'
-	| 'LongText'
-	| 'Picklist'
-	| 'Relationship'
-	| 'Text'
 	| 'Aggregation'
-	| 'LongInteger'
-	| 'Integer'
+	| 'Attachment'
+	| 'Date'
 	| 'Decimal'
+	| 'Formula'
+	| 'Integer'
+	| 'LongInteger'
+	| 'LongText'
+	| 'MultiselectPicklist'
+	| 'Picklist'
 	| 'PrecisionDecimal'
-	| 'Workflow Status'
-	| 'Date';
+	| 'Relationship'
+	| 'RichText'
+	| 'Text'
+	| 'Workflow Status';
 
 interface ObjectFieldSetting {
 	name: ObjectFieldSettingName;
@@ -111,3 +137,21 @@ type ObjectFieldSettingName =
 	| 'summarizeField'
 	| 'filters'
 	| 'stateFlow';
+
+interface PickListItem {
+	externalReferenceCode: string;
+	id: number;
+	key: string;
+	name: string;
+	name_i18n: LocalizedValue<string>;
+}
+
+interface PickList {
+	actions: Actions;
+	externalReferenceCode: string;
+	id: number;
+	key: string;
+	listTypeEntries: PickListItem[];
+	name: string;
+	name_i18n: LocalizedValue<string>;
+}

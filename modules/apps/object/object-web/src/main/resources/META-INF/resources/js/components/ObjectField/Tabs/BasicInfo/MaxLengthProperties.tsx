@@ -20,7 +20,6 @@ import {createTextMaskInputElement} from 'text-mask-core';
 
 import {createAutoCorrectedNumberPipe} from '../../../../utils/createAutoCorrectedNumberPipe';
 import {normalizeFieldSettings} from '../../../../utils/fieldSettings';
-import {ObjectFieldErrors} from '../../ObjectFieldFormBase';
 
 interface IMaxLengthPropertiesProps {
 	disabled?: boolean;

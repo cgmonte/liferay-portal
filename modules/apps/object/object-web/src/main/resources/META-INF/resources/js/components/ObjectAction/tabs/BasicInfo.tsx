@@ -13,12 +13,7 @@
  */
 
 import ClayForm, {ClayToggle} from '@clayui/form';
-import {
-	Card,
-	FormError,
-	Input,
-	InputLocalized,
-} from '@liferay/object-js-components-web';
+import {Card, Input, InputLocalized} from '@liferay/object-js-components-web';
 import React from 'react';
 
 import {defaultLanguageId} from '../../../utils/constants';

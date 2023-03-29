@@ -87,6 +87,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 	const [
 		{
 			error,
+			eventSidebarElements,
 			header,
 			onSave,
 			placeholder,
@@ -97,6 +98,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 		setState,
 	] = useState<{
 		error?: string;
+		eventSidebarElements?: SidebarCategory[];
 		header?: string;
 		onSave?: Callback;
 		placeholder?: string;
@@ -111,6 +113,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 
 	useEffect(() => {
 		const openModal = (params: {
+			eventSidebarElements: SidebarCategory[];
 			header: string;
 			onSave: Callback;
 			placeholder: string;
@@ -118,6 +121,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 			source: string;
 			validateExpressionURL: string;
 		}) => {
+			console.log('params', params);
 			setState(params);
 		};
 
@@ -145,8 +149,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 
 		if (required && !source?.trim()) {
 			error = REQUIRED_MSG;
-		}
-		else if (source?.trim() && validateExpressionURL) {
+		} else if (source?.trim() && validateExpressionURL) {
 			const response = await fetch(
 				createResourceURL(validateExpressionURL, {
 					expression: source,
@@ -161,12 +164,13 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 		}
 
 		if (error) {
+			console.log('oxe')
 			setState((state) => ({
 				...state,
 				error,
 			}));
-		}
-		else {
+		} else {
+			console.log('ai')
 			onSave?.(source);
 			closeModal();
 		}
@@ -196,7 +200,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 						)} -->`
 					}
 					ref={editorRef}
-					sidebarElements={sidebarElements}
+					sidebarElements={eventSidebarElements || sidebarElements}
 					value={source}
 				/>
 			</ClayModal.Body>

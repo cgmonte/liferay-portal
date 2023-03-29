@@ -12,21 +12,24 @@
  * details.
  */
 
-import React from 'react';
-interface BasicInfoProps {
-	errors: FormError<ObjectAction & ObjectActionParameters>;
-	handleChange: React.ChangeEventHandler<HTMLInputElement>;
-	isApproved: boolean;
-	readOnly?: boolean;
-	setValues: (values: Partial<ObjectAction>) => void;
-	values: Partial<ObjectAction>;
+/// <reference types="react" />
+
+import {SidebarCategory} from '@liferay/object-js-components-web';
+interface DefaultValueContainerProps {
+	creationLanguageId: Liferay.Language.Locale;
+	disabled?: boolean;
+	errors: ObjectFieldErrors;
+	objectFieldBusinessType: ObjectFieldBusinessType;
+	objectFieldSettings: ObjectFieldSetting[];
+	setValues: (value: Partial<ObjectField>) => void;
+	sidebarElements: SidebarCategory[];
+	values: Partial<ObjectField>;
 }
-export default function BasicInfo({
+export declare function DefaultValueContainer({
+	creationLanguageId,
 	errors,
-	handleChange,
-	isApproved,
-	readOnly,
 	setValues,
+	sidebarElements,
 	values,
-}: BasicInfoProps): JSX.Element;
+}: DefaultValueContainerProps): JSX.Element;
 export {};

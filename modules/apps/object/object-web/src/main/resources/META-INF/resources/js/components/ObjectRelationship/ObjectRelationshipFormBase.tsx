@@ -16,7 +16,6 @@ import ClayLabel from '@clayui/label';
 import {
 	API,
 	AutoComplete,
-	FormError,
 	Input,
 	REQUIRED_MSG,
 	SingleSelect,

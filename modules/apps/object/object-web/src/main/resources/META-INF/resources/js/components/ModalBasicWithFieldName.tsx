@@ -19,7 +19,6 @@ import ClayModal from '@clayui/modal';
 import {Observer} from '@clayui/modal/lib/types';
 import {
 	API,
-	FormError,
 	Input,
 	REQUIRED_MSG,
 	useForm,

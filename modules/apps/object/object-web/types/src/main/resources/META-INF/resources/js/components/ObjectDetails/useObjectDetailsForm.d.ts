@@ -12,9 +12,6 @@
  * details.
  */
 
-/// <reference types="react" />
-
-import {FormError} from '@liferay/object-js-components-web';
 interface UseObjectDetailsFormProps {
 	initialValues: Partial<ObjectDefinition>;
 	onSubmit: (field: ObjectDefinition) => void;

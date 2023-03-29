@@ -16,10 +16,11 @@ import ClayTabs from '@clayui/tabs';
 import {
 	API,
 	SidePanelForm,
+	SidebarCategory,
 	openToast,
 	saveAndReload,
 } from '@liferay/object-js-components-web';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import './EditObjectField.scss';
 import {AdvancedTab} from './Tabs/Advanced/AdvancedTab';
@@ -27,6 +28,7 @@ import {BasicInfo} from './Tabs/BasicInfo/BasicInfo';
 import {useObjectFieldForm} from './useObjectFieldForm';
 
 interface EditObjectFieldProps {
+	creationLanguageId: Liferay.Language.Locale;
 	filterOperators: TFilterOperators;
 	forbiddenChars: string[];
 	forbiddenLastChars: string[];
@@ -39,12 +41,14 @@ interface EditObjectFieldProps {
 	objectName: string;
 	objectRelationshipId: number;
 	readOnly: boolean;
+	sidebarElements: SidebarCategory[];
 	workflowStatusJSONArray: LabelValueObject[];
 }
 
 const TABS = [Liferay.Language.get('basic-info')];
 
 export default function EditObjectField({
+	creationLanguageId,
 	filterOperators,
 	forbiddenChars,
 	forbiddenLastChars,
@@ -57,6 +61,7 @@ export default function EditObjectField({
 	objectName,
 	objectRelationshipId,
 	readOnly,
+	sidebarElements,
 	workflowStatusJSONArray,
 }: EditObjectFieldProps) {
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -77,11 +82,12 @@ export default function EditObjectField({
 					'the-object-field-was-updated-successfully'
 				),
 			});
-		}
-		catch (error) {
+		} catch (error) {
 			openToast({message: (error as Error).message, type: 'danger'});
 		}
 	};
+
+	delete objectField.defaultValue;
 
 	const {
 		errors,
@@ -97,7 +103,15 @@ export default function EditObjectField({
 		onSubmit,
 	});
 
-	if (Liferay.FeatureFlags['LPS-159913'] && TABS.length < 2) {
+	useEffect(() => {
+		console.log('errors', errors);
+	}, [errors]);
+
+	if (
+		(Liferay.FeatureFlags['LPS-159913'] ||
+			Liferay.FeatureFlags['LPS-163716']) &&
+		TABS.length < 2
+	) {
 		TABS.push(Liferay.Language.get('advanced'));
 	}
 
@@ -141,9 +155,16 @@ export default function EditObjectField({
 					/>
 				</ClayTabs.TabPane>
 
-				{Liferay.FeatureFlags['LPS-159913'] ? (
+				{Liferay.FeatureFlags['LPS-159913'] ||
+				Liferay.FeatureFlags['LPS-163716'] ? (
 					<ClayTabs.TabPane>
-						<AdvancedTab setValues={setValues} values={values} />
+						<AdvancedTab
+							creationLanguageId={creationLanguageId}
+							errors={errors}
+							setValues={setValues}
+							sidebarElements={sidebarElements}
+							values={values}
+						/>
 					</ClayTabs.TabPane>
 				) : (
 					<></>

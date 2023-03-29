@@ -13,20 +13,5 @@
  */
 
 import React from 'react';
-interface BasicInfoProps {
-	errors: FormError<ObjectAction & ObjectActionParameters>;
-	handleChange: React.ChangeEventHandler<HTMLInputElement>;
-	isApproved: boolean;
-	readOnly?: boolean;
-	setValues: (values: Partial<ObjectAction>) => void;
-	values: Partial<ObjectAction>;
-}
-export default function BasicInfo({
-	errors,
-	handleChange,
-	isApproved,
-	readOnly,
-	setValues,
-	values,
-}: BasicInfoProps): JSX.Element;
-export {};
+declare const PicklistDefaultValueSelect: React.FC<InputAsValueFieldComponentProps>;
+export default PicklistDefaultValueSelect;

@@ -14,7 +14,7 @@
 
 import {ClayToggle} from '@clayui/form';
 import ClayPanel from '@clayui/panel';
-import {FormError, SingleSelect} from '@liferay/object-js-components-web';
+import {SingleSelect} from '@liferay/object-js-components-web';
 import React, {useEffect, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';

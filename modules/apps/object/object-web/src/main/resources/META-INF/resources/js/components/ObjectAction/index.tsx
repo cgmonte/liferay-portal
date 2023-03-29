@@ -17,7 +17,6 @@ import ClayTabs from '@clayui/tabs';
 import {
 	API,
 	CustomItem,
-	FormError,
 	SidePanelForm,
 	SidebarCategory,
 	openToast,

@@ -16,12 +16,7 @@ import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal from '@clayui/modal';
 import {Observer} from '@clayui/modal/lib/types';
-import {
-	FormError,
-	Input,
-	REQUIRED_MSG,
-	useForm,
-} from '@liferay/object-js-components-web';
+import {Input, REQUIRED_MSG, useForm} from '@liferay/object-js-components-web';
 import React from 'react';
 
 import {defaultLanguageId} from '../../../utils/constants';

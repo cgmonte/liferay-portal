@@ -12,6 +12,7 @@
  * details.
  */
 
+import ClayTooltip from '@clayui/tooltip';
 import {
 	REQUIRED_MSG,
 	invalidateRequired,
@@ -21,7 +22,6 @@ import {sub} from 'frontend-js-web';
 
 import {defaultLanguageId} from '../../utils/constants';
 import {normalizeFieldSettings} from '../../utils/fieldSettings';
-import {ObjectFieldErrors} from './ObjectFieldFormBase';
 
 interface IUseObjectFieldForm {
 	forbiddenChars?: string[];
@@ -40,7 +40,6 @@ export function useObjectFieldForm({
 }: IUseObjectFieldForm) {
 	const validate = (field: Partial<ObjectField>) => {
 		const getSourceFolderError = (folderPath: string) => {
-
 			// folder name cannot end with invalid last characters
 
 			const lastChar = folderPath[folderPath.length - 1];
@@ -100,8 +99,7 @@ export function useObjectFieldForm({
 
 		if (!field.businessType) {
 			errors.businessType = REQUIRED_MSG;
-		}
-		else if (field.businessType === 'Aggregation') {
+		} else if (field.businessType === 'Aggregation') {
 			if (!settings.function) {
 				errors.function = REQUIRED_MSG;
 			}
@@ -113,8 +111,7 @@ export function useObjectFieldForm({
 			if (!settings.objectRelationshipName) {
 				errors.objectRelationshipName = REQUIRED_MSG;
 			}
-		}
-		else if (field.businessType === 'Attachment') {
+		} else if (field.businessType === 'Attachment') {
 			const uploadRequestSizeLimit = Math.floor(
 				Liferay.PropsValues.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE /
 					1048576
@@ -132,8 +129,7 @@ export function useObjectFieldForm({
 			}
 			if (!settings.maximumFileSize && settings.maximumFileSize !== 0) {
 				errors.maximumFileSize = REQUIRED_MSG;
-			}
-			else if (
+			} else if (
 				(settings.maximumFileSize as number) > uploadRequestSizeLimit
 			) {
 				errors.maximumFileSize = sub(
@@ -142,8 +138,7 @@ export function useObjectFieldForm({
 					),
 					uploadRequestSizeLimit
 				);
-			}
-			else if ((settings.maximumFileSize as number) < 0) {
+			} else if ((settings.maximumFileSize as number) < 0) {
 				errors.maximumFileSize = sub(
 					Liferay.Language.get(
 						'only-integers-greater-than-or-equal-to-x-are-allowed'
@@ -159,8 +154,7 @@ export function useObjectFieldForm({
 					)
 				) {
 					errors.storageDLFolderPath = REQUIRED_MSG;
-				}
-				else {
+				} else {
 					const sourceFolderError = getSourceFolderError(
 						settings.storageDLFolderPath as string
 					);
@@ -170,29 +164,65 @@ export function useObjectFieldForm({
 					}
 				}
 			}
-		}
-		else if (field.businessType === 'Formula') {
+		} else if (field.businessType === 'Formula') {
 			if (invalidateRequired(settings.output as string)) {
 				errors.output = REQUIRED_MSG;
 			}
-		}
-		else if (
+		} else if (
 			field.businessType === 'LongText' ||
 			field.businessType === 'Text'
 		) {
 			if (settings.showCounter && !settings.maxLength) {
 				errors.maxLength = REQUIRED_MSG;
 			}
-		}
-		else if (field.businessType === 'Picklist') {
+		} else if (field.businessType === 'Picklist') {
 			if (!field.listTypeDefinitionId) {
 				errors.listTypeDefinitionId = REQUIRED_MSG;
 			}
 
-			if (field.state && !field.defaultValue) {
-				errors.defaultValue = REQUIRED_MSG;
+			const thereIsDefaultValueType = field.objectFieldSettings?.some(
+				(setting) =>
+					setting.name === 'defaultValueType' && setting.value
+			);
+
+			const thereIsDefaultValue = field.objectFieldSettings?.some(
+				(setting) => setting.name === 'defaultValue' && setting.value
+			);
+
+			console.log('field', field);
+
+			console.log('thereIsDefaultValueType', thereIsDefaultValueType);
+
+			console.log('thereIsDefaultValue', thereIsDefaultValue);
+
+			if (!field.id) {
+				if (field.state && !thereIsDefaultValue) {
+					errors.defaultValue = REQUIRED_MSG;
+				}
+			} else {
+				if (thereIsDefaultValueType && !thereIsDefaultValue) {
+					console.log('case1');
+					errors.defaultValue = REQUIRED_MSG;
+				}
+				// else if (
+				// 	!field.state &&
+				// 	thereIsDefaultValueType &&
+				// 	!thereIsDefaultValue
+				// ) {
+				// 	console.log('case2');
+				// 	errors.defaultValue = REQUIRED_MSG;
+				// }
+				// else if (
+				// 	!thereIsDefaultValueType &&
+				// 	!thereIsDefaultValue &&
+				// 	!field.state
+				// ) {
+				// 	delete errors.defaultValue;
+				// }
 			}
 		}
+		console.log('errors', errors);
+		debugger;
 
 		return errors;
 	};

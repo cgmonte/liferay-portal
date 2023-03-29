@@ -13,7 +13,6 @@
  */
 
 import {
-	FormError,
 	getLocalizableLabel,
 	invalidateRequired,
 	useForm,

@@ -31,6 +31,7 @@ export {InputLocalized} from './components/InputLocalized';
 export {ManagementToolbar} from './components/ManagementToolbar/index';
 export {ManagementToolbarSearch} from './components/ManagementToolbar/ManagementToolbarSearch';
 export {ModalEditExternalReferenceCode} from './components/ManagementToolbar/ModalEditExternalReferenceCode';
+export {PicklistEntryField} from './components/EntryFields/PicklistEntryField';
 export {RichTextLocalized} from './components/RichTextLocalized';
 export {Select} from './components/Select';
 export {CustomItem} from './components/Select/BaseSelect';
@@ -47,7 +48,7 @@ export {
 	SidePanelForm,
 } from './components/SidePanelContent';
 export {Toggle} from './components/Toggle';
-export {invalidateRequired, useForm, FormError} from './hooks/useForm';
+export {invalidateRequired, useForm} from './hooks/useForm';
 export {onActionDropdownItemClick} from './utils/fdsUtil';
 export {Panel} from './components/Panel/Panel';
 export {PanelBody, PanelSimpleBody} from './components/Panel/PanelBody';

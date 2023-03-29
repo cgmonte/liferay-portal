@@ -19,7 +19,7 @@ import ClayModal from '@clayui/modal';
 import {Observer} from '@clayui/modal/lib/types';
 import React, {useState} from 'react';
 
-import {FormError, useForm} from '../../hooks/useForm';
+import {useForm} from '../../hooks/useForm';
 import {save} from '../../utils/api';
 import {REQUIRED_MSG} from '../../utils/constants';
 import {Input} from '../Input';
