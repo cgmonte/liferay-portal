@@ -85,6 +85,7 @@ export function DefaultValueContainer({
 	useEffect(() => {
 		if (values.state) {
 			setDefaultValueToggleEnabled(true);
+			setDefaultValueTypeSelection('inputAsValue');
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,11 +118,13 @@ export function DefaultValueContainer({
 
 	return (
 		<Card disabled={false} title={Liferay.Language.get('default-value')}>
-			<ClayAlert displayType="info" title="Info">
-				{Liferay.Language.get(
-					'enter-a-value-or-use-expressions-to-set-default-values'
-				)}
-			</ClayAlert>
+			{!values.state && (
+				<ClayAlert displayType="info" title="Info">
+					{Liferay.Language.get(
+						'enter-a-value-or-use-expressions-to-set-default-values'
+					)}
+				</ClayAlert>
+			)}
 
 			{!values.state && (
 				<ClayToggle
@@ -133,7 +136,7 @@ export function DefaultValueContainer({
 				/>
 			)}
 
-			{defaultValueToggleEnabled && (
+			{defaultValueToggleEnabled && !values.state && (
 				<ClayButton.Group>
 					<ClayButton
 						className={classNames({
@@ -187,7 +190,11 @@ export function DefaultValueContainer({
 							defaultValueType === 'inputAsValue' && defaultValue
 						}
 						error={errors.defaultValue}
-						label={Liferay.Language.get('default-value')}
+						label={
+							!values.state
+								? Liferay.Language.get('default-value')
+								: Liferay.Language.get('input-as-value')
+						}
 						required
 						setValues={setValues}
 						values={values}
