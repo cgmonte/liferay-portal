@@ -104,7 +104,8 @@ export default function EditObjectField({
 
 	if (
 		(Liferay.FeatureFlags['LPS-159913'] ||
-			values.businessType === 'Picklist') &&
+			(Liferay.FeatureFlags['LPS-163716'] &&
+				values.businessType === 'Picklist')) &&
 		TABS.length < 2
 	) {
 		TABS.push(Liferay.Language.get('advanced'));
@@ -132,6 +133,7 @@ export default function EditObjectField({
 			<ClayTabs.Content activeIndex={activeIndex} fade>
 				<ClayTabs.TabPane>
 					<BasicInfo
+						creationLanguageId={creationLanguageId}
 						errors={errors}
 						filterOperators={filterOperators}
 						handleChange={handleChange}
@@ -151,7 +153,8 @@ export default function EditObjectField({
 				</ClayTabs.TabPane>
 
 				{(Liferay.FeatureFlags['LPS-159913'] ||
-					values.businessType === 'Picklist') && (
+					(Liferay.FeatureFlags['LPS-163716'] &&
+						values.businessType === 'Picklist')) && (
 					<ClayTabs.TabPane>
 						<AdvancedTab
 							creationLanguageId={creationLanguageId}

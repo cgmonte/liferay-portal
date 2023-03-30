@@ -279,37 +279,58 @@ export default function ObjectFieldFormBase({
 	}, [objectDefinitionExternalReferenceCode, values.businessType]);
 
 	const handleStateToggleChange = (toggled: boolean) => {
-		let defaultValue;
-		let defaultValueType;
+		if (Liferay.FeatureFlags['LPS-163716']) {
+			let defaultValue;
+			let defaultValueType;
 
-		if (values.id) {
-			const currentDefaultValueSettings = getDefaultValueFieldSettings(
-				values
-			);
-			defaultValue = currentDefaultValueSettings.defaultValue;
-			defaultValueType = currentDefaultValueSettings.defaultValueType;
-		}
-
-		if (toggled) {
-			if (defaultValueType && defaultValue) {
-				setValues({required: toggled, state: toggled});
+			if (values.id) {
+				const currentDefaultValueSettings = getDefaultValueFieldSettings(
+					values
+				);
+				defaultValue = currentDefaultValueSettings.defaultValue;
+				defaultValueType = currentDefaultValueSettings.defaultValueType;
 			}
-			else if (!defaultValueType || !defaultValue) {
+
+			if (toggled) {
+				if (defaultValueType && defaultValue) {
+					setValues({required: toggled, state: toggled});
+				}
+				else if (!defaultValueType || !defaultValue) {
+					setValues({
+						objectFieldSettings: getUpdatedDefaultValueType(
+							values,
+							'inputAsValue'
+						),
+						required: toggled,
+						state: toggled,
+					});
+				}
+			}
+			else {
 				setValues({
-					objectFieldSettings: getUpdatedDefaultValueType(
-						values,
-						'inputAsValue'
-					),
 					required: toggled,
 					state: toggled,
 				});
 			}
 		}
 		else {
-			setValues({
-				required: toggled,
-				state: toggled,
-			});
+			if (toggled) {
+				setValues({
+					required: toggled,
+					state: toggled,
+				});
+			}
+			else {
+				setValues({
+					defaultValue: undefined,
+					objectFieldSettings: filterSettingsOut(
+						['stateFlow'],
+						values
+					),
+					required: toggled,
+					state: toggled,
+				});
+			}
 		}
 	};
 
@@ -418,15 +439,26 @@ export default function ObjectFieldFormBase({
 					label={Liferay.Language.get('picklist')}
 					onChangeQuery={setPicklistQuery}
 					onSelectItem={(item) => {
-						setValues({
-							listTypeDefinitionExternalReferenceCode:
-								item.externalReferenceCode,
-							listTypeDefinitionId: item.id,
-							objectFieldSettings: filterSettingsOut(
-								['defaultValue', 'stateFlow'],
-								values
-							),
-						});
+						Liferay.FeatureFlags['LPS-163716']
+							? setValues({
+									listTypeDefinitionExternalReferenceCode:
+										item.externalReferenceCode,
+									listTypeDefinitionId: item.id,
+									objectFieldSettings: filterSettingsOut(
+										['defaultValue', 'stateFlow'],
+										values
+									),
+							  })
+							: setValues({
+									defaultValue: undefined,
+									listTypeDefinitionExternalReferenceCode:
+										item.externalReferenceCode,
+									listTypeDefinitionId: item.id,
+									objectFieldSettings: filterSettingsOut(
+										['stateFlow'],
+										values
+									),
+							  });
 					}}
 					query={picklistQuery}
 					value={selectedPicklist?.name}
