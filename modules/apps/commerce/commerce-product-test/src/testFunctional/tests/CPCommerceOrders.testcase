@@ -760,6 +760,8 @@ definition {
 		task ("Then the admin can remove the order by clicking on the Trash icon") {
 			ClickNoError(locator1 = "Button#TRASH_ENABLED");
 
+			AssertConfirm(value1 = "Are you sure you want to delete all selected orders? This operation cannot be undone.");
+
 			CommerceNavigator.searchEntry(entryName = ${getOrderId});
 
 			AssertElementNotPresent(
@@ -771,7 +773,7 @@ definition {
 			CommerceNavigator.searchEntry(entryName = "");
 
 			while (IsElementNotPresent(locator1 = "CommerceNavigation#EMPTY_SEARCH_CONTAINER")) {
-				CommerceProducts.deleteEntries();
+				CommerceProducts.deleteEntries(deleteMessage = "Are you sure you want to delete all selected orders? This operation cannot be undone.");
 			}
 
 			AssertElementPresent(locator1 = "CommerceNavigation#EMPTY_SEARCH_CONTAINER");
