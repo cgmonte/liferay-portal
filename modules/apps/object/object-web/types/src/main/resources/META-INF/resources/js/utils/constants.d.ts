@@ -13,4 +13,5 @@
  */
 
 export declare const defaultLanguageId: Liferay.Language.Locale;
+export declare const defaultUniqueValuesSettings: ObjectFieldSetting[];
 export declare const HEADERS: Headers;

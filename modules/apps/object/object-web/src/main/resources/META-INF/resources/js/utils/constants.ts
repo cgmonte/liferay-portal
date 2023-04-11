@@ -14,6 +14,21 @@
 
 export const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
+export const defaultUniqueValuesSettings: ObjectFieldSetting[] = [
+	{
+		name: 'uniqueValues',
+		value: true,
+	},
+	{
+		name: 'uniqueValuesErrorMessage',
+		value: {
+			[defaultLanguageId]: Liferay.Language.get(
+				'this-value-is-already-in-use-please-choose-an-unique-one'
+			),
+		},
+	},
+];
+
 export const HEADERS = new Headers({
 	'Accept': 'application/json',
 	'Accept-Language': Liferay.ThemeDisplay.getBCP47LanguageId(),
