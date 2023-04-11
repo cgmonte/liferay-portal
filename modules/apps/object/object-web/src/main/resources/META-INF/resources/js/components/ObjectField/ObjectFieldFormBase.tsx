@@ -31,10 +31,10 @@ import React, {
 
 import {defaultLanguageId} from '../../utils/constants';
 import {
-	filterSettings,
 	getDefaultValueFieldSettings,
 	getUpdatedDefaultValueType,
 } from '../../utils/defaultValues';
+import {removeFieldSettings} from '../../utils/fieldSettings';
 import {toCamelCase} from '../../utils/string';
 import {AggregationFormBase} from './AggregationFormBase';
 import {AttachmentFormBase} from './AttachmentFormBase';
@@ -323,7 +323,10 @@ export default function ObjectFieldFormBase({
 			else {
 				setValues({
 					defaultValue: undefined,
-					objectFieldSettings: filterSettings(['stateFlow'], values),
+					objectFieldSettings: removeFieldSettings(
+						['stateFlow'],
+						values
+					),
 					required: toggled,
 					state: toggled,
 				});
@@ -441,7 +444,7 @@ export default function ObjectFieldFormBase({
 									listTypeDefinitionExternalReferenceCode:
 										item.externalReferenceCode,
 									listTypeDefinitionId: item.id,
-									objectFieldSettings: filterSettings(
+									objectFieldSettings: removeFieldSettings(
 										['defaultValue', 'stateFlow'],
 										values
 									),
@@ -451,7 +454,7 @@ export default function ObjectFieldFormBase({
 									listTypeDefinitionExternalReferenceCode:
 										item.externalReferenceCode,
 									listTypeDefinitionId: item.id,
-									objectFieldSettings: filterSettings(
+									objectFieldSettings: removeFieldSettings(
 										['stateFlow'],
 										values
 									),
