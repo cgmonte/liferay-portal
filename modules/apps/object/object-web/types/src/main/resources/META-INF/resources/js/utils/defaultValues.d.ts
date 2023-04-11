@@ -12,10 +12,6 @@
  * details.
  */
 
-export declare function filterSettings(
-	settingsToFilter: string[],
-	values: Partial<ObjectField>
-): ObjectFieldSetting[];
 export declare function getDefaultValueFieldSettings(
 	values: Partial<ObjectField>
 ): {
