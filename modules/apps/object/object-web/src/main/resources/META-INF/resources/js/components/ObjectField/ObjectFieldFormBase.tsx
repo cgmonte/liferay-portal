@@ -29,7 +29,10 @@ import React, {
 	useState,
 } from 'react';
 
-import {defaultLanguageId} from '../../utils/constants';
+import {
+	defaultLanguageId,
+	defaultUniqueValuesSettings,
+} from '../../utils/constants';
 import {
 	getDefaultValueFieldSettings,
 	getUpdatedDefaultValueType,
@@ -334,6 +337,24 @@ export default function ObjectFieldFormBase({
 		}
 	};
 
+	const handleUniqueValuesToggle = (toggled: boolean) => {
+		if (toggled) {
+			setValues({
+				objectFieldSettings: values.objectFieldSettings!.concat(
+					defaultUniqueValuesSettings
+				),
+			});
+		}
+		else {
+			setValues({
+				objectFieldSettings: removeFieldSettings(
+					['uniqueValues', 'uniqueValuesErrorMessage'],
+					values
+				),
+			});
+		}
+	};
+
 	return (
 		<>
 			<Input
@@ -502,6 +523,21 @@ export default function ObjectFieldFormBase({
 							toggled={values.state}
 						/>
 					)}
+
+				{(values.businessType === 'Text' ||
+					values.businessType === 'Integer') && (
+					<ClayToggle
+						disabled={disabled}
+						label={Liferay.Language.get(
+							'accept-unique-values-only'
+						)}
+						name="uniqueValues"
+						onToggle={handleUniqueValuesToggle}
+						toggled={values.objectFieldSettings!.some(
+							(setting) => setting.name === 'uniqueValues'
+						)}
+					/>
+				)}
 			</ClayForm.Group>
 		</>
 	);
