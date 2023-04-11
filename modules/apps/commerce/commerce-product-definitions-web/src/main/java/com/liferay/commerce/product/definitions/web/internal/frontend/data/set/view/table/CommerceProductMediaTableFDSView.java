@@ -20,6 +20,7 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
+import com.liferay.portal.kernel.language.LanguageUtil;
 
 import java.util.Locale;
 
@@ -48,7 +49,7 @@ public class CommerceProductMediaTableFDSView extends BaseTableFDSView {
 			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
 				"image")
 		).add(
-			"title", "title",
+			"title", "alt-text",
 			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
 				"actionLink")
 		).add(

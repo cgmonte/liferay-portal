@@ -38,6 +38,7 @@ Map<String, String> contextParams = HashMapBuilder.<String, String>put(
 			bodyClasses="p-0"
 			title='<%= LanguageUtil.get(request, "images") %>'
 		>
+			<h1>oi</h1>
 			<frontend-data-set:classic-display
 				contextParams="<%= contextParams %>"
 				creationMenu="<%= cpAttachmentFileEntriesDisplayContext.getCreationMenu(CPAttachmentFileEntryConstants.TYPE_IMAGE) %>"

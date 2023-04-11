@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,10 +11,33 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<aui:model-context bean="<%= cpAttachmentFileEntry %>" model="<%= CPAttachmentFileEntry.class %>" />
+// import {
+// 	fetch,
+// 	openConfirmModal,
+// 	openToast,
+// 	postForm,
+// 	sub,
+// } from 'frontend-js-web';
 
-<aui:input defaultLanguageId="<%= cpAttachmentFileEntriesDisplayContext.getCatalogDefaultLanguageId() %>" helpMessage='<%= LanguageUtil.get(request, "the-title-is-applied-as-the-images-html-alt-attribute") %>' name="title" />
+import ClayIcon from '@clayui/icon';
 
-<aui:input name="priority" />
+export default function propsTransformer({...otherProps}) {
+	console.log('otherProps', otherProps);
+
+	return {
+		...otherProps,
+		customDataRenderers: {
+			sampleCustomDataRenderer: SampleCustomDataRenderer,
+		},
+	};
+}
+
+const SampleCustomDataRenderer = ({value}) => {
+	return (
+		<>
+			<ClayIcon symbol="user" />
+			{value}
+		</>
+	);
+};
