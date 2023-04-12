@@ -345,21 +345,46 @@ export default function ObjectFieldFormBase({
 		(setting) => setting.name === 'uniqueValuesErrorMessage'
 	);
 
+	const isUniqueValue = values.objectFieldSettings!.some(
+		(setting) => setting.name === 'uniqueValues'
+	);
+
 	const handleUniqueValuesToggle = (toggled: boolean) => {
 		if (toggled) {
-			setValues({
-				objectFieldSettings: values.objectFieldSettings!.concat(
-					defaultUniqueValuesSettings
-				),
-			});
+			if (!values.id) {
+				setValues({
+					objectFieldSettings: values.objectFieldSettings!.concat(
+						defaultUniqueValuesSettings
+					),
+				});
+			}
+			else {
+				setValues({
+					objectFieldSettings: values.objectFieldSettings!.concat([
+						defaultUniqueValuesSettings[0],
+						uniqueValuesErrorMessageSetting ??
+							defaultUniqueValuesSettings[1],
+					]),
+				});
+			}
 		}
 		else {
-			setValues({
-				objectFieldSettings: removeFieldSettings(
-					['uniqueValues', 'uniqueValuesErrorMessage'],
-					values
-				),
-			});
+			if (!values.id) {
+				setValues({
+					objectFieldSettings: removeFieldSettings(
+						['uniqueValues', 'uniqueValuesErrorMessage'],
+						values
+					),
+				});
+			}
+			else {
+				setValues({
+					objectFieldSettings: removeFieldSettings(
+						['uniqueValues'],
+						values
+					),
+				});
+			}
 		}
 	};
 
@@ -552,12 +577,10 @@ export default function ObjectFieldFormBase({
 								'accept-unique-values-only'
 							)}
 							onToggle={handleUniqueValuesToggle}
-							toggled={values.objectFieldSettings!.some(
-								(setting) => setting.name === 'uniqueValues'
-							)}
+							toggled={isUniqueValue}
 						/>
 
-						{!!uniqueValuesErrorMessageSetting && values.id && (
+						{values.id && isUniqueValue && (
 							<InputLocalized
 								disableFlag={disabled}
 								disabled={disabled}
@@ -568,9 +591,8 @@ export default function ObjectFieldFormBase({
 								onChange={handleUniqueValueErrorMessageChange}
 								required
 								translations={
-									uniqueValuesErrorMessageSetting.value as LocalizedValue<
-										string
-									>
+									uniqueValuesErrorMessageSetting!
+										.value as LocalizedValue<string>
 								}
 							/>
 						)}
