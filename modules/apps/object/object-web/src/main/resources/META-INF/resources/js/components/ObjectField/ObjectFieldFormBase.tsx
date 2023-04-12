@@ -18,6 +18,7 @@ import {
 	AutoComplete,
 	FormError,
 	Input,
+	InputLocalized,
 	SingleSelect,
 	stringIncludesQuery,
 } from '@liferay/object-js-components-web';
@@ -37,7 +38,10 @@ import {
 	getDefaultValueFieldSettings,
 	getUpdatedDefaultValueType,
 } from '../../utils/defaultValues';
-import {removeFieldSettings} from '../../utils/fieldSettings';
+import {
+	removeFieldSettings,
+	updateFieldSettings,
+} from '../../utils/fieldSettings';
 import {toCamelCase} from '../../utils/string';
 import {AggregationFormBase} from './AggregationFormBase';
 import {AttachmentFormBase} from './AttachmentFormBase';
@@ -337,6 +341,10 @@ export default function ObjectFieldFormBase({
 		}
 	};
 
+	const uniqueValuesErrorMessageSetting = values.objectFieldSettings?.find(
+		(setting) => setting.name === 'uniqueValuesErrorMessage'
+	);
+
 	const handleUniqueValuesToggle = (toggled: boolean) => {
 		if (toggled) {
 			setValues({
@@ -353,6 +361,17 @@ export default function ObjectFieldFormBase({
 				),
 			});
 		}
+	};
+
+	const handleUniqueValueErrorMessageChange = (
+		translations: LocalizedValue<string>
+	) => {
+		setValues({
+			objectFieldSettings: updateFieldSettings(
+				values.objectFieldSettings,
+				{name: 'uniqueValuesErrorMessage', value: translations}
+			),
+		});
 	};
 
 	return (
@@ -526,17 +545,36 @@ export default function ObjectFieldFormBase({
 
 				{(values.businessType === 'Text' ||
 					values.businessType === 'Integer') && (
-					<ClayToggle
-						disabled={disabled}
-						label={Liferay.Language.get(
-							'accept-unique-values-only'
+					<>
+						<ClayToggle
+							disabled={disabled}
+							label={Liferay.Language.get(
+								'accept-unique-values-only'
+							)}
+							onToggle={handleUniqueValuesToggle}
+							toggled={values.objectFieldSettings!.some(
+								(setting) => setting.name === 'uniqueValues'
+							)}
+						/>
+
+						{!!uniqueValuesErrorMessageSetting && values.id && (
+							<InputLocalized
+								disableFlag={disabled}
+								disabled={disabled}
+								error={errors.uniqueValuesErrorMessage}
+								label={Liferay.Language.get(
+									'unique-value-error-message'
+								)}
+								onChange={handleUniqueValueErrorMessageChange}
+								required
+								translations={
+									uniqueValuesErrorMessageSetting.value as LocalizedValue<
+										string
+									>
+								}
+							/>
 						)}
-						name="uniqueValues"
-						onToggle={handleUniqueValuesToggle}
-						toggled={values.objectFieldSettings!.some(
-							(setting) => setting.name === 'uniqueValues'
-						)}
-					/>
+					</>
 				)}
 			</ClayForm.Group>
 		</>
