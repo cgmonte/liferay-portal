@@ -12,8 +12,6 @@
  * details.
  */
 
-/// <reference types="react" />
-
 interface IUseObjectFieldForm {
 	forbiddenChars?: string[];
 	forbiddenLastChars?: string[];
@@ -49,6 +47,8 @@ export declare function useObjectFieldForm({
 			showFilesInDocumentsAndMedia: unknown;
 			stateFlow: unknown;
 			storageDLFolderPath: unknown;
+			uniqueValues: unknown;
+			uniqueValuesErrorMessage: unknown;
 		}
 	>;
 	handleChange: import('react').ChangeEventHandler<HTMLInputElement>;
