@@ -23,6 +23,7 @@ import {
 import React, {useEffect, useState} from 'react';
 
 import './EditObjectField.scss';
+import {removeFieldSettings} from '../../utils/fieldSettings';
 import {AdvancedTab} from './Tabs/Advanced/AdvancedTab';
 import {BasicInfo} from './Tabs/BasicInfo/BasicInfo';
 import {useObjectFieldForm} from './useObjectFieldForm';
@@ -92,6 +93,20 @@ export default function EditObjectField({
 
 		delete objectField.listTypeDefinitionId;
 		delete objectField.system;
+
+		if (
+			objectField.objectFieldSettings!.some(
+				(setting) => setting.name === 'uniqueValuesErrorMessage'
+			) &&
+			!objectField.objectFieldSettings!.some(
+				(setting) => setting.name === 'uniqueValues'
+			)
+		) {
+			objectField.objectFieldSettings = removeFieldSettings(
+				['uniqueValuesErrorMessage'],
+				objectField
+			);
+		}
 
 		try {
 			await API.save(
