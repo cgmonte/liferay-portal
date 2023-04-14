@@ -35,6 +35,7 @@ interface InputLocale {
 	symbol: string;
 }
 export declare function InputLocalized({
+	className,
 	disableFlag,
 	disabled,
 	error,

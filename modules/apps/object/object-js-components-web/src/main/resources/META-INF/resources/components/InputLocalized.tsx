@@ -51,6 +51,7 @@ const availableLocales = Object.keys(Liferay.Language.available)
 	}));
 
 export function InputLocalized({
+	className,
 	disableFlag,
 	disabled,
 	error,
@@ -84,7 +85,10 @@ export function InputLocalized({
 
 	return (
 		<FieldBase
-			className="lfr-objects__input-localized"
+			className={classNames({
+				[`${className}`]: !!className,
+				'lfr-objects__input-localized': true,
+			})}
 			disabled={disabled}
 			errorMessage={error}
 			id={id}
