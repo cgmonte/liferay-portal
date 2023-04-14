@@ -176,12 +176,38 @@ export function useObjectFieldForm({
 				errors.output = REQUIRED_MSG;
 			}
 		}
-		else if (
-			field.businessType === 'LongText' ||
-			field.businessType === 'Text'
-		) {
+		else if (field.businessType === 'LongText') {
 			if (settings.showCounter && !settings.maxLength) {
 				errors.maxLength = REQUIRED_MSG;
+			}
+		}
+		else if (field.businessType === 'Text') {
+			if (settings.showCounter && !settings.maxLength) {
+				errors.maxLength = REQUIRED_MSG;
+			}
+			if (
+				field.objectFieldSettings!.some(
+					(setting) =>
+						setting.name === 'uniqueValuesErrorMessage' &&
+						setting.value[
+							defaultLanguageId as keyof ObjectFieldSettingValue
+						] === ''
+				)
+			) {
+				errors.uniqueValuesErrorMessage = REQUIRED_MSG;
+			}
+		}
+		else if (field.businessType === 'Integer') {
+			if (
+				field.objectFieldSettings!.some(
+					(setting) =>
+						setting.name === 'uniqueValuesErrorMessage' &&
+						setting.value[
+							defaultLanguageId as keyof ObjectFieldSettingValue
+						] === ''
+				)
+			) {
+				errors.uniqueValuesErrorMessage = REQUIRED_MSG;
 			}
 		}
 		else if (field.businessType === 'Picklist') {
