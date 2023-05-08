@@ -57,6 +57,7 @@ export default function FieldsSidebarSettingsBody({field}) {
 	const {
 		defaultLanguageId,
 		editingLanguageId,
+		focusedField,
 		objectFields,
 		pages,
 		rules,
@@ -88,9 +89,8 @@ export default function FieldsSidebarSettingsBody({field}) {
 						case CORE_EVENT_TYPES.FIELD.CHANGE: {
 							dispatch({
 								payload: {
-									propertyName:
-										payload.fieldInstance.fieldName,
-									propertyValue: payload.value,
+									propertyName: focusedField.fieldName,
+									propertyValue: focusedField.options,
 								},
 								type,
 							});
