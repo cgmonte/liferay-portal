@@ -1,0 +1,6 @@
+Bundle-Name: Headless Builder Web
+Bundle-SymbolicName: com.liferay.headless.builder.web
+Bundle-Version: 1.0.0
+Web-ContextPath: /headless-builder-web
+Export-Package: com.liferay.headless.builder.web.internal.constants
+-dsannotations-options: inherit
