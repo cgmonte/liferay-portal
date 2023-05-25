@@ -19,6 +19,7 @@ import com.liferay.application.list.PanelApp;
 import com.liferay.application.list.constants.PanelCategoryKeys;
 import com.liferay.headless.builder.web.internal.constants.HeadlessBuilderWebPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -52,6 +53,21 @@ public class HeadlessBuilderPanelApp extends BasePanelApp {
 	public boolean isShow(PermissionChecker permissionChecker, Group group)
 		throws PortalException {
 
+		System.out.println("!FeatureFlagManagerUtil:");
+		System.out.println(!FeatureFlagManagerUtil.isEnabled("feature.flag.LPS-181458"));
+
+		System.out.println("FeatureFlagManagerUtil:");
+		System.out.println(FeatureFlagManagerUtil.isEnabled("feature.flag.LPS-181458"));
+		
+
+
+		if (!FeatureFlagManagerUtil.isEnabled("feature.flag.LPS-181458")) {
+			System.out.println("entrou");
+			return false;
+		}
+		
+		System.out.println("não entrou");
+		
 		return super.isShow(permissionChecker, group);
 	}
 
