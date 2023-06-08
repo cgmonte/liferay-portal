@@ -12,6 +12,7 @@
  * details.
  */
 
+import {fetch, openToast} from 'frontend-js-web';
 import React from 'react';
 
 import APIApplicationsTable from './FDS/APIApplicationsTable';
@@ -21,6 +22,37 @@ interface APIApplicationsProps {
 	portletId: string;
 }
 
+const handleDelete = ({
+	itemData,
+	loadData,
+	processClose,
+}: handleDeleteInModal) => {
+	const deleteURL = itemData.actions.delete.href;
+
+	fetch(deleteURL.replace('{id}', String(itemData.id)), {method: 'DELETE'})
+		.then(({ok}) => {
+			if (ok) {
+				processClose();
+				loadData();
+				openToast({
+					message: Liferay.Language.get(
+						'your-request-completed-successfully'
+					),
+					type: 'success',
+				});
+			}
+			else {
+				throw new Error();
+			}
+		})
+		.catch(() => {
+			openToast({
+				message: Liferay.Language.get('an-unexpected-error-occurred'),
+				type: 'danger',
+			});
+		});
+};
+
 export default function APIApplications({
 	apiURL,
 	portletId,
@@ -28,6 +60,7 @@ export default function APIApplications({
 	return (
 		<APIApplicationsTable
 			apiURL={apiURL}
+			handleDelete={handleDelete}
 			portletId={portletId}
 			readOnly={false}
 		/>

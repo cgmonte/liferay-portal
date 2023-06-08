@@ -12,7 +12,18 @@
  * details.
  */
 
+interface HTTPMethod {
+	href: string;
+	method: string;
+}
+interface Actions {
+	delete: HTTPMethod;
+	get: HTTPMethod;
+	permissions: HTTPMethod;
+	update: HTTPMethod;
+}
 interface ItemData {
+	actions: Actions;
 	applicationStatus: {key: string; name: string};
 	baseURL: string;
 	createDate: string;
@@ -27,5 +38,14 @@ interface ItemData {
 interface FDSItem {
 	action: {id: string};
 	itemData: ItemData;
+	loadData: voidReturn;
 	value: string;
+}
+
+type voidReturn = () => void;
+
+interface handleDeleteInModal {
+	itemData: ItemData;
+	loadData: voidReturn;
+	processClose: voidReturn;
 }

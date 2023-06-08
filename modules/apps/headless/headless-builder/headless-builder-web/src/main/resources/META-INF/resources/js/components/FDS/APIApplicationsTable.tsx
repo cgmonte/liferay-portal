@@ -13,24 +13,59 @@
  */
 
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
+import {openModal} from 'frontend-js-web';
 import React from 'react';
 
+import {DeleteAPIApplicationModalBody} from '../modals/DeleteAPIApplicationModalBody';
 import {getAPIApplicationsFDSProps} from './fdsUtils/fdsProps';
 
 interface APIApplicationsTableProps {
 	apiURL: string;
+	handleDelete: (parameters: handleDeleteInModal) => void;
 	portletId: string;
 	readOnly: boolean;
 }
 
 export default function APIApplicationsTable({
 	apiURL,
+	handleDelete,
 	portletId,
 	readOnly,
 }: APIApplicationsTableProps) {
+	function onActionDropdownItemClick({action, itemData, loadData}: FDSItem) {
+		if (action.id === 'deleteAPIApplication') {
+			openModal({
+				bodyComponent: () => DeleteAPIApplicationModalBody(itemData),
+				buttons: [
+					{
+						displayType: 'secondary',
+						label: Liferay.Language.get('cancel'),
+						onClick: ({processClose}: any) => {
+							processClose();
+						},
+					},
+					{
+						displayType: 'danger',
+						id: 'deleteAPIApplicationModalConfirmButton',
+						label: Liferay.Language.get('delete'),
+						onClick: ({processClose}: any) => {
+							handleDelete({itemData, loadData, processClose});
+						},
+					},
+				],
+				center: true,
+				id: 'deleteAPIApplicationModal',
+				size: 'md',
+				status: 'danger',
+				title: Liferay.Language.get('delete-api-application'),
+			});
+		}
+	}
+
 	return (
 		<FrontendDataSet
 			{...getAPIApplicationsFDSProps(apiURL, portletId, readOnly)}
+			onActionDropdownItemClick={onActionDropdownItemClick}
 		/>
 	);
 }

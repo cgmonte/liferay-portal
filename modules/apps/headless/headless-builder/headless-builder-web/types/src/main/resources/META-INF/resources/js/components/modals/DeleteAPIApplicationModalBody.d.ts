@@ -14,16 +14,6 @@
 
 /// <reference types="react" />
 
-interface APIApplicationsTableProps {
-	apiURL: string;
-	handleDelete: (parameters: handleDeleteInModal) => void;
-	portletId: string;
-	readOnly: boolean;
-}
-export default function APIApplicationsTable({
-	apiURL,
-	handleDelete,
-	portletId,
-	readOnly,
-}: APIApplicationsTableProps): JSX.Element;
-export {};
+export declare function DeleteAPIApplicationModalBody(
+	itemData: ItemData
+): JSX.Element;
