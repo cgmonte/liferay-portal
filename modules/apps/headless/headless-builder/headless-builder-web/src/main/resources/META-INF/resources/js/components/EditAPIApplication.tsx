@@ -24,7 +24,7 @@ import React, {useEffect, useState} from 'react';
 import {APIApplicationManagementToolbar} from './APIApplicationManagementToolbar';
 import BaseAPIApplicationField from './baseComponents/BaseAPIApplicationFields';
 import {fetchJSON, updateData} from './utils/fetchUtil';
-import {getCurrentURLParamValue} from './utils/urlUtil';
+import {getCurrentURLParamValue, updateHistory} from './utils/urlUtil';
 
 import '../../css/main.scss';
 
@@ -77,6 +77,11 @@ export default function EditAPIApplication({
 		fetchAPIApplication();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const handleNavigate = (nav: 'details' | 'endpoints' | 'schemas') => {
+		updateHistory({navState: nav, portletId});
+		setActiveTab(nav);
+	};
 
 	function validateData() {
 		let isDataValid = true;
@@ -172,16 +177,13 @@ export default function EditAPIApplication({
 			/>
 			<ClayNavigationBar triggerLabel={activeTab as string}>
 				<ClayNavigationBar.Item active={activeTab === 'details'}>
-					<ClayButton onClick={() => setActiveTab('details')}>
+					<ClayButton onClick={() => handleNavigate('details')}>
 						{Liferay.Language.get('details')}
 					</ClayButton>
 				</ClayNavigationBar.Item>
 
 				<ClayNavigationBar.Item active={activeTab === 'endpoints'}>
-					<ClayButton
-						disabled
-						onClick={() => setActiveTab('endpoints')}
-					>
+					<ClayButton onClick={() => handleNavigate('endpoints')}>
 						{Liferay.Language.get('endpoints')}
 					</ClayButton>
 				</ClayNavigationBar.Item>
@@ -189,7 +191,7 @@ export default function EditAPIApplication({
 				<ClayNavigationBar.Item active={activeTab === 'schemas'}>
 					<ClayButton
 						disabled
-						onClick={() => setActiveTab('schemas')}
+						onClick={() => handleNavigate('schemas')}
 					>
 						{Liferay.Language.get('schemas')}
 					</ClayButton>
