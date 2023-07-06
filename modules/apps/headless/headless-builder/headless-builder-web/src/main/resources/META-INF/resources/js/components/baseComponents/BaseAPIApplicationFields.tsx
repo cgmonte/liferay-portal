@@ -21,22 +21,15 @@ import React, {Dispatch, SetStateAction, useState} from 'react';
 
 import {limitStringInputLengh, makeURLPathString} from '../utils/string';
 
-type Data = {
-	baseURL: string;
-	description: string;
-	title: string;
-	version: string;
-};
-
 type DataError = {
 	baseURL: boolean;
 	title: boolean;
 };
 
 interface BaseAPIApplicationFieldsProps {
-	data: Partial<Data>;
+	data: Partial<APIApplicationItem>;
 	displayError: DataError;
-	setData: Dispatch<SetStateAction<Partial<Data>>>;
+	setData: Dispatch<SetStateAction<Partial<APIApplicationItem>>>;
 	urlAutoFill?: boolean;
 }
 
