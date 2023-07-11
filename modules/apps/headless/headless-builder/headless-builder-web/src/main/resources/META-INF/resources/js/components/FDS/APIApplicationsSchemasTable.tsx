@@ -13,7 +13,7 @@
  */
 
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
 import {getAPIApplicationsSchemasFDSProps} from './fdsUtils/schemasFDSProps.';
 
@@ -21,11 +21,13 @@ interface APIApplicationsTableProps {
 	apiURLPaths: APIURLPaths;
 	portletId: string;
 	readOnly: boolean;
+	setMainSchemaNav: Dispatch<SetStateAction<MainSchemaNav>>;
 }
 
 export default function APIApplicationsSchemasTable({
 	apiURLPaths,
 	portletId,
+	setMainSchemaNav,
 }: APIApplicationsTableProps) {
 	const createAPIApplicationSchema = {
 		label: Liferay.Language.get('add-new-schema'),
@@ -35,7 +37,9 @@ export default function APIApplicationsSchemasTable({
 		action,
 		itemData,
 	}: FDSItem<APIApplicationEndpointItem>) {
-		if (action.id === 'editAPIApplicationSchema') {
+		if (action.data.id === 'editAPIApplicationSchema') {
+			setMainSchemaNav({edit: itemData.id});
+
 			return void itemData;
 		}
 	}

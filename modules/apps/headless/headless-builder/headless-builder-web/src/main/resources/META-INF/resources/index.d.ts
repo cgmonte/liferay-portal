@@ -35,8 +35,12 @@ interface Actions {
 
 type voidReturn = () => void;
 
+interface FDSActionData {
+	id: string;
+}
+
 interface FDSItem<T> {
-	action: {id: string};
+	action: {data: FDSActionData; id: string};
 	id: number;
 	itemData: T;
 	loadData: voidReturn;
@@ -78,3 +82,5 @@ interface APIApplicationSchemaItem extends BaseItem {
 	mainObjectDefinitionERC: string;
 	name: string;
 }
+
+type MainSchemaNav = 'list' | {edit: number};

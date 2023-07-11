@@ -22,7 +22,7 @@ import {openToast} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import APIApplicationsEndpointsTable from '../components/FDS/APIApplicationsEndpointsTable';
-import APIApplicationsSchemasTable from '../components/FDS/APIApplicationsSchemasTable';
+import SchemasContent from '../components/SchemasContent';
 import {APIApplicationManagementToolbar} from './APIApplicationManagementToolbar';
 import BaseAPIApplicationField from './baseComponents/BaseAPIApplicationFields';
 import {fetchJSON, updateData} from './utils/fetchUtil';
@@ -235,7 +235,7 @@ export default function EditAPIApplication({
 				/>
 			)}
 			{activeTab === 'schemas' && (
-				<APIApplicationsSchemasTable
+				<SchemasContent
 					apiURLPaths={apiURLPaths}
 					portletId={portletId}
 					readOnly={false}
