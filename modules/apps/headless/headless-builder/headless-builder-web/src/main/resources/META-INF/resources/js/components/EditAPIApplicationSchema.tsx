@@ -16,6 +16,8 @@ import React from 'react';
 
 import {getCurrentURLParamValue} from './utils/urlUtil';
 
+import ThreeViewSpike from './ThreeViewSpike'
+
 import '../../css/main.scss';
 
 interface EditAPIApplicationSchemaProps {
@@ -37,6 +39,7 @@ export default function EditAPIApplicationSchema({
 		<>
 			<h3>{`API App ID ${currentAPIApplicationID}`}</h3>
 			<h3>{`API App Schema ID ${schemaId}`}</h3>
+			<ThreeViewSpike/>
 		</>
 	);
 }
