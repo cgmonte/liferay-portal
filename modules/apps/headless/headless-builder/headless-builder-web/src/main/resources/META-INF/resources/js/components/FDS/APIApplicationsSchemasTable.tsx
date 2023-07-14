@@ -15,7 +15,7 @@
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 import React from 'react';
 
-import {getAPIApplicationsSchemasFDSProps} from './fdsUtils/schemasFDSProps.';
+import {getAPIApplicationsSchemasFDSProps} from './fdsUtils/schemasFDSProps';
 
 interface APIApplicationsTableProps {
 	apiURLPaths: APIURLPaths;
