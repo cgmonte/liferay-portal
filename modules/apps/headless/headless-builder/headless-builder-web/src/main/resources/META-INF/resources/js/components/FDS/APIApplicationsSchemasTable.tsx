@@ -13,8 +13,10 @@
  */
 
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
+import {openModal} from 'frontend-js-web';
 import React from 'react';
 
+import {CreateAPISchemaModalContent} from '../modals/CreateAPISchemaModalContent';
 import {getAPIApplicationsSchemasFDSProps} from './fdsUtils/schemasFDSProps';
 
 interface APIApplicationsTableProps {
@@ -29,6 +31,19 @@ export default function APIApplicationsSchemasTable({
 }: APIApplicationsTableProps) {
 	const createAPIApplicationSchema = {
 		label: Liferay.Language.get('add-new-schema'),
+		onClick: ({loadData}: {loadData: voidReturn}) => {
+			openModal({
+				center: true,
+				contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
+					CreateAPISchemaModalContent({
+						apiApplicationsURLPath: apiURLPaths.schemas,
+						closeModal,
+						loadData,
+					}),
+				id: 'createAPISchemaModal',
+				size: 'md',
+			});
+		},
 	};
 
 	function onActionDropdownItemClick({

@@ -78,3 +78,40 @@ interface APIApplicationSchemaItem extends BaseItem {
 	mainObjectDefinitionERC: string;
 	name: string;
 }
+
+interface ObjectDefinition {
+	accountEntryRestricted: boolean;
+	accountEntryRestrictedObjectFieldId: string;
+	accountEntryRestrictedObjectFieldName: string;
+	active: boolean;
+	dateCreated: string;
+	dateModified: string;
+	dbTableName?: string;
+	defaultLanguageId: Liferay.Language.Locale;
+	enableCategorization: boolean;
+	enableComments: boolean;
+	enableLocalization: boolean;
+	enableObjectEntryHistory: boolean;
+	externalReferenceCode: string;
+	id: number;
+	modifiable?: boolean;
+	name: string;
+	objectActions: [];
+	objectLayouts: [];
+	objectRelationships: [];
+	objectViews: [];
+	panelCategoryKey: string;
+	parameterRequired?: boolean;
+	portlet: boolean;
+	restContextPath: string;
+	scope: string;
+	status: {
+		code: number;
+		label: string;
+		label_i18n: string;
+	};
+	storageType?: string;
+	system: boolean;
+	titleObjectFieldId: number | string;
+	titleObjectFieldName: string;
+}
