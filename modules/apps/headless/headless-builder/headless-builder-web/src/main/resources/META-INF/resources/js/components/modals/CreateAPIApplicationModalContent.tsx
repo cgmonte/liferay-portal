@@ -9,6 +9,7 @@ import {fetch, openToast} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import BaseAPIApplicationField from '../baseComponents/BaseAPIApplicationFields';
+import {beginStringWithForwardSlash} from '../utils/string';
 
 type DataError = {
 	baseURL: boolean;
@@ -56,6 +57,7 @@ export function CreateAPIApplicationModalContent({
 			body: JSON.stringify({
 				...data,
 				applicationStatus: {key: 'unpublished'},
+				baseURL: beginStringWithForwardSlash(data.baseURL!),
 				version: '1.0',
 			}),
 			headers,
@@ -124,13 +126,8 @@ export function CreateAPIApplicationModalContent({
 	}
 
 	const handleCreate = () => {
-		const isDataValid = validateData();
-
-		if (isDataValid) {
+		if (validateData()) {
 			postData();
-		}
-		else {
-			return;
 		}
 	};
 
