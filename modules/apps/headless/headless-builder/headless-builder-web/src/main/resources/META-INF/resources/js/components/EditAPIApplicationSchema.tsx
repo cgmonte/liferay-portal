@@ -53,6 +53,16 @@ export default function EditAPIApplicationSchema({
 		name: false,
 	});
 
+	const hideAllManagementButtons = () => {
+		const defaultButtonProps = {onClick: () => {}, visible: false};
+
+		setManagementButtonsProps({
+			cancel: defaultButtonProps,
+			publish: defaultButtonProps,
+			save: defaultButtonProps,
+		});
+	};
+
 	const fetchAPIApplication = () => {
 		fetchJSON<APIApplicationSchemaItem>({
 			input: apiURLPaths.schemas + schemaId,
@@ -75,16 +85,14 @@ export default function EditAPIApplicationSchema({
 			setDisplayError(errors as DataError);
 
 			isDataValid = false;
-		}
-		else {
+		} else {
 			mandatoryFields.forEach((field) => {
 				if (data![field as keyof APIApplicationSchemaItem]) {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: false,
 					}));
-				}
-				else {
+				} else {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: true,
@@ -156,6 +164,11 @@ export default function EditAPIApplicationSchema({
 
 	useEffect(() => {
 		fetchAPIApplication();
+
+		return () => {
+			hideAllManagementButtons();
+		};
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -163,12 +176,18 @@ export default function EditAPIApplicationSchema({
 		setManagementButtonsProps({
 			cancel: {onClick: () => setMainSchemaNav('list'), visible: true},
 			publish: {
-				onClick: () =>
+				onClick: () => {
 					handlePublish({
 						successMessage: Liferay.Language.get(
 							'api-application-was-published'
 						),
-					}),
+					});
+					handleUpdate({
+						successMessage: Liferay.Language.get(
+							'api-schema-changes-were-saved'
+						),
+					});
+				},
 				visible: true,
 			},
 			save: {
