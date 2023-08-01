@@ -10,6 +10,13 @@ export declare function getCurrentURLParamValue({
 	paramSufix: string;
 	portletId: string;
 }): string | null;
+export declare function getCurrentCurrentNavFromURL({
+	paramSufix,
+	portletId,
+}: {
+	paramSufix: string;
+	portletId: string;
+}): ActiveNav;
 export declare function openEditURL({
 	editURL,
 	id,

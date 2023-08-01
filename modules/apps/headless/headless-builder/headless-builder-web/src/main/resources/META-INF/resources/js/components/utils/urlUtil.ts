@@ -15,6 +15,28 @@ export function getCurrentURLParamValue({
 	return newURLSearchParams.get(`_${portletId}_${paramSufix}`);
 }
 
+export function getCurrentCurrentNavFromURL({
+	paramSufix,
+	portletId,
+}: {
+	paramSufix: string;
+	portletId: string;
+}): ActiveNav {
+	const currentURLParamValue = getCurrentURLParamValue({
+		paramSufix,
+		portletId,
+	});
+
+	if (
+		currentURLParamValue === 'endpoints' ||
+		currentURLParamValue === 'schemas'
+	) {
+		return currentURLParamValue;
+	}
+
+	return 'details';
+}
+
 export function openEditURL({
 	editURL,
 	id,

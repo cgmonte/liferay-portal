@@ -5,65 +5,21 @@
 
 import ClayButton from '@clayui/button';
 import ClayManagementToolbar from '@clayui/management-toolbar';
-import {openModal} from 'frontend-js-web';
-import React, {useMemo} from 'react';
+import React from 'react';
 
 import StatusLabel from './StatusLabel';
-import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
 
 interface APIApplicationManagementToolbarProps {
-	hideButtons: boolean;
-	itemData: APIApplicationItem;
-	onPublish: voidReturn;
-	onSave: voidReturn;
+	applicationStatusKey: 'published' | 'unpublished';
+	managementButtonsProps: ManagementButtonsProps;
 	title: string;
 }
 
 export function APIApplicationManagementToolbar({
-	hideButtons,
-	itemData,
-	onPublish,
-	onSave,
+	applicationStatusKey,
+	managementButtonsProps: buttons,
 	title,
 }: APIApplicationManagementToolbarProps) {
-	const initialFieldData = useMemo(
-		() => ({
-			baseURL: itemData.baseURL,
-			description: itemData.description,
-			title: itemData.title,
-		}),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[title]
-	);
-
-	const hasDataChanged = () => {
-		for (const [key, value] of Object.entries(initialFieldData)) {
-			if (itemData[key as keyof Partial<APIApplicationItem>] !== value) {
-				return true;
-			}
-		}
-
-		return false;
-	};
-
-	const handleCancel = () => {
-		if (hasDataChanged()) {
-			openModal({
-				center: true,
-				contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
-					CancelEditAPIApplicationModalContent({
-						closeModal,
-					}),
-				id: 'confirmCancelEditModal',
-				size: 'md',
-				status: 'warning',
-			});
-		}
-		else {
-			history.back();
-		}
-	};
-
 	return (
 		<>
 			<ClayManagementToolbar>
@@ -74,50 +30,46 @@ export function APIApplicationManagementToolbar({
 						</h2>
 					</div>
 
-					<StatusLabel statusKey={itemData.applicationStatus.key} />
+					<StatusLabel statusKey={applicationStatusKey} />
 				</ClayManagementToolbar.ItemList>
 
-				{!hideButtons && (
-					<ClayManagementToolbar.ItemList>
-						<ClayButton.Group key={1} spaced>
+				<ClayManagementToolbar.ItemList>
+					<ClayButton.Group key={1} spaced>
+						{buttons.cancel.visible && (
 							<ClayButton
-								borderless={
-									itemData.applicationStatus?.key ===
-									'unpublished'
-								}
+								borderless={buttons.save.visible}
 								displayType="secondary"
 								id="apiAppManagementToolbarCancelButton"
 								name="cancel"
-								onClick={handleCancel}
+								onClick={buttons.cancel.onClick}
 							>
 								{Liferay.Language.get('cancel')}
 							</ClayButton>
+						)}
 
-							{itemData.applicationStatus?.key !==
-								'published' && (
-								<ClayButton
-									displayType="secondary"
-									id="apiAppManagementToolbarSaveButton"
-									name="save"
-									onClick={() =>
-										(onSave() as unknown) as voidReturn
-									}
-								>
-									{Liferay.Language.get('save')}
-								</ClayButton>
-							)}
+						{buttons.save.visible && (
+							<ClayButton
+								displayType="secondary"
+								id="apiAppManagementToolbarSaveButton"
+								name="save"
+								onClick={buttons.save.onClick}
+							>
+								{Liferay.Language.get('save')}
+							</ClayButton>
+						)}
 
+						{buttons.publish.visible && (
 							<ClayButton
 								displayType="primary"
 								id="apiAppManagementToolbarPublishButton"
 								name="publish"
-								onClick={() => onPublish()}
+								onClick={buttons.publish.onClick}
 							>
 								{Liferay.Language.get('publish')}
 							</ClayButton>
-						</ClayButton.Group>
-					</ClayManagementToolbar.ItemList>
-				)}
+						)}
+					</ClayButton.Group>
+				</ClayManagementToolbar.ItemList>
 			</ClayManagementToolbar>
 		</>
 	);

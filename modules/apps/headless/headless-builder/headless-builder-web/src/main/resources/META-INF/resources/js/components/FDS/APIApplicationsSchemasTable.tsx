@@ -5,7 +5,7 @@
 
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 import {openModal} from 'frontend-js-web';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
 import {CreateAPISchemaModalContent} from '../modals/CreateAPISchemaModalContent';
 import {DeleteAPIApplicationModalContent} from '../modals/DeleteAPISchemaModalContent';
@@ -15,12 +15,14 @@ interface APIApplicationsTableProps {
 	apiURLPaths: APIURLPaths;
 	currentAPIApplicationID: string;
 	portletId: string;
+	setMainSchemaNav: Dispatch<SetStateAction<MainSchemaNav>>;
 }
 
 export default function APIApplicationsSchemasTable({
 	apiURLPaths,
 	currentAPIApplicationID,
 	portletId,
+	setMainSchemaNav,
 }: APIApplicationsTableProps) {
 	const createAPIApplicationSchema = {
 		label: Liferay.Language.get('add-new-schema'),
@@ -66,11 +68,19 @@ export default function APIApplicationsSchemasTable({
 		if (action.id === 'deleteAPIApplicationSchema') {
 			deleteAPISchema(itemData, loadData);
 		}
+
+		if (action.id === 'editAPIApplicationSchema') {
+			setMainSchemaNav({edit: itemData.id});
+		}
 	}
 
 	return (
 		<FrontendDataSet
-			{...getAPISchemasFDSProps(apiURLPaths.schemas, portletId)}
+			{...getAPISchemasFDSProps(
+				apiURLPaths.schemas,
+				portletId,
+				setMainSchemaNav
+			)}
 			creationMenu={{
 				primaryItems: [createAPIApplicationSchema],
 			}}

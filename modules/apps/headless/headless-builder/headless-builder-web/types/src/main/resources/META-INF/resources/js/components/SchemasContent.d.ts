@@ -4,16 +4,20 @@
  */
 
 import {Dispatch, SetStateAction} from 'react';
-interface APIApplicationsTableProps {
+interface SchemasContentProps {
 	apiURLPaths: APIURLPaths;
 	currentAPIApplicationID: string;
 	portletId: string;
-	setMainSchemaNav: Dispatch<SetStateAction<MainSchemaNav>>;
+	setManagementButtonsProps: Dispatch<SetStateAction<ManagementButtonsProps>>;
+	setStatus: Dispatch<SetStateAction<ApplicationStatusKeys>>;
+	setTitle: Dispatch<SetStateAction<string>>;
 }
-export default function APIApplicationsSchemasTable({
+export default function SchemasContent({
 	apiURLPaths,
 	currentAPIApplicationID,
 	portletId,
-	setMainSchemaNav,
-}: APIApplicationsTableProps): JSX.Element;
+	setManagementButtonsProps,
+	setStatus,
+	setTitle,
+}: SchemasContentProps): JSX.Element;
 export {};

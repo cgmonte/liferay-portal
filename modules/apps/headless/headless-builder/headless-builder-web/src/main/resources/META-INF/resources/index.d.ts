@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+type ActiveNav = 'details' | 'endpoints' | 'schemas';
+
 interface APIURLPaths {
 	applications: string;
 	endpoints: string;
@@ -26,8 +28,12 @@ interface Actions {
 
 type voidReturn = () => void;
 
+interface FDSActionData {
+	id: string;
+}
+
 interface FDSItem<T> {
-	action: {id: string};
+	action: {data: FDSActionData; id: string};
 	id: number;
 	itemData: T;
 	loadData: voidReturn;
@@ -49,8 +55,10 @@ interface BaseItem {
 	status: string;
 }
 
+type ApplicationStatusKeys = 'published' | 'unpublished';
+
 interface ApplicationStatus {
-	key: 'published' | 'unpublished';
+	key: ApplicationStatusKeys;
 	name?: 'Published' | 'Unpublished';
 }
 interface APIApplicationItem extends BaseItem {
@@ -69,6 +77,17 @@ interface APIApplicationSchemaItem extends BaseItem {
 	mainObjectDefinitionERC: string;
 	name: string;
 	r_apiApplicationToAPISchemas_c_apiApplicationId: string;
+}
+
+interface ManagementButton {
+	onClick: voidReturn;
+	visible: boolean;
+}
+
+interface ManagementButtonsProps {
+	cancel: ManagementButton;
+	publish: ManagementButton;
+	save: ManagementButton;
 }
 
 interface ObjectDefinition {
@@ -107,3 +126,5 @@ interface ObjectDefinition {
 	titleObjectFieldId: number | string;
 	titleObjectFieldName: string;
 }
+
+type MainSchemaNav = 'list' | {edit: number};
