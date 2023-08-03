@@ -107,3 +107,15 @@ interface ObjectDefinition {
 	titleObjectFieldId: number | string;
 	titleObjectFieldName: string;
 }
+
+type ActiveTab = 'details' | 'endpoints' | 'schemas';
+
+interface EditAPIApplicationContext {
+	activeTab: ActiveTab;
+	apiURLPaths: APIURLPaths;
+	basePath: string;
+	portletId: string;
+	setActiveTab: (activeTab: ActiveTab) => void;
+	setTitle: (title: string) => void;
+	title: string;
+}

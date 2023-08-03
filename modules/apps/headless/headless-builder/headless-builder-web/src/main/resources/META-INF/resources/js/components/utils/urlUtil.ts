@@ -15,6 +15,22 @@ export function getCurrentURLParamValue({
 	return newURLSearchParams.get(`_${portletId}_${paramSufix}`);
 }
 
+export function getActiveTabFromURL(portletId: string): ActiveTab {
+	const activeTabFromURL = getCurrentURLParamValue({
+		paramSufix: 'editAPIApplicationNav',
+		portletId,
+	});
+
+	if (
+		activeTabFromURL &&
+		['details', 'endpoints', 'schemas'].includes(activeTabFromURL)
+	) {
+		return activeTabFromURL as ActiveTab;
+	}
+
+	return 'details';
+}
+
 export function getFilterRelatedItemURL({
 	apiURLPath,
 	filterQuery,

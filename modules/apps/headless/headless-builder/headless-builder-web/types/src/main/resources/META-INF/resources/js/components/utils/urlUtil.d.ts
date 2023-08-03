@@ -10,6 +10,7 @@ export declare function getCurrentURLParamValue({
 	paramSufix: string;
 	portletId: string;
 }): string | null;
+export declare function getActiveTabFromURL(portletId: string): ActiveTab;
 export declare function getFilterRelatedItemURL({
 	apiURLPath,
 	filterQuery,

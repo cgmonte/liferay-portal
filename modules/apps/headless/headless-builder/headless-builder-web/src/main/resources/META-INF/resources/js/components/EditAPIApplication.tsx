@@ -18,7 +18,11 @@ import {APIApplicationManagementToolbar} from './APIApplicationManagementToolbar
 import {EditAPIApplicationContext} from './EditAPIApplicationContext';
 import BaseAPIApplicationField from './baseComponents/BaseAPIApplicationFields';
 import {fetchJSON, updateData} from './utils/fetchUtil';
-import {getCurrentURLParamValue, updateHistory} from './utils/urlUtil';
+import {
+	getActiveTabFromURL,
+	getCurrentURLParamValue,
+	updateHistory,
+} from './utils/urlUtil';
 
 import '../../css/main.scss';
 
@@ -45,13 +49,8 @@ export default function EditAPIApplication({
 
 	const [data, setData] = useState<APIApplicationItem>();
 	const [title, setTitle] = useState<string>('');
-	const [activeTab, setActiveTab] = useState(
-		getCurrentURLParamValue(
-			{
-				paramSufix: 'editAPIApplicationNav',
-				portletId,
-			} || 'details'
-		)
+	const [activeTab, setActiveTab] = useState<ActiveTab>(
+		getActiveTabFromURL(portletId)
 	);
 	const [displayError, setDisplayError] = useState<DataError>({
 		baseURL: false,
