@@ -15,6 +15,7 @@ import React, {useEffect, useState} from 'react';
 import APIApplicationsEndpointsTable from '../components/FDS/APIApplicationsEndpointsTable';
 import APIApplicationsSchemasTable from '../components/FDS/APIApplicationsSchemasTable';
 import {APIApplicationManagementToolbar} from './APIApplicationManagementToolbar';
+import {EditAPIApplicationContext} from './EditAPIApplicationContext';
 import BaseAPIApplicationField from './baseComponents/BaseAPIApplicationFields';
 import {fetchJSON, updateData} from './utils/fetchUtil';
 import {getCurrentURLParamValue, updateHistory} from './utils/urlUtil';
@@ -159,7 +160,17 @@ export default function EditAPIApplication({
 	};
 
 	return data && currentAPIApplicationId ? (
-		<>
+		<EditAPIApplicationContext.Provider
+			value={{
+				activeTab,
+				apiURLPaths,
+				basePath,
+				portletId,
+				setActiveTab,
+				setTitle,
+				title,
+			}}
+		>
 			<APIApplicationManagementToolbar
 				hideButtons={activeTab !== 'details'}
 				itemData={data}
@@ -181,6 +192,7 @@ export default function EditAPIApplication({
 				}
 				title={title}
 			/>
+
 			<ClayNavigationBar triggerLabel={activeTab as string}>
 				<ClayNavigationBar.Item active={activeTab === 'details'}>
 					<ClayButton onClick={() => handleNavigate('details')}>
@@ -200,6 +212,7 @@ export default function EditAPIApplication({
 					</ClayButton>
 				</ClayNavigationBar.Item>
 			</ClayNavigationBar>
+
 			{activeTab === 'details' && (
 				<ClayLayout.Container className="api-app-details mt-5">
 					<ClayCard className="pt-2">
@@ -220,6 +233,7 @@ export default function EditAPIApplication({
 					</ClayCard>
 				</ClayLayout.Container>
 			)}
+
 			{activeTab === 'endpoints' && (
 				<APIApplicationsEndpointsTable
 					apiApplicationBaseURL={data.baseURL}
@@ -229,6 +243,7 @@ export default function EditAPIApplication({
 					readOnly={false}
 				/>
 			)}
+
 			{activeTab === 'schemas' && (
 				<APIApplicationsSchemasTable
 					apiURLPaths={apiURLPaths}
@@ -236,6 +251,6 @@ export default function EditAPIApplication({
 					portletId={portletId}
 				/>
 			)}
-		</>
+		</EditAPIApplicationContext.Provider>
 	) : null;
 }
