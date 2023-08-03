@@ -6,8 +6,9 @@
 import ClayButton from '@clayui/button';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import {openModal} from 'frontend-js-web';
-import React, {useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 
+import {EditAPIApplicationContext} from './EditAPIApplicationContext';
 import StatusLabel from './StatusLabel';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
 
@@ -16,7 +17,6 @@ interface APIApplicationManagementToolbarProps {
 	itemData: APIApplicationItem;
 	onPublish: voidReturn;
 	onSave: voidReturn;
-	title: string;
 }
 
 export function APIApplicationManagementToolbar({
@@ -24,8 +24,9 @@ export function APIApplicationManagementToolbar({
 	itemData,
 	onPublish,
 	onSave,
-	title,
 }: APIApplicationManagementToolbarProps) {
+	const {title} = useContext(EditAPIApplicationContext);
+
 	const initialFieldData = useMemo(
 		() => ({
 			baseURL: itemData.baseURL,

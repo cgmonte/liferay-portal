@@ -10,13 +10,11 @@ interface APIApplicationManagementToolbarProps {
 	itemData: APIApplicationItem;
 	onPublish: voidReturn;
 	onSave: voidReturn;
-	title: string;
 }
 export declare function APIApplicationManagementToolbar({
 	hideButtons,
 	itemData,
 	onPublish,
 	onSave,
-	title,
 }: APIApplicationManagementToolbarProps): JSX.Element;
 export {};

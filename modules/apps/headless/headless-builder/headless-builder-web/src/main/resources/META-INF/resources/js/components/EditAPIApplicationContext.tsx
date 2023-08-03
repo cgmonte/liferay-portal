@@ -5,4 +5,4 @@
 
 import {createContext} from 'react';
 
-export const EditAPIApplicationContext = createContext({});
+export const EditAPIApplicationContext = createContext<any>({});

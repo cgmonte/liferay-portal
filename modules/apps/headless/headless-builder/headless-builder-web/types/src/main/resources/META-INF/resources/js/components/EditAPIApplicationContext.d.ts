@@ -5,4 +5,4 @@
 
 /// <reference types="react" />
 
-export declare const EditAPIApplicationContext: import('react').Context<{}>;
+export declare const EditAPIApplicationContext: import('react').Context<any>;

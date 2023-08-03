@@ -190,7 +190,6 @@ export default function EditAPIApplication({
 						),
 					})
 				}
-				title={title}
 			/>
 
 			<ClayNavigationBar triggerLabel={activeTab as string}>
