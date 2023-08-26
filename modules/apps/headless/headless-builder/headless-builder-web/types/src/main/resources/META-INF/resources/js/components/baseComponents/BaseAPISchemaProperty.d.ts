@@ -5,6 +5,10 @@
 
 /// <reference types="react" />
 
-export default function BaseAPISchemaProperty(
-	objectField: ObjectField
-): JSX.Element;
+interface BaseAPISchemaProperty {
+	objectField: ObjectField;
+}
+export default function BaseAPISchemaProperty({
+	objectField,
+}: BaseAPISchemaProperty): JSX.Element;
+export {};

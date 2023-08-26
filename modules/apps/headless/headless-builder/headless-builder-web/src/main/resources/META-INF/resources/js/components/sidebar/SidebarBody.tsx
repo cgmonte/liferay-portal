@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayButtonWithIcon} from '@clayui/button';
-import {ClayInput} from '@clayui/form';
 import ClayPanel from '@clayui/panel';
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 import BaseAPISchemaContainer from '../baseComponents/BaseAPISchemaContainer';
 import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
@@ -14,6 +12,7 @@ import {getAllItems} from '../utils/fetchUtil';
 
 interface SidebarBodyProps {
 	objectDefinition: ObjectDefinition;
+	// setTreeViewItems: Dispatch<SetStateAction<TreeViewItemData>>;
 }
 
 export default function SidebarBody({objectDefinition}: SidebarBodyProps) {
@@ -30,29 +29,6 @@ export default function SidebarBody({objectDefinition}: SidebarBodyProps) {
 
 	return (
 		<div className="sidebar-body">
-			<div className="search-container">
-				<ClayInput.Group>
-					<ClayInput.GroupItem>
-						<ClayInput
-							aria-label="Search"
-							className="form-control input-group-inset input-group-inset-after"
-							placeholder={Liferay.Language.get('search')}
-							type="text"
-						/>
-
-						<ClayInput.GroupInsetItem after tag="span">
-							<ClayButtonWithIcon
-								aria-label="Search"
-								displayType="unstyled"
-								symbol="search"
-							/>
-						</ClayInput.GroupInsetItem>
-					</ClayInput.GroupItem>
-				</ClayInput.Group>
-			</div>
-
-			<div className="card-divider"></div>
-
 			<ul>
 				<li>
 					<BaseAPISchemaContainer
@@ -87,7 +63,9 @@ export default function SidebarBody({objectDefinition}: SidebarBodyProps) {
 						<ul>
 							{objectFields.map((field) => (
 								<li key={field.id}>
-									<BaseAPISchemaProperty {...field} />
+									<BaseAPISchemaProperty
+										objectField={field}
+									/>
 								</li>
 							))}
 						</ul>

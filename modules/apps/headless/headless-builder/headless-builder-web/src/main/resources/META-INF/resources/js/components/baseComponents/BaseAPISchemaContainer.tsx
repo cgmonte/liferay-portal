@@ -5,7 +5,6 @@
 
 import ClayIcon from '@clayui/icon';
 import React, {useRef} from 'react';
-import {useDrag} from 'react-dnd';
 
 // interface BaseAPISchemaContainerProps {
 // 	label: string;
@@ -18,30 +17,8 @@ export default function BaseAPISchemaContainer({
 	name,
 	symbolName,
 }: SchemaContainer) {
-	const ref = useRef<HTMLDivElement | null>(null);
-
-	const [_, dragRef] = useDrag({
-		collect: (monitor) => ({
-			isDragging: monitor.isDragging(),
-		}),
-		item: {
-			item: {
-				indexes: [0],
-				symbolName,
-			},
-			name: label,
-			type: 'treeViewItem',
-		},
-	});
-
 	return (
-		<div
-			className="property-container"
-			ref={(element) => {
-				dragRef(element);
-				ref.current = element;
-			}}
-		>
+		<div className="property-container">
 			<div className="icon-container">
 				<ClayIcon symbol={symbolName} />
 			</div>

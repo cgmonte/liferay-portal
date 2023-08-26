@@ -7,7 +7,6 @@ import {TreeView} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import React, {useEffect, useState} from 'react';
 
-import PropertiesEmpryDropArea from './PropertiesEmpryDropArea';
 import {BUSINESS_TYPES_TO_SYMBOLS} from './utils/constants';
 
 export default function PropertiesTreeView() {
@@ -41,14 +40,16 @@ export default function PropertiesTreeView() {
 			<button onClick={handleClear}>Limpa</button>
 
 			{!treeViewItems.length ? (
-				<PropertiesEmpryDropArea
-					setTreeViewItems={setTreeViewItems}
-					treeViewItems={treeViewItems}
-				/>
+				<div className="first-property-drop-area">
+					<p>
+						{Liferay.Language.get(
+							'drop-properties-from-the-sidebar-here.'
+						)}
+					</p>
+				</div>
 			) : (
 				<TreeView
 					dragAndDrop
-					dragAndDropContext={window}
 					items={treeViewItems}
 					nestedKey="children"
 					onItemMove={(item, parentItem, index) => {

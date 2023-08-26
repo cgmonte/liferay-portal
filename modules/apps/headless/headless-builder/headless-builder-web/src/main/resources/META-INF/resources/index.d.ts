@@ -289,7 +289,13 @@ interface SelectOption {
 interface TreeViewItem {
 	children?: TreeViewItem[];
 	item: SchemaContainer | ObjectField;
-	key: string | number,
+	key: string | number;
+	name: string;
+	type: string;
+}
+
+interface TreeViewItemData {
+	id: number;
 	name: string;
 	type: string;
 }

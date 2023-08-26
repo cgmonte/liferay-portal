@@ -17,8 +17,6 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import {DndProvider} from 'react-dnd';
-import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import {EditAPIApplicationContext} from './EditAPIApplicationContext';
 import PropertiesTreeView from './PropertiesTreeView';
@@ -73,6 +71,7 @@ export default function EditAPISchema({
 		mainObjectDefinitionERC: false,
 		name: false,
 	});
+	const [treeViewItems, setTreeViewItems] = useState<TreeViewItemData[]>([]);
 
 	const fetchAPISchema = () => {
 		fetchJSON<APISchemaItem>({
@@ -288,114 +287,113 @@ export default function EditAPISchema({
 
 	return (
 		<div className="main-container">
-			<DndProvider backend={HTML5Backend} context={window}>
-				<div className="edit-schema">
-					<div className="container-fluid container-fluid-max-xl mt-3">
-						<ClayBreadcrumb
-							className="api-builder-navigation-breadcrum"
-							items={[
-								{
-									label: Liferay.Language.get('schemas'),
-									onClick: () => handleCancel(),
-								},
-								{
-									active: true,
-									label:
-										fetchedData.apiSchema?.name ??
-										localUIData.name,
-								},
-							]}
-						/>
+			<div className="edit-schema">
+				<div className="container-fluid container-fluid-max-xl mt-3">
+					<ClayBreadcrumb
+						className="api-builder-navigation-breadcrum"
+						items={[
+							{
+								label: Liferay.Language.get('schemas'),
+								onClick: () => handleCancel(),
+							},
+							{
+								active: true,
+								label:
+									fetchedData.apiSchema?.name ??
+									localUIData.name,
+							},
+						]}
+					/>
 
-						<ClayCard className="mt-3 pt-2">
-							<ClayTabs
-								active={activeTab}
-								className="mt-3"
-								onActiveChange={setActiveTab}
+					<ClayCard className="mt-3 pt-2">
+						<ClayTabs
+							active={activeTab}
+							className="mt-3"
+							onActiveChange={setActiveTab}
+						>
+							<ClayTabs.Item
+								innerProps={{
+									'aria-controls': 'tabpanel-1',
+								}}
 							>
-								<ClayTabs.Item
-									innerProps={{
-										'aria-controls': 'tabpanel-1',
-									}}
-								>
-									{Liferay.Language.get('info')}
-								</ClayTabs.Item>
+								{Liferay.Language.get('info')}
+							</ClayTabs.Item>
 
-								<ClayTabs.Item
-									innerProps={{
-										'aria-controls': 'tabpanel-2',
-									}}
-								>
-									{Liferay.Language.get('properties')}
-								</ClayTabs.Item>
-							</ClayTabs>
+							<ClayTabs.Item
+								innerProps={{
+									'aria-controls': 'tabpanel-2',
+								}}
+							>
+								{Liferay.Language.get('properties')}
+							</ClayTabs.Item>
+						</ClayTabs>
 
-							<ClayTabs.Content activeIndex={activeTab}>
-								<ClayTabs.TabPane
-									aria-label={Liferay.Language.get(
-										'information-tab'
-									)}
-									className="schema-tabs"
-								>
-									<ClayCard.Body>
-										<BaseAPISchemaFields
-											data={localUIData}
-											disableObjectSelect
-											displayError={displayError}
-											setData={setLocalUIData}
-										/>
-									</ClayCard.Body>
-								</ClayTabs.TabPane>
+						<ClayTabs.Content activeIndex={activeTab}>
+							<ClayTabs.TabPane
+								aria-label={Liferay.Language.get(
+									'information-tab'
+								)}
+								className="schema-tabs"
+							>
+								<ClayCard.Body>
+									<BaseAPISchemaFields
+										data={localUIData}
+										disableObjectSelect
+										displayError={displayError}
+										setData={setLocalUIData}
+									/>
+								</ClayCard.Body>
+							</ClayTabs.TabPane>
 
-								<ClayTabs.TabPane
-									aria-label={Liferay.Language.get(
-										'properties-tab'
-									)}
-									className="schema-tabs"
-								>
-									<ClayCard.Body>
-										<div className="search-container">
-											<ClayInput.Group>
-												<ClayInput.GroupItem>
-													<ClayInput
+							<ClayTabs.TabPane
+								aria-label={Liferay.Language.get(
+									'properties-tab'
+								)}
+								className="schema-tabs"
+							>
+								<ClayCard.Body>
+									<div className="search-container">
+										<ClayInput.Group>
+											<ClayInput.GroupItem>
+												<ClayInput
+													aria-label="Search"
+													className="form-control input-group-inset input-group-inset-after"
+													placeholder={Liferay.Language.get(
+														'search'
+													)}
+													type="text"
+												/>
+
+												<ClayInput.GroupInsetItem
+													after
+													tag="span"
+												>
+													<ClayButtonWithIcon
 														aria-label="Search"
-														className="form-control input-group-inset input-group-inset-after"
-														placeholder={Liferay.Language.get(
-															'search'
-														)}
-														type="text"
+														displayType="unstyled"
+														symbol="search"
 													/>
+												</ClayInput.GroupInsetItem>
+											</ClayInput.GroupItem>
+										</ClayInput.Group>
+									</div>
 
-													<ClayInput.GroupInsetItem
-														after
-														tag="span"
-													>
-														<ClayButtonWithIcon
-															aria-label="Search"
-															displayType="unstyled"
-															symbol="search"
-														/>
-													</ClayInput.GroupInsetItem>
-												</ClayInput.GroupItem>
-											</ClayInput.Group>
-										</div>
-
-										<PropertiesTreeView />
-									</ClayCard.Body>
-								</ClayTabs.TabPane>
-							</ClayTabs.Content>
-						</ClayCard>
-					</div>
-
-					{activeTab === 1 && (
-						<Sidebar
-							mainObjectDefinitionERC={
-								localUIData.mainObjectDefinitionERC
-							}
-						/>
-					)}
+									<PropertiesTreeView />
+								</ClayCard.Body>
+							</ClayTabs.TabPane>
+						</ClayTabs.Content>
+					</ClayCard>
 				</div>
-			</DndProvider>
+
+				{activeTab === 1 && (
+					<Sidebar
+						mainObjectDefinitionERC={
+							localUIData.mainObjectDefinitionERC
+						}
+						// setTreeViewItems={setTreeViewItems}
+					/>
+				)}
+			</div>
 		</div>
 	);
 }
