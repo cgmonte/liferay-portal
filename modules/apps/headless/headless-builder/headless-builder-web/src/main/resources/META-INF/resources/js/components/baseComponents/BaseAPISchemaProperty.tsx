@@ -36,21 +36,16 @@ export default function BaseAPISchemaProperty({
 				{objectField.label[Liferay.ThemeDisplay.getDefaultLanguageId()]}
 			</div>
 
-			{/* <div className="icon-container plus-icon"> */}
-
-				<ClayButtonWithIcon
-					// borderless
-					className="icon-container plus-icon"
-					displayType="unstyled"
-					onClick={() => {
-						console.log('oi');
-					}}
-					size="sm"
-				>
-					<ClayIcon symbol="plus" />
-				</ClayButtonWithIcon>
-
-			{/* </div> */}
+			<ClayButtonWithIcon
+				className="icon-container plus-icon"
+				displayType="unstyled"
+				onClick={() => {
+					console.log('oi');
+				}}
+				size="sm"
+			>
+				<ClayIcon symbol="plus" />
+			</ClayButtonWithIcon>
 		</div>
 	);
 }
