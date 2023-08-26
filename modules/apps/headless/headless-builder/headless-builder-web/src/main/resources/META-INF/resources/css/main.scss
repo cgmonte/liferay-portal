@@ -1,5 +1,11 @@
 @import 'atlas-variables';
 
+// Colors
+$active-blue: #0b5fff;
+$dark-blue: rgba(179, 205, 255, 0.3);
+$light-blue: #80acff;
+$strong-blue: #2e5aac;
+
 #createAPIApplicationModal {
 	textarea.form-control {
 		min-height: 136px !important;
@@ -17,7 +23,7 @@
 #portlet_com_liferay_headless_builder_web_internal_portlet_HeadlessBuilderPortlet {
 	.card-type-asset {
 		.card-body {
-			padding: 1.5rem;
+			padding: 1.5rem 2.5rem;
 
 			:last-child {
 				margin-bottom: 0;
@@ -70,7 +76,7 @@
 	}
 }
 
-.info-tab {
+.schema-tabs {
 	padding: 0 !important;
 }
 
@@ -116,6 +122,125 @@
 		button {
 			background-color: $danger-l2 !important;
 			border-color: $danger-l1 !important;
+		}
+	}
+}
+
+.main-container {
+	height: calc(100vh - 168px);
+
+	.edit-schema {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+		overflow: auto;
+
+		.temp {
+			flex-direction: column;
+		}
+
+		.container-fluid {
+			margin-left: calc((100vw - 1248px) / 2);
+		}
+
+		.search-container {
+			margin-bottom: 24px;
+		}
+
+		.first-property-drop-area {
+			background-color: #f7f8f9;
+			border: 2px dashed #a7a9bc;
+			border-radius: 4px;
+			color: #a7a9bc;
+			height: 85px;
+			line-height: 32px;
+			text-align: center;
+			width: 100%;
+
+			&-active {
+				background-color: $strong-blue;
+				border-radius: 4px;
+				border-color: $active-blue;
+				color: $active-blue;
+				height: 85px;
+				line-height: 32px;
+				text-align: center;
+				width: 100%;
+			}
+
+			p {
+				margin: 0;
+				padding: 24px 0;
+			}
+		}
+
+		.sidebar {
+			background: #fff;
+			border-left: 1px solid #e7e7ed;
+			margin-left: 24px;
+			min-width: 320px;
+			width: 320px;
+
+			.sidebar-body {
+				border-top: 1px solid rgba(0, 0, 0, 0.125);
+				padding-top: 24px !important;
+
+				ul {
+					display: block;
+					list-style: none;
+					margin-block-start: 0px;
+					margin-block-end: 0px;
+					margin-inline-start: 0px;
+					margin-inline-end: 0px;
+					padding-inline-start: 0px;
+				}
+
+				.card-divider {
+					margin-bottom: 24px !important;
+					margin-left: -1rem !important;
+					margin-right: -1rem !important;
+					margin-top: 24px !important;
+				}
+
+				.object-definitions-panel {
+					margin-top: 24px;
+				}
+
+				.property-container {
+					display: flex;
+					padding: 12px 16px;
+					align-items: center;
+					gap: 8px;
+					width: 100%;
+
+					.icon-container {
+						align-items: flex-start;
+						background: var(--light-light-l-1, #f7f8f9);
+						border-radius: 4px;
+						display: flex;
+						gap: 10px;
+						padding: 8px;
+
+						svg {
+							fill: #6b6c7e;
+						}
+					}
+				}
+			}
+
+			.sidebar-footer {
+				button {
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 1248px) {
+	.edit-schema {
+		.container-fluid {
+			margin-left: 0 !important;
 		}
 	}
 }

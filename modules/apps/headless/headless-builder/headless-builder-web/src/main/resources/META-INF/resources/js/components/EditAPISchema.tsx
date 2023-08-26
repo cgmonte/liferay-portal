@@ -4,7 +4,9 @@
  */
 
 import ClayBreadcrumb from '@clayui/breadcrumb';
+import {ClayButtonWithIcon} from '@clayui/button';
 import ClayCard from '@clayui/card';
+import {ClayInput} from '@clayui/form';
 import ClayTabs from '@clayui/tabs';
 import {openModal, openToast} from 'frontend-js-web';
 import React, {
@@ -15,10 +17,14 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
+import {DndProvider} from 'react-dnd';
+import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import {EditAPIApplicationContext} from './EditAPIApplicationContext';
+import PropertiesTreeView from './PropertiesTreeView';
 import BaseAPISchemaFields from './baseComponents/BaseAPISchemaFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
+import Sidebar from './sidebar/Sidebar';
 import {hasDataChanged, resetToFetched} from './utils/dataUtils';
 import {fetchJSON, updateData} from './utils/fetchUtil';
 
@@ -110,16 +116,14 @@ export default function EditAPISchema({
 			setDisplayError(errors as DataError);
 
 			isDataValid = false;
-		}
-		else {
+		} else {
 			mandatoryFields.forEach((field) => {
 				if (localUIData![field as keyof APISchemaUIData]) {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: false,
 					}));
-				}
-				else {
+				} else {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: true,
@@ -217,8 +221,7 @@ export default function EditAPISchema({
 				size: 'md',
 				status: 'warning',
 			});
-		}
-		else {
+		} else {
 			setMainSchemaNav('list');
 		}
 	};
@@ -284,52 +287,115 @@ export default function EditAPISchema({
 	}, [localUIData]);
 
 	return (
-		<div className="container-fluid container-fluid-max-xl mt-3">
-			<ClayBreadcrumb
-				className="api-builder-navigation-breadcrum"
-				items={[
-					{
-						label: Liferay.Language.get('schemas'),
-						onClick: () => handleCancel(),
-					},
-					{
-						active: true,
-						label: fetchedData.apiSchema?.name ?? localUIData.name,
-					},
-				]}
-			/>
+		<div className="main-container">
+			<DndProvider backend={HTML5Backend} context={window}>
+				<div className="edit-schema">
+					<div className="container-fluid container-fluid-max-xl mt-3">
+						<ClayBreadcrumb
+							className="api-builder-navigation-breadcrum"
+							items={[
+								{
+									label: Liferay.Language.get('schemas'),
+									onClick: () => handleCancel(),
+								},
+								{
+									active: true,
+									label:
+										fetchedData.apiSchema?.name ??
+										localUIData.name,
+								},
+							]}
+						/>
 
-			<ClayCard className="mt-3 pt-2">
-				<ClayTabs
-					active={activeTab}
-					className="mt-3"
-					onActiveChange={setActiveTab}
-				>
-					<ClayTabs.Item
-						innerProps={{
-							'aria-controls': 'tabpanel-1',
-						}}
-					>
-						{Liferay.Language.get('info')}
-					</ClayTabs.Item>
-				</ClayTabs>
+						<ClayCard className="mt-3 pt-2">
+							<ClayTabs
+								active={activeTab}
+								className="mt-3"
+								onActiveChange={setActiveTab}
+							>
+								<ClayTabs.Item
+									innerProps={{
+										'aria-controls': 'tabpanel-1',
+									}}
+								>
+									{Liferay.Language.get('info')}
+								</ClayTabs.Item>
 
-				<ClayTabs.Content>
-					<ClayTabs.TabPane
-						aria-label={Liferay.Language.get('information-tab')}
-						className="info-tab"
-					>
-						<ClayCard.Body>
-							<BaseAPISchemaFields
-								data={localUIData}
-								disableObjectSelect
-								displayError={displayError}
-								setData={setLocalUIData}
-							/>
-						</ClayCard.Body>
-					</ClayTabs.TabPane>
-				</ClayTabs.Content>
-			</ClayCard>
+								<ClayTabs.Item
+									innerProps={{
+										'aria-controls': 'tabpanel-2',
+									}}
+								>
+									{Liferay.Language.get('properties')}
+								</ClayTabs.Item>
+							</ClayTabs>
+
+							<ClayTabs.Content activeIndex={activeTab}>
+								<ClayTabs.TabPane
+									aria-label={Liferay.Language.get(
+										'information-tab'
+									)}
+									className="schema-tabs"
+								>
+									<ClayCard.Body>
+										<BaseAPISchemaFields
+											data={localUIData}
+											disableObjectSelect
+											displayError={displayError}
+											setData={setLocalUIData}
+										/>
+									</ClayCard.Body>
+								</ClayTabs.TabPane>
+
+								<ClayTabs.TabPane
+									aria-label={Liferay.Language.get(
+										'properties-tab'
+									)}
+									className="schema-tabs"
+								>
+									<ClayCard.Body>
+										<div className="search-container">
+											<ClayInput.Group>
+												<ClayInput.GroupItem>
+													<ClayInput
+														aria-label="Search"
+														className="form-control input-group-inset input-group-inset-after"
+														placeholder={Liferay.Language.get(
+															'search'
+														)}
+														type="text"
+													/>
+
+													<ClayInput.GroupInsetItem
+														after
+														tag="span"
+													>
+														<ClayButtonWithIcon
+															aria-label="Search"
+															displayType="unstyled"
+															symbol="search"
+														/>
+													</ClayInput.GroupInsetItem>
+												</ClayInput.GroupItem>
+											</ClayInput.Group>
+										</div>
+
+										<PropertiesTreeView />
+									</ClayCard.Body>
+								</ClayTabs.TabPane>
+							</ClayTabs.Content>
+						</ClayCard>
+					</div>
+
+					{activeTab === 1 && (
+						<Sidebar
+							mainObjectDefinitionERC={
+								localUIData.mainObjectDefinitionERC
+							}
+						/>
+					)}
+				</div>
+			</DndProvider>
 		</div>
 	);
 }

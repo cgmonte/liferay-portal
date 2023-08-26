@@ -117,9 +117,13 @@ export function Select({
 							'button-select-trigger': true,
 							'display-placeholder': displayPlaceholder,
 						})}
-						disabled={disabled}
+						disabled={true}
 						id="selectTrigger"
 						onBlur={handleBlur}
+						onClick={(event) => {
+							event.stopPropagation();
+							event.preventDefault();
+						}}
 						role="input"
 					>
 						{triggerLabel}
