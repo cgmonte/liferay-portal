@@ -221,16 +221,15 @@ $strong-blue: #2e5aac;
 							display: none;
 							height: 32px !important;
 							margin-right: 0px;
-							padding-top: 11px;
+							padding-top: 9px;
 							width: 32px !important;
+
+							svg {
+								fill: $dark;
+							}
 
 							&:hover {
 								border: 2px solid $primary-l1;
-							}
-
-							button {
-								height: 32px !important;
-								width: 32px !important;
 							}
 						}
 
