@@ -71,7 +71,9 @@ export default function EditAPISchema({
 		mainObjectDefinitionERC: false,
 		name: false,
 	});
-	const [treeViewItems, setTreeViewItems] = useState<TreeViewItemData[]>([]);
+	const [currentSchemaProperties, setCurrentSchemaProperties] = useState<
+		TreeViewItemData[]
+	>([]);
 
 	const fetchAPISchema = () => {
 		fetchJSON<APISchemaItem>({
@@ -309,6 +311,7 @@ export default function EditAPISchema({
 						<ClayTabs
 							active={activeTab}
 							className="mt-3"
+							fade
 							onActiveChange={setActiveTab}
 						>
 							<ClayTabs.Item
@@ -328,7 +331,7 @@ export default function EditAPISchema({
 							</ClayTabs.Item>
 						</ClayTabs>
 
-						<ClayTabs.Content activeIndex={activeTab}>
+						<ClayTabs.Content activeIndex={activeTab} fade>
 							<ClayTabs.TabPane
 								aria-label={Liferay.Language.get(
 									'information-tab'
@@ -378,7 +381,14 @@ export default function EditAPISchema({
 										</ClayInput.Group>
 									</div>
 
-									<PropertiesTreeView />
+									<PropertiesTreeView
+										currentSchemaProperties={
+											currentSchemaProperties
+										}
+										setCurrentSchemaProperties={
+											setCurrentSchemaProperties
+										}
+									/>
 								</ClayCard.Body>
 							</ClayTabs.TabPane>
 						</ClayTabs.Content>
@@ -387,10 +397,11 @@ export default function EditAPISchema({
 
 				{activeTab === 1 && (
 					<Sidebar
+						currentSchemaProperties={currentSchemaProperties}
 						mainObjectDefinitionERC={
 							localUIData.mainObjectDefinitionERC
 						}
-						// setTreeViewItems={setTreeViewItems}
+						setCurrentSchemaProperties={setCurrentSchemaProperties}
 					/>
 				)}
 			</div>

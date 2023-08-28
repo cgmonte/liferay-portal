@@ -5,24 +5,30 @@
 
 import ClayButtonWithIcon from '@clayui/button';
 import ClayIcon from '@clayui/icon';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
 import {BUSINESS_TYPES_TO_SYMBOLS} from '../utils/constants';
 
 interface BaseAPISchemaProperty {
 	objectField: ObjectField;
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
 export default function BaseAPISchemaProperty({
 	objectField,
+	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty) {
-	// const handleClick = () => {
-	// 	onClick({
-	// 		id: objectField.id,
-	// 		name: objectField.name,
-	// 		type: 'treeViewItem',
-	// 	});
-	// };
+	const handleClick = () => {
+		setCurrentSchemaProperties((previous) => [
+			...previous,
+			{
+				id: objectField.id,
+				item: objectField,
+				name: objectField.name,
+				type: 'treeViewItem',
+			},
+		]);
+	};
 
 	return (
 		<div className="property-container">
@@ -39,9 +45,7 @@ export default function BaseAPISchemaProperty({
 			<ClayButtonWithIcon
 				className="icon-container plus-icon"
 				displayType="unstyled"
-				onClick={() => {
-					console.log('oi');
-				}}
+				onClick={handleClick}
 				size="sm"
 			>
 				<ClayIcon symbol="plus" />

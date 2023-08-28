@@ -11,11 +11,15 @@ import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
 import {getAllItems} from '../utils/fetchUtil';
 
 interface SidebarBodyProps {
+	currentSchemaProperties: TreeViewItemData[];
 	objectDefinition: ObjectDefinition;
-	// setTreeViewItems: Dispatch<SetStateAction<TreeViewItemData>>;
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
-export default function SidebarBody({objectDefinition}: SidebarBodyProps) {
+export default function SidebarBody({
+	objectDefinition,
+	setCurrentSchemaProperties,
+}: SidebarBodyProps) {
 	const [objectFields, setObjectFields] = useState<ObjectField[]>();
 
 	useEffect(() => {
@@ -65,6 +69,9 @@ export default function SidebarBody({objectDefinition}: SidebarBodyProps) {
 								<li key={field.id}>
 									<BaseAPISchemaProperty
 										objectField={field}
+										setCurrentSchemaProperties={
+											setCurrentSchemaProperties
+										}
 									/>
 								</li>
 							))}

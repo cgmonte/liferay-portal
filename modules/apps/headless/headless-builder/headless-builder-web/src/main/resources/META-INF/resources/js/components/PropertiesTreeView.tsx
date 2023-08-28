@@ -5,15 +5,21 @@
 
 import {TreeView} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect} from 'react';
 
 import {BUSINESS_TYPES_TO_SYMBOLS} from './utils/constants';
 
-export default function PropertiesTreeView() {
-	const [treeViewItems, setTreeViewItems] = useState<TreeViewItem[]>([]);
+interface PropertiesTreeViewProps {
+	currentSchemaProperties: TreeViewItemData[];
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+}
 
+export default function PropertiesTreeView({
+	currentSchemaProperties,
+	setCurrentSchemaProperties,
+}: PropertiesTreeViewProps) {
 	const handleClear = () => {
-		setTreeViewItems([]);
+		setCurrentSchemaProperties([]);
 	};
 
 	const getIconName = (item: {
@@ -32,14 +38,14 @@ export default function PropertiesTreeView() {
 	};
 
 	useEffect(() => {
-		console.log('treeViewItems', treeViewItems);
-	}, [treeViewItems]);
+		console.log('treeViewItems', currentSchemaProperties);
+	}, [currentSchemaProperties]);
 
 	return (
 		<div className="d-flex temp">
 			<button onClick={handleClear}>Limpa</button>
 
-			{!treeViewItems.length ? (
+			{!currentSchemaProperties.length ? (
 				<div className="first-property-drop-area">
 					<p>
 						{Liferay.Language.get(
@@ -50,7 +56,7 @@ export default function PropertiesTreeView() {
 			) : (
 				<TreeView
 					dragAndDrop
-					items={treeViewItems}
+					items={currentSchemaProperties}
 					nestedKey="children"
 					onItemMove={(item, parentItem, index) => {
 						console.log('item', item);
@@ -106,21 +112,17 @@ export default function PropertiesTreeView() {
 							</TreeView.ItemStack>
 
 							{children && (
-								<>
-									<p>oxe</p>
+								<TreeView.Group items={children}>
+									{({item}) => (
+										<TreeView.Item key={name}>
+											<ClayIcon
+												symbol={getIconName(item)}
+											/>
 
-									<TreeView.Group items={children}>
-										{({item}) => (
-											<TreeView.Item key={name}>
-												<ClayIcon
-													symbol={getIconName(item)}
-												/>
-
-												{name}
-											</TreeView.Item>
-										)}
-									</TreeView.Group>
-								</>
+											{name}
+										</TreeView.Item>
+									)}
+								</TreeView.Group>
 							)}
 						</TreeView.Item>
 					)}

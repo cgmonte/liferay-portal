@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-/// <reference types="react" />
-
+import {Dispatch, SetStateAction} from 'react';
 interface BaseAPISchemaProperty {
 	objectField: ObjectField;
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 export default function BaseAPISchemaProperty({
 	objectField,
+	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty): JSX.Element;
 export {};

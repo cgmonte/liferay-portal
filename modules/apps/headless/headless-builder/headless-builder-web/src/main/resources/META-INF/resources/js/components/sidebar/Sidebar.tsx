@@ -11,8 +11,9 @@ import SidebarFooter from './SidebarFooter';
 import SidebarHeader from './SidebarHeader';
 
 interface SidebarProps {
+	currentSchemaProperties: TreeViewItemData[];
 	mainObjectDefinitionERC: string;
-	// setTreeViewItems: Dispatch<SetStateAction<TreeViewItemData>>;
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
 interface FectchedObjectDefinitions {
@@ -20,7 +21,11 @@ interface FectchedObjectDefinitions {
 	relatedObjectDefinitions?: ObjectDefinition[];
 }
 
-export default function Sidebar({mainObjectDefinitionERC}: SidebarProps) {
+export default function Sidebar({
+	currentSchemaProperties,
+	mainObjectDefinitionERC,
+	setCurrentSchemaProperties,
+}: SidebarProps) {
 	const [fetchedObjectDefinitions, setFetchedObjectDefinitions] = useState<
 		FectchedObjectDefinitions
 	>();
@@ -40,9 +45,11 @@ export default function Sidebar({mainObjectDefinitionERC}: SidebarProps) {
 
 			{fetchedObjectDefinitions && (
 				<SidebarBody
+					currentSchemaProperties={currentSchemaProperties}
 					objectDefinition={
 						fetchedObjectDefinitions.mainObjectDefinition
 					}
+					setCurrentSchemaProperties={setCurrentSchemaProperties}
 				/>
 			)}
 

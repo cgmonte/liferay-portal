@@ -295,7 +295,9 @@ interface TreeViewItem {
 }
 
 interface TreeViewItemData {
+	children?: TreeViewItemData[];
 	id: number;
+	item: SchemaContainer | ObjectField;
 	name: string;
 	type: string;
 }
