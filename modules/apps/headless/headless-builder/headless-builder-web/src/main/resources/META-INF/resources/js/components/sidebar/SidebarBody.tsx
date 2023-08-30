@@ -96,14 +96,21 @@ export default function SidebarBody({
 					startExpanded
 				/>
 			) : (
-				relatedObjectDefinitions?.length &&
-				relatedObjectDefinitions.map((relatedObjectDefinition) => (
-					<ObjectFieldsPanel
-						key={relatedObjectDefinition.id}
-						objectDefinition={relatedObjectDefinition}
-						setCurrentSchemaProperties={setCurrentSchemaProperties}
-					/>
-				))
+				relatedObjectDefinitions?.length && (
+					<div className="panels-container">
+						{relatedObjectDefinitions.map(
+							(relatedObjectDefinition) => (
+								<ObjectFieldsPanel
+									key={relatedObjectDefinition.id}
+									objectDefinition={relatedObjectDefinition}
+									setCurrentSchemaProperties={
+										setCurrentSchemaProperties
+									}
+								/>
+							)
+						)}
+					</div>
+				)
 			)}
 		</div>
 	);

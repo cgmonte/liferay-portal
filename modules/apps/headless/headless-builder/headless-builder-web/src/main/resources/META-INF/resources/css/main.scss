@@ -187,6 +187,12 @@ $strong-blue: #2e5aac;
 					margin-top: 24px;
 				}
 
+				.panels-container {
+					div:first-of-type {
+						margin-top: 0px;
+					}
+				}
+
 				.property-container {
 					align-items: center;
 					border-radius: 4px;
@@ -292,6 +298,10 @@ $strong-blue: #2e5aac;
 
 							.results-close-button {
 								padding-left: 0;
+
+								svg {
+									fill: $dark;
+								}
 							}
 
 							.results-info {
