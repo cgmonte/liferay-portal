@@ -25,10 +25,6 @@ $strong-blue: #2e5aac;
 		.card-body {
 			padding: 1.5rem 2.5rem;
 
-			:last-child {
-				margin-bottom: 0;
-			}
-
 			textarea.form-control {
 				min-height: 136px !important;
 			}
@@ -137,6 +133,7 @@ $strong-blue: #2e5aac;
 
 		.temp {
 			flex-direction: column;
+			margin-top: 24px;
 		}
 
 		.edit-schema-child {

@@ -24,7 +24,9 @@ export default function BaseAPISchemaProperty({
 			{
 				id: objectField.id,
 				item: objectField,
-				name: objectField.name,
+				name: objectField.label[
+					Liferay.ThemeDisplay.getDefaultLanguageId()
+				]!,
 				type: 'treeViewItem',
 			},
 		]);

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayButton from '@clayui/button';
 import {TreeView} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import React, {Dispatch, SetStateAction, useEffect} from 'react';
@@ -38,12 +39,12 @@ export default function PropertiesTreeView({
 	};
 
 	useEffect(() => {
-		console.log('treeViewItems', currentSchemaProperties);
+		console.log('currentSchemaProperties', currentSchemaProperties);
 	}, [currentSchemaProperties]);
 
 	return (
 		<div className="d-flex temp">
-			<button onClick={handleClear}>Limpa</button>
+			{/* <button onClick={handleClear}>Limpa</button>
 
 			{!currentSchemaProperties.length ? (
 				<div className="first-property-drop-area">
@@ -53,81 +54,46 @@ export default function PropertiesTreeView({
 						)}
 					</p>
 				</div>
-			) : (
+			) : ( */}
+
 				<TreeView
 					dragAndDrop
 					items={currentSchemaProperties}
 					nestedKey="children"
-					onItemMove={(item, parentItem, index) => {
-						console.log('item', item);
-						console.log('parentItem', parentItem);
-						console.log('index', index);
-
-						return false;
-					}}
-
-					// onItemMove={(item, parentItem, index) => {
-					// 	// Add external item to its respective position inside treeViewItems
-					// 	// TO DO: only execute the following code if the item is external because right now it's impacting the behavior for moving internal items
-
-					// 	const newTreeViewItems = treeViewItems;
-
-					// 	const updateParentItem = (array: TreeViewItem[]) => {
-					// 		const parent = array.find(
-					// 			(arrayItem) => arrayItem.id === parentItem.id
-					// 		);
-
-					// 		if (parent) {
-					// 			const parentIndex = array.findIndex(
-					// 				(arrayItem) => arrayItem.id === parentItem.id
-					// 			);
-
-					// 			parent.children?.splice(index.previous, 0, item);
-
-					// 			array[parentIndex] = parent;
-					// 		} else {
-					// 			const allItemsWithChildren = array.map(
-					// 				(arrayItem) => arrayItem.children
-					// 			);
-
-					// 			if (allItemsWithChildren.length) {
-					// 				allItemsWithChildren.forEach((i) =>
-					// 					updateParentItem(i!)
-					// 				);
-					// 			}
-					// 		}
-					// 	};
-
-					// 	updateParentItem(newTreeViewItems);
-
-					// 	setTreeViewItems(newTreeViewItems);
-
-					// 	return false;
-					// }}
 				>
-					{({children, item, name}) => (
-						<TreeView.Item key={name}>
-							<TreeView.ItemStack>
-								<ClayIcon symbol={getIconName(item)} /> {name}
-							</TreeView.ItemStack>
+					{({id, item, name}) => (
+						<TreeView.Item
+							actions={
+								<>
+									<ClayButton
+										// displayType={null}
+										monospaced
+										onClick={(event) => {
+											console.log('event', event);
+										}}
+									>
+										<ClayIcon symbol="pencil" />
+									</ClayButton>
 
-							{children && (
-								<TreeView.Group items={children}>
-									{({item}) => (
-										<TreeView.Item key={name}>
-											<ClayIcon
-												symbol={getIconName(item)}
-											/>
-
-											{name}
-										</TreeView.Item>
-									)}
-								</TreeView.Group>
-							)}
+									<ClayButton
+										displayType={null}
+										monospaced
+										onClick={(event) => {
+											console.log('event', event);
+										}}
+									>
+										<ClayIcon symbol="trash" />
+									</ClayButton>
+								</>
+							}
+							key={id}
+						>
+							<ClayIcon symbol={getIconName(item)} /> {name} {`(${item.name}.${item.name})`}
 						</TreeView.Item>
 					)}
 				</TreeView>
-			)}
+
+			{/* )} */}
 		</div>
 	);
 }
