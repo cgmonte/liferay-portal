@@ -17,52 +17,46 @@ interface SidebarBodyProps {
 }
 
 function RelatedObjectFieldsPanel({
-	relatedObjectDefinitions,
+	relatedObjectDefinition,
 	setCurrentSchemaProperties,
 }: {
-	relatedObjectDefinitions: ObjectDefinition[];
+	relatedObjectDefinition: ObjectDefinition;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }) {
-	const [expanded, setExpanded] = useState(true);
+	const [expanded, setExpanded] = useState(false);
 
 	return (
-		<>
-			{relatedObjectDefinitions.map((relatedObjectDefinition) => (
-				<ClayPanel
-					className="object-definitions-panel"
-					collapsable
-					defaultExpanded
-					displayTitle={
-						relatedObjectDefinition.label[
-							Liferay.ThemeDisplay.getDefaultLanguageId()
-						]
-					}
-					displayType="unstyled"
-					expanded={expanded}
-					key={relatedObjectDefinition.id}
-					onClick={() => setExpanded((previous) => !previous)}
-				>
-					{relatedObjectDefinition && (
-						<ClayPanel.Body>
-							<ul>
-								{relatedObjectDefinition.objectFields.map(
-									(field) => (
-										<li key={field.id}>
-											<BaseAPISchemaProperty
-												objectField={field}
-												setCurrentSchemaProperties={
-													setCurrentSchemaProperties
-												}
-											/>
-										</li>
-									)
-								)}
-							</ul>
-						</ClayPanel.Body>
-					)}
-				</ClayPanel>
-			))}
-		</>
+		<ClayPanel
+			className="object-definitions-panel"
+			collapsable
+			defaultExpanded
+			displayTitle={
+				relatedObjectDefinition.label[
+					Liferay.ThemeDisplay.getDefaultLanguageId()
+				]
+			}
+			displayType="unstyled"
+			expanded={expanded}
+			key={relatedObjectDefinition.id}
+			onClick={() => setExpanded((previous) => !previous)}
+		>
+			{relatedObjectDefinition && (
+				<ClayPanel.Body>
+					<ul>
+						{relatedObjectDefinition.objectFields.map((field) => (
+							<li key={field.id}>
+								<BaseAPISchemaProperty
+									objectField={field}
+									setCurrentSchemaProperties={
+										setCurrentSchemaProperties
+									}
+								/>
+							</li>
+						))}
+					</ul>
+				</ClayPanel.Body>
+			)}
+		</ClayPanel>
 	);
 }
 
@@ -125,48 +119,14 @@ export default function SidebarBody({
 					)}
 				</ClayPanel>
 			) : (
-				relatedObjectDefinitions?.length && (
+				relatedObjectDefinitions?.length &&
+				relatedObjectDefinitions.map((relatedObjectDefinition) => (
 					<RelatedObjectFieldsPanel
-						relatedObjectDefinitions={relatedObjectDefinitions}
+						key={relatedObjectDefinition.id}
+						relatedObjectDefinition={relatedObjectDefinition}
 						setCurrentSchemaProperties={setCurrentSchemaProperties}
 					/>
-				)
-
-				// relatedObjectDefinitions?.length &&
-				// relatedObjectDefinitions.map((relatedObjectDefinition) => (
-				// 	<ClayPanel
-				// 		className="object-definitions-panel"
-				// 		collapsable
-				// 		defaultExpanded
-				// 		displayTitle={
-				// 			relatedObjectDefinition.label[
-				// 				Liferay.ThemeDisplay.getDefaultLanguageId()
-				// 			]
-				// 		}
-				// 		displayType="unstyled"
-				// 		expanded={false}
-				// 		key={relatedObjectDefinition.id}
-				// 	>
-				// 		{relatedObjectDefinition && (
-				// 			<ClayPanel.Body>
-				// 				<ul>
-				// 					{relatedObjectDefinition.objectFields.map(
-				// 						(field) => (
-				// 							<li key={field.id}>
-				// 								<BaseAPISchemaProperty
-				// 									objectField={field}
-				// 									setCurrentSchemaProperties={
-				// 										setCurrentSchemaProperties
-				// 									}
-				// 								/>
-				// 							</li>
-				// 						)
-				// 					)}
-				// 				</ul>
-				// 			</ClayPanel.Body>
-				// 		)}
-				// 	</ClayPanel>
-				// ))
+				))
 			)}
 		</div>
 	);
