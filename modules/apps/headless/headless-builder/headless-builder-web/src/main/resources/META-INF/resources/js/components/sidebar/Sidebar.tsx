@@ -41,16 +41,22 @@ export default function Sidebar({
 
 	return (
 		<div className="sidebar">
-			<SidebarHeader />
-
 			{fetchedObjectDefinitions && (
-				<SidebarBody
-					currentSchemaProperties={currentSchemaProperties}
-					objectDefinition={
-						fetchedObjectDefinitions.mainObjectDefinition
-					}
-					setCurrentSchemaProperties={setCurrentSchemaProperties}
-				/>
+				<>
+					<SidebarHeader
+						objectDefinition={
+							fetchedObjectDefinitions.mainObjectDefinition
+						}
+					/>
+
+					<SidebarBody
+						currentSchemaProperties={currentSchemaProperties}
+						objectDefinition={
+							fetchedObjectDefinitions.mainObjectDefinition
+						}
+						setCurrentSchemaProperties={setCurrentSchemaProperties}
+					/>
+				</>
 			)}
 
 			<SidebarFooter />

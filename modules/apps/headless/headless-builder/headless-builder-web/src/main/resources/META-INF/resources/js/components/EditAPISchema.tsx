@@ -290,7 +290,7 @@ export default function EditAPISchema({
 	return (
 		<div className="main-container">
 			<div className="edit-schema">
-				<div className="container-fluid container-fluid-max-xl mt-3">
+				<div className="container-fluid container-fluid-max-xl edit-schema-child mt-3">
 					<ClayBreadcrumb
 						className="api-builder-navigation-breadcrum"
 						items={[

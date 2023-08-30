@@ -5,4 +5,10 @@
 
 /// <reference types="react" />
 
-export default function SidebarHeader(): JSX.Element;
+interface SidebarHeaderProps {
+	objectDefinition: ObjectDefinition;
+}
+export default function SidebarHeader({
+	objectDefinition,
+}: SidebarHeaderProps): JSX.Element;
+export {};
