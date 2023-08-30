@@ -16,11 +16,6 @@ interface SidebarProps {
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
-interface FectchedObjectDefinitions {
-	mainObjectDefinition: ObjectDefinition;
-	relatedObjectDefinitions?: ObjectDefinition[];
-}
-
 export default function Sidebar({
 	currentSchemaProperties,
 	mainObjectDefinitionERC,
@@ -32,11 +27,35 @@ export default function Sidebar({
 
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
+	const objectDefinitionBasePath =
+		'/o/object-admin/v1.0/object-definitions/by-external-reference-code/';
+
+	async function getRelationshipsDefinitions(
+		objectRelationships: ObjectRelationship[]
+	): Promise<ObjectDefinition[]> {
+		return await Promise.all(
+			objectRelationships.map(async (relationship) =>
+				fetchJSON({
+					input:
+						objectDefinitionBasePath +
+						relationship['objectDefinitionExternalReferenceCode2'],
+				})
+			)
+		) as ObjectDefinition[];
+	}
+
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
-			input: `/o/object-admin/v1.0/object-definitions/by-external-reference-code/${mainObjectDefinitionERC}`,
-		}).then((result) => {
-			setFetchedObjectDefinitions({mainObjectDefinition: result});
+			input: objectDefinitionBasePath + mainObjectDefinitionERC,
+		}).then((mainObjectResult) => {
+			getRelationshipsDefinitions(
+				mainObjectResult.objectRelationships
+			).then((relatedObjectDefinitions) =>
+				setFetchedObjectDefinitions({
+					mainObjectDefinition: mainObjectResult,
+					relatedObjectDefinitions,
+				})
+			);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -55,8 +74,8 @@ export default function Sidebar({
 
 					<SidebarBody
 						currentSchemaProperties={currentSchemaProperties}
-						objectDefinition={
-							fetchedObjectDefinitions.mainObjectDefinition
+						fectchedObjectDefinitions={
+							fetchedObjectDefinitions
 						}
 						setCurrentSchemaProperties={setCurrentSchemaProperties}
 						viewRelatedObjects={viewRelatedObjects}

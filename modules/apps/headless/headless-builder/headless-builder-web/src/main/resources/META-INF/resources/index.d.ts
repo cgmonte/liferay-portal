@@ -101,6 +101,11 @@ type ExcludesFilterOperator = {
 	};
 };
 
+interface FectchedObjectDefinitions {
+	mainObjectDefinition: ObjectDefinition;
+	relatedObjectDefinitions?: ObjectDefinition[];
+}
+
 type IncludesFilterOperator = {
 	in: string[] | number[];
 };
@@ -125,6 +130,10 @@ interface NameValueObject {
 	value: string;
 }
 
+interface ObjectRelationship {
+	objectDefinitionExternalReferenceCode2: string;
+}
+
 interface ObjectDefinition {
 	accountEntryRestricted: boolean;
 	accountEntryRestrictedObjectFieldId: string;
@@ -144,8 +153,9 @@ interface ObjectDefinition {
 	modifiable?: boolean;
 	name: string;
 	objectActions: [];
+	objectFields: ObjectField[];
 	objectLayouts: [];
-	objectRelationships: [];
+	objectRelationships: ObjectRelationship[];
 	objectViews: [];
 	panelCategoryKey: string;
 	parameterRequired?: boolean;
