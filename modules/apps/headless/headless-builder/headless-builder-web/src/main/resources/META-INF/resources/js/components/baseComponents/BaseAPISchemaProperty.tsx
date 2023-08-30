@@ -10,11 +10,13 @@ import React, {Dispatch, SetStateAction} from 'react';
 import {BUSINESS_TYPES_TO_SYMBOLS} from '../utils/constants';
 
 interface BaseAPISchemaProperty {
+	objectDefinitionName: string;
 	objectField: ObjectField;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
 export default function BaseAPISchemaProperty({
+	objectDefinitionName,
 	objectField,
 	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty) {
@@ -27,6 +29,7 @@ export default function BaseAPISchemaProperty({
 				name: objectField.label[
 					Liferay.ThemeDisplay.getDefaultLanguageId()
 				]!,
+				objectDefinitionName,
 				type: 'treeViewItem',
 			},
 		]);

@@ -131,9 +131,23 @@ $strong-blue: #2e5aac;
 		height: 100%;
 		overflow: auto;
 
-		.temp {
+		.treeview-container {
 			flex-direction: column;
 			margin-top: 24px;
+
+			.treeview-item {
+				.treeview-link {
+					.treeview-item-path {
+						display: none !important;
+					}
+
+					&:hover {
+						span.treeview-item-path {
+							display: inherit !important;
+						}
+					}
+				}
+			}
 		}
 
 		.edit-schema-child {

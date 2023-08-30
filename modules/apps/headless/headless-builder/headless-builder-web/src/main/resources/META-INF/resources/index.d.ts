@@ -309,5 +309,6 @@ interface TreeViewItemData {
 	id: number;
 	item: SchemaContainer | ObjectField;
 	name: string;
+	objectDefinitionName: string;
 	type: string;
 }

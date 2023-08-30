@@ -5,10 +5,12 @@
 
 import {Dispatch, SetStateAction} from 'react';
 interface BaseAPISchemaProperty {
+	objectDefinitionName: string;
 	objectField: ObjectField;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 export default function BaseAPISchemaProperty({
+	objectDefinitionName,
 	objectField,
 	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty): JSX.Element;

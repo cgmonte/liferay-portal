@@ -48,6 +48,7 @@ function ObjectFieldsPanel({
 						{objectDefinition.objectFields.map((field) => (
 							<li key={field.id}>
 								<BaseAPISchemaProperty
+									objectDefinitionName={objectDefinition.name}
 									objectField={field}
 									setCurrentSchemaProperties={
 										setCurrentSchemaProperties
@@ -69,7 +70,7 @@ export default function SidebarBody({
 }: SidebarBodyProps) {
 	return (
 		<div className="sidebar-body">
-			{!viewRelatedObjects && (
+			{/* {!viewRelatedObjects && (
 				<ul>
 					<li>
 						<BaseAPISchemaContainer
@@ -87,7 +88,7 @@ export default function SidebarBody({
 						/>
 					</li>
 				</ul>
-			)}
+			)} */}
 
 			{!viewRelatedObjects ? (
 				<ObjectFieldsPanel
