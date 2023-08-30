@@ -40,7 +40,7 @@ function ObjectFieldsPanel({
 			displayType="unstyled"
 			expanded={expanded}
 			key={objectDefinition.id}
-			onClick={() => setExpanded((previous) => !previous)}
+			onExpandedChange={() => setExpanded((previous) => !previous)}
 		>
 			{objectDefinition && (
 				<ClayPanel.Body>
