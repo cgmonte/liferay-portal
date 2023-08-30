@@ -8,9 +8,11 @@ interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
 	objectDefinition: ObjectDefinition;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	viewRelatedObjects: boolean;
 }
 export default function SidebarBody({
 	objectDefinition,
 	setCurrentSchemaProperties,
+	viewRelatedObjects,
 }: SidebarBodyProps): JSX.Element;
 export {};

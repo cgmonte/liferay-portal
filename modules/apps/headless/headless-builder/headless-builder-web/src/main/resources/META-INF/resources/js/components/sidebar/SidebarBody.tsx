@@ -14,11 +14,13 @@ interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
 	objectDefinition: ObjectDefinition;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	viewRelatedObjects: boolean;
 }
 
 export default function SidebarBody({
 	objectDefinition,
 	setCurrentSchemaProperties,
+	viewRelatedObjects,
 }: SidebarBodyProps) {
 	const [objectFields, setObjectFields] = useState<ObjectField[]>();
 
@@ -33,52 +35,56 @@ export default function SidebarBody({
 
 	return (
 		<div className="sidebar-body">
-			<ul>
-				<li>
-					<BaseAPISchemaContainer
-						label={Liferay.Language.get('single-container')}
-						name="folder"
-						symbolName="folder"
-					/>
-				</li>
+			{!viewRelatedObjects && (
+				<>
+					<ul>
+						<li>
+							<BaseAPISchemaContainer
+								label={Liferay.Language.get('single-container')}
+								name="folder"
+								symbolName="folder"
+							/>
+						</li>
 
-				<li>
-					<BaseAPISchemaContainer
-						label={Liferay.Language.get('array-container')}
-						name="fieldSet"
-						symbolName="fieldset"
-					/>
-				</li>
-			</ul>
+						<li>
+							<BaseAPISchemaContainer
+								label={Liferay.Language.get('array-container')}
+								name="fieldSet"
+								symbolName="fieldset"
+							/>
+						</li>
+					</ul>
 
-			<ClayPanel
-				className="object-definitions-panel"
-				collapsable
-				defaultExpanded
-				displayTitle={
-					objectDefinition.label[
-						Liferay.ThemeDisplay.getDefaultLanguageId()
-					]
-				}
-				displayType="unstyled"
-			>
-				{objectFields && (
-					<ClayPanel.Body>
-						<ul>
-							{objectFields.map((field) => (
-								<li key={field.id}>
-									<BaseAPISchemaProperty
-										objectField={field}
-										setCurrentSchemaProperties={
-											setCurrentSchemaProperties
-										}
-									/>
-								</li>
-							))}
-						</ul>
-					</ClayPanel.Body>
-				)}
-			</ClayPanel>
+					<ClayPanel
+						className="object-definitions-panel"
+						collapsable
+						defaultExpanded
+						displayTitle={
+							objectDefinition.label[
+								Liferay.ThemeDisplay.getDefaultLanguageId()
+							]
+						}
+						displayType="unstyled"
+					>
+						{objectFields && (
+							<ClayPanel.Body>
+								<ul>
+									{objectFields.map((field) => (
+										<li key={field.id}>
+											<BaseAPISchemaProperty
+												objectField={field}
+												setCurrentSchemaProperties={
+													setCurrentSchemaProperties
+												}
+											/>
+										</li>
+									))}
+								</ul>
+							</ClayPanel.Body>
+						)}
+					</ClayPanel>
+				</>
+			)}
 		</div>
 	);
 }

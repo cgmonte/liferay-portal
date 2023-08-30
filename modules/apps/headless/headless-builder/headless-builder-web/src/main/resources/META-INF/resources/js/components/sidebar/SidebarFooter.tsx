@@ -4,12 +4,21 @@
  */
 
 import ClayButton from '@clayui/button';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
-export default function SidebarFooter() {
+interface SidebarBodyProps {
+	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function SidebarFooter({
+	setViewRelatedObjects,
+}: SidebarBodyProps) {
 	return (
 		<div className="sidebar-footer">
-			<ClayButton displayType="secondary">
+			<ClayButton
+				displayType="secondary"
+				onClick={() => setViewRelatedObjects(true)}
+			>
 				{Liferay.Language.get('view-related-objects')}
 			</ClayButton>
 		</div>

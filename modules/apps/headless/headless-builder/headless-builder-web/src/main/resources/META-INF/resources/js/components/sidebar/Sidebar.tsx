@@ -30,6 +30,8 @@ export default function Sidebar({
 		FectchedObjectDefinitions
 	>();
 
+	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
+
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
 			input: `/o/object-admin/v1.0/object-definitions/by-external-reference-code/${mainObjectDefinitionERC}`,
@@ -47,6 +49,8 @@ export default function Sidebar({
 						objectDefinition={
 							fetchedObjectDefinitions.mainObjectDefinition
 						}
+						setViewRelatedObjects={setViewRelatedObjects}
+						viewRelatedObjects={viewRelatedObjects}
 					/>
 
 					<SidebarBody
@@ -55,11 +59,15 @@ export default function Sidebar({
 							fetchedObjectDefinitions.mainObjectDefinition
 						}
 						setCurrentSchemaProperties={setCurrentSchemaProperties}
+						viewRelatedObjects={viewRelatedObjects}
 					/>
 				</>
 			)}
 
-			<SidebarFooter />
+			{!!fetchedObjectDefinitions?.mainObjectDefinition
+				.objectRelationships.length && (
+				<SidebarFooter setViewRelatedObjects={setViewRelatedObjects} />
+			)}
 		</div>
 	);
 }

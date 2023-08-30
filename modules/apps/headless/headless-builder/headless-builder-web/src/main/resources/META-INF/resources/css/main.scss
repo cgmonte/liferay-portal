@@ -273,6 +273,10 @@ $strong-blue: #2e5aac;
 					font-weight: 600;
 				}
 
+				&.no-padding-bottom {
+					padding-bottom: 0px !important;
+				}
+
 				.related-objects-results-bar-container {
 					.subnav-tbar.subnav-tbar-primary.tbar.tbar-inline-xs-down {
 						margin: 0 -1rem !important;
