@@ -16,14 +16,16 @@ interface SidebarBodyProps {
 	viewRelatedObjects: boolean;
 }
 
-function RelatedObjectFieldsPanel({
-	relatedObjectDefinition,
+function ObjectFieldsPanel({
+	objectDefinition,
 	setCurrentSchemaProperties,
+	startExpanded,
 }: {
-	relatedObjectDefinition: ObjectDefinition;
+	objectDefinition: ObjectDefinition;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	startExpanded?: boolean;
 }) {
-	const [expanded, setExpanded] = useState(false);
+	const [expanded, setExpanded] = useState(startExpanded ?? false);
 
 	return (
 		<ClayPanel
@@ -31,19 +33,19 @@ function RelatedObjectFieldsPanel({
 			collapsable
 			defaultExpanded
 			displayTitle={
-				relatedObjectDefinition.label[
+				objectDefinition.label[
 					Liferay.ThemeDisplay.getDefaultLanguageId()
 				]
 			}
 			displayType="unstyled"
 			expanded={expanded}
-			key={relatedObjectDefinition.id}
+			key={objectDefinition.id}
 			onClick={() => setExpanded((previous) => !previous)}
 		>
-			{relatedObjectDefinition && (
+			{objectDefinition && (
 				<ClayPanel.Body>
 					<ul>
-						{relatedObjectDefinition.objectFields.map((field) => (
+						{objectDefinition.objectFields.map((field) => (
 							<li key={field.id}>
 								<BaseAPISchemaProperty
 									objectField={field}
@@ -88,42 +90,17 @@ export default function SidebarBody({
 			)}
 
 			{!viewRelatedObjects ? (
-				<ClayPanel
-					className="object-definitions-panel"
-					collapsable
-					defaultExpanded
-					displayTitle={
-						mainObjectDefinition.label[
-							Liferay.ThemeDisplay.getDefaultLanguageId()
-						]
-					}
-					displayType="unstyled"
-				>
-					{mainObjectDefinition && (
-						<ClayPanel.Body>
-							<ul>
-								{mainObjectDefinition.objectFields.map(
-									(field) => (
-										<li key={field.id}>
-											<BaseAPISchemaProperty
-												objectField={field}
-												setCurrentSchemaProperties={
-													setCurrentSchemaProperties
-												}
-											/>
-										</li>
-									)
-								)}
-							</ul>
-						</ClayPanel.Body>
-					)}
-				</ClayPanel>
+				<ObjectFieldsPanel
+					objectDefinition={mainObjectDefinition}
+					setCurrentSchemaProperties={setCurrentSchemaProperties}
+					startExpanded
+				/>
 			) : (
 				relatedObjectDefinitions?.length &&
 				relatedObjectDefinitions.map((relatedObjectDefinition) => (
-					<RelatedObjectFieldsPanel
+					<ObjectFieldsPanel
 						key={relatedObjectDefinition.id}
-						relatedObjectDefinition={relatedObjectDefinition}
+						objectDefinition={relatedObjectDefinition}
 						setCurrentSchemaProperties={setCurrentSchemaProperties}
 					/>
 				))
