@@ -4,9 +4,9 @@
  */
 
 import ClayButton from '@clayui/button';
-import {Text} from '@clayui/core';
 import {TreeView} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
+import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction, useEffect} from 'react';
 
 import {BUSINESS_TYPES_TO_SYMBOLS} from './utils/constants';
@@ -20,16 +20,10 @@ export default function PropertiesTreeView({
 	currentSchemaProperties,
 	setCurrentSchemaProperties,
 }: PropertiesTreeViewProps) {
-	const handleClear = () => {
-		setCurrentSchemaProperties([]);
-	};
-
 	const getIconName = (item: {
 		businessType?: ObjectFieldBusinessType;
 		symbolName?: string;
 	}) => {
-		console.log('item', item);
-
 		if (item.businessType) {
 			return BUSINESS_TYPES_TO_SYMBOLS[item.businessType];
 		} else if (item.symbolName) {
@@ -57,14 +51,24 @@ export default function PropertiesTreeView({
 				<TreeView
 					dragAndDrop
 					items={currentSchemaProperties}
-					// nestedKey="children"
-					onItemsChange={setCurrentSchemaProperties as any}
+					onItemMove={(_, parentItem, __) => {
+						return parentItem ? false : true;
+					}}
+					onItemsChange={(items) =>
+						items && setCurrentSchemaProperties(items)
+					}
 				>
 					{({id, item, name, objectDefinitionName}) => (
 						<TreeView.Item
 							actions={
 								<>
 									<ClayButton
+										aria-label={sub(
+											Liferay.Language.get(
+												'edit-x-property'
+											),
+											name
+										)}
 										monospaced
 										onClick={() => {
 											console.log('item edit', item);
@@ -74,6 +78,12 @@ export default function PropertiesTreeView({
 									</ClayButton>
 
 									<ClayButton
+										aria-label={sub(
+											Liferay.Language.get(
+												'delete-x-property'
+											),
+											name
+										)}
 										monospaced
 										onClick={() => {
 											console.log('item delete', item);
@@ -86,12 +96,10 @@ export default function PropertiesTreeView({
 							key={id}
 						>
 							<ClayIcon symbol={getIconName(item)} /> {name}
-
-							{/* &nbsp;
+							&nbsp;
 							<span className="treeview-item-path">
 								{`(${objectDefinitionName}.${item.name})`}
-							</span> */}
-
+							</span>
 						</TreeView.Item>
 					)}
 				</TreeView>

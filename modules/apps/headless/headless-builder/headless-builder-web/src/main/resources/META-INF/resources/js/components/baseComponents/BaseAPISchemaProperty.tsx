@@ -5,6 +5,7 @@
 
 import ClayButtonWithIcon from '@clayui/button';
 import ClayIcon from '@clayui/icon';
+import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction} from 'react';
 
 import {BUSINESS_TYPES_TO_SYMBOLS} from '../utils/constants';
@@ -20,15 +21,17 @@ export default function BaseAPISchemaProperty({
 	objectField,
 	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty) {
+	const localizedPropertyName = objectField.label[
+		Liferay.ThemeDisplay.getDefaultLanguageId()
+	]!;
+
 	const handleClick = () => {
 		setCurrentSchemaProperties((previous) => [
 			...previous,
 			{
 				id: objectField.id,
 				item: objectField,
-				name: objectField.label[
-					Liferay.ThemeDisplay.getDefaultLanguageId()
-				]!,
+				name: localizedPropertyName,
 				objectDefinitionName,
 				type: 'treeViewItem',
 			},
@@ -48,6 +51,10 @@ export default function BaseAPISchemaProperty({
 			</div>
 
 			<ClayButtonWithIcon
+				aria-label={sub(
+					Liferay.Language.get('add-x-property'),
+					localizedPropertyName
+				)}
 				className="icon-container plus-icon"
 				displayType="unstyled"
 				onClick={handleClick}

@@ -6,7 +6,6 @@
 import ClayPanel from '@clayui/panel';
 import React, {Dispatch, SetStateAction, useState} from 'react';
 
-import BaseAPISchemaContainer from '../baseComponents/BaseAPISchemaContainer';
 import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
 
 interface SidebarBodyProps {
@@ -70,26 +69,6 @@ export default function SidebarBody({
 }: SidebarBodyProps) {
 	return (
 		<div className="sidebar-body">
-			{/* {!viewRelatedObjects && (
-				<ul>
-					<li>
-						<BaseAPISchemaContainer
-							label={Liferay.Language.get('single-container')}
-							name="folder"
-							symbolName="folder"
-						/>
-					</li>
-
-					<li>
-						<BaseAPISchemaContainer
-							label={Liferay.Language.get('array-container')}
-							name="fieldSet"
-							symbolName="fieldset"
-						/>
-					</li>
-				</ul>
-			)} */}
-
 			{!viewRelatedObjects ? (
 				<ObjectFieldsPanel
 					objectDefinition={mainObjectDefinition}
