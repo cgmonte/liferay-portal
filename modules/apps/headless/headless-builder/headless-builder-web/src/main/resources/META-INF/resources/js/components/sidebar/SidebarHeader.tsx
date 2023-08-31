@@ -41,7 +41,7 @@ export default function SidebarHeader({
 				<ClayInput.Group>
 					<ClayInput.GroupItem>
 						<ClayInput
-							aria-label="Search"
+							aria-label={Liferay.Language.get('search')}
 							className="form-control input-group-inset input-group-inset-after"
 							onChange={({target: {value}}) =>
 								setSearchKeyword(value)
@@ -50,12 +50,12 @@ export default function SidebarHeader({
 							type="text"
 						/>
 
-						<ClayInput.GroupInsetItem after tag="span">
-							<ClayButtonWithIcon
-								aria-label="Search"
-								displayType="unstyled"
-								symbol="search"
-							/>
+						<ClayInput.GroupInsetItem
+							after
+							className="pr-3"
+							tag="span"
+						>
+							<ClayIcon symbol="search" />
 						</ClayInput.GroupInsetItem>
 					</ClayInput.GroupItem>
 				</ClayInput.Group>
