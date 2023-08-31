@@ -13,12 +13,14 @@ import React, {Dispatch, SetStateAction} from 'react';
 
 interface SidebarHeaderProps {
 	objectDefinition: ObjectDefinition;
+	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
 }
 
 export default function SidebarHeader({
 	objectDefinition,
+	setSearchKeyword,
 	setViewRelatedObjects,
 	viewRelatedObjects,
 }: SidebarHeaderProps) {
@@ -41,6 +43,9 @@ export default function SidebarHeader({
 						<ClayInput
 							aria-label="Search"
 							className="form-control input-group-inset input-group-inset-after"
+							onChange={({target: {value}}) =>
+								setSearchKeyword(value)
+							}
 							placeholder={Liferay.Language.get('search')}
 							type="text"
 						/>

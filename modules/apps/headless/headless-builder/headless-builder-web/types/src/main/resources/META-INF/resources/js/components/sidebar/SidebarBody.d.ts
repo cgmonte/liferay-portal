@@ -7,12 +7,14 @@ import {Dispatch, SetStateAction} from 'react';
 interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
 	fectchedObjectDefinitions: SchemaObjectDefinitions;
+	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 	viewRelatedObjects: boolean;
 }
 export default function SidebarBody({
 	currentSchemaProperties,
 	fectchedObjectDefinitions: {mainObjectDefinition, relatedObjectDefinitions},
+	searchKeyword,
 	setCurrentSchemaProperties,
 	viewRelatedObjects,
 }: SidebarBodyProps): JSX.Element;

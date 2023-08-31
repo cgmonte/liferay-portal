@@ -6,11 +6,13 @@
 import {Dispatch, SetStateAction} from 'react';
 interface SidebarHeaderProps {
 	objectDefinition: ObjectDefinition;
+	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
 }
 export default function SidebarHeader({
 	objectDefinition,
+	setSearchKeyword,
 	setViewRelatedObjects,
 	viewRelatedObjects,
 }: SidebarHeaderProps): JSX.Element;

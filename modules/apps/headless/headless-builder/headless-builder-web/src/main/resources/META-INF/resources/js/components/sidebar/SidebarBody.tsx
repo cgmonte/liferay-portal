@@ -19,21 +19,26 @@ interface ObjectDefinitionWithAddedField extends ObjectDefinition {
 interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
 	fectchedObjectDefinitions: SchemaObjectDefinitions;
+	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 	viewRelatedObjects: boolean;
+}
+
+interface ObjectFieldsPanelProps {
+	currentSchemaProperties: TreeViewItemData[];
+	objectDefinition: ObjectDefinition;
+	searchKeyword: string;
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	startExpanded?: boolean;
 }
 
 function ObjectFieldsPanel({
 	currentSchemaProperties,
 	objectDefinition,
+	searchKeyword,
 	setCurrentSchemaProperties,
 	startExpanded,
-}: {
-	currentSchemaProperties: TreeViewItemData[];
-	objectDefinition: ObjectDefinition;
-	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	startExpanded?: boolean;
-}) {
+}: ObjectFieldsPanelProps) {
 	const [expanded, setExpanded] = useState(startExpanded ?? false);
 	const [localUIData, setLocalUIData] = useState<
 		ObjectDefinitionWithAddedField
@@ -53,29 +58,38 @@ function ObjectFieldsPanel({
 		}));
 	}, [currentSchemaProperties]);
 
+	const getFilteredFields = (): AddedObjectField[] => {
+		return localUIData.objectFields.filter((field) =>
+			field.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
+				?.toLocaleLowerCase()
+				.includes(searchKeyword.toLocaleLowerCase())
+		);
+	};
+
 	return (
 		<ClayPanel
 			className="object-definitions-panel"
 			collapsable
 			defaultExpanded
 			displayTitle={
-				objectDefinition.label[
-					Liferay.ThemeDisplay.getDefaultLanguageId()
-				]
+				localUIData.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
 			}
 			displayType="unstyled"
 			expanded={expanded}
-			key={objectDefinition.id}
+			key={localUIData.id}
 			onExpandedChange={() => setExpanded((previous) => !previous)}
 		>
-			{objectDefinition && (
+			{localUIData && (
 				<ClayPanel.Body>
 					<ul>
-						{localUIData.objectFields.map((field) => (
+						{(!searchKeyword
+							? localUIData.objectFields
+							: getFilteredFields()
+						).map((field) => (
 							<li key={field.id}>
 								<BaseAPISchemaProperty
 									added={!!field.added}
-									objectDefinitionName={objectDefinition.name}
+									objectDefinitionName={localUIData.name}
 									objectField={field}
 									setCurrentSchemaProperties={
 										setCurrentSchemaProperties
@@ -93,6 +107,7 @@ function ObjectFieldsPanel({
 export default function SidebarBody({
 	currentSchemaProperties,
 	fectchedObjectDefinitions: {mainObjectDefinition, relatedObjectDefinitions},
+	searchKeyword,
 	setCurrentSchemaProperties,
 	viewRelatedObjects,
 }: SidebarBodyProps) {
@@ -102,6 +117,7 @@ export default function SidebarBody({
 				<ObjectFieldsPanel
 					currentSchemaProperties={currentSchemaProperties}
 					objectDefinition={mainObjectDefinition}
+					searchKeyword={searchKeyword}
 					setCurrentSchemaProperties={setCurrentSchemaProperties}
 					startExpanded
 				/>
@@ -116,6 +132,7 @@ export default function SidebarBody({
 									}
 									key={relatedObjectDefinition.id}
 									objectDefinition={relatedObjectDefinition}
+									searchKeyword={searchKeyword}
 									setCurrentSchemaProperties={
 										setCurrentSchemaProperties
 									}

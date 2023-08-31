@@ -25,6 +25,8 @@ export default function Sidebar({
 		SchemaObjectDefinitions
 	>();
 
+	const [searchKeyword, setSearchKeyword] = useState('');
+
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
 	const objectDefinitionBasePath =
@@ -33,7 +35,7 @@ export default function Sidebar({
 	async function getRelationshipsDefinitions(
 		objectRelationships: ObjectRelationship[]
 	): Promise<ObjectDefinition[]> {
-		return await Promise.all(
+		return (await Promise.all(
 			objectRelationships.map(async (relationship) =>
 				fetchJSON({
 					input:
@@ -41,7 +43,7 @@ export default function Sidebar({
 						relationship['objectDefinitionExternalReferenceCode2'],
 				})
 			)
-		) as ObjectDefinition[];
+		)) as ObjectDefinition[];
 	}
 
 	useEffect(() => {
@@ -68,15 +70,15 @@ export default function Sidebar({
 						objectDefinition={
 							fetchedObjectDefinitions.mainObjectDefinition
 						}
+						setSearchKeyword={setSearchKeyword}
 						setViewRelatedObjects={setViewRelatedObjects}
 						viewRelatedObjects={viewRelatedObjects}
 					/>
 
 					<SidebarBody
 						currentSchemaProperties={currentSchemaProperties}
-						fectchedObjectDefinitions={
-							fetchedObjectDefinitions
-						}
+						fectchedObjectDefinitions={fetchedObjectDefinitions}
+						searchKeyword={searchKeyword}
 						setCurrentSchemaProperties={setCurrentSchemaProperties}
 						viewRelatedObjects={viewRelatedObjects}
 					/>
