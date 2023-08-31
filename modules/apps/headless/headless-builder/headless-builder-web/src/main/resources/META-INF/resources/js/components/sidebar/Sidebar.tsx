@@ -22,7 +22,7 @@ export default function Sidebar({
 	setCurrentSchemaProperties,
 }: SidebarProps) {
 	const [fetchedObjectDefinitions, setFetchedObjectDefinitions] = useState<
-		FectchedObjectDefinitions
+		SchemaObjectDefinitions
 	>();
 
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);

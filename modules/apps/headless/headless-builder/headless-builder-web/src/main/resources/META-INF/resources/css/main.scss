@@ -250,6 +250,12 @@ $strong-blue: #2e5aac;
 							}
 						}
 
+						&.disabled {
+							svg {
+								fill: $gray-400;
+							}
+						}
+
 						svg {
 							fill: $gray-600;
 						}
@@ -259,6 +265,10 @@ $strong-blue: #2e5aac;
 						flex-grow: 1;
 						height: 48px;
 						line-height: 48px;
+
+						&.disabled {
+							color: $gray-500;
+						}
 					}
 				}
 			}

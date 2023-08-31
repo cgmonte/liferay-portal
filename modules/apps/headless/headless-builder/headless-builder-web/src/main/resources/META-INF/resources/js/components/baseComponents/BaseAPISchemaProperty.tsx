@@ -5,18 +5,21 @@
 
 import ClayButtonWithIcon from '@clayui/button';
 import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
 import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction} from 'react';
 
 import {BUSINESS_TYPES_TO_SYMBOLS} from '../utils/constants';
 
 interface BaseAPISchemaProperty {
+	added: boolean;
 	objectDefinitionName: string;
 	objectField: ObjectField;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
 export default function BaseAPISchemaProperty({
+	added,
 	objectDefinitionName,
 	objectField,
 	setCurrentSchemaProperties,
@@ -40,28 +43,41 @@ export default function BaseAPISchemaProperty({
 
 	return (
 		<div className="property-container">
-			<div className="icon-container">
+			<div
+				className={classNames({
+					'disabled': added,
+					'icon-container': true,
+				})}
+			>
 				<ClayIcon
 					symbol={BUSINESS_TYPES_TO_SYMBOLS[objectField.businessType]}
 				/>
 			</div>
 
-			<div className="label-container text-truncate">
+			<div
+				className={classNames({
+					'disabled': added,
+					'label-container': true,
+					'text-truncate': true,
+				})}
+			>
 				{objectField.label[Liferay.ThemeDisplay.getDefaultLanguageId()]}
 			</div>
 
-			<ClayButtonWithIcon
-				aria-label={sub(
-					Liferay.Language.get('add-x-property'),
-					localizedPropertyName
-				)}
-				className="icon-container plus-icon"
-				displayType="unstyled"
-				onClick={handleClick}
-				size="sm"
-			>
-				<ClayIcon symbol="plus" />
-			</ClayButtonWithIcon>
+			{!added && (
+				<ClayButtonWithIcon
+					aria-label={sub(
+						Liferay.Language.get('add-x-property'),
+						localizedPropertyName
+					)}
+					className="icon-container plus-icon"
+					displayType="unstyled"
+					onClick={handleClick}
+					size="sm"
+				>
+					<ClayIcon symbol="plus" />
+				</ClayButtonWithIcon>
+			)}
 		</div>
 	);
 }

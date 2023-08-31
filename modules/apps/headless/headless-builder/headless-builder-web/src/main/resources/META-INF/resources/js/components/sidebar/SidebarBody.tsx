@@ -4,27 +4,52 @@
  */
 
 import ClayPanel from '@clayui/panel';
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
 
+interface AddedObjectField extends ObjectField {
+	added?: boolean;
+}
+
+interface ObjectDefinitionWithAddedField extends ObjectDefinition {
+	objectFields: AddedObjectField[];
+}
+
 interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
-	fectchedObjectDefinitions: FectchedObjectDefinitions;
+	fectchedObjectDefinitions: SchemaObjectDefinitions;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 	viewRelatedObjects: boolean;
 }
 
 function ObjectFieldsPanel({
+	currentSchemaProperties,
 	objectDefinition,
 	setCurrentSchemaProperties,
 	startExpanded,
 }: {
+	currentSchemaProperties: TreeViewItemData[];
 	objectDefinition: ObjectDefinition;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 	startExpanded?: boolean;
 }) {
 	const [expanded, setExpanded] = useState(startExpanded ?? false);
+	const [localUIData, setLocalUIData] = useState<
+		ObjectDefinitionWithAddedField
+	>(objectDefinition);
+
+	useEffect(() => {
+		setLocalUIData((previous) => ({
+			...previous,
+			objectFields: previous.objectFields.map((field) => ({
+				...field,
+				...(currentSchemaProperties.some(
+					(addedProperty) => addedProperty.id === field.id
+				) && {added: true}),
+			})),
+		}));
+	}, [currentSchemaProperties]);
 
 	return (
 		<ClayPanel
@@ -44,9 +69,10 @@ function ObjectFieldsPanel({
 			{objectDefinition && (
 				<ClayPanel.Body>
 					<ul>
-						{objectDefinition.objectFields.map((field) => (
+						{localUIData.objectFields.map((field) => (
 							<li key={field.id}>
 								<BaseAPISchemaProperty
+									added={!!field.added}
 									objectDefinitionName={objectDefinition.name}
 									objectField={field}
 									setCurrentSchemaProperties={
@@ -63,6 +89,7 @@ function ObjectFieldsPanel({
 }
 
 export default function SidebarBody({
+	currentSchemaProperties,
 	fectchedObjectDefinitions: {mainObjectDefinition, relatedObjectDefinitions},
 	setCurrentSchemaProperties,
 	viewRelatedObjects,
@@ -71,6 +98,7 @@ export default function SidebarBody({
 		<div className="sidebar-body">
 			{!viewRelatedObjects ? (
 				<ObjectFieldsPanel
+					currentSchemaProperties={currentSchemaProperties}
 					objectDefinition={mainObjectDefinition}
 					setCurrentSchemaProperties={setCurrentSchemaProperties}
 					startExpanded
@@ -81,6 +109,9 @@ export default function SidebarBody({
 						{relatedObjectDefinitions.map(
 							(relatedObjectDefinition) => (
 								<ObjectFieldsPanel
+									currentSchemaProperties={
+										currentSchemaProperties
+									}
 									key={relatedObjectDefinition.id}
 									objectDefinition={relatedObjectDefinition}
 									setCurrentSchemaProperties={

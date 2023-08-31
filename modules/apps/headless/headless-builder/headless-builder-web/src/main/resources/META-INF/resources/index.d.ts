@@ -101,7 +101,7 @@ type ExcludesFilterOperator = {
 	};
 };
 
-interface FectchedObjectDefinitions {
+interface SchemaObjectDefinitions {
 	mainObjectDefinition: ObjectDefinition;
 	relatedObjectDefinitions?: ObjectDefinition[];
 }
