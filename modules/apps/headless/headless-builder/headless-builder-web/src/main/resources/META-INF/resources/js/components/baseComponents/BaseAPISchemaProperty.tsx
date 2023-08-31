@@ -29,16 +29,17 @@ export default function BaseAPISchemaProperty({
 	]!;
 
 	const handleClick = () => {
-		setCurrentSchemaProperties((previous) => [
-			...previous,
-			{
+		setCurrentSchemaProperties((previous) => {
+			previous.unshift({
 				id: objectField.id,
 				item: objectField,
 				name: localizedPropertyName,
 				objectDefinitionName,
 				type: 'treeViewItem',
-			},
-		]);
+			});
+
+			return [...previous];
+		});
 	};
 
 	return (
