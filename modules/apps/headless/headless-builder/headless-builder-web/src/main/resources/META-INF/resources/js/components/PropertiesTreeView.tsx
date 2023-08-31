@@ -39,9 +39,9 @@ export default function PropertiesTreeView({
 		);
 	};
 
-	useEffect(() => {
-		console.log('currentSchemaProperties', currentSchemaProperties);
-	}, [currentSchemaProperties]);
+	// useEffect(() => {
+	// 	console.log('currentSchemaProperties', currentSchemaProperties);
+	// }, [currentSchemaProperties]);
 
 	return (
 		<div className="d-flex treeview-container">

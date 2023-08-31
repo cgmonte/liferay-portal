@@ -46,7 +46,9 @@ function ObjectFieldsPanel({
 				...field,
 				...(currentSchemaProperties.some(
 					(addedProperty) => addedProperty.id === field.id
-				) && {added: true}),
+				)
+					? {added: true}
+					: {added: false}),
 			})),
 		}));
 	}, [currentSchemaProperties]);
