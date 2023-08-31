@@ -33,6 +33,12 @@ export default function PropertiesTreeView({
 		return 'simple-circle';
 	};
 
+	const handleRemoveProperty = (id: number) => {
+		setCurrentSchemaProperties((previous) =>
+			previous.filter((property) => property.id !== id)
+		);
+	};
+
 	useEffect(() => {
 		console.log('currentSchemaProperties', currentSchemaProperties);
 	}, [currentSchemaProperties]);
@@ -86,7 +92,7 @@ export default function PropertiesTreeView({
 										)}
 										monospaced
 										onClick={() => {
-											console.log('item delete', item);
+											handleRemoveProperty(id);
 										}}
 									>
 										<ClayIcon symbol="trash" />
