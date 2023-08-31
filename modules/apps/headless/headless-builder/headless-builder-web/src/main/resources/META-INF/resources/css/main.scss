@@ -143,7 +143,7 @@ $strong-blue: #2e5aac;
 
 					&:hover {
 						span.treeview-item-path {
-							display: inherit !important;
+							display: inline-block !important;
 						}
 					}
 				}

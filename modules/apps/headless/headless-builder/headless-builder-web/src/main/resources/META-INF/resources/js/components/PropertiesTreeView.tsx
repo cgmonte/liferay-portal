@@ -103,7 +103,7 @@ export default function PropertiesTreeView({
 						>
 							<ClayIcon symbol={getIconName(item)} /> {name}
 							&nbsp;
-							<span className="treeview-item-path">
+							<span className="text-truncate treeview-item-path">
 								{`(${objectDefinitionName}.${item.name})`}
 							</span>
 						</TreeView.Item>
