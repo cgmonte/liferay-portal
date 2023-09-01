@@ -4,18 +4,13 @@
  */
 
 import {Dispatch, SetStateAction} from 'react';
-interface PropertiesTreeViewProps {
+import '../../css/main.scss';
+interface EditAPISchemaPropertiesProps {
 	currentSchemaProperties: TreeViewItemData[];
-	searchState: SearchState;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
-interface SearchState {
-	filteredSchemaProperties: TreeViewItemData[];
-	searchKeyword: string;
-}
-export default function PropertiesTreeView({
+export default function EditAPISchemaProperties({
 	currentSchemaProperties,
-	searchState,
 	setCurrentSchemaProperties,
-}: PropertiesTreeViewProps): JSX.Element;
+}: EditAPISchemaPropertiesProps): JSX.Element;
 export {};

@@ -13,11 +13,18 @@ import {BUSINESS_TYPES_TO_SYMBOLS} from './utils/constants';
 
 interface PropertiesTreeViewProps {
 	currentSchemaProperties: TreeViewItemData[];
+	searchState: SearchState;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+}
+
+interface SearchState {
+	filteredSchemaProperties: TreeViewItemData[];
+	searchKeyword: string;
 }
 
 export default function PropertiesTreeView({
 	currentSchemaProperties,
+	searchState,
 	setCurrentSchemaProperties,
 }: PropertiesTreeViewProps) {
 	const getIconName = (item: {
@@ -39,6 +46,21 @@ export default function PropertiesTreeView({
 		);
 	};
 
+	const getItems = () => {
+		if (
+			!searchState.filteredSchemaProperties.length &&
+			searchState.searchKeyword !== ''
+		) {
+			return [];
+		}
+
+		if (searchState.filteredSchemaProperties.length) {
+			return searchState.filteredSchemaProperties;
+		}
+
+		return currentSchemaProperties;
+	};
+
 	return (
 		<div className="d-flex treeview-container">
 			{!currentSchemaProperties.length ? (
@@ -52,7 +74,7 @@ export default function PropertiesTreeView({
 			) : (
 				<TreeView
 					dragAndDrop
-					items={currentSchemaProperties}
+					items={getItems()}
 					onItemMove={(_, parentItem, __) => {
 						return parentItem ? false : true;
 					}}
