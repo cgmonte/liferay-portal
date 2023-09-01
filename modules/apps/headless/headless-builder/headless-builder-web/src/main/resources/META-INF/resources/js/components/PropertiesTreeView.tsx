@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import {TreeView} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import {sub} from 'frontend-js-web';
-import React, {Dispatch, SetStateAction, useEffect} from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
 import {BUSINESS_TYPES_TO_SYMBOLS} from './utils/constants';
 
@@ -38,10 +38,6 @@ export default function PropertiesTreeView({
 			previous.filter((property) => property.id !== id)
 		);
 	};
-
-	// useEffect(() => {
-	// 	console.log('currentSchemaProperties', currentSchemaProperties);
-	// }, [currentSchemaProperties]);
 
 	return (
 		<div className="d-flex treeview-container">

@@ -131,27 +131,37 @@ $strong-blue: #2e5aac;
 		height: 100%;
 		overflow: auto;
 
-		.treeview-container {
-			flex-direction: column;
-			margin-top: 24px;
+		.edit-schema-child {
+			margin-left: calc((100vw - 1248px) / 2);
 
-			.treeview-item {
-				.treeview-link {
-					.treeview-item-path {
-						display: none !important;
-					}
+			.treeview-container {
+				flex-direction: column;
+				margin-top: 24px;
 
-					&:hover {
-						span.treeview-item-path {
-							display: inline-block !important;
+				.treeview-item {
+					.treeview-link {
+						.treeview-item-path {
+							display: none !important;
+						}
+
+						&:hover {
+							span.treeview-item-path {
+								display: inline-block !important;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		.edit-schema-child {
-			margin-left: calc((100vw - 1248px) / 2);
+			.search-container {
+				.container-fluid.container-fluid-max-xl {
+					padding: 0;
+
+					.navbar-form.navbar-form-autofit.navbar-overlay.navbar-overlay-sm-down {
+						padding: 0;
+					}
+				}
+			}
 		}
 
 		.first-property-drop-area {

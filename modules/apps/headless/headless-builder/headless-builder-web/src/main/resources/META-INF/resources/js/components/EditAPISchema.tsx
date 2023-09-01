@@ -4,11 +4,15 @@
  */
 
 import ClayBreadcrumb from '@clayui/breadcrumb';
-import {ClayButtonWithIcon} from '@clayui/button';
+import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayCard from '@clayui/card';
 import {ClayInput} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
+import ClayManagementToolbar, {
+	ClayResultsBar,
+} from '@clayui/management-toolbar';
 import ClayTabs from '@clayui/tabs';
-import {openModal, openToast} from 'frontend-js-web';
+import {openModal, openToast, sub} from 'frontend-js-web';
 import React, {
 	Dispatch,
 	SetStateAction,
@@ -61,19 +65,20 @@ export default function EditAPISchema({
 	} = useContext(EditAPIApplicationContext);
 
 	const [activeTab, setActiveTab] = useState(0);
-	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
-		description: '',
-		mainObjectDefinitionERC: '',
-		name: '',
-	});
+	const [currentSchemaProperties, setCurrentSchemaProperties] = useState<
+		TreeViewItemData[]
+	>([]);
 	const [displayError, setDisplayError] = useState<DataError>({
 		description: false,
 		mainObjectDefinitionERC: false,
 		name: false,
 	});
-	const [currentSchemaProperties, setCurrentSchemaProperties] = useState<
-		TreeViewItemData[]
-	>([]);
+	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
+		description: '',
+		mainObjectDefinitionERC: '',
+		name: '',
+	});
+	const [searchKeyword, setSearchKeyword] = useState('');
 
 	const fetchAPISchema = () => {
 		fetchJSON<APISchemaItem>({
@@ -356,29 +361,74 @@ export default function EditAPISchema({
 							>
 								<ClayCard.Body>
 									<div className="search-container">
-										<ClayInput.Group>
-											<ClayInput.GroupItem>
-												<ClayInput
-													aria-label="Search"
-													className="form-control input-group-inset input-group-inset-after"
-													placeholder={Liferay.Language.get(
-														'search'
-													)}
-													type="text"
-												/>
+										<ClayManagementToolbar>
+											<ClayManagementToolbar.Search>
+												<ClayInput.Group>
+													<ClayInput.GroupItem>
+														<ClayInput
+															aria-label={Liferay.Language.get(
+																'search'
+															)}
+															className="form-control input-group-inset input-group-inset-after"
+															onChange={({
+																target: {value},
+															}) =>
+																setSearchKeyword(
+																	value
+																)
+															}
+															placeholder={Liferay.Language.get(
+																'search'
+															)}
+															type="text"
+															value={
+																searchKeyword
+															}
+														/>
 
-												<ClayInput.GroupInsetItem
-													after
-													tag="span"
-												>
-													<ClayButtonWithIcon
-														aria-label="Search"
+														<ClayInput.GroupInsetItem
+															after
+															className="pr-3"
+															tag="span"
+														>
+															<ClayIcon symbol="search" />
+														</ClayInput.GroupInsetItem>
+													</ClayInput.GroupItem>
+												</ClayInput.Group>
+											</ClayManagementToolbar.Search>
+										</ClayManagementToolbar>
+
+										{searchKeyword && (
+											<ClayResultsBar>
+												<ClayResultsBar.Item expand>
+													<span className="component-text text-truncate-inline">
+														<span className="text-truncate">
+															{sub(
+																Liferay.Language.get(
+																	'x-result-for-x'
+																),
+																'0',
+																searchKeyword
+															)}
+														</span>
+													</span>
+												</ClayResultsBar.Item>
+
+												<ClayResultsBar.Item>
+													<ClayButton
+														className="component-link tbar-link"
 														displayType="unstyled"
-														symbol="search"
-													/>
-												</ClayInput.GroupInsetItem>
-											</ClayInput.GroupItem>
-										</ClayInput.Group>
+														onClick={() =>
+															setSearchKeyword('')
+														}
+													>
+														{Liferay.Language.get(
+															'clear-all'
+														)}
+													</ClayButton>
+												</ClayResultsBar.Item>
+											</ClayResultsBar>
+										)}
 									</div>
 
 									<PropertiesTreeView
