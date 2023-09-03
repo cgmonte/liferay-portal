@@ -92,6 +92,14 @@ export default function EditAPISchema({
 		});
 	};
 
+	const fetchAPISchemaProperties = () => {
+		fetchJSON<any>({
+			input: `/o/headless-builder/schemas/${schemaId}/apiSchemaToAPIProperties`,
+		}).then((response) => {
+			setCurrentSchemaProperties(response.items);
+		});
+	};
+
 	const resetLocalUIData = () => {
 		if (fetchedData.apiSchema) {
 			setLocalUIData(
@@ -229,6 +237,7 @@ export default function EditAPISchema({
 		setHideManagementButtons(false);
 
 		fetchAPISchema();
+		fetchAPISchemaProperties();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -282,8 +291,10 @@ export default function EditAPISchema({
 			}
 		}
 
+		console.log('currentSchemaProperties', currentSchemaProperties);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [localUIData]);
+	}, [currentSchemaProperties, localUIData]);
 
 	return (
 		<div className="main-container">
