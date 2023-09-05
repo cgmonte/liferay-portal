@@ -3,8 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 
+import {EditSchemaContext} from '../EditAPIApplicationContext';
 import {fetchJSON} from '../utils/fetchUtil';
 import SidebarBody from './SidebarBody';
 import SidebarFooter from './SidebarFooter';
@@ -21,9 +28,13 @@ export default function Sidebar({
 	mainObjectDefinitionERC,
 	setCurrentSchemaProperties,
 }: SidebarProps) {
-	const [fetchedObjectDefinitions, setFetchedObjectDefinitions] = useState<
-		SchemaObjectDefinitions
-	>();
+	// const [fetchedObjectDefinitions, setFetchedObjectDefinitions] = useState<
+	// 	SchemaObjectDefinitions
+	// >();
+
+	const {fetchedSchemaData, setFetchedSchemaData} = useContext(
+		EditSchemaContext
+	);
 
 	const [searchKeyword, setSearchKeyword] = useState('');
 
@@ -53,10 +64,11 @@ export default function Sidebar({
 			getRelationshipsDefinitions(
 				mainObjectResult.objectRelationships
 			).then((relatedObjectDefinitions) =>
-				setFetchedObjectDefinitions({
+				setFetchedSchemaData((previous) => ({
+					...previous,
 					mainObjectDefinition: mainObjectResult,
 					relatedObjectDefinitions,
-				})
+				}))
 			);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,29 +76,37 @@ export default function Sidebar({
 
 	return (
 		<div className="sidebar">
-			{fetchedObjectDefinitions && (
-				<>
-					<SidebarHeader
-						objectDefinition={
-							fetchedObjectDefinitions.mainObjectDefinition
-						}
-						setSearchKeyword={setSearchKeyword}
-						setViewRelatedObjects={setViewRelatedObjects}
-						viewRelatedObjects={viewRelatedObjects}
-					/>
+			{fetchedSchemaData.mainObjectDefinition &&
+				fetchedSchemaData.relatedObjectDefinitions && (
+					<>
+						<SidebarHeader
+							objectDefinition={
+								fetchedSchemaData.mainObjectDefinition
+							}
+							setSearchKeyword={setSearchKeyword}
+							setViewRelatedObjects={setViewRelatedObjects}
+							viewRelatedObjects={viewRelatedObjects}
+						/>
 
-					<SidebarBody
-						currentSchemaProperties={currentSchemaProperties}
-						fectchedObjectDefinitions={fetchedObjectDefinitions}
-						searchKeyword={searchKeyword}
-						setCurrentSchemaProperties={setCurrentSchemaProperties}
-						viewRelatedObjects={viewRelatedObjects}
-					/>
-				</>
-			)}
+						<SidebarBody
+							currentSchemaProperties={currentSchemaProperties}
+							fectchedObjectDefinitions={{
+								mainObjectDefinition:
+									fetchedSchemaData.mainObjectDefinition,
+								relatedObjectDefinitions:
+									fetchedSchemaData.relatedObjectDefinitions,
+							}}
+							searchKeyword={searchKeyword}
+							setCurrentSchemaProperties={
+								setCurrentSchemaProperties
+							}
+							viewRelatedObjects={viewRelatedObjects}
+						/>
+					</>
+				)}
 
-			{!!fetchedObjectDefinitions?.mainObjectDefinition
-				.objectRelationships.length && (
+			{fetchedSchemaData?.mainObjectDefinition?.objectRelationships
+				.length && (
 				<SidebarFooter setViewRelatedObjects={setViewRelatedObjects} />
 			)}
 		</div>

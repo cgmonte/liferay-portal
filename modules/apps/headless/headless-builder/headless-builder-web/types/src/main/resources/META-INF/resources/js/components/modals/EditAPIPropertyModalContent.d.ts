@@ -12,7 +12,6 @@ export default function EditAPIPropertyModalContent({
 	closeModal,
 	description,
 	id,
-	item,
 	name,
 	objectDefinitionName,
 	type,

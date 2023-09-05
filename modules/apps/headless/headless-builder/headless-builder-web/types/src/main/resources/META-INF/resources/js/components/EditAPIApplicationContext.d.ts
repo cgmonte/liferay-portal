@@ -11,4 +11,9 @@ interface APIBuilderContext {
 	setIsDataUnsaved: Dispatch<SetStateAction<boolean>>;
 }
 export declare const EditAPIApplicationContext: import('react').Context<APIBuilderContext>;
+interface APISchemaContext {
+	fetchedSchemaData: SchemaFetchedData;
+	setFetchedSchemaData: Dispatch<SetStateAction<SchemaFetchedData>>;
+}
+export declare const EditSchemaContext: import('react').Context<APISchemaContext>;
 export {};

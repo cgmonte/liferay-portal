@@ -16,13 +16,16 @@ import React, {
 	useState,
 } from 'react';
 
-import {EditAPIApplicationContext} from './EditAPIApplicationContext';
+import {
+	EditAPIApplicationContext,
+	EditSchemaContext,
+} from './EditAPIApplicationContext';
 import EditAPISchemaProperties from './EditAPISchemaProperties';
 import BaseAPISchemaFields from './baseComponents/BaseAPISchemaFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
 import Sidebar from './sidebar/Sidebar';
 import {hasDataChanged, resetToFetched} from './utils/dataUtils';
-import {fetchJSON, updateData} from './utils/fetchUtil';
+import {fetchJSON, getAllItems, updateData} from './utils/fetchUtil';
 
 import '../../css/main.scss';
 
@@ -67,6 +70,9 @@ export default function EditAPISchema({
 		mainObjectDefinitionERC: false,
 		name: false,
 	});
+	const [fetchedSchemaData, setFetchedSchemaData] = useState<
+		SchemaFetchedData
+	>({});
 	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
 		description: '',
 		mainObjectDefinitionERC: '',
@@ -78,7 +84,7 @@ export default function EditAPISchema({
 			input: apiURLPaths.schemas + schemaId,
 		}).then((response) => {
 			if (response.id === schemaId) {
-				setFetchedData((previous) => ({
+				setFetchedSchemaData((previous) => ({
 					...previous,
 					apiSchema: response,
 				}));
@@ -93,10 +99,13 @@ export default function EditAPISchema({
 	};
 
 	const fetchAPISchemaProperties = () => {
-		fetchJSON<any>({
-			input: `/o/headless-builder/schemas/${schemaId}/apiSchemaToAPIProperties`,
+		getAllItems<APISchemaPropertyItem>({
+			url: `/o/headless-builder/schemas/${schemaId}/apiSchemaToAPIProperties`,
 		}).then((response) => {
-			setCurrentSchemaProperties(response.items);
+			setFetchedSchemaData((previous) => ({
+				...previous,
+				schemaProperties: response,
+			}));
 		});
 	};
 
@@ -243,6 +252,66 @@ export default function EditAPISchema({
 	}, []);
 
 	useEffect(() => {
+		const {
+			apiSchema,
+			mainObjectDefinition,
+			relatedObjectDefinitions,
+			schemaProperties,
+		} = fetchedSchemaData;
+
+		if (
+			apiSchema &&
+			mainObjectDefinition &&
+			relatedObjectDefinitions &&
+			schemaProperties
+		) {
+			let allFields: ObjectField[] = [];
+
+			relatedObjectDefinitions.forEach((definition) => {
+				allFields = [...allFields, ...definition.objectFields];
+			});
+
+			allFields = [...allFields, ...mainObjectDefinition.objectFields];
+
+			const allObjectDefinitions = [
+				...relatedObjectDefinitions,
+				mainObjectDefinition,
+			];
+
+			// const allFields = [
+			// 	...relatedObjectDefinitions.objectFields,
+			// 	mainObjectDefinition,
+			// ].map((definition) => {});
+
+			const propertiesTreeViewItems = schemaProperties.map(
+				(property) => ({
+					businessType: allFields.find(
+						(field) =>
+							field.externalReferenceCode ===
+							property.objectFieldERC
+					)?.businessType!,
+					id: property.id,
+					
+					// item: property,
+
+					name: property.name,
+					objectDefinitionName: allObjectDefinitions.find(
+						(definition) =>
+							definition.externalReferenceCode ===
+							apiSchema.mainObjectDefinitionERC
+					)?.name!,
+					type: 'trewViewItem',
+					...(property.description && {
+						description: property.description,
+					}),
+				})
+			);
+
+			setCurrentSchemaProperties(propertiesTreeViewItems);
+		}
+	}, [fetchedSchemaData]);
+
+	useEffect(() => {
 		if (fetchedData.apiSchema) {
 			setIsDataUnsaved(
 				hasDataChanged({
@@ -297,97 +366,106 @@ export default function EditAPISchema({
 	}, [currentSchemaProperties, localUIData]);
 
 	return (
-		<div className="main-container">
-			<div className="edit-schema">
-				<div className="container-fluid container-fluid-max-xl edit-schema-child mt-3">
-					<ClayBreadcrumb
-						className="api-builder-navigation-breadcrum"
-						items={[
-							{
-								label: Liferay.Language.get('schemas'),
-								onClick: () => handleCancel(),
-							},
-							{
-								active: true,
-								label:
-									fetchedData.apiSchema?.name ??
-									localUIData.name,
-							},
-						]}
-					/>
+		<EditSchemaContext.Provider
+			value={{
+				fetchedSchemaData,
+				setFetchedSchemaData,
+			}}
+		>
+			<div className="main-container">
+				<div className="edit-schema">
+					<div className="container-fluid container-fluid-max-xl edit-schema-child mt-3">
+						<ClayBreadcrumb
+							className="api-builder-navigation-breadcrum"
+							items={[
+								{
+									label: Liferay.Language.get('schemas'),
+									onClick: () => handleCancel(),
+								},
+								{
+									active: true,
+									label:
+										fetchedData.apiSchema?.name ??
+										localUIData.name,
+								},
+							]}
+						/>
 
-					<ClayCard className="mt-3 pt-2">
-						<ClayTabs
-							active={activeTab}
-							className="mt-3"
-							fade
-							onActiveChange={setActiveTab}
-						>
-							<ClayTabs.Item
-								innerProps={{
-									'aria-controls': 'tabpanel-1',
-								}}
+						<ClayCard className="mt-3 pt-2">
+							<ClayTabs
+								active={activeTab}
+								className="mt-3"
+								fade
+								onActiveChange={setActiveTab}
 							>
-								{Liferay.Language.get('info')}
-							</ClayTabs.Item>
+								<ClayTabs.Item
+									innerProps={{
+										'aria-controls': 'tabpanel-1',
+									}}
+								>
+									{Liferay.Language.get('info')}
+								</ClayTabs.Item>
 
-							<ClayTabs.Item
-								innerProps={{
-									'aria-controls': 'tabpanel-2',
-								}}
-							>
-								{Liferay.Language.get('properties')}
-							</ClayTabs.Item>
-						</ClayTabs>
+								<ClayTabs.Item
+									innerProps={{
+										'aria-controls': 'tabpanel-2',
+									}}
+								>
+									{Liferay.Language.get('properties')}
+								</ClayTabs.Item>
+							</ClayTabs>
 
-						<ClayTabs.Content activeIndex={activeTab} fade>
-							<ClayTabs.TabPane
-								aria-label={Liferay.Language.get(
-									'information-tab'
-								)}
-								className="schema-tabs"
-							>
-								<ClayCard.Body>
-									<BaseAPISchemaFields
-										data={localUIData}
-										disableObjectSelect
-										displayError={displayError}
-										setData={setLocalUIData}
-									/>
-								</ClayCard.Body>
-							</ClayTabs.TabPane>
+							<ClayTabs.Content activeIndex={activeTab} fade>
+								<ClayTabs.TabPane
+									aria-label={Liferay.Language.get(
+										'information-tab'
+									)}
+									className="schema-tabs"
+								>
+									<ClayCard.Body>
+										<BaseAPISchemaFields
+											data={localUIData}
+											disableObjectSelect
+											displayError={displayError}
+											setData={setLocalUIData}
+										/>
+									</ClayCard.Body>
+								</ClayTabs.TabPane>
 
-							<ClayTabs.TabPane
-								aria-label={Liferay.Language.get(
-									'properties-tab'
-								)}
-								className="schema-tabs"
-							>
-								<ClayCard.Body>
-									<EditAPISchemaProperties
-										currentSchemaProperties={
-											currentSchemaProperties
-										}
-										setCurrentSchemaProperties={
-											setCurrentSchemaProperties
-										}
-									/>
-								</ClayCard.Body>
-							</ClayTabs.TabPane>
-						</ClayTabs.Content>
-					</ClayCard>
+								<ClayTabs.TabPane
+									aria-label={Liferay.Language.get(
+										'properties-tab'
+									)}
+									className="schema-tabs"
+								>
+									<ClayCard.Body>
+										<EditAPISchemaProperties
+											currentSchemaProperties={
+												currentSchemaProperties
+											}
+											setCurrentSchemaProperties={
+												setCurrentSchemaProperties
+											}
+										/>
+									</ClayCard.Body>
+								</ClayTabs.TabPane>
+							</ClayTabs.Content>
+						</ClayCard>
+					</div>
+
+					{activeTab === 1 && (
+						<Sidebar
+							currentSchemaProperties={currentSchemaProperties}
+							mainObjectDefinitionERC={
+								localUIData.mainObjectDefinitionERC
+							}
+							setCurrentSchemaProperties={
+								setCurrentSchemaProperties
+							}
+						/>
+					)}
 				</div>
-
-				{activeTab === 1 && (
-					<Sidebar
-						currentSchemaProperties={currentSchemaProperties}
-						mainObjectDefinitionERC={
-							localUIData.mainObjectDefinitionERC
-						}
-						setCurrentSchemaProperties={setCurrentSchemaProperties}
-					/>
-				)}
 			</div>
-		</div>
+		</EditSchemaContext.Provider>
 	);
 }

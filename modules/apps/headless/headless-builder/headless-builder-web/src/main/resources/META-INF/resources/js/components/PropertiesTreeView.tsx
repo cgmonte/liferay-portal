@@ -28,14 +28,9 @@ export default function PropertiesTreeView({
 	searchState,
 	setCurrentSchemaProperties,
 }: PropertiesTreeViewProps) {
-	const getIconName = (item: {
-		businessType?: ObjectFieldBusinessType;
-		symbolName?: string;
-	}) => {
-		if (item.businessType) {
-			return BUSINESS_TYPES_TO_SYMBOLS[item.businessType];
-		} else if (item.symbolName) {
-			return item.symbolName;
+	const getIconName = (businessType: ObjectFieldBusinessType) => {
+		if (businessType) {
+			return BUSINESS_TYPES_TO_SYMBOLS[businessType];
 		}
 
 		return 'simple-circle';
@@ -62,23 +57,23 @@ export default function PropertiesTreeView({
 		return currentSchemaProperties;
 	};
 
-	const handleEditAPIProperty = ({id, item, name}: any) => {
-		openModal({
-			center: true,
-			contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
-				EditAPIPropertyModalContent({
-					closeModal,
-					description: '',
-					id,
-					item,
-					name,
-					objectDefinitionName: 'sei la',
-					type: 'treeViewItem',
-				}),
-			id: 'editAPIPropertyModal',
-			size: 'md',
-		});
-	};
+	// const handleEditAPIProperty = ({businessType, id, item, name}: TreeViewItemData) => {
+	// 	openModal({
+	// 		center: true,
+	// 		contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
+	// 			EditAPIPropertyModalContent({
+	// 				closeModal,
+	// 				description: '',
+	// 				id,
+	// 				item,
+	// 				name,
+	// 				objectDefinitionName: 'sei la',
+	// 				type: 'treeViewItem',
+	// 			}),
+	// 		id: 'editAPIPropertyModal',
+	// 		size: 'md',
+	// 	});
+	// };
 
 	return (
 		<div className="d-flex treeview-container">
@@ -101,7 +96,7 @@ export default function PropertiesTreeView({
 						items && setCurrentSchemaProperties(items)
 					}
 				>
-					{({id, item, name, objectDefinitionName}) => (
+					{({businessType, id, name, objectDefinitionName}) => (
 						<TreeView.Item
 							actions={
 								<>
@@ -113,7 +108,7 @@ export default function PropertiesTreeView({
 											name
 										)}
 										monospaced
-										onClick={handleEditAPIProperty}
+										onClick={() => {}}
 									>
 										<ClayIcon symbol="pencil" />
 									</ClayButton>
@@ -136,11 +131,11 @@ export default function PropertiesTreeView({
 							}
 							key={id}
 						>
-							<ClayIcon symbol={getIconName(item)} /> {name}
+							<ClayIcon symbol={getIconName(businessType)} />{name}
 							&nbsp;
-							<span className="text-truncate treeview-item-path">
+							{/* <span className="text-truncate treeview-item-path">
 								{`(${objectDefinitionName}.${item.name})`}
-							</span>
+							</span> */}
 						</TreeView.Item>
 					)}
 				</TreeView>
