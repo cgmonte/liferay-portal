@@ -95,6 +95,23 @@ type APISchemaUIData = Pick<
 	'description' | 'name' | 'mainObjectDefinitionERC'
 >;
 
+type ExcludesFilterOperator = {
+	not: {
+		in: string[] | number[];
+	};
+};
+
+interface SchemaObjectDefinitions {
+	mainObjectDefinition: ObjectDefinition;
+	relatedObjectDefinitions?: ObjectDefinition[];
+}
+
+type IncludesFilterOperator = {
+	in: string[] | number[];
+};
+
+type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+
 type MainSchemaNav = 'list' | {edit: number};
 
 interface ManagementButton {
@@ -106,6 +123,15 @@ interface ManagementButtonsProps {
 	cancel: ManagementButton;
 	publish: ManagementButton;
 	save: ManagementButton;
+}
+
+interface NameValueObject {
+	name: string;
+	value: string;
+}
+
+interface ObjectRelationship {
+	objectDefinitionExternalReferenceCode2: string;
 }
 
 interface ObjectDefinition {
@@ -123,11 +149,13 @@ interface ObjectDefinition {
 	enableObjectEntryHistory: boolean;
 	externalReferenceCode: string;
 	id: number;
+	label: LocalizedValue<string>;
 	modifiable?: boolean;
 	name: string;
 	objectActions: [];
+	objectFields: ObjectField[];
 	objectLayouts: [];
-	objectRelationships: [];
+	objectRelationships: ObjectRelationship[];
 	objectViews: [];
 	panelCategoryKey: string;
 	parameterRequired?: boolean;
@@ -145,7 +173,143 @@ interface ObjectDefinition {
 	titleObjectFieldName: string;
 }
 
+type ObjectFieldBusinessType =
+	| 'Aggregation'
+	| 'Attachment'
+	| 'Date'
+	| 'DateTime'
+	| 'Decimal'
+	| 'Encrypted'
+	| 'Formula'
+	| 'Integer'
+	| 'LongInteger'
+	| 'LongText'
+	| 'MultiselectPicklist'
+	| 'Picklist'
+	| 'PrecisionDecimal'
+	| 'Relationship'
+	| 'RichText'
+	| 'Text'
+	| 'Workflow Status';
+
+interface ObjectField {
+	DBType: string;
+	businessType: ObjectFieldBusinessType;
+	defaultValue?: string;
+	externalReferenceCode?: string;
+	id: number;
+	indexed: boolean;
+	indexedAsKeyword: boolean;
+	indexedLanguageId: Liferay.Language.Locale | null;
+	label: LocalizedValue<string>;
+	listTypeDefinitionExternalReferenceCode: string;
+	listTypeDefinitionId?: number;
+	localized: boolean;
+	name: string;
+	objectFieldSettings?: ObjectFieldSetting[];
+	readOnly: ReadOnlyFieldValue;
+	readOnlyConditionExpression: string;
+	relationshipId?: number;
+	relationshipType?: unknown;
+	required: boolean;
+	state: boolean;
+	system?: boolean;
+}
+
+interface ObjectFieldSetting {
+	name: ObjectFieldSettingName;
+	objectFieldId?: number;
+	value: ObjectFieldSettingValue;
+}
+
+type ObjectFieldDateRangeFilterSettings = {
+	[key: string]: string;
+};
+
+type ObjectFieldFilterSetting = {
+	filterBy?: string;
+	filterType?: string;
+	json:
+		| {
+				[key: string]:
+					| string
+					| string[]
+					| ObjectFieldDateRangeFilterSettings
+					| undefined;
+		  }
+		| ExcludesFilterOperator
+		| IncludesFilterOperator
+		| string;
+};
+
+type ObjectFieldSettingName =
+	| 'acceptedFileExtensions'
+	| 'defaultValue'
+	| 'defaultValueType'
+	| 'fileSource'
+	| 'filters'
+	| 'function'
+	| 'maxLength'
+	| 'maximumFileSize'
+	| 'objectDefinition1ShortName'
+	| 'objectFieldName'
+	| 'objectRelationshipName'
+	| 'output'
+	| 'script'
+	| 'showCounter'
+	| 'showFilesInDocumentsAndMedia'
+	| 'stateFlow'
+	| 'storageDLFolderPath'
+	| 'timeStorage'
+	| 'uniqueValues'
+	| 'uniqueValuesErrorMessage';
+
+type ObjectFieldSettingValue =
+	| LocalizedValue<string>
+	| NameValueObject[]
+	| ObjectFieldFilterSetting[]
+	| ObjectFieldPicklistSetting
+	| boolean
+	| number
+	| string;
+
+type ObjectFieldPicklistSetting = {
+	id: number;
+	objectStates: ObjectState[];
+};
+
+interface ObjectState {
+	key: string;
+	objectStateTransitions: {key: string}[];
+}
+
+type ReadOnlyFieldValue = '' | 'conditional' | 'false' | 'true';
+
+interface SchemaContainer {
+	label: string;
+	name: string;
+	symbolName: string;
+}
+
 interface SelectOption {
 	label: string;
 	value: string;
+}
+
+interface TreeViewItem {
+	children?: TreeViewItem[];
+	item: SchemaContainer | ObjectField;
+	key: string | number;
+	name: string;
+	type: string;
+}
+
+interface TreeViewItemData {
+	children?: TreeViewItemData[];
+	description?: string;
+	id: number;
+	item: SchemaContainer | ObjectField;
+	name: string;
+	objectDefinitionName: string;
+	type: string;
 }
