@@ -49,7 +49,6 @@ interface FetchedData {
 interface BaseItem {
 	actions: Actions;
 	createDate: string;
-	creator: string;
 	dateCreated: string;
 	dateModified: string;
 	description: string;
@@ -58,7 +57,6 @@ interface BaseItem {
 	keywords: string[];
 	modifiedDate: string;
 	scopeKey: string;
-	status: string;
 }
 
 type ApplicationStatusKeys = 'published' | 'unpublished';
@@ -88,6 +86,22 @@ interface APISchemaItem extends BaseItem {
 	mainObjectDefinitionERC: string;
 	name: string;
 	r_apiApplicationToAPISchemas_c_apiApplicationId: string;
+}
+
+interface APISchemaPropertyItem {
+	actions: Actions;
+	apiSchemaToAPIPropertiesERC: string;
+	dateCreated: string;
+	dateModified: string;
+	description?: string;
+	externalReferenceCode: string;
+	id: number;
+	keywords: string[];
+	name: string;
+	objectFieldERC: string;
+	objectRelationshipNames: string;
+	r_apiSchemaToAPIProperties_c_apiSchemaERC: string;
+	r_apiSchemaToAPIProperties_c_apiSchemaId: number;
 }
 
 type APISchemaUIData = Pick<
@@ -285,30 +299,23 @@ interface ObjectState {
 
 type ReadOnlyFieldValue = '' | 'conditional' | 'false' | 'true';
 
-interface SchemaContainer {
-	label: string;
-	name: string;
-	symbolName: string;
-}
-
+type SchemaFetchedData = {
+	apiSchema?: APISchemaItem;
+	mainObjectDefinition?: ObjectDefinition;
+	relatedObjectDefinitions?: ObjectDefinition[];
+	schemaProperties?: APISchemaPropertyItem[];
+};
 interface SelectOption {
 	label: string;
 	value: string;
 }
 
-interface TreeViewItem {
-	children?: TreeViewItem[];
-	item: SchemaContainer | ObjectField;
-	key: string | number;
-	name: string;
-	type: string;
-}
-
 interface TreeViewItemData {
+	businessType: ObjectFieldBusinessType;
 	children?: TreeViewItemData[];
 	description?: string;
 	id: number;
-	item: SchemaContainer | ObjectField;
+	// item: APISchemaPropertyItem;
 	name: string;
 	objectDefinitionName: string;
 	type: string;

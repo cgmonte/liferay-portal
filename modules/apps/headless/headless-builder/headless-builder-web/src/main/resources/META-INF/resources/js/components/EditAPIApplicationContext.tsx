@@ -18,3 +18,13 @@ export const EditAPIApplicationContext = createContext<APIBuilderContext>({
 	setHideManagementButtons: () => {},
 	setIsDataUnsaved: () => {},
 });
+
+interface APISchemaContext {
+	fetchedSchemaData: SchemaFetchedData;
+	setFetchedSchemaData: Dispatch<SetStateAction<SchemaFetchedData>>;
+}
+
+export const EditSchemaContext = createContext<APISchemaContext>({
+	fetchedSchemaData: {},
+	setFetchedSchemaData: () => {},
+});

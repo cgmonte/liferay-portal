@@ -31,8 +31,11 @@ export default function BaseAPISchemaProperty({
 	const handleClick = () => {
 		setCurrentSchemaProperties((previous) => {
 			previous.unshift({
+				businessType: objectField.businessType,
 				id: objectField.id,
-				item: objectField,
+
+				// item: objectField,
+
 				name: localizedPropertyName,
 				objectDefinitionName,
 				type: 'treeViewItem',
