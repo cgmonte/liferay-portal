@@ -17,8 +17,10 @@ import React, {
 } from 'react';
 
 import {EditAPIApplicationContext} from './EditAPIApplicationContext';
+import EditAPISchemaProperties from './EditAPISchemaProperties';
 import BaseAPISchemaFields from './baseComponents/BaseAPISchemaFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
+import Sidebar from './sidebar/Sidebar';
 import {hasDataChanged, resetToFetched} from './utils/dataUtils';
 import {fetchJSON, updateData} from './utils/fetchUtil';
 
@@ -57,15 +59,18 @@ export default function EditAPISchema({
 	} = useContext(EditAPIApplicationContext);
 
 	const [activeTab, setActiveTab] = useState(0);
-	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
-		description: '',
-		mainObjectDefinitionERC: '',
-		name: '',
-	});
+	const [currentSchemaProperties, setCurrentSchemaProperties] = useState<
+		TreeViewItemData[]
+	>([]);
 	const [displayError, setDisplayError] = useState<DataError>({
 		description: false,
 		mainObjectDefinitionERC: false,
 		name: false,
+	});
+	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
+		description: '',
+		mainObjectDefinitionERC: '',
+		name: '',
 	});
 
 	const fetchAPISchema = () => {
@@ -84,6 +89,14 @@ export default function EditAPISchema({
 					name: response.name,
 				});
 			}
+		});
+	};
+
+	const fetchAPISchemaProperties = () => {
+		fetchJSON<any>({
+			input: `/o/headless-builder/schemas/${schemaId}/apiSchemaToAPIProperties`,
+		}).then((response) => {
+			setCurrentSchemaProperties(response.items);
 		});
 	};
 
@@ -110,16 +123,14 @@ export default function EditAPISchema({
 			setDisplayError(errors as DataError);
 
 			isDataValid = false;
-		}
-		else {
+		} else {
 			mandatoryFields.forEach((field) => {
 				if (localUIData![field as keyof APISchemaUIData]) {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: false,
 					}));
-				}
-				else {
+				} else {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: true,
@@ -217,8 +228,7 @@ export default function EditAPISchema({
 				size: 'md',
 				status: 'warning',
 			});
-		}
-		else {
+		} else {
 			setMainSchemaNav('list');
 		}
 	};
@@ -227,6 +237,7 @@ export default function EditAPISchema({
 		setHideManagementButtons(false);
 
 		fetchAPISchema();
+		fetchAPISchemaProperties();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -280,56 +291,103 @@ export default function EditAPISchema({
 			}
 		}
 
+		console.log('currentSchemaProperties', currentSchemaProperties);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [localUIData]);
+	}, [currentSchemaProperties, localUIData]);
 
 	return (
-		<div className="container-fluid container-fluid-max-xl mt-3">
-			<ClayBreadcrumb
-				className="api-builder-navigation-breadcrum"
-				items={[
-					{
-						label: Liferay.Language.get('schemas'),
-						onClick: () => handleCancel(),
-					},
-					{
-						active: true,
-						label: fetchedData.apiSchema?.name ?? localUIData.name,
-					},
-				]}
-			/>
+		<div className="main-container">
+			<div className="edit-schema">
+				<div className="container-fluid container-fluid-max-xl edit-schema-child mt-3">
+					<ClayBreadcrumb
+						className="api-builder-navigation-breadcrum"
+						items={[
+							{
+								label: Liferay.Language.get('schemas'),
+								onClick: () => handleCancel(),
+							},
+							{
+								active: true,
+								label:
+									fetchedData.apiSchema?.name ??
+									localUIData.name,
+							},
+						]}
+					/>
 
-			<ClayCard className="mt-3 pt-2">
-				<ClayTabs
-					active={activeTab}
-					className="mt-3"
-					onActiveChange={setActiveTab}
-				>
-					<ClayTabs.Item
-						innerProps={{
-							'aria-controls': 'tabpanel-1',
-						}}
-					>
-						{Liferay.Language.get('info')}
-					</ClayTabs.Item>
-				</ClayTabs>
+					<ClayCard className="mt-3 pt-2">
+						<ClayTabs
+							active={activeTab}
+							className="mt-3"
+							fade
+							onActiveChange={setActiveTab}
+						>
+							<ClayTabs.Item
+								innerProps={{
+									'aria-controls': 'tabpanel-1',
+								}}
+							>
+								{Liferay.Language.get('info')}
+							</ClayTabs.Item>
 
-				<ClayTabs.Content>
-					<ClayTabs.TabPane
-						aria-label={Liferay.Language.get('information-tab')}
-						className="info-tab"
-					>
-						<ClayCard.Body>
-							<BaseAPISchemaFields
-								data={localUIData}
-								disableObjectSelect
-								displayError={displayError}
-								setData={setLocalUIData}
-							/>
-						</ClayCard.Body>
-					</ClayTabs.TabPane>
-				</ClayTabs.Content>
-			</ClayCard>
+							<ClayTabs.Item
+								innerProps={{
+									'aria-controls': 'tabpanel-2',
+								}}
+							>
+								{Liferay.Language.get('properties')}
+							</ClayTabs.Item>
+						</ClayTabs>
+
+						<ClayTabs.Content activeIndex={activeTab} fade>
+							<ClayTabs.TabPane
+								aria-label={Liferay.Language.get(
+									'information-tab'
+								)}
+								className="schema-tabs"
+							>
+								<ClayCard.Body>
+									<BaseAPISchemaFields
+										data={localUIData}
+										disableObjectSelect
+										displayError={displayError}
+										setData={setLocalUIData}
+									/>
+								</ClayCard.Body>
+							</ClayTabs.TabPane>
+
+							<ClayTabs.TabPane
+								aria-label={Liferay.Language.get(
+									'properties-tab'
+								)}
+								className="schema-tabs"
+							>
+								<ClayCard.Body>
+									<EditAPISchemaProperties
+										currentSchemaProperties={
+											currentSchemaProperties
+										}
+										setCurrentSchemaProperties={
+											setCurrentSchemaProperties
+										}
+									/>
+								</ClayCard.Body>
+							</ClayTabs.TabPane>
+						</ClayTabs.Content>
+					</ClayCard>
+				</div>
+
+				{activeTab === 1 && (
+					<Sidebar
+						currentSchemaProperties={currentSchemaProperties}
+						mainObjectDefinitionERC={
+							localUIData.mainObjectDefinitionERC
+						}
+						setCurrentSchemaProperties={setCurrentSchemaProperties}
+					/>
+				)}
+			</div>
 		</div>
 	);
 }
