@@ -52,7 +52,9 @@ function ObjectFieldsPanel({
 			objectFields: previous.objectFields.map((field) => ({
 				...field,
 				...(currentSchemaProperties.some(
-					(addedProperty) => addedProperty.id === field.id
+					(addedProperty) =>
+						addedProperty.objectFieldERC ===
+						field.externalReferenceCode
 				)
 					? {added: true}
 					: {added: false}),
