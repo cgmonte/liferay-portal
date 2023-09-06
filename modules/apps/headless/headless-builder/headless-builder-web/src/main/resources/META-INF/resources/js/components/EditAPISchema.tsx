@@ -293,24 +293,30 @@ export default function EditAPISchema({
 							field.externalReferenceCode === objectFieldERC
 					);
 
+					const parentObjectDefinition = allObjectDefinitions.find(
+						(definition) =>
+							definition.objectFields.some(
+								(field) =>
+									field.externalReferenceCode ===
+									objectFieldERC
+							)
+					);
+
 					return {
 						businessType: currentField?.businessType!,
-						id,
-						name,
-						objectDefinitionName: allObjectDefinitions.find(
-							(definition) =>
-								definition.externalReferenceCode ===
-								apiSchema.mainObjectDefinitionERC
-						)?.name!,
-						objectFieldERC,
-						...(objectRelationshipNames && {
-							objectRelationshipNames,
-						}),
-						objectFieldName: currentField?.name!,
-						type: 'trewViewItem',
 						...(description && {
 							description,
 						}),
+						id,
+						name,
+						objectDefinitionName: parentObjectDefinition?.name!,
+						objectFieldERC,
+						objectFieldName: currentField?.name!,
+						...(objectRelationshipNames && {
+							objectRelationshipNames,
+						}),
+						r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchema.id,
+						type: 'trewViewItem',
 					};
 				}
 			);
@@ -376,6 +382,7 @@ export default function EditAPISchema({
 	return (
 		<EditSchemaContext.Provider
 			value={{
+				apiSchemaId: schemaId,
 				fetchedSchemaData,
 				setFetchedSchemaData,
 			}}

@@ -7,8 +7,9 @@ import ClayButtonWithIcon from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {sub} from 'frontend-js-web';
-import React, {Dispatch, SetStateAction} from 'react';
+import React, {Dispatch, SetStateAction, useContext} from 'react';
 
+import {EditSchemaContext} from '../EditAPIApplicationContext';
 import {BUSINESS_TYPES_TO_SYMBOLS} from '../utils/constants';
 
 interface BaseAPISchemaProperty {
@@ -26,6 +27,8 @@ export default function BaseAPISchemaProperty({
 	objectRelationshipName,
 	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty) {
+	const {apiSchemaId} = useContext(EditSchemaContext);
+
 	const localizedPropertyName = objectField.label[
 		Liferay.ThemeDisplay.getDefaultLanguageId()
 	]!;
@@ -39,6 +42,7 @@ export default function BaseAPISchemaProperty({
 				objectDefinitionName,
 				objectFieldERC: objectField.externalReferenceCode,
 				objectFieldName: objectField.name,
+				r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchemaId,
 				type: 'treeViewItem',
 				...(objectRelationshipName && {
 					objectRelationshipNames: objectRelationshipName,

@@ -330,5 +330,6 @@ interface TreeViewItemData {
 	objectFieldERC: string;
 	objectFieldName: string;
 	objectRelationshipNames?: string;
+	r_apiSchemaToAPIProperties_c_apiSchemaId: number;
 	type: string;
 }

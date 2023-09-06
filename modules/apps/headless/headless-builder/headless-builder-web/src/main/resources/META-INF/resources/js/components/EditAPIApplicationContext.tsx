@@ -20,11 +20,13 @@ export const EditAPIApplicationContext = createContext<APIBuilderContext>({
 });
 
 interface APISchemaContext {
+	apiSchemaId: number;
 	fetchedSchemaData: SchemaFetchedData;
 	setFetchedSchemaData: Dispatch<SetStateAction<SchemaFetchedData>>;
 }
 
 export const EditSchemaContext = createContext<APISchemaContext>({
+	apiSchemaId: 0,
 	fetchedSchemaData: {},
 	setFetchedSchemaData: () => {},
 });
