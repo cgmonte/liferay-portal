@@ -162,6 +162,7 @@ export default function EditAPISchema({
 						description: localUIData.description,
 						name: localUIData.name,
 					},
+					method: 'PATCH',
 					onError: (error: string) => {
 						openToast({
 							message: error,
@@ -191,6 +192,7 @@ export default function EditAPISchema({
 				dataToUpdate: {
 					applicationStatus: {key: 'published'},
 				},
+				method: 'PATCH',
 				onError: (error: string) => {
 					openToast({
 						message: error,
