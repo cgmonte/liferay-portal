@@ -27,6 +27,7 @@ interface SidebarBodyProps {
 interface ObjectFieldsPanelProps {
 	currentSchemaProperties: TreeViewItemData[];
 	objectDefinition: ObjectDefinition;
+	objectRelationshipName?: string;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 	startExpanded?: boolean;
@@ -35,6 +36,7 @@ interface ObjectFieldsPanelProps {
 function ObjectFieldsPanel({
 	currentSchemaProperties,
 	objectDefinition,
+	objectRelationshipName,
 	searchKeyword,
 	setCurrentSchemaProperties,
 	startExpanded,
@@ -91,6 +93,9 @@ function ObjectFieldsPanel({
 									added={!!field.added}
 									objectDefinitionName={localUIData.name}
 									objectField={field}
+									objectRelationshipName={
+										objectRelationshipName
+									}
 									setCurrentSchemaProperties={
 										setCurrentSchemaProperties
 									}
@@ -125,13 +130,17 @@ export default function SidebarBody({
 				relatedObjectDefinitions?.length && (
 					<div className="panels-container">
 						{relatedObjectDefinitions.map(
-							(relatedObjectDefinition) => (
+							(relatedObjectDefinition, index) => (
 								<ObjectFieldsPanel
 									currentSchemaProperties={
 										currentSchemaProperties
 									}
 									key={relatedObjectDefinition.id}
 									objectDefinition={relatedObjectDefinition}
+									objectRelationshipName={
+										mainObjectDefinition
+											.objectRelationships[index].name
+									}
 									searchKeyword={searchKeyword}
 									setCurrentSchemaProperties={
 										setCurrentSchemaProperties

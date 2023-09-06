@@ -15,6 +15,7 @@ interface BaseAPISchemaProperty {
 	added: boolean;
 	objectDefinitionName: string;
 	objectField: ObjectField;
+	objectRelationshipName?: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
@@ -22,6 +23,7 @@ export default function BaseAPISchemaProperty({
 	added,
 	objectDefinitionName,
 	objectField,
+	objectRelationshipName,
 	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty) {
 	const localizedPropertyName = objectField.label[
@@ -39,6 +41,9 @@ export default function BaseAPISchemaProperty({
 				name: localizedPropertyName,
 				objectDefinitionName,
 				type: 'treeViewItem',
+				...(objectRelationshipName && {
+					objectRelationshipNames: objectRelationshipName,
+				}),
 			});
 
 			return [...previous];

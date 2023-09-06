@@ -280,31 +280,29 @@ export default function EditAPISchema({
 				mainObjectDefinition,
 			];
 
-			// const allFields = [
-			// 	...relatedObjectDefinitions.objectFields,
-			// 	mainObjectDefinition,
-			// ].map((definition) => {});
-
 			const propertiesTreeViewItems = schemaProperties.map(
-				(property) => ({
+				({
+					description,
+					id,
+					name,
+					objectFieldERC,
+					objectRelationshipNames,
+				}) => ({
 					businessType: allFields.find(
 						(field) =>
-							field.externalReferenceCode ===
-							property.objectFieldERC
+							field.externalReferenceCode === objectFieldERC
 					)?.businessType!,
-					id: property.id,
-					
-					// item: property,
-
-					name: property.name,
+					id,
+					name,
 					objectDefinitionName: allObjectDefinitions.find(
 						(definition) =>
 							definition.externalReferenceCode ===
 							apiSchema.mainObjectDefinitionERC
 					)?.name!,
+					...(objectRelationshipNames && {objectRelationshipNames}),
 					type: 'trewViewItem',
-					...(property.description && {
-						description: property.description,
+					...(description && {
+						description,
 					}),
 				})
 			);
