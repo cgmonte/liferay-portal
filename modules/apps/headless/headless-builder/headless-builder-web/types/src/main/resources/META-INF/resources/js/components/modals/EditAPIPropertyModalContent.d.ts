@@ -5,15 +5,14 @@
 
 /// <reference types="react" />
 
-interface EditAPIPropertyModalContentProps extends TreeViewItemData {
+interface EditAPIPropertyModalContentProps extends Partial<TreeViewItemData> {
 	closeModal: voidReturn;
 }
 export default function EditAPIPropertyModalContent({
+	businessType,
 	closeModal,
 	description,
-	id,
 	name,
-	objectDefinitionName,
-	type,
+	objectFieldName,
 }: EditAPIPropertyModalContentProps): JSX.Element;
 export {};

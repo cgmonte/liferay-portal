@@ -156,11 +156,26 @@ export default function EditAPISchema({
 		({successMessage}: {successMessage: string}) => {
 			const isDataValid = validateData();
 
-			if (localUIData && isDataValid && fetchedData?.apiSchema) {
+			if (localUIData && isDataValid && fetchedSchemaData.apiSchema) {
 				updateData<APISchemaItem>({
 					dataToUpdate: {
 						description: localUIData.description,
 						name: localUIData.name,
+						...(currentSchemaProperties.length && {
+							apiSchemaToAPIProperties: currentSchemaProperties.map(
+								(property) => ({
+									description: property.description,
+									name: property.name,
+									objectFieldERC: property.objectFieldERC,
+									r_apiSchemaToAPIProperties_c_apiSchemaId:
+										property.r_apiSchemaToAPIProperties_c_apiSchemaId,
+									...(property.objectRelationshipNames && {
+										objectRelationshipNames:
+											property.objectRelationshipNames,
+									}),
+								})
+							),
+						}),
 					},
 					method: 'PATCH',
 					onError: (error: string) => {
@@ -175,14 +190,15 @@ export default function EditAPISchema({
 							type: 'success',
 						});
 						fetchAPISchema();
+						fetchAPISchemaProperties();
 					},
-					url: fetchedData.apiSchema.actions.update.href,
+					url: fetchedSchemaData.apiSchema.actions.update.href,
 				});
 			}
 		},
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[localUIData]
+		[currentSchemaProperties, localUIData]
 	);
 
 	const handlePublish = ({successMessage}: {successMessage: string}) => {
