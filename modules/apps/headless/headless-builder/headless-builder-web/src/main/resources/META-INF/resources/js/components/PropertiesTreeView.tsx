@@ -96,7 +96,13 @@ export default function PropertiesTreeView({
 						items && setCurrentSchemaProperties(items)
 					}
 				>
-					{({businessType, id, name, objectDefinitionName}) => (
+					{({
+						businessType,
+						id,
+						name,
+						objectDefinitionName,
+						objectFieldName,
+					}) => (
 						<TreeView.Item
 							actions={
 								<>
@@ -133,9 +139,9 @@ export default function PropertiesTreeView({
 						>
 							<ClayIcon symbol={getIconName(businessType)} />{name}
 							&nbsp;
-							{/* <span className="text-truncate treeview-item-path">
-								{`(${objectDefinitionName}.${item.name})`}
-							</span> */}
+							<span className="text-truncate treeview-item-path">
+								{`(${objectDefinitionName}.${objectFieldName})`}
+							</span>
 						</TreeView.Item>
 					)}
 				</TreeView>

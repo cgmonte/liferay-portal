@@ -82,10 +82,18 @@ interface APIEndpointItem extends BaseItem {
 	path: string;
 }
 
+interface APIPropertiy {
+	description?: string;
+	name: string;
+	objectFieldERC: string;
+	objectRelationshipNames?: string;
+}
+
 interface APISchemaItem extends BaseItem {
+	apiSchemaToAPIProperties?: APIPropertiy[];
 	mainObjectDefinitionERC: string;
 	name: string;
-	r_apiApplicationToAPISchemas_c_apiApplicationId: string;
+	r_apiApplicationToAPISchemas_c_apiApplicationId?: string;
 }
 
 interface APISchemaPropertyItem {
@@ -145,6 +153,7 @@ interface NameValueObject {
 }
 
 interface ObjectRelationship {
+	name: string;
 	objectDefinitionExternalReferenceCode2: string;
 }
 
@@ -169,6 +178,7 @@ interface ObjectDefinition {
 	objectActions: [];
 	objectFields: ObjectField[];
 	objectLayouts: [];
+	objectRelationshipName?: string;
 	objectRelationships: ObjectRelationship[];
 	objectViews: [];
 	panelCategoryKey: string;
@@ -210,7 +220,7 @@ interface ObjectField {
 	DBType: string;
 	businessType: ObjectFieldBusinessType;
 	defaultValue?: string;
-	externalReferenceCode?: string;
+	externalReferenceCode: string;
 	id: number;
 	indexed: boolean;
 	indexedAsKeyword: boolean;
@@ -315,8 +325,10 @@ interface TreeViewItemData {
 	children?: TreeViewItemData[];
 	description?: string;
 	id: number;
-	// item: APISchemaPropertyItem;
 	name: string;
 	objectDefinitionName: string;
+	objectFieldERC: string;
+	objectFieldName: string;
+	objectRelationshipNames?: string;
 	type: string;
 }

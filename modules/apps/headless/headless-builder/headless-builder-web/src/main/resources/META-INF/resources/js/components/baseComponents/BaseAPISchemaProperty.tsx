@@ -35,11 +35,10 @@ export default function BaseAPISchemaProperty({
 			previous.unshift({
 				businessType: objectField.businessType,
 				id: objectField.id,
-
-				// item: objectField,
-
 				name: localizedPropertyName,
 				objectDefinitionName,
+				objectFieldERC: objectField.externalReferenceCode,
+				objectFieldName: objectField.name,
 				type: 'treeViewItem',
 				...(objectRelationshipName && {
 					objectRelationshipNames: objectRelationshipName,

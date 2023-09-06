@@ -287,24 +287,32 @@ export default function EditAPISchema({
 					name,
 					objectFieldERC,
 					objectRelationshipNames,
-				}) => ({
-					businessType: allFields.find(
+				}) => {
+					const currentField = allFields.find(
 						(field) =>
 							field.externalReferenceCode === objectFieldERC
-					)?.businessType!,
-					id,
-					name,
-					objectDefinitionName: allObjectDefinitions.find(
-						(definition) =>
-							definition.externalReferenceCode ===
-							apiSchema.mainObjectDefinitionERC
-					)?.name!,
-					...(objectRelationshipNames && {objectRelationshipNames}),
-					type: 'trewViewItem',
-					...(description && {
-						description,
-					}),
-				})
+					);
+
+					return {
+						businessType: currentField?.businessType!,
+						id,
+						name,
+						objectDefinitionName: allObjectDefinitions.find(
+							(definition) =>
+								definition.externalReferenceCode ===
+								apiSchema.mainObjectDefinitionERC
+						)?.name!,
+						objectFieldERC,
+						...(objectRelationshipNames && {
+							objectRelationshipNames,
+						}),
+						objectFieldName: currentField?.name!,
+						type: 'trewViewItem',
+						...(description && {
+							description,
+						}),
+					};
+				}
 			);
 
 			setCurrentSchemaProperties(propertiesTreeViewItems);
