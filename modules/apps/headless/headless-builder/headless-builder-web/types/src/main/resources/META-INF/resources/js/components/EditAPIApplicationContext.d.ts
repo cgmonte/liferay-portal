@@ -12,6 +12,7 @@ interface APIBuilderContext {
 }
 export declare const EditAPIApplicationContext: import('react').Context<APIBuilderContext>;
 interface APISchemaContext {
+	apiSchemaId: number;
 	fetchedSchemaData: SchemaFetchedData;
 	setFetchedSchemaData: Dispatch<SetStateAction<SchemaFetchedData>>;
 }
