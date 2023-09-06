@@ -57,23 +57,28 @@ export default function PropertiesTreeView({
 		return currentSchemaProperties;
 	};
 
-	// const handleEditAPIProperty = ({businessType, id, item, name}: TreeViewItemData) => {
-	// 	openModal({
-	// 		center: true,
-	// 		contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
-	// 			EditAPIPropertyModalContent({
-	// 				closeModal,
-	// 				description: '',
-	// 				id,
-	// 				item,
-	// 				name,
-	// 				objectDefinitionName: 'sei la',
-	// 				type: 'treeViewItem',
-	// 			}),
-	// 		id: 'editAPIPropertyModal',
-	// 		size: 'md',
-	// 	});
-	// };
+	const handleEditAPIProperty = ({
+		businessType,
+		description,
+		id,
+		name,
+		objectFieldName,
+	}: Partial<TreeViewItemData>) => {
+		openModal({
+			center: true,
+			contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
+				EditAPIPropertyModalContent({
+					businessType,
+					closeModal,
+					description,
+					id,
+					name,
+					objectFieldName,
+				}),
+			id: 'editAPIPropertyModal',
+			size: 'md',
+		});
+	};
 
 	return (
 		<div className="d-flex treeview-container">
@@ -98,6 +103,7 @@ export default function PropertiesTreeView({
 				>
 					{({
 						businessType,
+						description,
 						id,
 						name,
 						objectDefinitionName,
@@ -114,7 +120,15 @@ export default function PropertiesTreeView({
 											name
 										)}
 										monospaced
-										onClick={() => {}}
+										onClick={() =>
+											handleEditAPIProperty({
+												businessType,
+												description,
+												id,
+												name,
+												objectFieldName,
+											})
+										}
 									>
 										<ClayIcon symbol="pencil" />
 									</ClayButton>

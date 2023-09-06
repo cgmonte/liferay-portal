@@ -32,38 +32,35 @@ const headers = new Headers({
 	'Content-Type': 'application/json',
 });
 
-interface EditAPIPropertyModalContentProps extends TreeViewItemData {
+interface EditAPIPropertyModalContentProps extends Partial<TreeViewItemData> {
 	closeModal: voidReturn;
 }
 
 export default function EditAPIPropertyModalContent({
+	businessType,
 	closeModal,
 	description,
-	id,
-	
-	// item,
-
 	name,
-	objectDefinitionName,
-	type,
+	objectFieldName,
 }: EditAPIPropertyModalContentProps) {
-	const [localUIData, setLocalUIData] = useState<PropertyUIData>();
+	// const [localUIData, setLocalUIData] = useState<PropertyUIData>();
+
 	const [displayError, setDisplayError] = useState<DataError>({
 		dataType: false,
 		mappedProperty: false,
 		name: false,
 	});
 
-	useEffect(() => {
-		for (const key in localUIData) {
-			if (localUIData[key as keyof PropertyUIData] !== '') {
-				setDisplayError((previousErrors) => ({
-					...previousErrors,
-					[key]: false,
-				}));
-			}
-		}
-	}, [localUIData]);
+	// useEffect(() => {
+	// 	for (const key in localUIData) {
+	// 		if (localUIData[key as keyof PropertyUIData] !== '') {
+	// 			setDisplayError((previousErrors) => ({
+	// 				...previousErrors,
+	// 				[key]: false,
+	// 			}));
+	// 		}
+	// 	}
+	// }, [localUIData]);
 
 	// async function postData() {
 	// 	fetch(apiSchemasURLPath, {
@@ -204,7 +201,7 @@ export default function EditAPIPropertyModalContent({
 					// className={classNames({
 					// 	'has-error': displayError.description,
 					// })}
-
+					
 					>
 						<label
 							htmlFor="properyDescriptionField"
@@ -243,12 +240,17 @@ export default function EditAPIPropertyModalContent({
 							cleanUp={() => {}}
 							disabled
 							onClick={() => {}}
-							options={[{label: 'oi', value: 'nada'}]}
+							options={[
+								{label: businessType!, value: businessType!},
+							]}
 							placeholder={Liferay.Language.get(
 								'select-a-data-type'
 							)}
 							required
-							selectedOption={{label: 'oi', value: 'nada'}}
+							selectedOption={{
+								label: businessType!,
+								value: businessType!,
+							}}
 						/>
 
 						<div className="feedback-container">
@@ -285,12 +287,20 @@ export default function EditAPIPropertyModalContent({
 							cleanUp={() => {}}
 							disabled
 							onClick={() => {}}
-							options={[{label: 'oi', value: 'nada'}]}
+							options={[
+								{
+									label: objectFieldName!,
+									value: objectFieldName!,
+								},
+							]}
 							placeholder={Liferay.Language.get(
 								'select-a-mapperd-property'
 							)}
 							required
-							selectedOption={{label: 'q???', value: 'nadica de nada'}}
+							selectedOption={{
+								label: objectFieldName!,
+								value: objectFieldName!,
+							}}
 						/>
 
 						<div className="feedback-container">
