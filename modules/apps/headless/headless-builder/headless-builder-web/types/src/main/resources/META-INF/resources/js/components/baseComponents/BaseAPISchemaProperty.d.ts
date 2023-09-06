@@ -8,12 +8,14 @@ interface BaseAPISchemaProperty {
 	added: boolean;
 	objectDefinitionName: string;
 	objectField: ObjectField;
+	objectRelationshipName?: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 export default function BaseAPISchemaProperty({
 	added,
 	objectDefinitionName,
 	objectField,
+	objectRelationshipName,
 	setCurrentSchemaProperties,
 }: BaseAPISchemaProperty): JSX.Element;
 export {};
