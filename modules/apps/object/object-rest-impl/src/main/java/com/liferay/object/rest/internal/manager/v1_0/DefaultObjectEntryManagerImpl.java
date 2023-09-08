@@ -878,6 +878,8 @@ public class DefaultObjectEntryManagerImpl
 				objectRelationshipElementsParser.parse(
 					objectRelationship, properties.get(entry.getKey()));
 
+			List<String> nestedExternalReferenceCodes = new ArrayList<>();
+
 			if (relatedObjectDefinition.isUnmodifiableSystemObject()) {
 				SystemObjectDefinitionManager systemObjectDefinitionManager =
 					_systemObjectDefinitionManagerRegistry.
@@ -888,13 +890,21 @@ public class DefaultObjectEntryManagerImpl
 					Map<String, Object> nestedObjectEntry =
 						(Map<String, Object>)item;
 
-					_relateNestedObjectEntry(
-						objectDefinition, objectRelationship, primaryKey,
+					long nestedObjectEntryId =
 						systemObjectDefinitionManager.upsertBaseModel(
 							String.valueOf(
 								nestedObjectEntry.get("externalReferenceCode")),
 							relatedObjectDefinition.getCompanyId(),
-							dtoConverterContext.getUser(), nestedObjectEntry));
+							dtoConverterContext.getUser(), nestedObjectEntry);
+
+					_relateNestedObjectEntry(
+						objectDefinition, objectRelationship, primaryKey,
+						nestedObjectEntryId);
+
+					nestedExternalReferenceCodes.add(
+						systemObjectDefinitionManager.
+							getBaseModelExternalReferenceCode(
+								nestedObjectEntryId));
 				}
 			}
 			else {
@@ -933,11 +943,11 @@ public class DefaultObjectEntryManagerImpl
 							objectDefinition, objectRelationship, primaryKey,
 							nestedObjectEntry.getId());
 					}
+
+					nestedExternalReferenceCodes.add(
+						nestedObjectEntry.getExternalReferenceCode());
 				}
 			}
-
-			List<String> nestedExternalReferenceCodes = TransformUtil.transform(
-				nestedObjectEntries, this::_getExternalReferenceCode);
 
 			long[] toDisassociatePrimaryKeys =
 				TransformUtil.transformToLongArray(
