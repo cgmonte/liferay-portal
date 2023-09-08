@@ -71,7 +71,7 @@ export default function EditAPISchema({
 		name: false,
 	});
 	const [fetchedSchemaData, setFetchedSchemaData] = useState<
-		SchemaFetchedData
+		FetchedSchemaData
 	>({});
 	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
 		description: '',
@@ -269,77 +269,71 @@ export default function EditAPISchema({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {
-		const {
-			apiSchema,
-			mainObjectDefinition,
-			relatedObjectDefinitions,
-			schemaProperties,
-		} = fetchedSchemaData;
+	// useEffect(() => {
+	// 	const {
+	// 		apiSchema,
+	// 		objectDefinitions,
+	// 		schemaProperties,
+	// 	} = fetchedSchemaData;
 
-		if (
-			apiSchema &&
-			mainObjectDefinition &&
-			relatedObjectDefinitions &&
-			schemaProperties
-		) {
-			let allFields: ObjectField[] = [];
+	// 	if (apiSchema && objectDefinitions && schemaProperties) {
+	// 		let allFields: ObjectField[] = [];
 
-			relatedObjectDefinitions.forEach((definition) => {
-				allFields = [...allFields, ...definition.objectFields];
-			});
+	// 		relatedObjectDefinitions.forEach((definition) => {
+	// 			allFields = [...allFields, ...definition.objectFields];
+	// 		});
 
-			allFields = [...allFields, ...mainObjectDefinition.objectFields];
+	// 		allFields = [...allFields, ...mainObjectDefinition.objectFields];
 
-			const allObjectDefinitions = [
-				...relatedObjectDefinitions,
-				mainObjectDefinition,
-			];
+	// 		const allObjectDefinitions = [
+	// 			...relatedObjectDefinitions,
+	// 			mainObjectDefinition,
+	// 		];
 
-			const propertiesTreeViewItems = schemaProperties.map(
-				({
-					description,
-					id,
-					name,
-					objectFieldERC,
-					objectRelationshipNames,
-				}) => {
-					const currentField = allFields.find(
-						(field) =>
-							field.externalReferenceCode === objectFieldERC
-					);
+	// 		const propertiesTreeViewItems = schemaProperties.map(
+	// 			({
+	// 				description,
+	// 				id,
+	// 				name,
+	// 				objectFieldERC,
+	// 				objectRelationshipNames,
+	// 			}) => {
+	// 				const currentField = allFields.find(
+	// 					(field) =>
+	// 						field.externalReferenceCode === objectFieldERC
+	// 				);
 
-					const parentObjectDefinition = allObjectDefinitions.find(
-						(definition) =>
-							definition.objectFields.some(
-								(field) =>
-									field.externalReferenceCode ===
-									objectFieldERC
-							)
-					);
+	// 				const parentObjectDefinition = allObjectDefinitions.find(
+	// 					(definition) =>
+	// 						definition.objectFields.some(
+	// 							(field) =>
+	// 								field.externalReferenceCode ===
+	// 								objectFieldERC
+	// 						)
+	// 				);
 
-					return {
-						businessType: currentField?.businessType!,
-						...(description && {
-							description,
-						}),
-						id,
-						name,
-						objectDefinitionName: parentObjectDefinition?.name!,
-						objectFieldERC,
-						objectFieldName: currentField?.name!,
-						...(objectRelationshipNames && {
-							objectRelationshipNames,
-						}),
-						r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchema.id,
-						type: 'trewViewItem',
-					};
-				}
-			);
+	// 				return {
+	// 					businessType: currentField?.businessType!,
+	// 					...(description && {
+	// 						description,
+	// 					}),
+	// 					id,
+	// 					name,
+	// 					objectDefinitionName: parentObjectDefinition?.name!,
+	// 					objectFieldERC,
+	// 					objectFieldName: currentField?.name!,
+	// 					...(objectRelationshipNames && {
+	// 						objectRelationshipNames,
+	// 					}),
+	// 					r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchema.id,
+	// 					type: 'trewViewItem',
+	// 				};
+	// 			}
+	// 		);
 
-			setCurrentSchemaProperties(propertiesTreeViewItems);
-		}
-	}, [fetchedSchemaData]);
+	// 		setCurrentSchemaProperties(propertiesTreeViewItems);
+	// 	}
+	// }, [fetchedSchemaData]);
 
 	useEffect(() => {
 		if (fetchedData.apiSchema) {
@@ -400,6 +394,8 @@ export default function EditAPISchema({
 			value={{
 				apiSchemaId: schemaId,
 				fetchedSchemaData,
+				objectDefinitionBasePath:
+					'/o/object-admin/v1.0/object-definitions/by-external-reference-code/',
 				setFetchedSchemaData,
 			}}
 		>

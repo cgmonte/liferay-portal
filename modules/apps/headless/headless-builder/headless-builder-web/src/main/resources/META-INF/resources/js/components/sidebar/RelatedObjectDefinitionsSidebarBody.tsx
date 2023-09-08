@@ -5,17 +5,9 @@
 
 import ClayButton from '@clayui/button';
 import ClayPanel from '@clayui/panel';
-import React, {
-	Dispatch,
-	SetStateAction,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
-import {fetchJSON} from '../utils/fetchUtil';
-import {EditSchemaContext} from '../EditAPIApplicationContext';
 
 interface AddedObjectField extends ObjectField {
 	added?: boolean;
@@ -27,10 +19,10 @@ interface ObjectDefinitionWithAddedField extends ObjectDefinition {
 
 interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
-	mainObjectDefinition: ObjectDefinition;
+	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
+	viewRelatedObjects: boolean;
 }
 
 interface ObjectFieldsPanelProps {
@@ -39,7 +31,6 @@ interface ObjectFieldsPanelProps {
 	objectRelationshipName?: string;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	startExpanded?: boolean;
 }
 
@@ -49,15 +40,8 @@ function ObjectFieldsPanel({
 	objectRelationshipName,
 	searchKeyword,
 	setCurrentSchemaProperties,
-	setViewRelatedObjects,
 	startExpanded,
 }: ObjectFieldsPanelProps) {
-	const {
-		fetchedSchemaData,
-		objectDefinitionBasePath,
-		setFetchedSchemaData,
-	} = useContext(EditSchemaContext);
-
 	const [expanded, setExpanded] = useState(startExpanded ?? false);
 	const [localUIData, setLocalUIData] = useState<
 		ObjectDefinitionWithAddedField
@@ -84,46 +68,6 @@ function ObjectFieldsPanel({
 			field.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
 				?.toLocaleLowerCase()
 				.includes(searchKeyword.toLocaleLowerCase())
-		);
-	};
-
-	async function getRelationshipsDefinitions(
-		objectRelationships: ObjectRelationship[]
-	): Promise<ObjectDefinition[]> {
-		return (await Promise.all(
-			objectRelationships.map(async (relationship) =>
-				fetchJSON({
-					input:
-						objectDefinitionBasePath +
-						relationship['objectDefinitionExternalReferenceCode2'],
-				})
-			)
-		)) as ObjectDefinition[];
-	}
-
-	const handleViewRelationships = () => {
-		getRelationshipsDefinitions(objectDefinition.objectRelationships).then(
-			(relatedObjectDefinitions) =>
-				// setFetchedSchemaData((previous) => ({
-				// 	...previous,
-				// 	mainObjectDefinition: mainObjectResult,
-				// 	relatedObjectDefinitions,
-				// }))
-
-				{
-					setFetchedSchemaData((previous) => ({
-						...previous,
-						objectDefinitions: {
-							...previous.objectDefinitions,
-							definition: objectDefinition,
-							relatedDefinitions: relatedObjectDefinitions.map(
-								(related) => ({definition: related})
-							),
-						},
-					}));
-
-					setViewRelatedObjects(true);
-				}
 		);
 	};
 
@@ -166,7 +110,7 @@ function ObjectFieldsPanel({
 					{!!objectDefinition.objectRelationships.length && (
 						<ClayButton
 							displayType="secondary"
-							onClick={handleViewRelationships}
+							// onClick={() => setViewRelatedObjects(true)}
 						>
 							{Liferay.Language.get('view-related-objects')}
 						</ClayButton>
@@ -177,23 +121,28 @@ function ObjectFieldsPanel({
 	);
 }
 
-export default function SidebarBody({
+export default function RelatedObjectDefinitionsSidebarBody({
 	currentSchemaProperties,
-	mainObjectDefinition,
+	fectchedObjectDefinitions: {definition, relatedDefinitions},
 	searchKeyword,
 	setCurrentSchemaProperties,
-	setViewRelatedObjects,
 }: SidebarBodyProps) {
 	return (
 		<div className="sidebar-body">
-			<ObjectFieldsPanel
-				currentSchemaProperties={currentSchemaProperties}
-				objectDefinition={mainObjectDefinition}
-				searchKeyword={searchKeyword}
-				setCurrentSchemaProperties={setCurrentSchemaProperties}
-				setViewRelatedObjects={setViewRelatedObjects}
-				startExpanded
-			/>
+			<div className="panels-container">
+				{relatedDefinitions?.map((relatedObjectDefinition, index) => (
+					<ObjectFieldsPanel
+						currentSchemaProperties={currentSchemaProperties}
+						key={relatedObjectDefinition.definition.id}
+						objectDefinition={relatedObjectDefinition.definition}
+						objectRelationshipName={
+							definition.objectRelationships[index].name
+						}
+						searchKeyword={searchKeyword}
+						setCurrentSchemaProperties={setCurrentSchemaProperties}
+					/>
+				))}
+			</div>
 		</div>
 	);
 }

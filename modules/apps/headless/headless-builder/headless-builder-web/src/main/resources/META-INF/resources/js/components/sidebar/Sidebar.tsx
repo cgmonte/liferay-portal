@@ -13,8 +13,8 @@ import React, {
 
 import {EditSchemaContext} from '../EditAPIApplicationContext';
 import {fetchJSON} from '../utils/fetchUtil';
+import RelatedObjectDefinitionsSidebarBody from './RelatedObjectDefinitionsSidebarBody';
 import SidebarBody from './SidebarBody';
-import SidebarFooter from './SidebarFooter';
 import SidebarHeader from './SidebarHeader';
 
 interface SidebarProps {
@@ -28,86 +28,75 @@ export default function Sidebar({
 	mainObjectDefinitionERC,
 	setCurrentSchemaProperties,
 }: SidebarProps) {
-	// const [fetchedObjectDefinitions, setFetchedObjectDefinitions] = useState<
-	// 	SchemaObjectDefinitions
-	// >();
-
-	const {fetchedSchemaData, setFetchedSchemaData} = useContext(
-		EditSchemaContext
-	);
+	const {
+		fetchedSchemaData,
+		objectDefinitionBasePath,
+		setFetchedSchemaData,
+	} = useContext(EditSchemaContext);
 
 	const [searchKeyword, setSearchKeyword] = useState('');
 
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
-	const objectDefinitionBasePath =
-		'/o/object-admin/v1.0/object-definitions/by-external-reference-code/';
-
-	async function getRelationshipsDefinitions(
-		objectRelationships: ObjectRelationship[]
-	): Promise<ObjectDefinition[]> {
-		return (await Promise.all(
-			objectRelationships.map(async (relationship) =>
-				fetchJSON({
-					input:
-						objectDefinitionBasePath +
-						relationship['objectDefinitionExternalReferenceCode2'],
-				})
-			)
-		)) as ObjectDefinition[];
-	}
+	useEffect(() => {
+		console.log('viewRelatedObjects', viewRelatedObjects);
+	}, [viewRelatedObjects]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
 			input: objectDefinitionBasePath + mainObjectDefinitionERC,
-		}).then((mainObjectResult) => {
-			getRelationshipsDefinitions(
-				mainObjectResult.objectRelationships
-			).then((relatedObjectDefinitions) =>
-				setFetchedSchemaData((previous) => ({
-					...previous,
-					mainObjectDefinition: mainObjectResult,
-					relatedObjectDefinitions,
-				}))
-			);
-		});
+		}).then((mainObjectResult) =>
+			setFetchedSchemaData((previous) => ({
+				...previous,
+				objectDefinitions: {
+					...previous.objectDefinitions,
+					definition: mainObjectResult,
+				},
+			}))
+		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<div className="sidebar">
-			{fetchedSchemaData.mainObjectDefinition &&
-				fetchedSchemaData.relatedObjectDefinitions && (
-					<>
-						<SidebarHeader
-							objectDefinition={
-								fetchedSchemaData.mainObjectDefinition
-							}
-							setSearchKeyword={setSearchKeyword}
-							setViewRelatedObjects={setViewRelatedObjects}
-							viewRelatedObjects={viewRelatedObjects}
-						/>
+			{fetchedSchemaData.objectDefinitions?.definition && (
+				<>
+					<SidebarHeader
+						objectDefinition={
+							fetchedSchemaData.objectDefinitions.definition
+						}
+						setSearchKeyword={setSearchKeyword}
+						setViewRelatedObjects={setViewRelatedObjects}
+						viewRelatedObjects={viewRelatedObjects}
+					/>
 
-						<SidebarBody
+					{!!fetchedSchemaData.objectDefinitions.relatedDefinitions
+						?.length && viewRelatedObjects ? (
+						<RelatedObjectDefinitionsSidebarBody
 							currentSchemaProperties={currentSchemaProperties}
-							fectchedObjectDefinitions={{
-								mainObjectDefinition:
-									fetchedSchemaData.mainObjectDefinition,
-								relatedObjectDefinitions:
-									fetchedSchemaData.relatedObjectDefinitions,
-							}}
+							fectchedObjectDefinitions={
+								fetchedSchemaData.objectDefinitions
+							}
 							searchKeyword={searchKeyword}
 							setCurrentSchemaProperties={
 								setCurrentSchemaProperties
 							}
 							viewRelatedObjects={viewRelatedObjects}
 						/>
-					</>
-				)}
-
-			{fetchedSchemaData?.mainObjectDefinition?.objectRelationships
-				.length && (
-				<SidebarFooter setViewRelatedObjects={setViewRelatedObjects} />
+					) : (
+						<SidebarBody
+							currentSchemaProperties={currentSchemaProperties}
+							mainObjectDefinition={
+								fetchedSchemaData.objectDefinitions.definition
+							}
+							searchKeyword={searchKeyword}
+							setCurrentSchemaProperties={
+								setCurrentSchemaProperties
+							}
+							setViewRelatedObjects={setViewRelatedObjects}
+						/>
+					)}
+				</>
 			)}
 		</div>
 	);
