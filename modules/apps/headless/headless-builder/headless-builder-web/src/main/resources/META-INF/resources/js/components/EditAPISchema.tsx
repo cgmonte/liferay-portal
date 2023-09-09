@@ -79,6 +79,11 @@ export default function EditAPISchema({
 		name: '',
 	});
 
+	useEffect(() => {
+		console.log('objectDefinitions:', fetchedSchemaData.objectDefinitions);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [fetchedSchemaData.objectDefinitions]);
+
 	const fetchAPISchema = () => {
 		fetchJSON<APISchemaItem>({
 			input: apiURLPaths.schemas + schemaId,
@@ -384,7 +389,7 @@ export default function EditAPISchema({
 			}
 		}
 
-		console.log('currentSchemaProperties', currentSchemaProperties);
+		// console.log('currentSchemaProperties', currentSchemaProperties);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentSchemaProperties, localUIData]);

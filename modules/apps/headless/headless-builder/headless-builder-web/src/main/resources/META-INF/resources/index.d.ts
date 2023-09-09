@@ -309,16 +309,16 @@ interface ObjectState {
 
 type ReadOnlyFieldValue = '' | 'conditional' | 'false' | 'true';
 
+interface ObjectDefinitionsRelationshipTree {
+	definition: ObjectDefinition;
+	relatedDefinitions?: ObjectDefinitionsRelationshipTree[];
+}
+
 type FetchedSchemaData = {
 	apiSchema?: APISchemaItem;
 	objectDefinitions?: ObjectDefinitionsRelationshipTree;
 	schemaProperties?: APISchemaPropertyItem[];
 };
-
-interface ObjectDefinitionsRelationshipTree {
-	definition: ObjectDefinition;
-	relatedDefinitions?: ObjectDefinitionsRelationshipTree[];
-}
 
 interface SelectOption {
 	label: string;

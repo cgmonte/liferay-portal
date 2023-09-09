@@ -38,9 +38,9 @@ export default function Sidebar({
 
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
-	useEffect(() => {
-		console.log('viewRelatedObjects', viewRelatedObjects);
-	}, [viewRelatedObjects]);
+	// useEffect(() => {
+	// 	console.log('viewRelatedObjects', viewRelatedObjects);
+	// }, [viewRelatedObjects]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
