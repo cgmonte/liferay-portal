@@ -13,9 +13,9 @@ import React, {
 	useState,
 } from 'react';
 
+import {EditSchemaContext} from '../EditAPIApplicationContext';
 import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
 import {fetchJSON} from '../utils/fetchUtil';
-import {EditSchemaContext} from '../EditAPIApplicationContext';
 
 interface AddedObjectField extends ObjectField {
 	added?: boolean;
@@ -103,27 +103,20 @@ function ObjectFieldsPanel({
 
 	const handleViewRelationships = () => {
 		getRelationshipsDefinitions(objectDefinition.objectRelationships).then(
-			(relatedObjectDefinitions) =>
-				// setFetchedSchemaData((previous) => ({
-				// 	...previous,
-				// 	mainObjectDefinition: mainObjectResult,
-				// 	relatedObjectDefinitions,
-				// }))
+			(relatedObjectDefinitions) => {
+				setFetchedSchemaData((previous) => ({
+					...previous,
+					objectDefinitions: {
+						...previous.objectDefinitions,
+						definition: objectDefinition,
+						relatedDefinitions: relatedObjectDefinitions.map(
+							(related) => ({definition: related})
+						),
+					},
+				}));
 
-				{
-					setFetchedSchemaData((previous) => ({
-						...previous,
-						objectDefinitions: {
-							...previous.objectDefinitions,
-							definition: objectDefinition,
-							relatedDefinitions: relatedObjectDefinitions.map(
-								(related) => ({definition: related})
-							),
-						},
-					}));
-
-					setViewRelatedObjects(true);
-				}
+				setViewRelatedObjects(true);
+			}
 		);
 	};
 
