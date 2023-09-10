@@ -35,6 +35,7 @@ interface SidebarBodyProps {
 
 interface ObjectFieldsPanelProps {
 	currentSchemaProperties: TreeViewItemData[];
+	navigate: (id: number) => void;
 	objectDefinition: ObjectDefinition;
 	objectRelationshipName?: string;
 	parentDefinitionId: number;
@@ -43,33 +44,9 @@ interface ObjectFieldsPanelProps {
 	startExpanded?: boolean;
 }
 
-// const recurse = (
-// 	action: (id: number) => void,
-// 	id: number,
-// 	objectDefinitions: ObjectDefinitionsRelationshipTree
-// ) => {
-// 	if (objectDefinitions.relatedDefinitions?.length) {
-// 		objectDefinitions.relatedDefinitions.forEach((relatedDefinitions) => {
-// 			if (relatedDefinitions.relatedDefinitions?.length) {
-// 				console.log(`filhos de ${relatedDefinitions.definition.name}:`);
-
-// 				recurse(action, objectDefinitions);
-// 			} else {
-// 				if (relatedDefinitions.definition.id === id) {
-// 					console.log(
-// 						`bingo! deu match no id: ${relatedDefinitions.definition.id}`,
-// 						action(relatedDefinitions.definition.id)
-// 					);
-// 				}
-// 			}
-// 		});
-// 	} else {
-// 		console.log('só tem', objectDefinitions.definition.name);
-// 	}
-// };
-
 function ObjectFieldsPanel({
 	currentSchemaProperties,
+	navigate,
 	objectDefinition,
 	objectRelationshipName,
 	searchKeyword,
@@ -82,26 +59,11 @@ function ObjectFieldsPanel({
 		setFetchedSchemaData,
 	} = useContext(EditSchemaContext);
 
+	const [showOnClick, setShowOnClick] = useState<undefined | {id: number}>();
 	const [expanded, setExpanded] = useState(startExpanded ?? false);
 	const [localUIData, setLocalUIData] = useState<
 		ObjectDefinitionWithAddedField
 	>(objectDefinition);
-
-	useEffect(() => {
-		setLocalUIData((previous) => ({
-			...previous,
-			objectFields: previous.objectFields.map((field) => ({
-				...field,
-				...(currentSchemaProperties.some(
-					(addedProperty) =>
-						addedProperty.objectFieldERC ===
-						field.externalReferenceCode
-				)
-					? {added: true}
-					: {added: false}),
-			})),
-		}));
-	}, [currentSchemaProperties]);
 
 	const getFilteredFields = (): AddedObjectField[] => {
 		return localUIData.objectFields.filter((field) =>
@@ -151,13 +113,16 @@ function ObjectFieldsPanel({
 
 		getAllIds(objectDefinitions);
 
-		function recurse(definitions: ObjectDefinitionsRelationshipTree) {
+		function addRelationships(
+			definitions: ObjectDefinitionsRelationshipTree
+		) {
 			if (definitions) {
 				if (definitions.definition.id === objectDefinition.id) {
 					definitions.relatedDefinitions = newRelationShips.reduce(
 						(accumulator, currentElement) => {
 							if (!AllIds.includes(currentElement.id)) {
 								accumulator.push({definition: currentElement});
+								setShowOnClick({id: definitions.definition.id});
 							}
 
 							return accumulator;
@@ -168,13 +133,13 @@ function ObjectFieldsPanel({
 
 				if (definitions.relatedDefinitions) {
 					for (const relatedDefinition of definitions.relatedDefinitions) {
-						recurse(relatedDefinition);
+						addRelationships(relatedDefinition);
 					}
 				}
 			}
 		}
 
-		recurse(newObjectDefinitions);
+		addRelationships(newObjectDefinitions);
 
 		setFetchedSchemaData((previous) => {
 			return {
@@ -183,6 +148,31 @@ function ObjectFieldsPanel({
 			};
 		});
 	};
+
+	useEffect(() => {
+		handleAddRelationships(
+			fetchedSchemaData.objectDefinitions!,
+			objectDefinition.objectRelationships
+		);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		setLocalUIData((previous) => ({
+			...previous,
+			objectFields: previous.objectFields.map((field) => ({
+				...field,
+				...(currentSchemaProperties.some(
+					(addedProperty) =>
+						addedProperty.objectFieldERC ===
+						field.externalReferenceCode
+				)
+					? {added: true}
+					: {added: false}),
+			})),
+		}));
+	}, [currentSchemaProperties]);
 
 	return (
 		<ClayPanel
@@ -220,20 +210,14 @@ function ObjectFieldsPanel({
 						))}
 					</ul>
 
-					{!!objectDefinition.objectRelationships.length &&
-						fetchedSchemaData.objectDefinitions && (
-							<ClayButton
-								displayType="secondary"
-								onClick={() =>
-									handleAddRelationships(
-										fetchedSchemaData.objectDefinitions!,
-										objectDefinition.objectRelationships
-									)
-								}
-							>
-								{Liferay.Language.get('view-related-objects')}
-							</ClayButton>
-						)}
+					{showOnClick?.id && (
+						<ClayButton
+							displayType="secondary"
+							onClick={() => navigate(showOnClick.id)}
+						>
+							{Liferay.Language.get('view-related-objects')}
+						</ClayButton>
+					)}
 				</ClayPanel.Body>
 			)}
 		</ClayPanel>
@@ -242,17 +226,41 @@ function ObjectFieldsPanel({
 
 export default function RelatedObjectDefinitionsSidebarBody({
 	currentSchemaProperties,
-	fectchedObjectDefinitions: {definition, relatedDefinitions},
+	fectchedObjectDefinitions,
 	searchKeyword,
 	setCurrentSchemaProperties,
 }: SidebarBodyProps) {
+	const {definition, relatedDefinitions} = fectchedObjectDefinitions;
+	const [currentNav, setCurrentNav] = useState(relatedDefinitions);
+
+	const navigateRelationships = async (id: number) => {
+		function findAndSetCurrentNav(
+			definitions: ObjectDefinitionsRelationshipTree
+		) {
+			if (definitions) {
+				if (definitions.definition.id === id) {
+					setCurrentNav(definitions.relatedDefinitions);
+				}
+
+				if (definitions.relatedDefinitions) {
+					for (const relatedDefinition of definitions.relatedDefinitions) {
+						findAndSetCurrentNav(relatedDefinition);
+					}
+				}
+			}
+		}
+
+		findAndSetCurrentNav(fectchedObjectDefinitions);
+	};
+
 	return (
 		<div className="sidebar-body">
 			<div className="panels-container">
-				{relatedDefinitions?.map((relatedObjectDefinition, index) => (
+				{currentNav?.map((relatedObjectDefinition, index) => (
 					<ObjectFieldsPanel
 						currentSchemaProperties={currentSchemaProperties}
 						key={relatedObjectDefinition.definition.id}
+						navigate={navigateRelationships}
 						objectDefinition={relatedObjectDefinition.definition}
 						objectRelationshipName={
 							definition.objectRelationships[index].name

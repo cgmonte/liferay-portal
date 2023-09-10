@@ -13,7 +13,7 @@ interface SidebarBodyProps {
 }
 export default function RelatedObjectDefinitionsSidebarBody({
 	currentSchemaProperties,
-	fectchedObjectDefinitions: {definition, relatedDefinitions},
+	fectchedObjectDefinitions,
 	searchKeyword,
 	setCurrentSchemaProperties,
 }: SidebarBodyProps): JSX.Element;
