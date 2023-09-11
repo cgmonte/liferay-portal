@@ -80,7 +80,35 @@ export default function EditAPISchema({
 	});
 
 	useEffect(() => {
-		console.log('objectDefinitions:', fetchedSchemaData.objectDefinitions);
+		// console.log('first');
+		// let count = 0;
+
+		// function printAll(definitions: ObjectDefinitionsRelationshipTree) {
+		// 	if (definitions) {
+		// 		count = count + 1;
+		// 		console.log('count', count);
+		// 		console.log(
+		// 			'objectDefinition name:',
+		// 			definitions.definition.name
+		// 		);
+
+		// 		if (definitions.relatedDefinitions) {
+		// 			for (const relatedDefinition of definitions.relatedDefinitions) {
+		// 				printAll(relatedDefinition);
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// if (fetchedSchemaData.objectDefinitions) {
+		// 	printAll(fetchedSchemaData.objectDefinitions);
+		// }
+
+		console.log(
+			'fetchedSchemaData.objectDefinitions',
+			fetchedSchemaData.objectDefinitions
+		);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fetchedSchemaData.objectDefinitions]);
 
