@@ -44,8 +44,8 @@ export default function EditModeSelector() {
 
 	const [editMode, setEditMode] = useState(
 		canSwitchEditMode
-			? EDIT_MODES.find(({value}) => value === 'page-design').value
-			: EDIT_MODES.find(({value}) => value === 'content-editing').value
+			? EDIT_MODES.find(({value}) => value === 'page-design')
+			: EDIT_MODES.find(({value}) => value === 'content-editing')
 	);
 
 	const permissions = useSelector((state) => state.permissions);
@@ -72,11 +72,11 @@ export default function EditModeSelector() {
 				UNSAFE_menuClassName="cadmin"
 				aria-label={sub(
 					Liferay.Language.get('page-edition-mode-x'),
-					editMode
+					editMode.label
 				)}
 				as={TriggerLabel}
 				className="btn-secondary"
-				defaultSelectedKey={editMode}
+				defaultSelectedKey={editMode.value}
 				disabled={!canSwitchEditMode}
 				items={EDIT_MODES}
 				onSelectionChange={(key) => {
@@ -84,7 +84,7 @@ export default function EditModeSelector() {
 						({value}) => value === key
 					);
 
-					setEditMode(selectedOption.label);
+					setEditMode(selectedOption);
 
 					dispatch(
 						togglePermission(
