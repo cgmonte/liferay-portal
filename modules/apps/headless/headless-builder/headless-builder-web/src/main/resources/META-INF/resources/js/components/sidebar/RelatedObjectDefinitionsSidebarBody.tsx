@@ -97,21 +97,21 @@ function ObjectFieldsPanel({
 
 		const newObjectDefinitions = {...objectDefinitions};
 
-		const AllIds: number[] = [];
+		// const AllIds: number[] = [];
 
-		function getAllIds(definitions: ObjectDefinitionsRelationshipTree) {
-			if (definitions) {
-				AllIds.push(definitions.definition.id);
+		// function getAllIds(definitions: ObjectDefinitionsRelationshipTree) {
+		// 	if (definitions) {
+		// 		AllIds.push(definitions.definition.id);
 
-				if (definitions.relatedDefinitions) {
-					for (const relatedDefinition of definitions.relatedDefinitions) {
-						getAllIds(relatedDefinition);
-					}
-				}
-			}
-		}
+		// 		if (definitions.relatedDefinitions) {
+		// 			for (const relatedDefinition of definitions.relatedDefinitions) {
+		// 				getAllIds(relatedDefinition);
+		// 			}
+		// 		}
+		// 	}
+		// }
 
-		getAllIds(objectDefinitions);
+		// getAllIds(objectDefinitions);
 
 		function addRelationships(
 			definitions: ObjectDefinitionsRelationshipTree
@@ -120,18 +120,18 @@ function ObjectFieldsPanel({
 				if (definitions.definition.id === objectDefinition.id) {
 					definitions.relatedDefinitions = newRelationShips.reduce(
 						(accumulator, currentElement) => {
-							if (!AllIds.includes(currentElement.id)) {
-								accumulator.push({definition: currentElement});
-								setShowOnClick({id: definitions.definition.id});
-							}
+							accumulator.push({definition: currentElement});
+							setShowOnClick({id: definitions.definition.id});
 
 							return accumulator;
 						},
 						[] as ObjectDefinitionsRelationshipTree[]
 					);
+
+					return;
 				}
 
-				if (definitions.relatedDefinitions) {
+				if (definitions.relatedDefinitions?.length) {
 					for (const relatedDefinition of definitions.relatedDefinitions) {
 						addRelationships(relatedDefinition);
 					}
@@ -233,13 +233,30 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	const {definition, relatedDefinitions} = fectchedObjectDefinitions;
 	const [currentNav, setCurrentNav] = useState(relatedDefinitions);
 
-	const navigateRelationships = async (id: number) => {
+	const navigateRelationships = (id: number) => {
 		function findAndSetCurrentNav(
 			definitions: ObjectDefinitionsRelationshipTree
 		) {
 			if (definitions) {
 				if (definitions.definition.id === id) {
-					setCurrentNav(definitions.relatedDefinitions);
+					if (definitions.relatedDefinitions) {
+						const uniqueRelatedDefinitions = [
+							...definitions.relatedDefinitions,
+						].filter(
+							(item, index, array) =>
+								array.findIndex(
+									(item2) =>
+										item2.definition.id ===
+										item.definition.id
+								) === index
+						);
+
+						setCurrentNav(uniqueRelatedDefinitions);
+
+						return;
+					}
+
+					return;
 				}
 
 				if (definitions.relatedDefinitions) {
@@ -256,20 +273,24 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	return (
 		<div className="sidebar-body">
 			<div className="panels-container">
-				{currentNav?.map((relatedObjectDefinition, index) => (
-					<ObjectFieldsPanel
-						currentSchemaProperties={currentSchemaProperties}
-						key={relatedObjectDefinition.definition.id}
-						navigate={navigateRelationships}
-						objectDefinition={relatedObjectDefinition.definition}
-						objectRelationshipName={
-							definition.objectRelationships[index].name
-						}
-						parentDefinitionId={definition.id}
-						searchKeyword={searchKeyword}
-						setCurrentSchemaProperties={setCurrentSchemaProperties}
-					/>
-				))}
+				{currentNav?.map((oxe, index) => {
+					return (
+						<ObjectFieldsPanel
+							currentSchemaProperties={currentSchemaProperties}
+							key={oxe.definition.id}
+							navigate={navigateRelationships}
+							objectDefinition={oxe.definition}
+							objectRelationshipName={
+								currentNav[index].definition.name
+							}
+							parentDefinitionId={definition.id}
+							searchKeyword={searchKeyword}
+							setCurrentSchemaProperties={
+								setCurrentSchemaProperties
+							}
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);
