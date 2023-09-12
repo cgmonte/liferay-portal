@@ -105,16 +105,16 @@ public class CommerceOrderContentConfigurationAction
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		if (cmd.equals(Constants.UPDATE)) {
-			PortletPreferences preferences = actionRequest.getPreferences();
+			PortletPreferences portletPreferences =
+				actionRequest.getPreferences();
 
-			preferences.setValue(
+			portletPreferences.setValue(
 				"displayStyle", getParameter(actionRequest, "displayStyle"));
-
-			preferences.setValue(
+			portletPreferences.setValue(
 				"showCommerceOrderCreateTime",
 				getParameter(actionRequest, "showCommerceOrderCreateTime"));
 
-			preferences.store();
+			portletPreferences.store();
 		}
 	}
 
