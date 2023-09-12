@@ -37,7 +37,7 @@ interface SidebarBodyProps {
 
 interface ObjectFieldsPanelProps {
 	currentSchemaProperties: TreeViewItemData[];
-	navigate: (id: number) => void;
+	navigate: (id: number, direction: 'back' | 'forward') => void;
 	objectDefinition: ObjectDefinition;
 	objectRelationshipName?: string;
 	parentDefinitionId: number;
@@ -224,7 +224,7 @@ function ObjectFieldsPanel({
 								);
 								console.log('showOnClick.id', showOnClick.id);
 								// setPreviousNav(objectDefinition.id);
-								navigate(showOnClick.id);
+								navigate(showOnClick.id, 'forward');
 							}}
 						>
 							{Liferay.Language.get('view-related-objects')}
@@ -251,7 +251,7 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	const [navHistory, setNavHistory] = useState<number[]>([]);
 
 	const navigateRelationships = useCallback(
-		(id: number) => {
+		(id: number, direction: 'back' | 'forward') => {
 			console.log('oi');
 			function findAndSetCurrentNav(
 				definitions: ObjectDefinitionsRelationshipTree
@@ -261,23 +261,37 @@ export default function RelatedObjectDefinitionsSidebarBody({
 						if (definitions.relatedDefinitions) {
 							const uniqueRelatedDefinitions = [
 								...definitions.relatedDefinitions,
-							]
-							.filter(
-								(item, index, array) =>
-									array.findIndex(
-										(item2) =>
-											item2.definition.id ===
-											item.definition.id
-									) === index
-							);
+							];
+							// .filter(
+							// 	(item, index, array) =>
+							// 		array.findIndex(
+							// 			(item2) =>
+							// 				item2.definition.id ===
+							// 				item.definition.id
+							// 		) === index
+							// );
 
 							setCurrentNav((previousNav) => {
 								if (previousNav) {
 									setNavHistory((previousHistory) => {
 										if (
-											previousHistory[0] !==
-											previousNav.parentId
+											// previousHistory[0] !==
+											// previousNav.parentId
+											direction === 'forward'
 										) {
+											console.log(
+												'previousNav.parentId',
+												previousNav.parentId
+											);
+											console.log(
+												'previousHistory',
+												previousHistory
+											);
+											console.log('oxiiiii', [
+												previousNav.parentId,
+												...previousHistory,
+											]);
+
 											return [
 												previousNav.parentId,
 												...previousHistory,
@@ -316,10 +330,11 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	useEffect(() => {
 		console.log('navHistory atual:', navHistory);
 		setOnBackClick(() => () => {
-			navigateRelationships(navHistory[0]);
+			navigateRelationships(navHistory[0], 'back');
 			setNavHistory([...navHistory.slice(1)]);
 		});
-	}, [navHistory, navigateRelationships, setOnBackClick]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [navHistory]);
 
 	return (
 		<div className="sidebar-body">
@@ -328,7 +343,7 @@ export default function RelatedObjectDefinitionsSidebarBody({
 					return (
 						<ObjectFieldsPanel
 							currentSchemaProperties={currentSchemaProperties}
-							key={item.definition.id}
+							key={`${index}${item.definition.id}`}
 							navigate={navigateRelationships}
 							objectDefinition={item.definition}
 							objectRelationshipName={
