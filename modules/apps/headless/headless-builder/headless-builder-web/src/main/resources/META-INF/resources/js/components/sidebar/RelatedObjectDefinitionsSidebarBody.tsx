@@ -8,6 +8,7 @@ import ClayPanel from '@clayui/panel';
 import React, {
 	Dispatch,
 	SetStateAction,
+	useCallback,
 	useContext,
 	useEffect,
 	useState,
@@ -243,63 +244,77 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	setOnBackClick,
 }: SidebarBodyProps) {
 	const {definition, relatedDefinitions} = fectchedObjectDefinitions;
-	const [currentNav, setCurrentNav] = useState(relatedDefinitions);
-	const [previousNav, setPreviousNav] = useState([{definition}]);
+	const [currentNav, setCurrentNav] = useState({
+		parentId: definition.id,
+		relatedDefinitions,
+	});
+	const [navHistory, setNavHistory] = useState<number[]>([]);
 
-	const navigateRelationships = (id: number) => {
-		console.log('oi');
-		function findAndSetCurrentNav(
-			definitions: ObjectDefinitionsRelationshipTree
-		) {
-			if (definitions) {
-				if (definitions.definition.id === id) {
-					if (definitions.relatedDefinitions) {
-						const uniqueRelatedDefinitions = [
-							...definitions.relatedDefinitions,
-						].filter(
-							(item, index, array) =>
-								array.findIndex(
-									(item2) =>
-										item2.definition.id ===
-										item.definition.id
-								) === index
-						);
+	const navigateRelationships = useCallback(
+		(id: number) => {
+			console.log('oi');
+			function findAndSetCurrentNav(
+				definitions: ObjectDefinitionsRelationshipTree
+			) {
+				if (definitions) {
+					if (definitions.definition.id === id) {
+						if (definitions.relatedDefinitions) {
+							const uniqueRelatedDefinitions = [
+								...definitions.relatedDefinitions,
+							].filter(
+								(item, index, array) =>
+									array.findIndex(
+										(item2) =>
+											item2.definition.id ===
+											item.definition.id
+									) === index
+							);
 
-						setCurrentNav((previous) => {
-							if (previous) {
-								setPreviousNav(previous);
-							}
+							setCurrentNav((previousNav) => {
+								if (previousNav) {
+									setNavHistory((previousHistory) => [
+										previousNav.parentId,
+										...previousHistory,
+									]);
+								}
 
-							return uniqueRelatedDefinitions;
-						});
+								return {
+									parentId: definitions.definition.id,
+									relatedDefinitions: uniqueRelatedDefinitions,
+								};
+							});
+
+							return;
+						}
 
 						return;
 					}
 
-					return;
-				}
-
-				if (definitions.relatedDefinitions) {
-					for (const relatedDefinition of definitions.relatedDefinitions) {
-						findAndSetCurrentNav(relatedDefinition);
+					if (definitions.relatedDefinitions) {
+						for (const relatedDefinition of definitions.relatedDefinitions) {
+							findAndSetCurrentNav(relatedDefinition);
+						}
 					}
 				}
 			}
-		}
 
-		findAndSetCurrentNav(fectchedObjectDefinitions);
-	};
+			findAndSetCurrentNav(fectchedObjectDefinitions);
+		},
+		[fectchedObjectDefinitions]
+	);
 
 	useEffect(() => {
-		console.log('seta o click pro id:', previousNav);
-		setOnBackClick(() => () => setCurrentNav(previousNav));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [previousNav]);
+		console.log('navHistory atual:', navHistory);
+		setOnBackClick(() => () => {
+			navigateRelationships(navHistory[0]);
+			setNavHistory([...navHistory.slice(1)]);
+		});
+	}, [navHistory, navigateRelationships, setOnBackClick]);
 
 	return (
 		<div className="sidebar-body">
 			<div className="panels-container">
-				{currentNav?.map((item, index) => {
+				{currentNav.relatedDefinitions?.map((item, index) => {
 					return (
 						<ObjectFieldsPanel
 							currentSchemaProperties={currentSchemaProperties}
@@ -307,7 +322,8 @@ export default function RelatedObjectDefinitionsSidebarBody({
 							navigate={navigateRelationships}
 							objectDefinition={item.definition}
 							objectRelationshipName={
-								currentNav[index].definition.name
+								currentNav.relatedDefinitions?.[index]
+									.definition.name
 							}
 							parentDefinitionId={definition.id}
 							searchKeyword={searchKeyword}
