@@ -13,6 +13,7 @@ import React, {Dispatch, SetStateAction} from 'react';
 
 interface SidebarHeaderProps {
 	objectDefinition: ObjectDefinition;
+	onBackClick: voidReturn;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
@@ -20,6 +21,7 @@ interface SidebarHeaderProps {
 
 export default function SidebarHeader({
 	objectDefinition,
+	onBackClick,
 	setSearchKeyword,
 	setViewRelatedObjects,
 	viewRelatedObjects,
@@ -68,7 +70,12 @@ export default function SidebarHeader({
 					<div className="related-objects-results-bar-container">
 						<ClayResultsBar>
 							<ClayResultsBar.Item className="results-angle-left">
-								<ClayIcon symbol="angle-left" />
+								<ClayButtonWithIcon
+									aria-label="Back"
+									displayType="unstyled"
+									onClick={onBackClick}
+									symbol="angle-left"
+								/>
 							</ClayResultsBar.Item>
 
 							<ClayResultsBar.Item className="results-info">

@@ -30,6 +30,7 @@ interface SidebarBodyProps {
 	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
 	viewRelatedObjects: boolean;
 }
 
@@ -41,6 +42,7 @@ interface ObjectFieldsPanelProps {
 	parentDefinitionId: number;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	// setPreviousNav: Dispatch<SetStateAction<number>>;
 	startExpanded?: boolean;
 }
 
@@ -51,6 +53,7 @@ function ObjectFieldsPanel({
 	objectRelationshipName,
 	searchKeyword,
 	setCurrentSchemaProperties,
+	// setPreviousNav,
 	startExpanded,
 }: ObjectFieldsPanelProps) {
 	const {
@@ -213,7 +216,15 @@ function ObjectFieldsPanel({
 					{showOnClick?.id && (
 						<ClayButton
 							displayType="secondary"
-							onClick={() => navigate(showOnClick.id)}
+							onClick={() => {
+								console.log(
+									'objectDefinition.id',
+									objectDefinition.id
+								);
+								console.log('showOnClick.id', showOnClick.id);
+								// setPreviousNav(objectDefinition.id);
+								navigate(showOnClick.id);
+							}}
 						>
 							{Liferay.Language.get('view-related-objects')}
 						</ClayButton>
@@ -229,11 +240,14 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	fectchedObjectDefinitions,
 	searchKeyword,
 	setCurrentSchemaProperties,
+	setOnBackClick,
 }: SidebarBodyProps) {
 	const {definition, relatedDefinitions} = fectchedObjectDefinitions;
 	const [currentNav, setCurrentNav] = useState(relatedDefinitions);
+	const [previousNav, setPreviousNav] = useState([{definition}]);
 
 	const navigateRelationships = (id: number) => {
+		console.log('oi');
 		function findAndSetCurrentNav(
 			definitions: ObjectDefinitionsRelationshipTree
 		) {
@@ -251,7 +265,13 @@ export default function RelatedObjectDefinitionsSidebarBody({
 								) === index
 						);
 
-						setCurrentNav(uniqueRelatedDefinitions);
+						setCurrentNav((previous) => {
+							if (previous) {
+								setPreviousNav(previous);
+							}
+
+							return uniqueRelatedDefinitions;
+						});
 
 						return;
 					}
@@ -270,16 +290,22 @@ export default function RelatedObjectDefinitionsSidebarBody({
 		findAndSetCurrentNav(fectchedObjectDefinitions);
 	};
 
+	useEffect(() => {
+		console.log('seta o click pro id:', previousNav);
+		setOnBackClick(() => () => setCurrentNav(previousNav));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [previousNav]);
+
 	return (
 		<div className="sidebar-body">
 			<div className="panels-container">
-				{currentNav?.map((oxe, index) => {
+				{currentNav?.map((item, index) => {
 					return (
 						<ObjectFieldsPanel
 							currentSchemaProperties={currentSchemaProperties}
-							key={oxe.definition.id}
+							key={item.definition.id}
 							navigate={navigateRelationships}
-							objectDefinition={oxe.definition}
+							objectDefinition={item.definition}
 							objectRelationshipName={
 								currentNav[index].definition.name
 							}
@@ -288,6 +314,7 @@ export default function RelatedObjectDefinitionsSidebarBody({
 							setCurrentSchemaProperties={
 								setCurrentSchemaProperties
 							}
+							// setPreviousNav={setPreviousNav}
 						/>
 					);
 				})}

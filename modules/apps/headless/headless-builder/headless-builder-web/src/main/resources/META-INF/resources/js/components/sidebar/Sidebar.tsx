@@ -34,13 +34,13 @@ export default function Sidebar({
 		setFetchedSchemaData,
 	} = useContext(EditSchemaContext);
 
+	const [onBackClick, setOnBackClick] = useState(() => () => {});
 	const [searchKeyword, setSearchKeyword] = useState('');
-
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
-	// useEffect(() => {
-	// 	console.log('viewRelatedObjects', viewRelatedObjects);
-	// }, [viewRelatedObjects]);
+	useEffect(() => {
+		console.log('onBackClick', onBackClick);
+	}, [onBackClick]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
@@ -65,6 +65,7 @@ export default function Sidebar({
 						objectDefinition={
 							fetchedSchemaData.objectDefinitions.definition
 						}
+						onBackClick={onBackClick}
 						setSearchKeyword={setSearchKeyword}
 						setViewRelatedObjects={setViewRelatedObjects}
 						viewRelatedObjects={viewRelatedObjects}
@@ -81,6 +82,7 @@ export default function Sidebar({
 							setCurrentSchemaProperties={
 								setCurrentSchemaProperties
 							}
+							setOnBackClick={setOnBackClick}
 							viewRelatedObjects={viewRelatedObjects}
 						/>
 					) : (

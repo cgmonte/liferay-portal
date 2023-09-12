@@ -6,12 +6,14 @@
 import {Dispatch, SetStateAction} from 'react';
 interface SidebarHeaderProps {
 	objectDefinition: ObjectDefinition;
+	onBackClick: voidReturn;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
 }
 export default function SidebarHeader({
 	objectDefinition,
+	onBackClick,
 	setSearchKeyword,
 	setViewRelatedObjects,
 	viewRelatedObjects,
