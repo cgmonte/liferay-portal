@@ -9,6 +9,7 @@ interface SidebarBodyProps {
 	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
+	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
 	viewRelatedObjects: boolean;
 }
 export default function RelatedObjectDefinitionsSidebarBody({
@@ -16,5 +17,6 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	fectchedObjectDefinitions,
 	searchKeyword,
 	setCurrentSchemaProperties,
+	setOnBackClick,
 }: SidebarBodyProps): JSX.Element;
 export {};
