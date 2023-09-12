@@ -104,10 +104,10 @@ export default function EditAPISchema({
 		// 	printAll(fetchedSchemaData.objectDefinitions);
 		// }
 
-		console.log(
-			'fetchedSchemaData.objectDefinitions',
-			fetchedSchemaData.objectDefinitions
-		);
+		// console.log(
+		// 	'fetchedSchemaData.objectDefinitions',
+		// 	fetchedSchemaData.objectDefinitions
+		// );
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fetchedSchemaData.objectDefinitions]);

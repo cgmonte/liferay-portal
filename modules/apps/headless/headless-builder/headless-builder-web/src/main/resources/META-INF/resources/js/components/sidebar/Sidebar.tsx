@@ -38,9 +38,9 @@ export default function Sidebar({
 	const [searchKeyword, setSearchKeyword] = useState('');
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
-	useEffect(() => {
-		console.log('onBackClick', onBackClick);
-	}, [onBackClick]);
+	// useEffect(() => {
+	// 	console.log('onBackClick', onBackClick);
+	// }, [onBackClick]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({

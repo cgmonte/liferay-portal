@@ -182,9 +182,9 @@ function ObjectFieldsPanel({
 		<ClayPanel
 			className="object-definitions-panel"
 			collapsable
-			defaultExpanded
+			// defaultExpanded
 			displayTitle={
-				localUIData.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
+				localUIData.id+' '+localUIData.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
 			}
 			displayType="unstyled"
 			expanded={expanded}
@@ -219,11 +219,9 @@ function ObjectFieldsPanel({
 							displayType="secondary"
 							onClick={() => {
 								console.log(
-									'objectDefinition.id',
-									objectDefinition.id
+									'navigate forward to:',
+									showOnClick.id
 								);
-								console.log('showOnClick.id', showOnClick.id);
-								// setPreviousNav(objectDefinition.id);
 								navigate(showOnClick.id, 'forward');
 							}}
 						>
@@ -252,7 +250,6 @@ export default function RelatedObjectDefinitionsSidebarBody({
 
 	const navigateRelationships = useCallback(
 		(id: number, direction: 'back' | 'forward') => {
-			console.log('oi');
 			function findAndSetCurrentNav(
 				definitions: ObjectDefinitionsRelationshipTree
 			) {
@@ -275,22 +272,25 @@ export default function RelatedObjectDefinitionsSidebarBody({
 								if (previousNav) {
 									setNavHistory((previousHistory) => {
 										if (
-											// previousHistory[0] !==
-											// previousNav.parentId
+											previousHistory[0] !==
+												previousNav.parentId &&
 											direction === 'forward'
 										) {
+											// console.log(
+											// 	'previousNav.parentId',
+											// 	previousNav.parentId
+											// );
+											// console.log(
+											// 	'previousHistory',
+											// 	previousHistory
+											// );
 											console.log(
-												'previousNav.parentId',
-												previousNav.parentId
+												'o history vai ser setado como:',
+												[
+													previousNav.parentId,
+													...previousHistory,
+												]
 											);
-											console.log(
-												'previousHistory',
-												previousHistory
-											);
-											console.log('oxiiiii', [
-												previousNav.parentId,
-												...previousHistory,
-											]);
 
 											return [
 												previousNav.parentId,
@@ -330,6 +330,7 @@ export default function RelatedObjectDefinitionsSidebarBody({
 	useEffect(() => {
 		console.log('navHistory atual:', navHistory);
 		setOnBackClick(() => () => {
+			console.log('navigate back to', navHistory[0]);
 			navigateRelationships(navHistory[0], 'back');
 			setNavHistory([...navHistory.slice(1)]);
 		});
