@@ -261,7 +261,8 @@ export default function RelatedObjectDefinitionsSidebarBody({
 						if (definitions.relatedDefinitions) {
 							const uniqueRelatedDefinitions = [
 								...definitions.relatedDefinitions,
-							].filter(
+							]
+							.filter(
 								(item, index, array) =>
 									array.findIndex(
 										(item2) =>
@@ -272,10 +273,19 @@ export default function RelatedObjectDefinitionsSidebarBody({
 
 							setCurrentNav((previousNav) => {
 								if (previousNav) {
-									setNavHistory((previousHistory) => [
-										previousNav.parentId,
-										...previousHistory,
-									]);
+									setNavHistory((previousHistory) => {
+										if (
+											previousHistory[0] !==
+											previousNav.parentId
+										) {
+											return [
+												previousNav.parentId,
+												...previousHistory,
+											];
+										}
+
+										return previousHistory;
+									});
 								}
 
 								return {
