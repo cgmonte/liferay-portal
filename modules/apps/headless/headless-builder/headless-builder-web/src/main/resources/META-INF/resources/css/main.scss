@@ -212,6 +212,13 @@ $strong-blue: #2e5aac;
 					div:first-of-type {
 						margin-top: 0px;
 					}
+
+					.panel-body {
+						.view-related-objects {
+							width: 100%;
+							margin-top: 10px;
+						}
+					}
 				}
 
 				.property-container {
@@ -320,7 +327,7 @@ $strong-blue: #2e5aac;
 						padding: 0 !important;
 
 						.container-fluid.container-fluid-max-xl {
-							padding-left: 16px;
+							padding-left: 0;
 							padding-right: 0;
 
 							.results-angle-left {
@@ -338,7 +345,7 @@ $strong-blue: #2e5aac;
 							.results-info {
 								justify-content: end;
 								padding-right: 0;
-								width: 237px;
+								width: 226px;
 							}
 
 							.tbar-nav.tbar-nav-wrap {
