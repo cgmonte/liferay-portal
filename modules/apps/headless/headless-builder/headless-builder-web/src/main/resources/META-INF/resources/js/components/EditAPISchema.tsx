@@ -82,7 +82,6 @@ export default function EditAPISchema({
 	useEffect(() => {
 		// console.log('first');
 		// let count = 0;
-
 		// function printAll(definitions: ObjectDefinitionsRelationshipTree) {
 		// 	if (definitions) {
 		// 		count = count + 1;
@@ -91,7 +90,6 @@ export default function EditAPISchema({
 		// 			'objectDefinition name:',
 		// 			definitions.definition.name
 		// 		);
-
 		// 		if (definitions.relatedDefinitions) {
 		// 			for (const relatedDefinition of definitions.relatedDefinitions) {
 		// 				printAll(relatedDefinition);
@@ -99,16 +97,13 @@ export default function EditAPISchema({
 		// 		}
 		// 	}
 		// }
-
 		// if (fetchedSchemaData.objectDefinitions) {
 		// 	printAll(fetchedSchemaData.objectDefinitions);
 		// }
-
 		// console.log(
 		// 	'fetchedSchemaData.objectDefinitions',
 		// 	fetchedSchemaData.objectDefinitions
 		// );
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fetchedSchemaData.objectDefinitions]);
 
@@ -518,6 +513,9 @@ export default function EditAPISchema({
 							currentSchemaProperties={currentSchemaProperties}
 							mainObjectDefinitionERC={
 								localUIData.mainObjectDefinitionERC
+							}
+							objectDefinitions={
+								fetchedSchemaData.objectDefinitions
 							}
 							setCurrentSchemaProperties={
 								setCurrentSchemaProperties

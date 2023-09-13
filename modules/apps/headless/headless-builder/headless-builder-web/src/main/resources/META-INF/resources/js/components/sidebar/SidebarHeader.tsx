@@ -12,11 +12,14 @@ import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction} from 'react';
 
 interface SidebarHeaderProps {
-	currentNav: ObjectDefinition[];
-	navHistory: undefined | number[];
-	objectDefinition: ObjectDefinition;
+	// currentNav: ObjectDefinition[];
+
+	navHistory: ObjectDefinition[][];
+
+	// objectDefinition: ObjectDefinition;
+
 	onBackClick: voidReturn;
-	setNavHistory: Dispatch<SetStateAction<number[]>>;
+	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
@@ -24,11 +27,15 @@ interface SidebarHeaderProps {
 
 export default function SidebarHeader({
 	navHistory,
-	objectDefinition,
+
+	// objectDefinition,
+
 	onBackClick,
 	setNavHistory,
 	setSearchKeyword,
-	setViewRelatedObjects,
+
+	// setViewRelatedObjects,
+
 	viewRelatedObjects,
 }: SidebarHeaderProps) {
 	return (
@@ -68,7 +75,7 @@ export default function SidebarHeader({
 				</ClayInput.Group>
 			</div>
 
-			{!!navHistory?.length && (
+			{navHistory?.length > 1 && (
 				<>
 					<div className="card-divider" />
 
@@ -78,7 +85,10 @@ export default function SidebarHeader({
 								<ClayButtonWithIcon
 									aria-label="Back"
 									displayType="unstyled"
-									onClick={onBackClick}
+									onClick={() =>
+										navHistory.length > 1 &&
+										setNavHistory([...navHistory.slice(1)])
+									}
 									symbol="angle-left"
 								/>
 							</ClayResultsBar.Item>
@@ -89,11 +99,12 @@ export default function SidebarHeader({
 										Liferay.Language.get(
 											'x-related-objects-for-x'
 										),
-										objectDefinition.objectRelationships
-											.length,
-										`"${objectDefinition.label[
-											Liferay.ThemeDisplay.getDefaultLanguageId()
-										]!}"`
+										navHistory[0].length,
+										`"${navHistory[1]}`
+
+										// `.[
+										// 	Liferay.ThemeDisplay.getDefaultLanguageId()
+										// ]!}"`
 									)}
 								</span>
 							</ClayResultsBar.Item>
@@ -102,7 +113,11 @@ export default function SidebarHeader({
 								<ClayButtonWithIcon
 									aria-label="Search"
 									displayType="unstyled"
-									onClick={() => setNavHistory([])}
+									onClick={() =>
+										setNavHistory((previous) => [
+											previous[previous.length - 1],
+										])
+									}
 									symbol="times-circle"
 								/>
 							</ClayResultsBar.Item>

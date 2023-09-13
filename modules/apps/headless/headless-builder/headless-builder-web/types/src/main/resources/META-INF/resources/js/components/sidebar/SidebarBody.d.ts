@@ -5,24 +5,20 @@
 
 import {Dispatch, SetStateAction} from 'react';
 interface SidebarBodyProps {
-	currentNav: ObjectDefinition[];
 	currentSchemaProperties: TreeViewItemData[];
 	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
-	navHistory: number[];
+	navHistory: ObjectDefinition[][];
 	searchKeyword: string;
-	setCurrentNav: Dispatch<SetStateAction<ObjectDefinition[]>>;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	setNavHistory: Dispatch<SetStateAction<number[]>>;
+	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
 	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
 	viewRelatedObjects: boolean;
 }
 export default function SidebarBody({
-	currentNav,
 	currentSchemaProperties,
 	fectchedObjectDefinitions,
 	navHistory,
 	searchKeyword,
-	setCurrentNav,
 	setCurrentSchemaProperties,
 	setNavHistory,
 	setOnBackClick,

@@ -22,59 +22,61 @@ import SidebarHeader from './SidebarHeader';
 interface SidebarProps {
 	currentSchemaProperties: TreeViewItemData[];
 	mainObjectDefinitionERC: string;
+	objectDefinitions?: ObjectDefinitionsRelationshipTree;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
 export default function Sidebar({
 	currentSchemaProperties,
 	mainObjectDefinitionERC,
+	objectDefinitions,
 	setCurrentSchemaProperties,
 }: SidebarProps) {
 	const {
-		fetchedSchemaData,
+		// fetchedSchemaData,
+
 		objectDefinitionBasePath,
 		setFetchedSchemaData,
 	} = useContext(EditSchemaContext);
 
-	const [currentNav, setCurrentNav] = useState([
-		{...fetchedSchemaData.objectDefinitions?.definition},
-	] as ObjectDefinition[]);
-	const [navHistory, setNavHistory] = useState<number[]>([]);
+	const [navHistory, setNavHistory] = useState<ObjectDefinition[][]>([[]]);
+
+	// const [navHistory, setNavHistory] = useState<ObjectDefinition[]>([]);
+
 	const [onBackClick, setOnBackClick] = useState(() => () => {});
 	const [searchKeyword, setSearchKeyword] = useState('');
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
 	useEffect(() => {
-		// console.log('||||||||||||||||||');
-
 		console.log('------ navHistory', navHistory);
 	}, [navHistory]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
 			input: objectDefinitionBasePath + mainObjectDefinitionERC,
-		}).then((mainObjectResult) =>
+		}).then((mainObjectResult) => {
 			setFetchedSchemaData((previous) => ({
 				...previous,
 				objectDefinitions: {
 					...previous.objectDefinitions,
 					definition: mainObjectResult,
 				},
-			}))
-		);
+			}));
+			setNavHistory([[mainObjectResult]]);
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<div className="sidebar">
-			{fetchedSchemaData.objectDefinitions?.definition && (
+			{objectDefinitions?.definition && (
 				<>
 					<SidebarHeader
-						currentNav={currentNav}
+						// currentNav={currentNav}
+
 						navHistory={navHistory}
-						objectDefinition={
-							fetchedSchemaData.objectDefinitions.definition
-						}
+						// objectDefinition={objectDefinitions.definition}
+
 						onBackClick={onBackClick}
 						setNavHistory={setNavHistory}
 						setSearchKeyword={setSearchKeyword}
@@ -83,14 +85,10 @@ export default function Sidebar({
 					/>
 
 					<SidebarBody
-						currentNav={currentNav}
 						currentSchemaProperties={currentSchemaProperties}
-						fectchedObjectDefinitions={
-							fetchedSchemaData.objectDefinitions
-						}
+						fectchedObjectDefinitions={objectDefinitions}
 						navHistory={navHistory}
 						searchKeyword={searchKeyword}
-						setCurrentNav={setCurrentNav}
 						setCurrentSchemaProperties={setCurrentSchemaProperties}
 						setNavHistory={setNavHistory}
 						setOnBackClick={setOnBackClick}
