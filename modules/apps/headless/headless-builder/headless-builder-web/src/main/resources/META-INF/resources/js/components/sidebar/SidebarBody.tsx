@@ -56,11 +56,8 @@ function ObjectFieldsPanel({
 	navigate,
 	objectDefinition,
 	objectRelationshipName,
-	parentDefinitionId,
 	searchKeyword,
 	setCurrentSchemaProperties,
-	setNavHistory,
-	startExpanded,
 }: ObjectFieldsPanelProps) {
 	const {
 		fetchedSchemaData,
@@ -69,7 +66,7 @@ function ObjectFieldsPanel({
 	} = useContext(EditSchemaContext);
 
 	const [showOnClick, setShowOnClick] = useState<undefined | {id: number}>();
-	const [expanded, setExpanded] = useState(false);
+	const [expanded, setExpanded] = useState(defaultExpanded);
 	const [localUIData, setLocalUIData] = useState<
 		ObjectDefinitionWithAddedField
 	>(objectDefinition);
@@ -171,10 +168,8 @@ function ObjectFieldsPanel({
 		<ClayPanel
 			className="object-definitions-panel"
 			collapsable
-			defaultExpanded={false}
+			defaultExpanded={defaultExpanded}
 			displayTitle={
-				localUIData.id +
-				' ' +
 				localUIData.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
 			}
 			displayType="unstyled"
@@ -283,7 +278,10 @@ export default function SidebarBody({
 					return (
 						<ObjectFieldsPanel
 							currentSchemaProperties={currentSchemaProperties}
-							defaultExpanded={false}
+							defaultExpanded={
+								fectchedObjectDefinitions.definition.id ===
+								navHistory[0][0].id
+							}
 							key={`${index}${item.id}`}
 							navigate={navigateRelationships}
 							objectDefinition={item}
