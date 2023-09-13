@@ -5,6 +5,7 @@
 
 import {Dispatch, SetStateAction} from 'react';
 interface SidebarHeaderProps {
+	currentNav: ObjectDefinition[];
 	navHistory: undefined | number[];
 	objectDefinition: ObjectDefinition;
 	onBackClick: voidReturn;
