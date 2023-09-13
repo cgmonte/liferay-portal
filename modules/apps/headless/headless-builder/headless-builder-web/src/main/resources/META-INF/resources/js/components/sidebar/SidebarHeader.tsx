@@ -12,16 +12,20 @@ import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction} from 'react';
 
 interface SidebarHeaderProps {
+	navHistory: undefined | number[];
 	objectDefinition: ObjectDefinition;
 	onBackClick: voidReturn;
+	setNavHistory: Dispatch<SetStateAction<number[]>>;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
 }
 
 export default function SidebarHeader({
+	navHistory,
 	objectDefinition,
 	onBackClick,
+	setNavHistory,
 	setSearchKeyword,
 	setViewRelatedObjects,
 	viewRelatedObjects,
@@ -63,7 +67,7 @@ export default function SidebarHeader({
 				</ClayInput.Group>
 			</div>
 
-			{viewRelatedObjects && (
+			{!!navHistory?.length && (
 				<>
 					<div className="card-divider" />
 
@@ -97,7 +101,7 @@ export default function SidebarHeader({
 								<ClayButtonWithIcon
 									aria-label="Search"
 									displayType="unstyled"
-									onClick={() => setViewRelatedObjects(false)}
+									onClick={() => setNavHistory([])}
 									symbol="times-circle"
 								/>
 							</ClayResultsBar.Item>

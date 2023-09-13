@@ -13,8 +13,10 @@ import React, {
 
 import {EditSchemaContext} from '../EditAPIApplicationContext';
 import {fetchJSON} from '../utils/fetchUtil';
-import RelatedObjectDefinitionsSidebarBody from './RelatedObjectDefinitionsSidebarBody';
 import SidebarBody from './SidebarBody';
+
+// import SidebarBody from './SidebarBody';
+
 import SidebarHeader from './SidebarHeader';
 
 interface SidebarProps {
@@ -34,13 +36,19 @@ export default function Sidebar({
 		setFetchedSchemaData,
 	} = useContext(EditSchemaContext);
 
+	const [currentNav, setCurrentNav] = useState([
+		{...fetchedSchemaData.objectDefinitions?.definition},
+	] as ObjectDefinition[]);
+	const [navHistory, setNavHistory] = useState<number[]>([]);
 	const [onBackClick, setOnBackClick] = useState(() => () => {});
 	const [searchKeyword, setSearchKeyword] = useState('');
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
-	// useEffect(() => {
-	// 	console.log('onBackClick', onBackClick);
-	// }, [onBackClick]);
+	useEffect(() => {
+		// console.log('||||||||||||||||||');
+
+		console.log('------ navHistory', navHistory);
+	}, [navHistory]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
@@ -62,42 +70,32 @@ export default function Sidebar({
 			{fetchedSchemaData.objectDefinitions?.definition && (
 				<>
 					<SidebarHeader
+						currentNav={currentNav}
+						navHistory={navHistory}
 						objectDefinition={
 							fetchedSchemaData.objectDefinitions.definition
 						}
 						onBackClick={onBackClick}
+						setNavHistory={setNavHistory}
 						setSearchKeyword={setSearchKeyword}
 						setViewRelatedObjects={setViewRelatedObjects}
 						viewRelatedObjects={viewRelatedObjects}
 					/>
 
-					{!!fetchedSchemaData.objectDefinitions.relatedDefinitions
-						?.length && viewRelatedObjects ? (
-						<RelatedObjectDefinitionsSidebarBody
-							currentSchemaProperties={currentSchemaProperties}
-							fectchedObjectDefinitions={
-								fetchedSchemaData.objectDefinitions
-							}
-							searchKeyword={searchKeyword}
-							setCurrentSchemaProperties={
-								setCurrentSchemaProperties
-							}
-							setOnBackClick={setOnBackClick}
-							viewRelatedObjects={viewRelatedObjects}
-						/>
-					) : (
-						<SidebarBody
-							currentSchemaProperties={currentSchemaProperties}
-							mainObjectDefinition={
-								fetchedSchemaData.objectDefinitions.definition
-							}
-							searchKeyword={searchKeyword}
-							setCurrentSchemaProperties={
-								setCurrentSchemaProperties
-							}
-							setViewRelatedObjects={setViewRelatedObjects}
-						/>
-					)}
+					<SidebarBody
+						currentNav={currentNav}
+						currentSchemaProperties={currentSchemaProperties}
+						fectchedObjectDefinitions={
+							fetchedSchemaData.objectDefinitions
+						}
+						navHistory={navHistory}
+						searchKeyword={searchKeyword}
+						setCurrentNav={setCurrentNav}
+						setCurrentSchemaProperties={setCurrentSchemaProperties}
+						setNavHistory={setNavHistory}
+						setOnBackClick={setOnBackClick}
+						viewRelatedObjects={viewRelatedObjects}
+					/>
 				</>
 			)}
 		</div>
