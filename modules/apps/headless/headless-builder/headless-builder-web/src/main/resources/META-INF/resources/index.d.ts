@@ -155,6 +155,7 @@ interface NameValueObject {
 interface ObjectRelationship {
 	name: string;
 	objectDefinitionExternalReferenceCode2: string;
+	objectDefinitionId2: number;
 }
 
 interface ObjectDefinition {

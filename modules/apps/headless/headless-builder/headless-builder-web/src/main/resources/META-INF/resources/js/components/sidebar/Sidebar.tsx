@@ -14,9 +14,6 @@ import React, {
 import {EditSchemaContext} from '../EditAPIApplicationContext';
 import {fetchJSON} from '../utils/fetchUtil';
 import SidebarBody from './SidebarBody';
-
-// import SidebarBody from './SidebarBody';
-
 import SidebarHeader from './SidebarHeader';
 
 interface SidebarProps {
@@ -32,24 +29,14 @@ export default function Sidebar({
 	objectDefinitions,
 	setCurrentSchemaProperties,
 }: SidebarProps) {
-	const {
-		// fetchedSchemaData,
-
-		objectDefinitionBasePath,
-		setFetchedSchemaData,
-	} = useContext(EditSchemaContext);
+	const {objectDefinitionBasePath, setFetchedSchemaData} = useContext(
+		EditSchemaContext
+	);
 
 	const [navHistory, setNavHistory] = useState<ObjectDefinition[][]>([[]]);
-
-	// const [navHistory, setNavHistory] = useState<ObjectDefinition[]>([]);
-
 	const [onBackClick, setOnBackClick] = useState(() => () => {});
 	const [searchKeyword, setSearchKeyword] = useState('');
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
-
-	useEffect(() => {
-		console.log('------ navHistory', navHistory);
-	}, [navHistory]);
 
 	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
@@ -72,11 +59,7 @@ export default function Sidebar({
 			{objectDefinitions?.definition && (
 				<>
 					<SidebarHeader
-						// currentNav={currentNav}
-
 						navHistory={navHistory}
-						// objectDefinition={objectDefinitions.definition}
-
 						onBackClick={onBackClick}
 						setNavHistory={setNavHistory}
 						setSearchKeyword={setSearchKeyword}

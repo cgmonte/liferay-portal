@@ -12,12 +12,7 @@ import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction} from 'react';
 
 interface SidebarHeaderProps {
-	// currentNav: ObjectDefinition[];
-
 	navHistory: ObjectDefinition[][];
-
-	// objectDefinition: ObjectDefinition;
-
 	onBackClick: voidReturn;
 	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
@@ -27,17 +22,33 @@ interface SidebarHeaderProps {
 
 export default function SidebarHeader({
 	navHistory,
-
-	// objectDefinition,
-
-	onBackClick,
 	setNavHistory,
 	setSearchKeyword,
-
-	// setViewRelatedObjects,
-
 	viewRelatedObjects,
 }: SidebarHeaderProps) {
+	const getParentLabel = (history: ObjectDefinition[][]) => {
+		let label;
+
+		history[1].forEach((item) => {
+			const matches: boolean[] = [];
+
+			if (item.objectRelationships.length === history[0].length) {
+				item.objectRelationships.forEach(
+					({objectDefinitionId2}, index) =>
+						matches.push(
+							objectDefinitionId2 === history[0][index].id
+						)
+				);
+			}
+
+			if (!matches.includes(false)) {
+				label = item.label[Liferay.ThemeDisplay.getDefaultLanguageId()];
+			}
+		});
+
+		return label ?? '';
+	};
+
 	return (
 		<div
 			className={classNames({
@@ -100,11 +111,7 @@ export default function SidebarHeader({
 											'x-related-objects-for-x'
 										),
 										navHistory[0].length,
-										`"${navHistory[1]}`
-
-										// `.[
-										// 	Liferay.ThemeDisplay.getDefaultLanguageId()
-										// ]!}"`
+										`"${getParentLabel(navHistory)}`
 									)}
 								</span>
 							</ClayResultsBar.Item>
