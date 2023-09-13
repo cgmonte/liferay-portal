@@ -27,7 +27,6 @@ interface ObjectDefinitionWithAddedField extends ObjectDefinition {
 }
 
 interface ObjectFieldsPanelProps {
-	// buffer: undefined | [number] | [number, number];
 	currentSchemaProperties: TreeViewItemData[];
 	defaultExpanded: boolean;
 	navigate: (id: number) => void;
@@ -41,12 +40,10 @@ interface ObjectFieldsPanelProps {
 }
 
 interface SidebarBodyProps {
-	// currentNav: ObjectDefinition[];
 	currentSchemaProperties: TreeViewItemData[];
 	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
 	navHistory: ObjectDefinition[][];
 	searchKeyword: string;
-	// setCurrentNav: Dispatch<SetStateAction<ObjectDefinition[]>>;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
 	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
@@ -54,7 +51,6 @@ interface SidebarBodyProps {
 }
 
 function ObjectFieldsPanel({
-	// buffer,
 	currentSchemaProperties,
 	defaultExpanded,
 	navigate,
@@ -215,18 +211,6 @@ function ObjectFieldsPanel({
 							displayType="secondary"
 							onClick={() => {
 								navigate(showOnClick.id);
-
-								// setNavHistory((previousHistory) => {
-								// 	if (buffer?.length === 1) {
-								// 		return buffer;
-								// 	}
-
-								// 	if (buffer?.length === 2) {
-								// 		return [buffer[1], ...previousHistory];
-								// 	}
-
-								// 	return previousHistory;
-								// });
 							}}
 						>
 							{Liferay.Language.get('view-related-objects')}
@@ -238,13 +222,6 @@ function ObjectFieldsPanel({
 	);
 }
 
-// interface BufferItem {
-// 	id: number;
-// 	label: LocalizedValue<string>;
-// }
-
-// type HistoryBuffer = [BufferItem] | [BufferItem, BufferItem];
-
 export default function SidebarBody({
 	currentSchemaProperties,
 	fectchedObjectDefinitions,
@@ -254,24 +231,6 @@ export default function SidebarBody({
 	setNavHistory,
 	setOnBackClick,
 }: SidebarBodyProps) {
-	// const {definition, relatedDefinitions} = fectchedObjectDefinitions;
-
-	// const [currentNav, setCurrentNav] = useState([
-	// 	{...definition},
-	// ] as ObjectDefinition[]);
-
-	// const [buffer, setBuffer] = useState<HistoryBuffer>([
-	// 	{id: definition.id, label: definition.label},
-	// ]);
-
-	// useEffect(() => {
-	// 	console.log('buffer', buffer);
-	// }, [buffer]);
-
-	// useEffect(() => {
-	// 	console.log('------ currentNav', navHistory);
-	// }, [navHistory]);
-
 	const navigateRelationships = useCallback(
 		(id: number) => {
 			let match = false;
@@ -282,15 +241,6 @@ export default function SidebarBody({
 				if (definitions) {
 					if (definitions.definition.id === id) {
 						if (definitions.relatedDefinitions?.length) {
-							// const uniqueRelatedDefinitions = [
-							// 	...definitions.relatedDefinitions,
-							// ];
-
-							// setBuffer((previousBuffer) => [
-							// 	previousBuffer[1] ?? previousBuffer[0],
-							// 	{id, label},
-							// ]);
-
 							setNavHistory((previous) => [
 								definitions.relatedDefinitions!.map(
 									({definition}) => definition
@@ -321,12 +271,6 @@ export default function SidebarBody({
 
 	useEffect(() => {
 		setOnBackClick(() => () => {
-			// console.log('on back click:', {
-			// 	navigateBack: navHistory[0],
-			// 	setNavHistory: [...navHistory.slice(1)],
-			// });
-			// navigateRelationships(navHistory[0]);
-
 			setNavHistory([...navHistory.slice(1)]);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -338,8 +282,6 @@ export default function SidebarBody({
 				{navHistory[0]?.map((item, index) => {
 					return (
 						<ObjectFieldsPanel
-							// buffer={buffer}
-
 							currentSchemaProperties={currentSchemaProperties}
 							defaultExpanded={false}
 							key={`${index}${item.id}`}

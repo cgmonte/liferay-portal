@@ -14,7 +14,6 @@ interface SidebarHeaderProps {
 }
 export default function SidebarHeader({
 	navHistory,
-	onBackClick,
 	setNavHistory,
 	setSearchKeyword,
 	viewRelatedObjects,
