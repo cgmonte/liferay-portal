@@ -29,7 +29,7 @@ export default function SidebarHeader({
 	const getParentLabel = (history: ObjectDefinition[][]) => {
 		let label;
 
-		history[1].forEach((item) => {
+		for (const item of history[1]) {
 			const matches: boolean[] = [];
 
 			if (item.objectRelationships.length === history[0].length) {
@@ -41,10 +41,12 @@ export default function SidebarHeader({
 				);
 			}
 
-			if (!matches.includes(false)) {
+			if (matches.length && !matches.includes(false)) {
 				label = item.label[Liferay.ThemeDisplay.getDefaultLanguageId()];
+
+				break;
 			}
-		});
+		}
 
 		return label ?? '';
 	};

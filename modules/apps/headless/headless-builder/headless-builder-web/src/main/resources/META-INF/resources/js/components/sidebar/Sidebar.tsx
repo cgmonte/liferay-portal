@@ -39,6 +39,10 @@ export default function Sidebar({
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
 	useEffect(() => {
+		console.log('navHistory', navHistory);
+	}, [navHistory]);
+
+	useEffect(() => {
 		fetchJSON<ObjectDefinition>({
 			input: objectDefinitionBasePath + mainObjectDefinitionERC,
 		}).then((mainObjectResult) => {
