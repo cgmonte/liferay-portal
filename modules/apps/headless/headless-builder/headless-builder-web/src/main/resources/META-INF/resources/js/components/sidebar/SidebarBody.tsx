@@ -226,8 +226,12 @@ export default function SidebarBody({
 	setNavHistory,
 	setOnBackClick,
 }: SidebarBodyProps) {
+	const [previousId, setPreviousId] = useState<number>();
+
 	const navigateRelationships = useCallback(
 		(id: number) => {
+			setPreviousId(id);
+
 			let match = false;
 
 			function findAndSetCurrentNav(
@@ -285,7 +289,11 @@ export default function SidebarBody({
 							key={`${index}${item.id}`}
 							navigate={navigateRelationships}
 							objectDefinition={item}
-							objectRelationshipName={navHistory[0]?.[index].name}
+							objectRelationshipName={
+								navHistory[1]?.find(
+									(navItem) => navItem.id === previousId
+								)?.objectRelationships[index].name
+							}
 							parentDefinitionId={item.id}
 							searchKeyword={searchKeyword}
 							setCurrentSchemaProperties={
