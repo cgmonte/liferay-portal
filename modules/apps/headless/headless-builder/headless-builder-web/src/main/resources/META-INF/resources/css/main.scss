@@ -10,6 +10,7 @@
 	}
 
 	#hostTextPreview {
+		color: $secondary;
 		margin-bottom: 7px !important;
 	}
 }
@@ -28,8 +29,15 @@
 			}
 
 			#hostTextPreview {
+				color: $secondary;
 				margin-bottom: 7px !important;
 			}
+		}
+	}
+
+	.form-feedback-group {
+		span.text-3 {
+			color: $secondary;
 		}
 	}
 
@@ -49,6 +57,13 @@
 		strong#titleConfirmationElement {
 			white-space: pre !important;
 		}
+	}
+}
+
+#createAPIEndpointModal {
+	#hostTextPreview {
+		color: $secondary;
+		margin-bottom: 7px !important;
 	}
 }
 
