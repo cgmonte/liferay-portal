@@ -5,9 +5,9 @@
 
 import {Dispatch, SetStateAction} from 'react';
 interface SidebarHeaderProps {
-	navHistory: ObjectDefinition[][];
+	navHistory: HistoryItem[];
 	onBackClick: voidReturn;
-	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
+	setNavHistory: Dispatch<SetStateAction<HistoryItem[]>>;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;

@@ -12,9 +12,9 @@ import {sub} from 'frontend-js-web';
 import React, {Dispatch, SetStateAction} from 'react';
 
 interface SidebarHeaderProps {
-	navHistory: ObjectDefinition[][];
+	navHistory: HistoryItem[];
 	onBackClick: voidReturn;
-	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
+	setNavHistory: Dispatch<SetStateAction<HistoryItem[]>>;
 	setSearchKeyword: Dispatch<SetStateAction<string>>;
 	setViewRelatedObjects: Dispatch<SetStateAction<boolean>>;
 	viewRelatedObjects: boolean;
@@ -26,17 +26,20 @@ export default function SidebarHeader({
 	setSearchKeyword,
 	viewRelatedObjects,
 }: SidebarHeaderProps) {
-	const getParentLabel = (history: ObjectDefinition[][]) => {
+	const getParentLabel = (history: HistoryItem[]) => {
 		let label;
 
-		for (const item of history[1]) {
+		for (const item of history[1].navigated) {
 			const matches: boolean[] = [];
 
-			if (item.objectRelationships.length === history[0].length) {
+			if (
+				item.objectRelationships.length === history[0].navigated.length
+			) {
 				item.objectRelationships.forEach(
 					({objectDefinitionId2}, index) =>
 						matches.push(
-							objectDefinitionId2 === history[0][index].id
+							objectDefinitionId2 ===
+								history[0].navigated[index].id
 						)
 				);
 			}
@@ -112,7 +115,7 @@ export default function SidebarHeader({
 										Liferay.Language.get(
 											'x-related-objects-for-x'
 										),
-										navHistory[0].length,
+										navHistory[0].navigated.length,
 										`"${getParentLabel(navHistory)}`
 									)}
 								</span>

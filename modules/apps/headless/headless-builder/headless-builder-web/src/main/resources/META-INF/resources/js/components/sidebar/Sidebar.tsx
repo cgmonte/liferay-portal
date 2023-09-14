@@ -33,13 +33,20 @@ export default function Sidebar({
 		EditSchemaContext
 	);
 
-	const [navHistory, setNavHistory] = useState<ObjectDefinition[][]>([[]]);
+	const [navHistory, setNavHistory] = useState<HistoryItem[]>([
+		{
+			navigated: [],
+			relationshipNames: [],
+		},
+	]);
 	const [onBackClick, setOnBackClick] = useState(() => () => {});
 	const [searchKeyword, setSearchKeyword] = useState('');
 	const [viewRelatedObjects, setViewRelatedObjects] = useState(false);
 
 	useEffect(() => {
-		console.log('navHistory', navHistory);
+		console.log('-----');
+		navHistory.forEach((item) => console.log('navigationItem: ', item));
+		console.log('-----');
 	}, [navHistory]);
 
 	useEffect(() => {
@@ -53,7 +60,9 @@ export default function Sidebar({
 					definition: mainObjectResult,
 				},
 			}));
-			setNavHistory([[mainObjectResult]]);
+			setNavHistory([
+				{navigated: [mainObjectResult], relationshipNames: []},
+			]);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

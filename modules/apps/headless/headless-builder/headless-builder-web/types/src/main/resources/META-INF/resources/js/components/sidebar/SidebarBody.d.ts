@@ -7,10 +7,10 @@ import {Dispatch, SetStateAction} from 'react';
 interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
 	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
-	navHistory: ObjectDefinition[][];
+	navHistory: HistoryItem[];
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
+	setNavHistory: Dispatch<SetStateAction<HistoryItem[]>>;
 	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
 	viewRelatedObjects: boolean;
 }

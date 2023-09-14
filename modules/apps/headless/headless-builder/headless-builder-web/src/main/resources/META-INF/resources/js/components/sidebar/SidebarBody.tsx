@@ -29,23 +29,24 @@ interface ObjectDefinitionWithAddedField extends ObjectDefinition {
 interface ObjectFieldsPanelProps {
 	currentSchemaProperties: TreeViewItemData[];
 	defaultExpanded: boolean;
+	navHistory: HistoryItem[];
 	navigate: (id: number) => void;
 	objectDefinition: ObjectDefinition;
 	objectRelationshipName?: string;
 	parentDefinitionId: number;
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
+	// setNavHistory: Dispatch<SetStateAction<HistoryItem[]>>;
 	startExpanded?: boolean;
 }
 
 interface SidebarBodyProps {
 	currentSchemaProperties: TreeViewItemData[];
 	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
-	navHistory: ObjectDefinition[][];
+	navHistory: HistoryItem[];
 	searchKeyword: string;
 	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
-	setNavHistory: Dispatch<SetStateAction<ObjectDefinition[][]>>;
+	setNavHistory: Dispatch<SetStateAction<HistoryItem[]>>;
 	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
 	viewRelatedObjects: boolean;
 }
@@ -239,11 +240,23 @@ export default function SidebarBody({
 			) {
 				if (definitions) {
 					if (definitions.definition.id === id) {
+						// console.log(
+						// 	'first',
+						// 	definitions.definition.objectRelationships.map(
+						// 		(item) => item.name
+						// 	)
+						// );
 						if (definitions.relatedDefinitions?.length) {
+							console.log('vai dar set');
 							setNavHistory((previous) => [
-								definitions.relatedDefinitions!.map(
-									({definition}) => definition
-								),
+								{
+									navigated: definitions.relatedDefinitions!.map(
+										({definition}) => definition
+									),
+									relationshipNames: definitions.definition.objectRelationships.map(
+										(item) => item.name
+									),
+								},
 								...previous,
 							]);
 
@@ -278,19 +291,20 @@ export default function SidebarBody({
 	return (
 		<div className="sidebar-body">
 			<div className="panels-container">
-				{navHistory[0]?.map((item, index) => {
+				{navHistory[0]?.navigated.map((item, index) => {
 					return (
 						<ObjectFieldsPanel
 							currentSchemaProperties={currentSchemaProperties}
 							defaultExpanded={
 								fectchedObjectDefinitions.definition.id ===
-								navHistory[0][0].id
+								navHistory[0].navigated[0].id
 							}
 							key={`${index}${item.id}`}
+							navHistory={navHistory}
 							navigate={navigateRelationships}
 							objectDefinition={item}
 							objectRelationshipName={
-								navHistory[1]?.find(
+								navHistory[1]?.navigated.find(
 									(navItem) => navItem.id === previousId
 								)?.objectRelationships[index].name
 							}
@@ -299,7 +313,7 @@ export default function SidebarBody({
 							setCurrentSchemaProperties={
 								setCurrentSchemaProperties
 							}
-							setNavHistory={setNavHistory}
+							// setNavHistory={setNavHistory}
 						/>
 					);
 				})}

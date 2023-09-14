@@ -128,6 +128,11 @@ interface SchemaObjectDefinitions {
 	relatedObjectDefinitions?: ObjectDefinition[];
 }
 
+interface HistoryItem {
+	navigated: ObjectDefinition[]
+	relationshipNames: string[]
+}
+
 type IncludesFilterOperator = {
 	in: string[] | number[];
 };
@@ -179,7 +184,7 @@ interface ObjectDefinition {
 	objectActions: [];
 	objectFields: ObjectField[];
 	objectLayouts: [];
-	objectRelationshipName?: string;
+	// objectRelationshipName?: string;
 	objectRelationships: ObjectRelationship[];
 	objectViews: [];
 	panelCategoryKey: string;
