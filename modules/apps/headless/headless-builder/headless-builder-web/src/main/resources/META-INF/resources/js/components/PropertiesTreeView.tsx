@@ -74,6 +74,7 @@ export default function PropertiesTreeView({
 					id,
 					name,
 					objectFieldName,
+					setCurrentSchemaProperties,
 				}),
 			id: 'editAPIPropertyModal',
 			size: 'md',

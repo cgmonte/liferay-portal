@@ -34,16 +34,24 @@ const headers = new Headers({
 
 interface EditAPIPropertyModalContentProps extends Partial<TreeViewItemData> {
 	closeModal: voidReturn;
+	setCurrentSchemaProperties: Dispatch<SetStateAction<TreeViewItemData[]>>;
 }
 
 export default function EditAPIPropertyModalContent({
 	businessType,
 	closeModal,
 	description,
+	id,
 	name,
 	objectFieldName,
+	setCurrentSchemaProperties,
 }: EditAPIPropertyModalContentProps) {
-	// const [localUIData, setLocalUIData] = useState<PropertyUIData>();
+	const [localUIData, setLocalUIData] = useState<Partial<PropertyUIData>>({
+		dataType: businessType,
+		description,
+		mappedProperty: objectFieldName,
+		name,
+	});
 
 	const [displayError, setDisplayError] = useState<DataError>({
 		dataType: false,
@@ -171,12 +179,17 @@ export default function EditAPIPropertyModalContent({
 							aria-required="true"
 							autoComplete="off"
 							id="PropertyName"
-							onChange={() => {}}
+							onChange={({target: {value}}) =>
+								setLocalUIData((previous) => ({
+									...previous,
+									name: value,
+								}))
+							}
 							onKeyPress={(event) =>
 								event.key === 'Enter' && event.preventDefault()
 							}
 							placeholder={Liferay.Language.get('enter-name')}
-							value={name}
+							value={localUIData.name}
 						/>
 
 						<div className="feedback-container">
@@ -201,7 +214,6 @@ export default function EditAPIPropertyModalContent({
 					// className={classNames({
 					// 	'has-error': displayError.description,
 					// })}
-					
 					>
 						<label
 							htmlFor="properyDescriptionField"
@@ -215,11 +227,16 @@ export default function EditAPIPropertyModalContent({
 							autoComplete="off"
 							className="form-control"
 							id="properyDescriptionField"
-							onChange={() => {}}
+							onChange={({target: {value}}) =>
+								setLocalUIData((previous) => ({
+									...previous,
+									description: value,
+								}))
+							}
 							placeholder={Liferay.Language.get(
 								'add-a-description-to-this-property'
 							)}
-							value={description}
+							value={localUIData.description}
 						/>
 					</ClayForm.Group>
 
@@ -248,8 +265,8 @@ export default function EditAPIPropertyModalContent({
 							)}
 							required
 							selectedOption={{
-								label: businessType!,
-								value: businessType!,
+								label: localUIData.dataType!,
+								value: localUIData.dataType!,
 							}}
 						/>
 
@@ -298,8 +315,8 @@ export default function EditAPIPropertyModalContent({
 							)}
 							required
 							selectedOption={{
-								label: objectFieldName!,
-								value: objectFieldName!,
+								label: localUIData.mappedProperty!,
+								value: localUIData.mappedProperty!,
 							}}
 						/>
 
@@ -347,10 +364,19 @@ export default function EditAPIPropertyModalContent({
 						<ClayButton
 							displayType="primary"
 							id="modalCreateButton"
-							onClick={() => {}}
+							onClick={() => {
+								setCurrentSchemaProperties((previous) =>
+									previous.map((property) =>
+										property.id !== id
+											? property
+											: {...property, ...localUIData}
+									)
+								);
+								closeModal();
+							}}
 							type="button"
 						>
-							{Liferay.Language.get('create')}
+							{Liferay.Language.get('update')}
 						</ClayButton>
 					</ClayButton.Group>
 				}

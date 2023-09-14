@@ -79,34 +79,6 @@ export default function EditAPISchema({
 		name: '',
 	});
 
-	useEffect(() => {
-		// console.log('first');
-		// let count = 0;
-		// function printAll(definitions: ObjectDefinitionsRelationshipTree) {
-		// 	if (definitions) {
-		// 		count = count + 1;
-		// 		console.log('count', count);
-		// 		console.log(
-		// 			'objectDefinition name:',
-		// 			definitions.definition.name
-		// 		);
-		// 		if (definitions.relatedDefinitions) {
-		// 			for (const relatedDefinition of definitions.relatedDefinitions) {
-		// 				printAll(relatedDefinition);
-		// 			}
-		// 		}
-		// 	}
-		// }
-		// if (fetchedSchemaData.objectDefinitions) {
-		// 	printAll(fetchedSchemaData.objectDefinitions);
-		// }
-		// console.log(
-		// 	'fetchedSchemaData.objectDefinitions',
-		// 	fetchedSchemaData.objectDefinitions
-		// );
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [fetchedSchemaData.objectDefinitions]);
-
 	const fetchAPISchema = () => {
 		fetchJSON<APISchemaItem>({
 			input: apiURLPaths.schemas + schemaId,
@@ -134,6 +106,22 @@ export default function EditAPISchema({
 				...previous,
 				schemaProperties: response,
 			}));
+
+			// setCurrentSchemaProperties(
+			// 	response.map((item) => ({
+			// 		businessType: item.businessType,
+			// 		id: objectField.id,
+			// 		name: localizedPropertyName,
+			// 		objectDefinitionName,
+			// 		objectFieldERC: objectField.externalReferenceCode,
+			// 		objectFieldName: objectField.name,
+			// 		r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchemaId,
+			// 		type: 'treeViewItem',
+			// 		...(objectRelationshipName && {
+			// 			objectRelationshipNames: objectRelationshipName,
+			// 		}),
+			// 	}))
+			// );
 		});
 	};
 
@@ -302,71 +290,82 @@ export default function EditAPISchema({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// useEffect(() => {
-	// 	const {
-	// 		apiSchema,
-	// 		objectDefinitions,
-	// 		schemaProperties,
-	// 	} = fetchedSchemaData;
+	useEffect(() => {
+		const {
+			apiSchema,
+			objectDefinitions,
+			schemaProperties,
+		} = fetchedSchemaData;
 
-	// 	if (apiSchema && objectDefinitions && schemaProperties) {
-	// 		let allFields: ObjectField[] = [];
+		let allRelatedObjectDefinitionsFields: ObjectField[] = [];
 
-	// 		relatedObjectDefinitions.forEach((definition) => {
-	// 			allFields = [...allFields, ...definition.objectFields];
-	// 		});
+		const allRelatedObjectDefinitions: ObjectDefinition[] = [];
 
-	// 		allFields = [...allFields, ...mainObjectDefinition.objectFields];
+		function getAllDefinitions(
+			definitions: ObjectDefinitionsRelationshipTree
+		) {
+			allRelatedObjectDefinitions.push(definitions.definition);
 
-	// 		const allObjectDefinitions = [
-	// 			...relatedObjectDefinitions,
-	// 			mainObjectDefinition,
-	// 		];
+			allRelatedObjectDefinitionsFields = [
+				...allRelatedObjectDefinitionsFields,
+				...definitions.definition.objectFields,
+			];
 
-	// 		const propertiesTreeViewItems = schemaProperties.map(
-	// 			({
-	// 				description,
-	// 				id,
-	// 				name,
-	// 				objectFieldERC,
-	// 				objectRelationshipNames,
-	// 			}) => {
-	// 				const currentField = allFields.find(
-	// 					(field) =>
-	// 						field.externalReferenceCode === objectFieldERC
-	// 				);
+			if (definitions.relatedDefinitions?.length) {
+				for (const relatedDefinition of definitions.relatedDefinitions) {
+					getAllDefinitions(relatedDefinition);
+				}
+			}
+		}
 
-	// 				const parentObjectDefinition = allObjectDefinitions.find(
-	// 					(definition) =>
-	// 						definition.objectFields.some(
-	// 							(field) =>
-	// 								field.externalReferenceCode ===
-	// 								objectFieldERC
-	// 						)
-	// 				);
+		if (apiSchema && objectDefinitions && schemaProperties) {
+			getAllDefinitions(objectDefinitions);
 
-	// 				return {
-	// 					businessType: currentField?.businessType!,
-	// 					...(description && {
-	// 						description,
-	// 					}),
-	// 					id,
-	// 					name,
-	// 					objectDefinitionName: parentObjectDefinition?.name!,
-	// 					objectFieldERC,
-	// 					objectFieldName: currentField?.name!,
-	// 					...(objectRelationshipNames && {
-	// 						objectRelationshipNames,
-	// 					}),
-	// 					r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchema.id,
-	// 					type: 'trewViewItem',
-	// 				};
-	// 			}
-	// 		);
+			const propertiesTreeViewItems = schemaProperties.map(
+				({
+					description,
+					id,
+					name,
+					objectFieldERC,
+					objectRelationshipNames,
+				}) => {
+					const currentField = allRelatedObjectDefinitionsFields.find(
+						(field) =>
+							field.externalReferenceCode === objectFieldERC
+					);
 
-	// 		setCurrentSchemaProperties(propertiesTreeViewItems);
-	// 	}
-	// }, [fetchedSchemaData]);
+					const parentObjectDefinition = allRelatedObjectDefinitions.find(
+						(definition) =>
+							definition.objectFields.some(
+								(field) =>
+									field.externalReferenceCode ===
+									objectFieldERC
+							)
+					);
+
+					return {
+						businessType: currentField?.businessType!,
+						...(description && {
+							description,
+						}),
+						id,
+						name,
+						objectDefinitionName: parentObjectDefinition?.name!,
+						objectFieldERC,
+						objectFieldName: currentField?.name!,
+						...(objectRelationshipNames && {
+							objectRelationshipNames,
+						}),
+						r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchema.id,
+						type: 'trewViewItem',
+					};
+				}
+			);
+
+			setCurrentSchemaProperties(propertiesTreeViewItems);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [fetchedSchemaData]);
 
 	useEffect(() => {
 		if (fetchedData.apiSchema) {
@@ -416,8 +415,6 @@ export default function EditAPISchema({
 				}));
 			}
 		}
-
-		// console.log('currentSchemaProperties', currentSchemaProperties);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentSchemaProperties, localUIData]);
