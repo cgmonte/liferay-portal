@@ -1,0 +1,305 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import ClayButton from '@clayui/button';
+import ClayPanel from '@clayui/panel';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
+
+import {EditSchemaContext} from '../EditAPIApplicationContext';
+import BaseAPISchemaProperty from '../baseComponents/BaseAPISchemaProperty';
+import {fetchJSON} from '../utils/fetchUtil';
+
+interface AddedObjectField extends ObjectField {
+	added?: boolean;
+}
+
+interface ObjectDefinitionWithAddedField extends AddedObjectDefinition {
+	objectFields: AddedObjectField[];
+}
+
+interface ObjectFieldsPanelProps {
+	defaultExpanded: boolean;
+	navigate: (id: number) => void;
+	objectDefinition: AddedObjectDefinition;
+	objectRelationshipName?: string;
+	parentDefinitionId: number;
+	schemaUIData: APISchemaUIData;
+	searchKeyword: string;
+	setNavHistory: Dispatch<SetStateAction<AddedObjectDefinition[][]>>;
+	setSchemaUIData: Dispatch<SetStateAction<APISchemaUIData>>;
+	startExpanded?: boolean;
+}
+
+interface SidebarBodyProps {
+	fectchedObjectDefinitions: ObjectDefinitionsRelationshipTree;
+	navHistory: AddedObjectDefinition[][];
+	schemaUIData: APISchemaUIData;
+	searchKeyword: string;
+	setNavHistory: Dispatch<SetStateAction<AddedObjectDefinition[][]>>;
+	setOnBackClick: Dispatch<SetStateAction<voidReturn>>;
+	setSchemaUIData: Dispatch<SetStateAction<APISchemaUIData>>;
+	viewRelatedObjects: boolean;
+}
+
+function ObjectFieldsPanel({
+	defaultExpanded,
+	navigate,
+	objectDefinition,
+	objectRelationshipName,
+	schemaUIData,
+	searchKeyword,
+	setSchemaUIData,
+}: ObjectFieldsPanelProps) {
+	const {
+		fetchedSchemaData,
+		objectDefinitionBasePath,
+		setFetchedSchemaData,
+	} = useContext(EditSchemaContext);
+
+	const [showOnClick, setShowOnClick] = useState<undefined | {id: number}>();
+	const [expanded, setExpanded] = useState(defaultExpanded);
+	const [localUIData, setLocalUIData] = useState<
+		ObjectDefinitionWithAddedField
+	>(objectDefinition);
+
+	const getFilteredFields = (): AddedObjectField[] => {
+		return localUIData.objectFields.filter((field) =>
+			field.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
+				?.toLocaleLowerCase()
+				.includes(searchKeyword.toLocaleLowerCase())
+		);
+	};
+
+	async function getRelationshipsDefinitions(
+		objectRelationships: ObjectRelationship[]
+	): Promise<AddedObjectDefinition[]> {
+		return (await Promise.all(
+			objectRelationships.map(async (relationship) =>
+				fetchJSON<AddedObjectDefinition>({
+					input:
+						objectDefinitionBasePath +
+						relationship['objectDefinitionExternalReferenceCode2'],
+				}).then((definition) => {
+					definition.aggregatedObjectRelationshipNames = !objectDefinition.aggregatedObjectRelationshipNames
+						? relationship.name
+						: objectDefinition.aggregatedObjectRelationshipNames +
+						  ',' +
+						  relationship.name;
+
+					return definition;
+				})
+			)
+		)) as AddedObjectDefinition[];
+	}
+
+	const handleAddRelationships = async (
+		objectDefinitions: ObjectDefinitionsRelationshipTree,
+		objectRelationships: ObjectRelationship[]
+	) => {
+		const newRelationShips = await getRelationshipsDefinitions(
+			objectRelationships
+		);
+
+		const newObjectDefinitions = {...objectDefinitions};
+
+		function addRelationships(
+			definitions: ObjectDefinitionsRelationshipTree
+		) {
+			if (definitions) {
+				if (definitions.definition.id === objectDefinition.id) {
+					definitions.relatedDefinitions = newRelationShips.reduce(
+						(accumulator, currentElement) => {
+							accumulator.push({definition: currentElement});
+							setShowOnClick({id: definitions.definition.id});
+
+							return accumulator;
+						},
+						[] as ObjectDefinitionsRelationshipTree[]
+					);
+
+					return;
+				}
+
+				if (definitions.relatedDefinitions?.length) {
+					for (const relatedDefinition of definitions.relatedDefinitions) {
+						addRelationships(relatedDefinition);
+					}
+				}
+			}
+		}
+
+		addRelationships(newObjectDefinitions);
+
+		setFetchedSchemaData((previous) => {
+			return {
+				...previous,
+				objectDefinitions: newObjectDefinitions,
+			};
+		});
+	};
+
+	useEffect(() => {
+		handleAddRelationships(
+			fetchedSchemaData.objectDefinitions!,
+			objectDefinition.objectRelationships
+		);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		setLocalUIData((previous) => ({
+			...previous,
+			objectFields: previous.objectFields.map((field) => ({
+				...field,
+				...(schemaUIData.schemaProperties?.some((addedProperty) => {
+					return addedProperty.objectFieldId === field.id;
+				})
+					? {added: true}
+					: {added: false}),
+			})),
+		}));
+	}, [schemaUIData.schemaProperties]);
+
+	return (
+		<ClayPanel
+			className="object-definitions-panel"
+			collapsable
+			defaultExpanded={defaultExpanded}
+			displayTitle={
+				localUIData.label[Liferay.ThemeDisplay.getDefaultLanguageId()]
+			}
+			displayType="unstyled"
+			expanded={expanded}
+			key={localUIData.id}
+			onExpandedChange={() => setExpanded((previous) => !previous)}
+		>
+			{localUIData && (
+				<ClayPanel.Body>
+					<ul>
+						{(!searchKeyword
+							? localUIData.objectFields
+							: getFilteredFields()
+						).map((field) => (
+							<li key={field.id}>
+								<BaseAPISchemaProperty
+									added={!!field.added}
+									objectDefinitionName={localUIData.name}
+									objectField={field}
+									objectRelationshipName={
+										objectRelationshipName
+									}
+									setSchemaUIData={setSchemaUIData}
+								/>
+							</li>
+						))}
+					</ul>
+
+					{showOnClick?.id && (
+						<ClayButton
+							className="view-related-objects"
+							displayType="secondary"
+							onClick={() => {
+								navigate(showOnClick.id);
+							}}
+						>
+							{Liferay.Language.get('view-related-objects')}
+						</ClayButton>
+					)}
+				</ClayPanel.Body>
+			)}
+		</ClayPanel>
+	);
+}
+
+export default function SidebarBody({
+	fectchedObjectDefinitions,
+	navHistory,
+	schemaUIData,
+	searchKeyword,
+	setNavHistory,
+	setOnBackClick,
+	setSchemaUIData,
+}: SidebarBodyProps) {
+	const navigateRelationships = useCallback(
+		(id: number) => {
+			let match = false;
+
+			function findAndSetCurrentNav(
+				definitions: ObjectDefinitionsRelationshipTree
+			) {
+				if (definitions) {
+					if (definitions.definition.id === id) {
+						if (definitions.relatedDefinitions?.length) {
+							setNavHistory((previous) => [
+								definitions.relatedDefinitions!.map(
+									({definition}) => definition
+								),
+								...previous,
+							]);
+
+							match = true;
+						}
+					}
+
+					if (definitions.relatedDefinitions) {
+						for (const relatedDefinition of definitions.relatedDefinitions) {
+							if (match) {
+								break;
+							}
+							findAndSetCurrentNav(relatedDefinition);
+						}
+					}
+				}
+			}
+
+			findAndSetCurrentNav(fectchedObjectDefinitions);
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[fectchedObjectDefinitions]
+	);
+
+	useEffect(() => {
+		setOnBackClick(() => () => {
+			setNavHistory([...navHistory.slice(1)]);
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [navHistory]);
+
+	return (
+		<div className="sidebar-body">
+			<div className="panels-container">
+				{navHistory[0]?.map((item, index) => {
+					return (
+						<ObjectFieldsPanel
+							defaultExpanded={
+								fectchedObjectDefinitions.definition.id ===
+								navHistory[0][0].id
+							}
+							key={`${index}${item.id}`}
+							navigate={navigateRelationships}
+							objectDefinition={item}
+							objectRelationshipName={
+								item.aggregatedObjectRelationshipNames
+							}
+							parentDefinitionId={item.id}
+							schemaUIData={schemaUIData}
+							searchKeyword={searchKeyword}
+							setNavHistory={setNavHistory}
+							setSchemaUIData={setSchemaUIData}
+						/>
+					);
+				})}
+			</div>
+		</div>
+	);
+}
