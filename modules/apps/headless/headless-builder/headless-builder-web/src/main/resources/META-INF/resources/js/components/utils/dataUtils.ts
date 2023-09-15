@@ -5,6 +5,86 @@
 
 type LocalUIData = APISchemaUIData | APIApplicationUIData;
 
+interface FieldsDataToProperties {
+	apiSchema: APISchemaItem;
+	objectDefinitions: ObjectDefinition[];
+	schemaProperties: APISchemaPropertyItem[];
+}
+
+export function AddObjectFieldsDataToProperties({
+	apiSchema,
+	objectDefinitions,
+	schemaProperties,
+}: FieldsDataToProperties) {
+	const propertiesTreeViewItems = schemaProperties.map(
+		({description, id, name, objectFieldERC, objectRelationshipNames}) => {
+			const objectRelationshipNamesArray = objectRelationshipNames?.split(
+				','
+			);
+
+			const objectRelationshipName =
+				objectRelationshipNamesArray?.[
+					objectRelationshipNamesArray.length - 1
+				];
+
+			const mainObjectDefinition = objectDefinitions.find(
+				(definition) =>
+					definition.externalReferenceCode ===
+					apiSchema.mainObjectDefinitionERC
+			);
+
+			let objectDefinitionId2: number;
+
+			objectDefinitions.forEach((definition) => {
+				definition.objectRelationships.forEach((relationship) => {
+					{
+						if (relationship.name === objectRelationshipName) {
+							objectDefinitionId2 =
+								relationship.objectDefinitionId2;
+						}
+					}
+				});
+			});
+
+			const relatedDefinition = objectDefinitions.find(
+				(parentDefinition) =>
+					parentDefinition.id === objectDefinitionId2
+			);
+
+			const parentObjectDefinition =
+				relatedDefinition ?? mainObjectDefinition;
+
+			const currentField = parentObjectDefinition?.objectFields.find(
+				(field) => field.externalReferenceCode === objectFieldERC
+			);
+
+			if (currentField && parentObjectDefinition) {
+				return {
+					businessType: currentField?.businessType!,
+					...(description && {
+						description,
+					}),
+					id,
+					name,
+					objectDefinitionName: parentObjectDefinition?.name!,
+					objectFieldERC,
+					objectFieldId: currentField?.id!,
+					objectFieldName: currentField?.name!,
+					...(objectRelationshipNames && {
+						objectRelationshipNames,
+					}),
+					r_apiSchemaToAPIProperties_c_apiSchemaId: apiSchema.id,
+					type: 'trewViewItem',
+				};
+			}
+		}
+	);
+
+	return (propertiesTreeViewItems.length
+		? propertiesTreeViewItems
+		: schemaProperties) as TreeViewItemData[];
+}
+
 export function hasDataChanged({
 	fetchedEntityData,
 	localUIData,
@@ -19,6 +99,42 @@ export function hasDataChanged({
 	}
 
 	return false;
+}
+
+export function hasPropertiesDataChanged({
+	fetchedPropertiesData,
+	propertiesUIData,
+}: {
+	fetchedPropertiesData: APISchemaPropertyItem[];
+	propertiesUIData: TreeViewItemData[];
+}) {
+	if (propertiesUIData.length !== fetchedPropertiesData.length) {
+		return true;
+	}
+	else {
+		for (const property of propertiesUIData) {
+			const matchedFetchedProperty = fetchedPropertiesData.find(
+				({objectFieldERC, objectRelationshipNames}) =>
+					objectRelationshipNames ===
+						property.objectRelationshipNames &&
+					objectFieldERC === property.objectFieldERC
+			);
+			if (
+				!(
+					matchedFetchedProperty &&
+					(matchedFetchedProperty.description ===
+						property.description ||
+						(!matchedFetchedProperty.description &&
+							property.description === '')) &&
+					matchedFetchedProperty.name === property.name
+				)
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
 
 export function resetToFetched<FT extends LT, LT extends {}>({

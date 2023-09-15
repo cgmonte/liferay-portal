@@ -4,12 +4,29 @@
  */
 
 declare type LocalUIData = APISchemaUIData | APIApplicationUIData;
+interface FieldsDataToProperties {
+	apiSchema: APISchemaItem;
+	objectDefinitions: ObjectDefinition[];
+	schemaProperties: APISchemaPropertyItem[];
+}
+export declare function AddObjectFieldsDataToProperties({
+	apiSchema,
+	objectDefinitions,
+	schemaProperties,
+}: FieldsDataToProperties): TreeViewItemData[];
 export declare function hasDataChanged({
 	fetchedEntityData,
 	localUIData,
 }: {
 	fetchedEntityData: APIApplicationItem | APISchemaItem;
 	localUIData: LocalUIData;
+}): boolean;
+export declare function hasPropertiesDataChanged({
+	fetchedPropertiesData,
+	propertiesUIData,
+}: {
+	fetchedPropertiesData: APISchemaPropertyItem[];
+	propertiesUIData: TreeViewItemData[];
 }): boolean;
 export declare function resetToFetched<FT extends LT, LT extends {}>({
 	fetchedEntityData,
