@@ -255,7 +255,9 @@ export default function EditAPISchema({
 						...(localUIData.schemaProperties.length && {
 							apiSchemaToAPIProperties: localUIData.schemaProperties.map(
 								(property) => ({
-									description: property.description,
+									...(!!property.description && {
+										description: property.description,
+									}),
 									name: property.name,
 									objectFieldERC: property.objectFieldERC,
 									r_apiSchemaToAPIProperties_c_apiSchemaId:
@@ -431,47 +433,57 @@ export default function EditAPISchema({
 							</ClayTabs>
 
 							<ClayTabs.Content activeIndex={activeTab} fade>
-								<ClayTabs.TabPane
-									aria-label={Liferay.Language.get(
-										'information-tab'
-									)}
-									className="schema-tabs"
-								>
-									<ClayCard.Body>
-										<BaseAPISchemaFields
-											data={localUIData}
-											disableObjectSelect
-											displayError={displayError}
-											setData={setLocalUIData}
-										/>
-									</ClayCard.Body>
-								</ClayTabs.TabPane>
-
-								<ClayTabs.TabPane
-									aria-label={Liferay.Language.get(
-										'properties-tab'
-									)}
-									className="schema-tabs"
-								>
-									<ClayCard.Body>
-										{fetchedSchemaData.apiSchema &&
-											fetchedSchemaData.objectDefinitions && (
-												<EditAPISchemaProperties
-													fetchedSchemaData={
-														fetchedSchemaData
-													}
-													schemaId={schemaId}
-													schemaUIData={localUIData}
-													setFetchedSchemaData={
-														setFetchedSchemaData
-													}
-													setSchemaUIData={
-														setLocalUIData
-													}
+								{activeTab === 0 && (
+									<ClayTabs.TabPane
+										aria-label={Liferay.Language.get(
+											'information-tab'
+										)}
+										className="schema-tabs"
+									>
+										<ClayCard.Body>
+											<div className="schema-fields-card-body">
+												<BaseAPISchemaFields
+													data={localUIData}
+													disableObjectSelect
+													displayError={displayError}
+													setData={setLocalUIData}
 												/>
-											)}
-									</ClayCard.Body>
-								</ClayTabs.TabPane>
+											</div>
+										</ClayCard.Body>
+									</ClayTabs.TabPane>
+								)}
+
+								{activeTab === 1 && (
+									<ClayTabs.TabPane
+										aria-label={Liferay.Language.get(
+											'properties-tab'
+										)}
+										className="schema-tabs"
+									>
+										<ClayCard.Body>
+											<div className="schema-properties-card-body">
+												{fetchedSchemaData.apiSchema &&
+													fetchedSchemaData.objectDefinitions && (
+														<EditAPISchemaProperties
+															fetchedSchemaData={
+																fetchedSchemaData
+															}
+															schemaId={schemaId}
+															schemaUIData={
+																localUIData
+															}
+															setFetchedSchemaData={
+																setFetchedSchemaData
+															}
+															setSchemaUIData={
+																setLocalUIData
+															}
+														/>
+													)}
+											</div>
+										</ClayCard.Body>
+									</ClayTabs.TabPane>
+								)}
 							</ClayTabs.Content>
 						</ClayCard>
 					</div>
