@@ -69,11 +69,11 @@ export function getAPIEndpointsFDSProps(
 						},
 						{
 							actionId: 'editAPIEndpoint',
-							contentRenderer: 'itemPathRenderer',
-							expand: false,
+							contentRenderer: 'actionLink',
 							fieldName: 'path',
 							label: Liferay.Language.get('path'),
 							localizeLabel: true,
+							sortable: true,
 						},
 						{
 							fieldName: 'description',

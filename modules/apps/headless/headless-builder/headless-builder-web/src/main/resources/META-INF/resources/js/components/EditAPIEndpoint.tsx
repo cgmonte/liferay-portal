@@ -122,6 +122,7 @@ export default function EditAPIEndpoint({
 						...previousErrors,
 						[field]: true,
 					}));
+
 					isDataValid = false;
 				}
 			});
