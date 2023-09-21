@@ -10,7 +10,8 @@ import {itemMethodRenderer, itemPathRenderer} from './fdsRenderers';
 
 export function getAPIEndpointsFDSProps(
 	urlPath: string,
-	portletId: string
+	portletId: string,
+	setMainEndpointNav: ({edit}: {edit: number}) => void
 ): IFrontendDataSetProps {
 	return {
 		...baseFDSProps,
@@ -32,6 +33,9 @@ export function getAPIEndpointsFDSProps(
 				},
 				icon: 'pencil',
 				label: Liferay.Language.get('edit'),
+				onClick: ({itemData}: FDSItem<APIEndpointItem>) => {
+					setMainEndpointNav({edit: itemData.id});
+				},
 			},
 			...(window.isSecureContext
 				? [
@@ -63,11 +67,11 @@ export function getAPIEndpointsFDSProps(
 						},
 						{
 							actionId: 'editAPIEndpoint',
-							contentRenderer: 'itemPathRenderer',
-							expand: false,
+							contentRenderer: 'actionLink',
 							fieldName: 'path',
 							label: Liferay.Language.get('path'),
 							localizeLabel: true,
+							sortable: true,
 						},
 						{
 							fieldName: 'description',

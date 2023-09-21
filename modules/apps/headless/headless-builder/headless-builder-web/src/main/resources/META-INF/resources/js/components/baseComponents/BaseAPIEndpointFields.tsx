@@ -69,7 +69,7 @@ export default function BaseAPIEndpointFields({
 	const handleSelectScope = (value: string) => {
 		setData((previousValue) => ({
 			...previousValue,
-			scope: {key: value},
+			scope: {key: value, name: ''},
 		}));
 
 		setSelectedScope(scopeOptions.find((option) => option.value === value));
