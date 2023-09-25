@@ -17,10 +17,12 @@ import React, {
 } from 'react';
 
 import {EditAPIApplicationContext} from './EditAPIApplicationContext';
+import EditEndpointConfiguration from './EditEndpointConfiguration';
 import BaseAPIEndpointFields from './baseComponents/BaseAPIEndpointFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
 import {hasDataChanged, resetToFetched} from './utils/dataUtils';
-import {fetchJSON, updateData} from './utils/fetchUtil';
+import {fetchJSON, getAllItems, updateData} from './utils/fetchUtil';
+import {getFilterRelatedItemURL} from './utils/urlUtil';
 
 import '../../css/main.scss';
 import {beginStringWithForwardSlash} from './utils/string';
@@ -62,6 +64,11 @@ export default function EditAPIEndpoint({
 	const [displayError, setDisplayError] = useState<EndpointDataError>({
 		path: false,
 		scope: false,
+	});
+
+	const schemaAPIURLPath = getFilterRelatedItemURL({
+		apiURLPath: apiURLPaths.schemas,
+		filterQuery: `r_apiApplicationToAPISchemas_c_apiApplicationId eq '${currentAPIApplicationId}'`,
 	});
 
 	const fetchAPIEndpoint = () => {
@@ -108,16 +115,14 @@ export default function EditAPIEndpoint({
 			setDisplayError(errors as EndpointDataError);
 
 			isDataValid = false;
-		}
-		else {
+		} else {
 			mandatoryFields.forEach((field) => {
 				if (localUIData![field as keyof APIEndpointUIData]) {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: false,
 					}));
-				}
-				else {
+				} else {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: true,
@@ -219,8 +224,7 @@ export default function EditAPIEndpoint({
 				size: 'md',
 				status: 'warning',
 			});
-		}
-		else {
+		} else {
 			setMainEndpointNav('list');
 		}
 	};
@@ -229,7 +233,6 @@ export default function EditAPIEndpoint({
 		setHideManagementButtons(false);
 
 		fetchAPIEndpoint();
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -319,28 +322,56 @@ export default function EditAPIEndpoint({
 					>
 						{Liferay.Language.get('info')}
 					</ClayTabs.Item>
+
+					<ClayTabs.Item
+						innerProps={{
+							'aria-controls': 'tabpanel-2',
+						}}
+					>
+						{Liferay.Language.get('configuration')}
+					</ClayTabs.Item>
 				</ClayTabs>
 
-				<ClayTabs.Content>
-					<ClayTabs.TabPane
-						aria-label={Liferay.Language.get('information-tab')}
-						className="info-tab"
-					>
-						<ClayCard.Body>
-							<div className="endpoints-fields-card-body">
-								<BaseAPIEndpointFields
-									apiApplicationBaseURL={
-										apiApplicationBaseURL
+				<ClayTabs.Content activeIndex={activeTab} fade>
+					{activeTab === 0 && (
+						<ClayTabs.TabPane
+							aria-label={Liferay.Language.get('information-tab')}
+							className="info-tab"
+						>
+							<ClayCard.Body>
+								<div className="endpoints-fields-card-body">
+									<BaseAPIEndpointFields
+										apiApplicationBaseURL={
+											apiApplicationBaseURL
+										}
+										basePath={basePath}
+										data={localUIData}
+										displayError={displayError}
+										editMode={true}
+										setData={setLocalUIData}
+									/>
+								</div>
+							</ClayCard.Body>
+						</ClayTabs.TabPane>
+					)}
+
+					{activeTab === 1 && (
+						<ClayTabs.TabPane
+							aria-label={Liferay.Language.get(
+								'configuration-tab'
+							)}
+							className="info-tab"
+						>
+							<ClayCard.Body>
+								<EditEndpointConfiguration
+									currentAPIApplicationId={
+										currentAPIApplicationId
 									}
-									basePath={basePath}
-									data={localUIData}
-									displayError={displayError}
-									editMode={true}
-									setData={setLocalUIData}
+									schemaAPIURLPath={apiURLPaths.schemas}
 								/>
-							</div>
-						</ClayCard.Body>
-					</ClayTabs.TabPane>
+							</ClayCard.Body>
+						</ClayTabs.TabPane>
+					)}
 				</ClayTabs.Content>
 			</ClayCard>
 		</div>

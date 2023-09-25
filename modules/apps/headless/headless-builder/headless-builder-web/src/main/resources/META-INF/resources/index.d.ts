@@ -4,6 +4,7 @@
  */
 
 interface APIApplicationItem extends BaseItem {
+	// applicationSchemas?: APISchemaItem[];
 	applicationStatus: ApplicationStatus;
 	baseURL: string;
 	title: string;
