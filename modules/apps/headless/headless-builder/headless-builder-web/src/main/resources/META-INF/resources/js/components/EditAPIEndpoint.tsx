@@ -21,8 +21,7 @@ import EditEndpointConfiguration from './EditEndpointConfiguration';
 import BaseAPIEndpointFields from './baseComponents/BaseAPIEndpointFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
 import {hasDataChanged, resetToFetched} from './utils/dataUtils';
-import {fetchJSON, getAllItems, updateData} from './utils/fetchUtil';
-import {getFilterRelatedItemURL} from './utils/urlUtil';
+import {fetchJSON, updateData} from './utils/fetchUtil';
 
 import '../../css/main.scss';
 import {beginStringWithForwardSlash} from './utils/string';
@@ -66,14 +65,12 @@ export default function EditAPIEndpoint({
 		scope: false,
 	});
 
-	const schemaAPIURLPath = getFilterRelatedItemURL({
-		apiURLPath: apiURLPaths.schemas,
-		filterQuery: `r_apiApplicationToAPISchemas_c_apiApplicationId eq '${currentAPIApplicationId}'`,
-	});
-
 	const fetchAPIEndpoint = () => {
 		fetchJSON<APIEndpointItem>({
-			input: apiURLPaths.endpoints + endpointId,
+			input:
+				apiURLPaths.endpoints +
+				endpointId +
+				'?nestedFields=apiEndpointToAPIFilters&apiEndpointToAPISorts',
 		}).then((response) => {
 			if (response.id === endpointId) {
 				setFetchedData((previous) => ({
@@ -86,6 +83,8 @@ export default function EditAPIEndpoint({
 						description: response.description,
 					}),
 					path: response.path,
+					r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
+						response.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId,
 					scope: response.scope,
 				});
 			}
@@ -115,14 +114,16 @@ export default function EditAPIEndpoint({
 			setDisplayError(errors as EndpointDataError);
 
 			isDataValid = false;
-		} else {
+		}
+		else {
 			mandatoryFields.forEach((field) => {
 				if (localUIData![field as keyof APIEndpointUIData]) {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: false,
 					}));
-				} else {
+				}
+				else {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: true,
@@ -145,6 +146,8 @@ export default function EditAPIEndpoint({
 					dataToUpdate: {
 						description: localUIData.description,
 						path: beginStringWithForwardSlash(localUIData.path),
+						r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
+							localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId,
 						scope: localUIData.scope,
 					},
 					method: 'PATCH',
@@ -224,7 +227,8 @@ export default function EditAPIEndpoint({
 				size: 'md',
 				status: 'warning',
 			});
-		} else {
+		}
+		else {
 			setMainEndpointNav('list');
 		}
 	};
@@ -367,7 +371,9 @@ export default function EditAPIEndpoint({
 									currentAPIApplicationId={
 										currentAPIApplicationId
 									}
+									data={localUIData}
 									schemaAPIURLPath={apiURLPaths.schemas}
+									setData={setLocalUIData}
 								/>
 							</ClayCard.Body>
 						</ClayTabs.TabPane>

@@ -8,42 +8,39 @@ import ClayForm from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {sub} from 'frontend-js-web';
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 import {Select} from './fieldComponents/Select';
 import {getAllItems} from './utils/fetchUtil';
 
 interface EditEndpointConfigurationProps {
 	currentAPIApplicationId: string;
+	data: APIEndpointUIData;
 	schemaAPIURLPath: string;
+	setData: Dispatch<SetStateAction<APIEndpointUIData>>;
 }
 
 export default function EditEndpointConfiguration({
 	currentAPIApplicationId,
+	data,
 	schemaAPIURLPath,
+	setData,
 }: EditEndpointConfigurationProps) {
 	const [responseBodySchemaOptions, setResponseBodySchemaOptions] = useState<
 		SelectOption[]
 	>([]);
-	const [localUIData, setLocalUIData] = useState<
-		Partial<{
-			endpointFilter: string;
-			endpointSort: string;
-			selectedResponseBodySchema: SelectOption;
-		}>
-	>();
+	const [
+		selectedResponseBodySchema,
+		setSelectedResponseBodySchema,
+	] = useState<SelectOption>();
 
 	useEffect(() => {
 		getAllItems<APISchemaItem>({
+			filter: `r_apiApplicationToAPISchemas_c_apiApplicationId eq '${currentAPIApplicationId}'`,
 			url: schemaAPIURLPath,
 		}).then((result) => {
 			const options = result
 				? result
-						.filter(
-							(apiSchemas) =>
-								apiSchemas.r_apiApplicationToAPISchemas_c_apiApplicationId?.toString() ===
-								currentAPIApplicationId
-						)
 						.map((apiSchemas) => ({
 							label: apiSchemas.name,
 							value: apiSchemas.id.toString(),
@@ -57,21 +54,30 @@ export default function EditEndpointConfiguration({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const handleSelectResponseBodySchema = (value: string) => {
-		const selectedOption = responseBodySchemaOptions.find(
-			(option) => option.value === value
-		);
-
-		if (selectedOption) {
-			setLocalUIData((previousValue) => ({
-				...previousValue,
-				selectedResponseBodySchema: selectedOption,
-			}));
+	useEffect(() => {
+		if (
+			data.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId &&
+			responseBodySchemaOptions.length
+		) {
+			setSelectedResponseBodySchema(
+				responseBodySchemaOptions.find(
+					(option) =>
+						option.value ===
+						data.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId?.toString()
+				)
+			);
 		}
+	}, [data, responseBodySchemaOptions]);
 
-		// setSelectedObjectDefinition(
-		// 	objectDefinitionsOptions.find((option) => option.value === value)
-		// );
+	const handleSelectResponseBodySchema = (value: string) => {
+		setData((previousValue) => ({
+			...previousValue,
+			r_responseAPISchemaToAPIEndpoints_c_apiSchemaId: Number(value),
+		}));
+
+		setSelectedResponseBodySchema(
+			responseBodySchemaOptions.find((option) => option.value === value)
+		);
 	};
 
 	const endpointFiltersInstruction = Liferay.Language.get(
@@ -91,8 +97,8 @@ export default function EditEndpointConfiguration({
 
 				<Select
 					cleanUp={() =>
-						setLocalUIData((previousValue) => {
-							delete previousValue?.selectedResponseBodySchema;
+						setData((previousValue) => {
+							previousValue.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId = 0;
 
 							return {...previousValue};
 						})
@@ -106,7 +112,7 @@ export default function EditEndpointConfiguration({
 					placeholder={Liferay.Language.get(
 						'select-a-response-body-schema'
 					)}
-					selectedOption={localUIData?.selectedResponseBodySchema}
+					selectedOption={selectedResponseBodySchema}
 
 					// triggerAriaLabel={
 					// 	!selectedObjectDefinition
@@ -122,6 +128,7 @@ export default function EditEndpointConfiguration({
 					// 				selectedObjectDefinition.label
 					// 		  )
 					// }
+
 				/>
 			</ClayForm.Group>
 
@@ -157,18 +164,18 @@ export default function EditEndpointConfiguration({
 					className="form-control"
 					id="endpointFiltersField"
 					onChange={({target: {value}}) =>
-						setLocalUIData((previousData) => ({
+						setData((previousData) => ({
 							...previousData,
 							endpointFilter: value,
 						}))
 					}
 					placeholder={endpointFiltersInstruction}
-					value={localUIData?.endpointFilter}
+					value={data?.endpointFilter}
 				/>
 			</ClayForm.Group>
 
 			<ClayForm.Group>
-				<label htmlFor="schemaDescriptionField">
+				<label htmlFor="endpointSortingField">
 					{Liferay.Language.get('sorting')}
 
 					<ClayTooltipProvider>
@@ -197,15 +204,15 @@ export default function EditEndpointConfiguration({
 					aria-label={endpointSortInstruction}
 					autoComplete="off"
 					className="form-control"
-					id="schemaDescriptionField"
+					id="endpointSortingField"
 					onChange={({target: {value}}) =>
-						setLocalUIData((previousData) => ({
+						setData((previousData) => ({
 							...previousData,
 							endpointSort: value,
 						}))
 					}
 					placeholder={endpointSortInstruction}
-					value={localUIData?.endpointSort}
+					value={data?.endpointSort}
 				/>
 			</ClayForm.Group>
 		</ClayForm>

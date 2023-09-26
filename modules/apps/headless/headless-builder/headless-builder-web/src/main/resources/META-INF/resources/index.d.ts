@@ -4,17 +4,22 @@
  */
 
 interface APIApplicationItem extends BaseItem {
-	// applicationSchemas?: APISchemaItem[];
 	applicationStatus: ApplicationStatus;
 	baseURL: string;
 	title: string;
 	version: string;
+
+	// applicationSchemas?: APISchemaItem[];
+
 }
 
 interface APIEndpointItem extends BaseItem {
+	endpointFilter?: string;
+	endpointSort?: string;
 	httpMethod: APIListType;
 	path: string;
 	r_apiApplicationToAPIEndpoints_c_apiApplicationId: string;
+	r_responseAPISchemaToAPIEndpoints_c_apiSchemaId?: number;
 	scope: APIListType;
 }
 
@@ -257,7 +262,12 @@ type APIApplicationUIData = Pick<
 
 type APIEndpointUIData = Pick<
 	APIEndpointItem,
-	'description' | 'path' | 'scope'
+	| 'description'
+	| 'endpointFilter'
+	| 'endpointSort'
+	| 'path'
+	| 'r_responseAPISchemaToAPIEndpoints_c_apiSchemaId'
+	| 'scope'
 >;
 
 type ActiveNav = 'details' | 'endpoints' | 'schemas';
