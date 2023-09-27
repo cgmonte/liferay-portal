@@ -84,8 +84,12 @@ export default function EditAPIEndpoint({
 					...(response.description && {
 						description: response.description,
 					}),
-					endpointFilters: response.apiEndpointToAPIFilters?.map(filter => filter.oDataFilter).join(', '),
-					endpointSorting: response.apiEndpointToAPISorts?.map(sort => sort.oDataSort).join(', '),
+					endpointFilters: response.apiEndpointToAPIFilters
+						?.map((filter) => filter.oDataFilter)
+						.join(', '),
+					endpointSorting: response.apiEndpointToAPISorts
+						?.map((sort) => sort.oDataSort)
+						.join(', '),
 					path: response.path,
 					r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
 						response.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId,
@@ -403,14 +407,16 @@ export default function EditAPIEndpoint({
 							className="info-tab"
 						>
 							<ClayCard.Body>
-								<EditEndpointConfiguration
-									currentAPIApplicationId={
-										currentAPIApplicationId
-									}
-									data={localUIData}
-									schemaAPIURLPath={apiURLPaths.schemas}
-									setData={setLocalUIData}
-								/>
+								<div className="endpoints-fields-card-body">
+									<EditEndpointConfiguration
+										currentAPIApplicationId={
+											currentAPIApplicationId
+										}
+										data={localUIData}
+										schemaAPIURLPath={apiURLPaths.schemas}
+										setData={setLocalUIData}
+									/>
+								</div>
 							</ClayCard.Body>
 						</ClayTabs.TabPane>
 					)}
