@@ -118,16 +118,14 @@ export default function EditAPIEndpoint({
 			setDisplayError(errors as EndpointDataError);
 
 			isDataValid = false;
-		}
-		else {
+		} else {
 			mandatoryFields.forEach((field) => {
 				if (localUIData![field as keyof APIEndpointUIData]) {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: false,
 					}));
-				}
-				else {
+				} else {
 					setDisplayError((previousErrors) => ({
 						...previousErrors,
 						[field]: true,
@@ -149,7 +147,9 @@ export default function EditAPIEndpoint({
 				updateData<APIEndpointUIData>({
 					dataToUpdate: {
 						description: localUIData.description,
-						path: beginStringWithForwardSlash(localUIData.path),
+						...(localUIData.path && {
+							path: beginStringWithForwardSlash(localUIData.path),
+						}),
 						r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
 							localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId,
 						scope: localUIData.scope,
@@ -178,7 +178,10 @@ export default function EditAPIEndpoint({
 	);
 
 	async function handleEndpointFilters() {
-		if (localUIData.endpointFilters && localUIData.apiEndpointToAPIFilters) {
+		if (
+			localUIData.endpointFilters &&
+			localUIData.apiEndpointToAPIFilters
+		) {
 			updateData<APIEndpointFilter>({
 				dataToUpdate: {
 					oDataFilter: localUIData.endpointFilters,
@@ -196,13 +199,14 @@ export default function EditAPIEndpoint({
 						type: 'success',
 					});
 				},
-				url: apiURLPaths.filters + localUIData.apiEndpointToAPIFilters[0].id,
-			});	
+				url:
+					apiURLPaths.filters +
+					localUIData.apiEndpointToAPIFilters[0].id,
+			});
 		}
 	}
 
-	async function handleEndpointSorting() {
-	}
+	async function handleEndpointSorting() {}
 
 	const handlePublish = ({successMessage}: {successMessage: string}) => {
 		const isDataValid = validateData();
@@ -260,8 +264,7 @@ export default function EditAPIEndpoint({
 				size: 'md',
 				status: 'warning',
 			});
-		}
-		else {
+		} else {
 			setMainEndpointNav('list');
 		}
 	};
