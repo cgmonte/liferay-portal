@@ -70,7 +70,7 @@ export default function EditAPIEndpoint({
 			input:
 				apiURLPaths.endpoints +
 				endpointId +
-				'?nestedFields=apiEndpointToAPIFilters&apiEndpointToAPISorts',
+				'?nestedFields=apiEndpointToAPIFilters, apiEndpointToAPISorts',
 		}).then((response) => {
 			if (response.id === endpointId) {
 				setFetchedData((previous) => ({
@@ -79,9 +79,13 @@ export default function EditAPIEndpoint({
 				}));
 
 				setLocalUIData({
+					apiEndpointToAPIFilters: response.apiEndpointToAPIFilters,
+					apiEndpointToAPISorts: response.apiEndpointToAPISorts,
 					...(response.description && {
 						description: response.description,
 					}),
+					endpointFilters: response.apiEndpointToAPIFilters?.map(filter => filter.oDataFilter).join(', '),
+					endpointSorting: response.apiEndpointToAPISorts?.map(sort => sort.oDataSort).join(', '),
 					path: response.path,
 					r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
 						response.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId,
@@ -173,9 +177,38 @@ export default function EditAPIEndpoint({
 		[localUIData]
 	);
 
+	async function handleEndpointFilters() {
+		if (localUIData.endpointFilters && localUIData.apiEndpointToAPIFilters) {
+			updateData<APIEndpointFilter>({
+				dataToUpdate: {
+					oDataFilter: localUIData.endpointFilters,
+				},
+				method: 'PATCH',
+				onError: (error: string) => {
+					openToast({
+						message: error,
+						type: 'danger',
+					});
+				},
+				onSuccess: () => {
+					openToast({
+						message: 'message', // to-do
+						type: 'success',
+					});
+				},
+				url: apiURLPaths.filters + localUIData.apiEndpointToAPIFilters[0].id,
+			});	
+		}
+	}
+
+	async function handleEndpointSorting() {
+	}
+
 	const handlePublish = ({successMessage}: {successMessage: string}) => {
 		const isDataValid = validateData();
 		if (localUIData && isDataValid) {
+			handleEndpointFilters();
+			handleEndpointSorting();
 			updateData<APIApplicationItem>({
 				dataToUpdate: {
 					applicationStatus: {key: 'published'},

@@ -13,14 +13,24 @@ interface APIApplicationItem extends BaseItem {
 
 }
 
+interface APIEndpointFilter {
+	id: number;
+	oDataFilter: string;
+}
+
 interface APIEndpointItem extends BaseItem {
-	endpointFilter?: string;
-	endpointSort?: string;
+	apiEndpointToAPIFilters?: APIEndpointFilter[];
+	apiEndpointToAPISorts?: APIEndpointSort[];
 	httpMethod: APIListType;
 	path: string;
 	r_apiApplicationToAPIEndpoints_c_apiApplicationId: string;
 	r_responseAPISchemaToAPIEndpoints_c_apiSchemaId?: number;
 	scope: APIListType;
+}
+
+interface APIEndpointSort {
+	id: number;
+	oDataSort: string;
 }
 
 interface APIListType {
@@ -262,13 +272,17 @@ type APIApplicationUIData = Pick<
 
 type APIEndpointUIData = Pick<
 	APIEndpointItem,
+	| 'apiEndpointToAPIFilters'
+	| 'apiEndpointToAPISorts'
 	| 'description'
-	| 'endpointFilter'
-	| 'endpointSort'
 	| 'path'
 	| 'r_responseAPISchemaToAPIEndpoints_c_apiSchemaId'
 	| 'scope'
->;
+	> & {
+		endpointFilters?: string;
+		endpointSorting?: string;
+	}
+;
 
 type ActiveNav = 'details' | 'endpoints' | 'schemas';
 

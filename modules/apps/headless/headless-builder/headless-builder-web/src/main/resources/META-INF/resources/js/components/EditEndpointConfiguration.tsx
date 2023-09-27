@@ -166,11 +166,11 @@ export default function EditEndpointConfiguration({
 					onChange={({target: {value}}) =>
 						setData((previousData) => ({
 							...previousData,
-							endpointFilter: value,
+							endpointFilters: value,
 						}))
 					}
 					placeholder={endpointFiltersInstruction}
-					value={data?.endpointFilter}
+					value={data?.endpointFilters}
 				/>
 			</ClayForm.Group>
 
@@ -208,11 +208,11 @@ export default function EditEndpointConfiguration({
 					onChange={({target: {value}}) =>
 						setData((previousData) => ({
 							...previousData,
-							endpointSort: value,
+							endpointSorting: value,
 						}))
 					}
 					placeholder={endpointSortInstruction}
-					value={data?.endpointSort}
+					value={data?.endpointSorting}
 				/>
 			</ClayForm.Group>
 		</ClayForm>
