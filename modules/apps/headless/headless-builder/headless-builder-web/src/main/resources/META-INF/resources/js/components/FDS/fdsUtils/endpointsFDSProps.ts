@@ -69,7 +69,8 @@ export function getAPIEndpointsFDSProps(
 						},
 						{
 							actionId: 'editAPIEndpoint',
-							contentRenderer: 'actionLink',
+							contentRenderer: 'itemPathRenderer',
+							expand: false,
 							fieldName: 'path',
 							label: Liferay.Language.get('path'),
 							localizeLabel: true,
