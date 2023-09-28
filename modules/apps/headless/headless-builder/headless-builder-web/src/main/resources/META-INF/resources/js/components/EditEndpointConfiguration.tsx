@@ -40,11 +40,10 @@ export default function EditEndpointConfiguration({
 			url: schemaAPIURLPath,
 		}).then((result) => {
 			const options = result
-				? result
-						.map((apiSchemas) => ({
-							label: apiSchemas.name,
-							value: apiSchemas.id.toString(),
-						}))
+				? result.map((apiSchemas) => ({
+						label: apiSchemas.name,
+						value: apiSchemas.id.toString(),
+				  }))
 				: [];
 
 			if (options.length) {
@@ -109,9 +108,7 @@ export default function EditEndpointConfiguration({
 					)}
 					onClick={handleSelectResponseBodySchema}
 					options={responseBodySchemaOptions}
-					placeholder={Liferay.Language.get(
-						'select-a-response-body-schema'
-					)}
+					placeholder={Liferay.Language.get('select-a-schema')}
 					selectedOption={selectedResponseBodySchema}
 
 					// triggerAriaLabel={
@@ -128,7 +125,6 @@ export default function EditEndpointConfiguration({
 					// 				selectedObjectDefinition.label
 					// 		  )
 					// }
-
 				/>
 			</ClayForm.Group>
 
@@ -166,11 +162,22 @@ export default function EditEndpointConfiguration({
 					onChange={({target: {value}}) =>
 						setData((previousData) => ({
 							...previousData,
-							endpointFilters: value,
+							apiEndpointToAPIFilters: [
+								{
+									...(previousData
+										.apiEndpointToAPIFilters?.[0].id && {
+										id:
+											previousData
+												.apiEndpointToAPIFilters?.[0]
+												.id,
+									}),
+									oDataFilter: value,
+								},
+							],
 						}))
 					}
 					placeholder={endpointFiltersInstruction}
-					value={data?.endpointFilters}
+					value={data.apiEndpointToAPIFilters?.[0]?.oDataFilter}
 				/>
 			</ClayForm.Group>
 
@@ -212,7 +219,7 @@ export default function EditEndpointConfiguration({
 						}))
 					}
 					placeholder={endpointSortInstruction}
-					value={data?.endpointSorting}
+					value={data.apiEndpointToAPISorts?.[0]?.oDataSort}
 				/>
 			</ClayForm.Group>
 		</ClayForm>

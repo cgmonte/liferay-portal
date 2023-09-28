@@ -245,10 +245,18 @@ export default function BaseAPIEndpointFields({
 					className="form-control"
 					id="endpointDescriptionField"
 					onChange={({target: {value}}) =>
-						setData((previousData) => ({
-							...previousData,
-							description: value,
-						}))
+						setData((previousData) => {
+							if (value === '' && previousData.description) {
+								delete previousData.description;
+
+								return {...previousData};
+							}
+
+							return {
+								...previousData,
+								description: value,
+							};
+						})
 					}
 					placeholder={endpointDescriptionLabel}
 					value={data.description}

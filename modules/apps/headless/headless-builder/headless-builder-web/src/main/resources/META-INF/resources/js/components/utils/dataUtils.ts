@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-type LocalUIData = APIApplicationUIData | APIEndpointUIData | APISchemaUIData;
+import {beginStringWithForwardSlash} from './string';
+
+type LocalUIData = APIApplicationUIData | APISchemaUIData;
 
 interface AddObjectFieldsDataToProperties {
 	apiSchema: APISchemaItem;
@@ -90,7 +92,7 @@ export function hasDataChanged({
 	fetchedEntityData,
 	localUIData,
 }: {
-	fetchedEntityData: APIApplicationItem | APIEndpointItem | APISchemaItem;
+	fetchedEntityData: APIApplicationItem | APISchemaItem;
 	localUIData: Partial<LocalUIData>;
 }) {
 	for (const [key, value] of Object.entries(localUIData)) {
@@ -98,6 +100,56 @@ export function hasDataChanged({
 			return true;
 		}
 	}
+
+	return false;
+}
+
+export function hasEndpointDataChanged({
+	fetchedEndpointData,
+	localUIData,
+}: {
+	fetchedEndpointData: APIEndpointItem;
+	localUIData: Partial<APIEndpointUIData>;
+}) {
+	console.log('fetchedEndpointData', fetchedEndpointData);
+	console.log('localUIData', localUIData);
+
+	if (
+		fetchedEndpointData.path !==
+		beginStringWithForwardSlash(localUIData.path)
+	) {
+		console.log('vai retornar true no path');
+
+		return true;
+	} else if (fetchedEndpointData.scope.key !== localUIData.scope?.key) {
+		console.log('vai retornar true no scope');
+
+		return true;
+	} else if (fetchedEndpointData.description !== localUIData.description) {
+		console.log('vai retornar true no description');
+
+		return true;
+	} else if (
+		(fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId ===
+			0 &&
+			localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId) ||
+		fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId !==
+			localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId
+	) {
+		console.log('vai retornar true no schema');
+
+		return true;
+	}
+
+	// for (const [key, value] of Object.entries(localUIData)) {
+	// 	if (fetchedEndpointData?.[key as keyof LocalUIData] !== value) {
+	// 		console.log('vai retornar true na propriedade: ', key);
+
+	// 		return true;
+	// 	}
+	// }
+
+	console.log('vai retornar falso');
 
 	return false;
 }
@@ -111,8 +163,7 @@ export function hasPropertiesDataChanged({
 }) {
 	if (propertiesUIData.length !== fetchedPropertiesData.length) {
 		return true;
-	}
-	else {
+	} else {
 		for (const property of propertiesUIData) {
 			const matchedFetchedProperty = fetchedPropertiesData.find(
 				({objectFieldERC, objectRelationshipNames}) =>

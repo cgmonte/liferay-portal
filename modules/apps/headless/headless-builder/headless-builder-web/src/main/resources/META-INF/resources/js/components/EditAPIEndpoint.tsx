@@ -20,8 +20,8 @@ import {EditAPIApplicationContext} from './EditAPIApplicationContext';
 import EditEndpointConfiguration from './EditEndpointConfiguration';
 import BaseAPIEndpointFields from './baseComponents/BaseAPIEndpointFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
-import {hasDataChanged, resetToFetched} from './utils/dataUtils';
-import {fetchJSON, updateData} from './utils/fetchUtil';
+import {hasEndpointDataChanged, resetToFetched} from './utils/dataUtils';
+import {deleteData, fetchJSON, postData, updateData} from './utils/fetchUtil';
 
 import '../../css/main.scss';
 import {beginStringWithForwardSlash} from './utils/string';
@@ -51,6 +51,7 @@ export default function EditAPIEndpoint({
 }: EditAPIEndpointProps) {
 	const {
 		fetchedData,
+		isDataUnsaved,
 		setFetchedData,
 		setHideManagementButtons,
 		setIsDataUnsaved,
@@ -72,30 +73,38 @@ export default function EditAPIEndpoint({
 				endpointId +
 				'?nestedFields=apiEndpointToAPIFilters, apiEndpointToAPISorts',
 		}).then((response) => {
-			if (response.id === endpointId) {
-				setFetchedData((previous) => ({
-					...previous,
-					apiEndpoint: response,
-				}));
+			// console.log('response', response);
 
-				setLocalUIData({
+			setFetchedData((previous) => ({
+				...previous,
+				apiEndpoint: response,
+			}));
+
+			setLocalUIData({
+				...(response.apiEndpointToAPIFilters?.length && {
 					apiEndpointToAPIFilters: response.apiEndpointToAPIFilters,
+				}),
+				...(response.apiEndpointToAPISorts?.length && {
 					apiEndpointToAPISorts: response.apiEndpointToAPISorts,
-					...(response.description && {
-						description: response.description,
-					}),
-					endpointFilters: response.apiEndpointToAPIFilters
-						?.map((filter) => filter.oDataFilter)
-						.join(', '),
-					endpointSorting: response.apiEndpointToAPISorts
-						?.map((sort) => sort.oDataSort)
-						.join(', '),
-					path: response.path,
+				}),
+				...(response.description && {
+					description: response.description,
+				}),
+
+				// endpointFilters: response.apiEndpointToAPIFilters
+				// 	?.map((filter) => filter.oDataFilter)
+				// 	.join(', '),
+				// endpointSorting: response.apiEndpointToAPISorts
+				// 	?.map((sort) => sort.oDataSort)
+				// 	.join(', '),
+
+				path: response.path,
+				...(response.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId && {
 					r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
 						response.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId,
-					scope: response.scope,
-				});
-			}
+				}),
+				scope: response.scope,
+			});
 		});
 	};
 
@@ -147,7 +156,13 @@ export default function EditAPIEndpoint({
 		({successMessage}: {successMessage: string}) => {
 			const isDataValid = validateData();
 
-			if (localUIData && isDataValid && fetchedData?.apiEndpoint) {
+			if (
+				fetchedData?.apiEndpoint &&
+				Object.keys(localUIData).length &&
+				isDataValid
+			) {
+				handleModifyEndpointFilters();
+				handleEndpointSorting();
 				updateData<APIEndpointUIData>({
 					dataToUpdate: {
 						description: localUIData.description,
@@ -170,10 +185,11 @@ export default function EditAPIEndpoint({
 							message: successMessage,
 							type: 'success',
 						});
-						fetchAPIEndpoint();
 					},
 					url: fetchedData.apiEndpoint.actions.update.href,
 				});
+
+				fetchAPIEndpoint();
 			}
 		},
 
@@ -181,32 +197,83 @@ export default function EditAPIEndpoint({
 		[localUIData]
 	);
 
-	async function handleEndpointFilters() {
-		if (
-			localUIData.endpointFilters &&
-			localUIData.apiEndpointToAPIFilters
-		) {
-			updateData<APIEndpointFilter>({
-				dataToUpdate: {
-					oDataFilter: localUIData.endpointFilters,
-				},
-				method: 'PATCH',
-				onError: (error: string) => {
-					openToast({
-						message: error,
-						type: 'danger',
-					});
-				},
-				onSuccess: () => {
-					openToast({
-						message: 'message', // to-do
-						type: 'success',
-					});
-				},
-				url:
-					apiURLPaths.filters +
-					localUIData.apiEndpointToAPIFilters[0].id,
-			});
+	async function handleModifyEndpointFilters() {
+		if (localUIData.apiEndpointToAPIFilters) {
+			if (
+				fetchedData.apiEndpoint?.apiEndpointToAPIFilters &&
+				!fetchedData.apiEndpoint.apiEndpointToAPIFilters.length &&
+				localUIData.apiEndpointToAPIFilters[0].oDataFilter
+			) {
+				postData<APIEndpointFilter>({
+					data: {
+						id: fetchedData.apiEndpoint.id,
+						oDataFilter:
+							localUIData.apiEndpointToAPIFilters[0].oDataFilter,
+					},
+					onError: (error: string) => {
+						openToast({
+							message: error,
+							type: 'danger',
+						});
+					},
+					onSuccess: () => {
+						openToast({
+							message: 'The filter was created.',
+							type: 'success',
+						});
+					},
+					url: apiURLPaths.filters,
+				});
+			} else if (
+				fetchedData.apiEndpoint?.apiEndpointToAPIFilters?.[0]
+					.oDataFilter &&
+				localUIData.apiEndpointToAPIFilters[0].oDataFilter
+			) {
+				updateData<APIEndpointFilter>({
+					dataToUpdate: {
+						oDataFilter:
+							localUIData.apiEndpointToAPIFilters[0].oDataFilter,
+					},
+					method: 'PATCH',
+					onError: (error: string) => {
+						openToast({
+							message: error,
+							type: 'danger',
+						});
+					},
+					onSuccess: () => {
+						openToast({
+							message: 'The filter was updated',
+							type: 'success',
+						});
+					},
+					url:
+						apiURLPaths.filters +
+						localUIData.apiEndpointToAPIFilters[0].id,
+				});
+			} else if (
+				fetchedData.apiEndpoint?.apiEndpointToAPIFilters?.[0]
+					.oDataFilter &&
+				!localUIData.apiEndpointToAPIFilters[0].oDataFilter
+			) {
+				deleteData<APIEndpointFilter>({
+					onError: (error: string) => {
+						openToast({
+							message: error,
+							type: 'danger',
+						});
+					},
+					onSuccess: () => {
+						openToast({
+							message: 'The filter was deleted',
+							type: 'success',
+						});
+					},
+					url:
+						apiURLPaths.filters +
+						localUIData.apiEndpointToAPIFilters[0].id,
+				});
+			}
 		}
 	}
 
@@ -215,8 +282,6 @@ export default function EditAPIEndpoint({
 	const handlePublish = ({successMessage}: {successMessage: string}) => {
 		const isDataValid = validateData();
 		if (localUIData && isDataValid) {
-			handleEndpointFilters();
-			handleEndpointSorting();
 			updateData<APIApplicationItem>({
 				dataToUpdate: {
 					applicationStatus: {key: 'published'},
@@ -246,20 +311,14 @@ export default function EditAPIEndpoint({
 	};
 
 	const handleCancel = () => {
-		if (
-			fetchedData?.apiEndpoint &&
-			hasDataChanged({
-				fetchedEntityData: fetchedData.apiEndpoint,
-				localUIData,
-			})
-		) {
+		if (isDataUnsaved) {
 			openModal({
 				center: true,
 				contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
 					CancelEditAPIApplicationModalContent({
 						closeModal,
 						onConfirm: () => {
-							resetLocalUIData();
+							// resetLocalUIData();
 							setIsDataUnsaved(false);
 							setMainEndpointNav('list');
 						},
@@ -282,9 +341,10 @@ export default function EditAPIEndpoint({
 
 	useEffect(() => {
 		if (fetchedData.apiEndpoint) {
+			// console.log('fetchedData.apiEndpoint', fetchedData.apiEndpoint);
 			setIsDataUnsaved(
-				hasDataChanged({
-					fetchedEntityData: fetchedData.apiEndpoint,
+				hasEndpointDataChanged({
+					fetchedEndpointData: fetchedData.apiEndpoint,
 					localUIData,
 				})
 			);
@@ -330,7 +390,7 @@ export default function EditAPIEndpoint({
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [localUIData]);
+	}, [fetchedData, localUIData]);
 
 	const APIEndpointHttpMethodName = fetchedData.apiEndpoint?.httpMethod.name?.toUpperCase();
 	const editAPIEndpointBreadcrumbLabel = `${

@@ -10,7 +10,6 @@ interface APIApplicationItem extends BaseItem {
 	version: string;
 
 	// applicationSchemas?: APISchemaItem[];
-
 }
 
 interface APIEndpointFilter {
@@ -270,19 +269,32 @@ type APIApplicationUIData = Pick<
 	'baseURL' | 'description' | 'title'
 >;
 
-type APIEndpointUIData = Pick<
-	APIEndpointItem,
-	| 'apiEndpointToAPIFilters'
-	| 'apiEndpointToAPISorts'
-	| 'description'
-	| 'path'
-	| 'r_responseAPISchemaToAPIEndpoints_c_apiSchemaId'
-	| 'scope'
-	> & {
-		endpointFilters?: string;
-		endpointSorting?: string;
-	}
-;
+// type APIEndpointUIData = Pick<
+// 	APIEndpointItem,
+// 	| 'apiEndpointToAPIFilters'
+// 	| 'apiEndpointToAPISorts'
+// 	| 'description'
+// 	| 'httpMethod'
+// 	| 'path'
+// 	| 'r_responseAPISchemaToAPIEndpoints_c_apiSchemaId'
+// 	| 'scope'
+// 	>
+// 	// & {
+// 	// 	endpointFilters?: string;
+// 	// 	endpointSorting?: string;
+// 	// }
+// ;
+
+type APIEndpointUIData = {
+	apiEndpointToAPIFilters: Partial<APIEndpointFilter>[];
+	apiEndpointToAPISorts: Partial<APIEndpointSort>[];
+	description: string;
+	httpMethod: APIListType;
+	path: string;
+	r_apiApplicationToAPIEndpoints_c_apiApplicationId: string;
+	r_responseAPISchemaToAPIEndpoints_c_apiSchemaId: number;
+	scope: APIListType;
+};
 
 type ActiveNav = 'details' | 'endpoints' | 'schemas';
 
