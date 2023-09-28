@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-type LocalUIData = APIApplicationUIData | APIEndpointUIData | APISchemaUIData;
+import {beginStringWithForwardSlash} from './string';
+
+type LocalUIData = APIApplicationUIData | APISchemaUIData;
 
 interface AddObjectFieldsDataToProperties {
 	apiSchema: APISchemaItem;
@@ -90,13 +92,50 @@ export function hasDataChanged({
 	fetchedEntityData,
 	localUIData,
 }: {
-	fetchedEntityData: APIApplicationItem | APIEndpointItem | APISchemaItem;
+	fetchedEntityData: APIApplicationItem | APISchemaItem;
 	localUIData: Partial<LocalUIData>;
 }) {
 	for (const [key, value] of Object.entries(localUIData)) {
 		if (fetchedEntityData?.[key as keyof LocalUIData] !== value) {
 			return true;
 		}
+	}
+
+	return false;
+}
+
+export function hasEndpointDataChanged({
+	fetchedEndpointData,
+	localUIData,
+}: {
+	fetchedEndpointData: APIEndpointItem;
+	localUIData: Partial<APIEndpointUIData>;
+}) {
+	if (
+		fetchedEndpointData.path !==
+		beginStringWithForwardSlash(localUIData.path)
+	) {
+		return true;
+	}
+	else if (fetchedEndpointData.scope.key !== localUIData.scope?.key) {
+		return true;
+	}
+	else if (fetchedEndpointData.description !== localUIData.description) {
+		return true;
+	}
+	else if (
+		((fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId ===
+			0 &&
+			localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId) ||
+			fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId !==
+				localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId) &&
+		!(
+			fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId ===
+				0 &&
+			!localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId
+		)
+	) {
+		return true;
 	}
 
 	return false;
