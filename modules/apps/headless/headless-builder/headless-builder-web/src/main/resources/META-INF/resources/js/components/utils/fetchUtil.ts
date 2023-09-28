@@ -23,7 +23,13 @@ export async function fetchJSON<T>({
 	return (await result.json()) as T;
 }
 
-export async function getAllItems<T>({filter, url}: {filter?: string, url: string}) {
+export async function getAllItems<T>({
+	filter,
+	url,
+}: {
+	filter?: string;
+	url: string;
+}) {
 	let allItems: T[] = [];
 	let currentPage = 1;
 	let lastPage;
@@ -37,7 +43,7 @@ export async function getAllItems<T>({filter, url}: {filter?: string, url: strin
 			input: filter
 				? `${url}?filter=${filter}&?page=${currentPage}`
 				: `${url}?page=${currentPage}`,
-			})
+		});
 		allItems = [...allItems, ...items];
 		currentPage = page + 1;
 		lastPage = lastPageFromAPI;
@@ -71,8 +77,7 @@ export async function postData<T>({
 		.then((response) => {
 			if (response.ok) {
 				return response.json();
-			}
-			else {
+			} else {
 				throw response.json();
 			}
 		})
@@ -107,8 +112,7 @@ export async function updateData<T>({
 		.then((response) => {
 			if (response.ok) {
 				return response.json();
-			}
-			else {
+			} else {
 				throw response.json();
 			}
 		})
@@ -122,13 +126,13 @@ export async function updateData<T>({
 		});
 }
 
-export async function deleteData<T>({
+export async function deleteData({
 	onError,
 	onSuccess,
 	url,
 }: {
 	onError: (error: string) => void;
-	onSuccess: (responseJSON: T) => void;
+	onSuccess: voidReturn;
 	url: string;
 }) {
 	fetch(url, {
@@ -137,14 +141,10 @@ export async function deleteData<T>({
 	})
 		.then((response) => {
 			if (response.ok) {
-				return response.json();
-			}
-			else {
+				onSuccess();
+			} else {
 				throw response.json();
 			}
-		})
-		.then((responseJSON) => {
-			onSuccess(responseJSON);
 		})
 		.catch((error) => {
 			error.then((response: {message: string; title: string}) => {

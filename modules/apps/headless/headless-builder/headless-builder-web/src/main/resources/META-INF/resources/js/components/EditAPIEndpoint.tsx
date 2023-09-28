@@ -56,7 +56,6 @@ export default function EditAPIEndpoint({
 		setHideManagementButtons,
 		setIsDataUnsaved,
 	} = useContext(EditAPIApplicationContext);
-
 	const [activeTab, setActiveTab] = useState(0);
 	const [localUIData, setLocalUIData] = useState<Partial<APIEndpointUIData>>(
 		{}
@@ -141,7 +140,6 @@ export default function EditAPIEndpoint({
 				isDataValid
 			) {
 				handleModifyEndpointFilters();
-				handleEndpointSorting();
 				updateData<APIEndpointItem>({
 					dataToUpdate: {
 						description: localUIData.description,
@@ -185,8 +183,6 @@ export default function EditAPIEndpoint({
 					},
 					url: fetchedData.apiEndpoint.actions.update.href,
 				});
-
-				// fetchAPIEndpoint();
 			}
 		},
 
@@ -203,9 +199,10 @@ export default function EditAPIEndpoint({
 			) {
 				postData<APIEndpointFilter>({
 					data: {
-						id: fetchedData.apiEndpoint.id,
 						oDataFilter:
 							localUIData.apiEndpointToAPIFilters[0].oDataFilter,
+						r_apiEndpointToAPIFilters_c_apiEndpointId:
+							fetchedData.apiEndpoint.id,
 					},
 					onError: (error: string) => {
 						openToast({
@@ -260,26 +257,26 @@ export default function EditAPIEndpoint({
 					},
 					url:
 						apiURLPaths.filters +
-						localUIData.apiEndpointToAPIFilters[0].id,
+						fetchedData.apiEndpoint.apiEndpointToAPIFilters[0].id,
 				});
 			} else if (
 				fetchedData.apiEndpoint?.apiEndpointToAPIFilters?.[0]
 					.oDataFilter &&
 				!localUIData.apiEndpointToAPIFilters[0].oDataFilter
 			) {
-				deleteData<APIEndpointFilter>({
+				deleteData({
 					onError: (error: string) => {
 						openToast({
 							message: error,
 							type: 'danger',
 						});
 					},
-					onSuccess: (responseJSON) => {
+					onSuccess: () => {
 						setFetchedData((previous) => ({
 							...previous,
 							apiEndpoint: {
 								...previous.apiEndpoint!,
-								apiEndpointToAPIFilters: [responseJSON],
+								apiEndpointToAPIFilters: [],
 							},
 						}));
 						openToast({
@@ -289,13 +286,11 @@ export default function EditAPIEndpoint({
 					},
 					url:
 						apiURLPaths.filters +
-						localUIData.apiEndpointToAPIFilters[0].id,
+						fetchedData.apiEndpoint.apiEndpointToAPIFilters[0].id,
 				});
 			}
 		}
 	}
-
-	async function handleEndpointSorting() {}
 
 	const handlePublish = ({successMessage}: {successMessage: string}) => {
 		const isDataValid = validateData();

@@ -49,6 +49,6 @@ export declare function deleteData<T>({
 	url,
 }: {
 	onError: (error: string) => void;
-	onSuccess: (responseJSON: T) => void;
+	onSuccess: voidReturn;
 	url: string;
 }): Promise<void>;
