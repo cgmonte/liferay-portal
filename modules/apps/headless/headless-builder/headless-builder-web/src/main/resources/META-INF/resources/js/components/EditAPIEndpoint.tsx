@@ -20,7 +20,7 @@ import {EditAPIApplicationContext} from './EditAPIApplicationContext';
 import EditEndpointConfiguration from './EditEndpointConfiguration';
 import BaseAPIEndpointFields from './baseComponents/BaseAPIEndpointFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
-import {hasEndpointDataChanged, resetToFetched} from './utils/dataUtils';
+import {hasEndpointDataChanged} from './utils/dataUtils';
 import {deleteData, fetchJSON, postData, updateData} from './utils/fetchUtil';
 
 import '../../css/main.scss';
@@ -73,8 +73,6 @@ export default function EditAPIEndpoint({
 				endpointId +
 				'?nestedFields=apiEndpointToAPIFilters, apiEndpointToAPISorts',
 		}).then((response) => {
-			// console.log('response', response);
-
 			setFetchedData((previous) => ({
 				...previous,
 				apiEndpoint: response,
@@ -90,14 +88,6 @@ export default function EditAPIEndpoint({
 				...(response.description && {
 					description: response.description,
 				}),
-
-				// endpointFilters: response.apiEndpointToAPIFilters
-				// 	?.map((filter) => filter.oDataFilter)
-				// 	.join(', '),
-				// endpointSorting: response.apiEndpointToAPISorts
-				// 	?.map((sort) => sort.oDataSort)
-				// 	.join(', '),
-
 				path: response.path,
 				...(response.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId && {
 					r_responseAPISchemaToAPIEndpoints_c_apiSchemaId:
@@ -106,17 +96,6 @@ export default function EditAPIEndpoint({
 				scope: response.scope,
 			});
 		});
-	};
-
-	const resetLocalUIData = () => {
-		if (fetchedData.apiEndpoint) {
-			setLocalUIData(
-				resetToFetched<APIEndpointItem, Partial<APIEndpointUIData>>({
-					fetchedEntityData: fetchedData.apiEndpoint,
-					localUIData,
-				})
-			);
-		}
 	};
 
 	function validateData() {
@@ -163,7 +142,7 @@ export default function EditAPIEndpoint({
 			) {
 				handleModifyEndpointFilters();
 				handleEndpointSorting();
-				updateData<APIEndpointUIData>({
+				updateData<APIEndpointItem>({
 					dataToUpdate: {
 						description: localUIData.description,
 						...(localUIData.path && {
@@ -180,7 +159,25 @@ export default function EditAPIEndpoint({
 							type: 'danger',
 						});
 					},
-					onSuccess: () => {
+					onSuccess: (responseJSON) => {
+						setFetchedData((previous) => ({
+							...previous,
+							apiEndpoint: {
+								...responseJSON,
+								...(previous.apiEndpoint
+									?.apiEndpointToAPIFilters?.length && {
+									apiEndpointToAPIFilters:
+										previous.apiEndpoint
+											.apiEndpointToAPIFilters,
+								}),
+								...(previous.apiEndpoint?.apiEndpointToAPISorts
+									?.length && {
+									apiEndpointToAPISorts:
+										previous.apiEndpoint
+											.apiEndpointToAPISorts,
+								}),
+							},
+						}));
 						openToast({
 							message: successMessage,
 							type: 'success',
@@ -189,7 +186,7 @@ export default function EditAPIEndpoint({
 					url: fetchedData.apiEndpoint.actions.update.href,
 				});
 
-				fetchAPIEndpoint();
+				// fetchAPIEndpoint();
 			}
 		},
 
@@ -216,7 +213,14 @@ export default function EditAPIEndpoint({
 							type: 'danger',
 						});
 					},
-					onSuccess: () => {
+					onSuccess: (responseJSON) => {
+						setFetchedData((previous) => ({
+							...previous,
+							apiEndpoint: {
+								...previous.apiEndpoint!,
+								apiEndpointToAPIFilters: [responseJSON],
+							},
+						}));
 						openToast({
 							message: 'The filter was created.',
 							type: 'success',
@@ -241,7 +245,14 @@ export default function EditAPIEndpoint({
 							type: 'danger',
 						});
 					},
-					onSuccess: () => {
+					onSuccess: (responseJSON) => {
+						setFetchedData((previous) => ({
+							...previous,
+							apiEndpoint: {
+								...previous.apiEndpoint!,
+								apiEndpointToAPIFilters: [responseJSON],
+							},
+						}));
 						openToast({
 							message: 'The filter was updated',
 							type: 'success',
@@ -263,7 +274,14 @@ export default function EditAPIEndpoint({
 							type: 'danger',
 						});
 					},
-					onSuccess: () => {
+					onSuccess: (responseJSON) => {
+						setFetchedData((previous) => ({
+							...previous,
+							apiEndpoint: {
+								...previous.apiEndpoint!,
+								apiEndpointToAPIFilters: [responseJSON],
+							},
+						}));
 						openToast({
 							message: 'The filter was deleted',
 							type: 'success',
@@ -318,7 +336,6 @@ export default function EditAPIEndpoint({
 					CancelEditAPIApplicationModalContent({
 						closeModal,
 						onConfirm: () => {
-							// resetLocalUIData();
 							setIsDataUnsaved(false);
 							setMainEndpointNav('list');
 						},
@@ -341,7 +358,6 @@ export default function EditAPIEndpoint({
 
 	useEffect(() => {
 		if (fetchedData.apiEndpoint) {
-			// console.log('fetchedData.apiEndpoint', fetchedData.apiEndpoint);
 			setIsDataUnsaved(
 				hasEndpointDataChanged({
 					fetchedEndpointData: fetchedData.apiEndpoint,

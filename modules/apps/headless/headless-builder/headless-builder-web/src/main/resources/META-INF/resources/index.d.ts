@@ -15,6 +15,7 @@ interface APIApplicationItem extends BaseItem {
 interface APIEndpointFilter {
 	id: number;
 	oDataFilter: string;
+	r_apiEndpointToAPIFilters_c_apiEndpointId: number;
 }
 
 interface APIEndpointItem extends BaseItem {

@@ -111,22 +111,22 @@ export function hasEndpointDataChanged({
 	fetchedEndpointData: APIEndpointItem;
 	localUIData: Partial<APIEndpointUIData>;
 }) {
-	console.log('fetchedEndpointData', fetchedEndpointData);
-	console.log('localUIData', localUIData);
+	// console.log('fetchedEndpointData', fetchedEndpointData);
+	// console.log('localUIData', localUIData);
 
 	if (
 		fetchedEndpointData.path !==
 		beginStringWithForwardSlash(localUIData.path)
 	) {
-		console.log('vai retornar true no path');
+		// console.log('vai retornar true no path');
 
 		return true;
 	} else if (fetchedEndpointData.scope.key !== localUIData.scope?.key) {
-		console.log('vai retornar true no scope');
+		// console.log('vai retornar true no scope');
 
 		return true;
 	} else if (fetchedEndpointData.description !== localUIData.description) {
-		console.log('vai retornar true no description');
+		// console.log('vai retornar true no description');
 
 		return true;
 	} else if (
@@ -136,7 +136,7 @@ export function hasEndpointDataChanged({
 		fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId !==
 			localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId
 	) {
-		console.log('vai retornar true no schema');
+		// console.log('vai retornar true no schema');
 
 		return true;
 	}
@@ -149,7 +149,7 @@ export function hasEndpointDataChanged({
 	// 	}
 	// }
 
-	console.log('vai retornar falso');
+	// console.log('vai retornar falso');
 
 	return false;
 }
