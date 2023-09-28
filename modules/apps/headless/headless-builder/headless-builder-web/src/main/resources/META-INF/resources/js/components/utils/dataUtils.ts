@@ -111,45 +111,65 @@ export function hasEndpointDataChanged({
 	fetchedEndpointData: APIEndpointItem;
 	localUIData: Partial<APIEndpointUIData>;
 }) {
-	// console.log('fetchedEndpointData', fetchedEndpointData);
-	// console.log('localUIData', localUIData);
+	console.log('fetchedEndpointData', fetchedEndpointData);
+	console.log('localUIData', localUIData);
 
 	if (
 		fetchedEndpointData.path !==
 		beginStringWithForwardSlash(localUIData.path)
 	) {
-		// console.log('vai retornar true no path');
+		console.log('vai retornar true no path');
 
 		return true;
 	} else if (fetchedEndpointData.scope.key !== localUIData.scope?.key) {
-		// console.log('vai retornar true no scope');
+		console.log('vai retornar true no scope');
 
 		return true;
 	} else if (fetchedEndpointData.description !== localUIData.description) {
-		// console.log('vai retornar true no description');
+		console.log('vai retornar true no description');
 
 		return true;
 	} else if (
-		(fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId ===
+		((fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId ===
 			0 &&
 			localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId) ||
-		fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId !==
-			localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId
+			fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId !==
+				localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId) &&
+		!(
+			fetchedEndpointData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId ===
+				0 &&
+			!localUIData.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId
+		)
 	) {
-		// console.log('vai retornar true no schema');
+		console.log('vai retornar true no schema');
 
 		return true;
+	} else if (
+		localUIData.apiEndpointToAPIFilters &&
+		fetchedEndpointData.apiEndpointToAPIFilters &&
+		fetchedEndpointData.apiEndpointToAPIFilters.length !==
+			localUIData.apiEndpointToAPIFilters.length
+	) {
+		console.log('vai retornar true no comprimeento da array de filters');
+
+		return true;
+	} else if (
+		fetchedEndpointData.apiEndpointToAPIFilters?.length &&
+		localUIData.apiEndpointToAPIFilters?.length
+	) {
+		if (
+			fetchedEndpointData.apiEndpointToAPIFilters[0].id !==
+				localUIData.apiEndpointToAPIFilters[0].id ||
+			fetchedEndpointData.apiEndpointToAPIFilters[0].oDataFilter !==
+				localUIData.apiEndpointToAPIFilters[0].oDataFilter
+		) {
+			console.log('vai retornar true no conteudo do filtro');
+
+			return true;
+		}
 	}
 
-	// for (const [key, value] of Object.entries(localUIData)) {
-	// 	if (fetchedEndpointData?.[key as keyof LocalUIData] !== value) {
-	// 		console.log('vai retornar true na propriedade: ', key);
-
-	// 		return true;
-	// 	}
-	// }
-
-	// console.log('vai retornar falso');
+	console.log('vai retornar falso');
 
 	return false;
 }

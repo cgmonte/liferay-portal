@@ -65,6 +65,10 @@ export default function EditAPIEndpoint({
 		scope: false,
 	});
 
+	useEffect(() => {
+		console.log('isDataUnsaved', isDataUnsaved);
+	}, [isDataUnsaved]);
+
 	const fetchAPIEndpoint = () => {
 		fetchJSON<APIEndpointItem>({
 			input:
@@ -323,7 +327,8 @@ export default function EditAPIEndpoint({
 		}
 	};
 
-	const handleCancel = () => {
+	const handleCancel = useCallback(() => {
+		console.log('isDataUnsaved', isDataUnsaved);
 		if (isDataUnsaved) {
 			openModal({
 				center: true,
@@ -342,7 +347,8 @@ export default function EditAPIEndpoint({
 		} else {
 			setMainEndpointNav('list');
 		}
-	};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isDataUnsaved]);
 
 	useEffect(() => {
 		setHideManagementButtons(false);
@@ -401,7 +407,7 @@ export default function EditAPIEndpoint({
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [fetchedData, localUIData]);
+	}, [fetchedData, isDataUnsaved, localUIData]);
 
 	const APIEndpointHttpMethodName = fetchedData.apiEndpoint?.httpMethod.name?.toUpperCase();
 	const editAPIEndpointBreadcrumbLabel = `${

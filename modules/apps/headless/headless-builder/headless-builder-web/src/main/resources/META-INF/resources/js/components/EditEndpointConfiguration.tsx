@@ -83,10 +83,6 @@ export default function EditEndpointConfiguration({
 		'type-any-filter-using-odata-language'
 	);
 
-	const endpointSortInstruction = Liferay.Language.get(
-		'type-any-sort-using-odata-language'
-	);
-
 	return (
 		<ClayForm>
 			<ClayForm.Group>
@@ -95,13 +91,6 @@ export default function EditEndpointConfiguration({
 				</label>
 
 				<Select
-					cleanUp={() =>
-						setData((previousValue) => {
-							previousValue.r_responseAPISchemaToAPIEndpoints_c_apiSchemaId = 0;
-
-							return {...previousValue};
-						})
-					}
 					disabled={false}
 					dropDownSearchAriaLabel={Liferay.Language.get(
 						'search-for-a-schema-or-use-the-arrow-keys-to-navigate-and-select-a-schema-from-the-list'
@@ -110,21 +99,6 @@ export default function EditEndpointConfiguration({
 					options={responseBodySchemaOptions}
 					placeholder={Liferay.Language.get('select-a-schema')}
 					selectedOption={selectedResponseBodySchema}
-
-					// triggerAriaLabel={
-					// 	!selectedObjectDefinition
-					// 		? Liferay.Language.get(
-					// 				Liferay.Language.get(
-					// 					'select-an-object-definition'
-					// 				)
-					// 		  )
-					// 		: sub(
-					// 				Liferay.Language.get(
-					// 					'object-definition-x-is-selected'
-					// 				),
-					// 				selectedObjectDefinition.label
-					// 		  )
-					// }
 				/>
 			</ClayForm.Group>
 
@@ -162,64 +136,27 @@ export default function EditEndpointConfiguration({
 					onChange={({target: {value}}) =>
 						setData((previousData) => ({
 							...previousData,
-							apiEndpointToAPIFilters: [
-								{
-									...(previousData
-										.apiEndpointToAPIFilters?.[0].id && {
-										id:
-											previousData
-												.apiEndpointToAPIFilters?.[0]
-												.id,
-									}),
-									oDataFilter: value,
-								},
-							],
+							...(value !== ''
+								? {
+										apiEndpointToAPIFilters: [
+											{
+												...(previousData
+													.apiEndpointToAPIFilters?.[0]
+													?.id && {
+													id:
+														previousData
+															.apiEndpointToAPIFilters?.[0]
+															.id,
+												}),
+												oDataFilter: value,
+											},
+										],
+								  }
+								: {apiEndpointToAPIFilters: []}),
 						}))
 					}
 					placeholder={endpointFiltersInstruction}
 					value={data.apiEndpointToAPIFilters?.[0]?.oDataFilter}
-				/>
-			</ClayForm.Group>
-
-			<ClayForm.Group>
-				<label htmlFor="endpointSortingField">
-					{Liferay.Language.get('sorting')}
-
-					<ClayTooltipProvider>
-						<span
-							data-tooltip-align="top"
-							title={`${Liferay.Language.get(
-								'there-is-a-limit-of-1000-characters-in-OData-language'
-							)} ${sub(
-								Liferay.Language.get(
-									'remember-not-to-include-the-x'
-								),
-								'?filter='
-							)}`}
-						>
-							&nbsp;
-							<ClayIcon symbol="question-circle-full" />
-						</span>
-					</ClayTooltipProvider>
-				</label>
-
-				<Text as="p" id="hostTextPreview" size={2} weight="lighter">
-					/?sort=
-				</Text>
-
-				<textarea
-					aria-label={endpointSortInstruction}
-					autoComplete="off"
-					className="form-control"
-					id="endpointSortingField"
-					onChange={({target: {value}}) =>
-						setData((previousData) => ({
-							...previousData,
-							endpointSorting: value,
-						}))
-					}
-					placeholder={endpointSortInstruction}
-					value={data.apiEndpointToAPISorts?.[0]?.oDataSort}
 				/>
 			</ClayForm.Group>
 		</ClayForm>

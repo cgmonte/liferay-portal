@@ -8,8 +8,6 @@ interface APIApplicationItem extends BaseItem {
 	baseURL: string;
 	title: string;
 	version: string;
-
-	// applicationSchemas?: APISchemaItem[];
 }
 
 interface APIEndpointFilter {

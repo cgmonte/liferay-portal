@@ -43,7 +43,7 @@ export declare function updateData<T>({
 	onSuccess: (responseJSON: T) => void;
 	url: string;
 }): Promise<void>;
-export declare function deleteData<T>({
+export declare function deleteData({
 	onError,
 	onSuccess,
 	url,
