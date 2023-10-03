@@ -139,11 +139,27 @@ export function hasEndpointDataChanged({
 			!uiR_responseAPISchemaToAPIEndpoints_c_apiSchemaId
 		);
 
+	const filtersArrayLengthChanged = !!(
+		localUIData.apiEndpointToAPIFilters &&
+		fetchedEndpointData.apiEndpointToAPIFilters &&
+		fetchedEndpointData.apiEndpointToAPIFilters.length !==
+			localUIData.apiEndpointToAPIFilters.length
+	);
+
+	const filtersContentChanged = !!(
+		localUIData.apiEndpointToAPIFilters?.length &&
+		fetchedEndpointData.apiEndpointToAPIFilters?.length &&
+		fetchedEndpointData.apiEndpointToAPIFilters[0].oDataFilter !==
+			localUIData.apiEndpointToAPIFilters[0].oDataFilter
+	);
+
 	if (
 		pathChanged ||
 		scopeKeyChanged ||
 		descriptionChanged ||
-		schemaIdChanged
+		schemaIdChanged ||
+		filtersArrayLengthChanged ||
+		filtersContentChanged
 	) {
 		return true;
 	}
