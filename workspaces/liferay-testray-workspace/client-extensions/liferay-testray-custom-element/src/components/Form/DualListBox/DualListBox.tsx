@@ -20,12 +20,9 @@ type DualListBoxProps = {
 	setValue?: (value: any) => void;
 };
 
-const DualListBox: React.FC<DualListBoxProps> = ({
-	boxes = [[], []],
-	leftLabel,
-	rightLabel,
-	setValue = () => {},
-}) => {
+const DualListBox: React.FC<
+	{children?: React.ReactNode | undefined} & DualListBoxProps
+> = ({boxes = [[], []], leftLabel, rightLabel, setValue = () => {}}) => {
 	const [items, setItems] = useState<Boxes>([[], []]);
 	const [leftSelected, setLeftSelected] = useState<string[]>([]);
 	const [rightSelected, setRightSelected] = useState<string[]>([]);

@@ -108,8 +108,7 @@ export function DefaultValueContainer({
 					),
 				});
 			}
-		}
-		else {
+		} else {
 			setValues({
 				objectFieldSettings: getUpdatedDefaultValueType(
 					values,

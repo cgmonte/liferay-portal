@@ -22,11 +22,9 @@ type RequirementCaseLinkModalProps = {
 
 export type State = {caseId?: number; requirementId?: number}[];
 
-const RequirementCaseLinkModal: React.FC<RequirementCaseLinkModalProps> = ({
-	items,
-	modal: {observer, onClose, onSave, visible},
-	projectId,
-}) => {
+const RequirementCaseLinkModal: React.FC<
+	{children?: React.ReactNode | undefined} & RequirementCaseLinkModalProps
+> = ({items, modal: {observer, onClose, onSave, visible}, projectId}) => {
 	const [state, setState] = useState<State>([]);
 
 	return (

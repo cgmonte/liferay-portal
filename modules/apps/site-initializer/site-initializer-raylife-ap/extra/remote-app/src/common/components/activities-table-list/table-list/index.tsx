@@ -23,11 +23,9 @@ export type Props = {
 
 type InfoRowContent = {[keys: string]: string | boolean};
 
-const TableListComponent: React.FC<Props> = ({
-	BodyElement = () => null,
-	headers,
-	rows,
-}) => {
+const TableListComponent: React.FC<
+	{children?: React.ReactNode | undefined} & Props
+> = ({BodyElement = () => null, headers, rows}) => {
 	const [selectedRow, setSelectedRow] = useState(rows[0]);
 
 	const toggleRowContent = (item: InfoRowContent) => {

@@ -4,10 +4,10 @@
  */
 
 import ClayModal from '@clayui/modal';
-import React, {ReactElement, ReactNode} from 'react';
+import React, {ReactElement} from 'react';
 
 type ModalProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	className?: string;
 	first?: ReactElement;
 	last?: ReactElement;
@@ -18,16 +18,9 @@ type ModalProps = {
 	visible: boolean;
 };
 
-const Modal: React.FC<ModalProps> = ({
-	children,
-	first,
-	last,
-	observer,
-	size,
-	subtitle,
-	title,
-	visible,
-}) => {
+const Modal: React.FC<
+	{children?: React.ReactNode | undefined} & ModalProps
+> = ({children, first, last, observer, size, subtitle, title, visible}) => {
 	if (!visible) {
 		return null;
 	}

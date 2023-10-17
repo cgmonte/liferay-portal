@@ -14,9 +14,9 @@ type ProductVersionModalProps = {
 	projectId: number;
 };
 
-const ProductVersionModal: React.FC<ProductVersionModalProps> = ({
-	projectId,
-}) => {
+const ProductVersionModal: React.FC<
+	{children?: React.ReactNode | undefined} & ProductVersionModalProps
+> = ({projectId}) => {
 	const {actions, formModal} = useTeamActions();
 
 	return (

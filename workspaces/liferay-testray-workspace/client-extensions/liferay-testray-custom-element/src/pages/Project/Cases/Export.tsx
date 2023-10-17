@@ -40,7 +40,9 @@ type RequirementTableProps = {
 	requirements: TestrayRequirement[];
 };
 
-const RequirementTable: React.FC<RequirementTableProps> = ({requirements}) => (
+const RequirementTable: React.FC<
+	{children?: React.ReactNode | undefined} & RequirementTableProps
+> = ({requirements}) => (
 	<ClayTable>
 		<ClayTable.Head>
 			<ClayTable.Row>
@@ -83,7 +85,9 @@ const RequirementTable: React.FC<RequirementTableProps> = ({requirements}) => (
 	</ClayTable>
 );
 
-const CaseItems: React.FC<CaseItemsProps> = ({caseWithRequirements, cases}) => (
+const CaseItems: React.FC<
+	{children?: React.ReactNode | undefined} & CaseItemsProps
+> = ({caseWithRequirements, cases}) => (
 	<div>
 		<h5>{i18n.translate('case')}</h5>
 
@@ -161,10 +165,9 @@ const CaseItems: React.FC<CaseItemsProps> = ({caseWithRequirements, cases}) => (
 	</div>
 );
 
-const ExportCaseContainer: React.FC<CaseItemsProps> = ({
-	caseWithRequirements,
-	cases,
-}) => (
+const ExportCaseContainer: React.FC<
+	{children?: React.ReactNode | undefined} & CaseItemsProps
+> = ({caseWithRequirements, cases}) => (
 	<div>
 		<h5 className="mt-5">{i18n.translate('associated-requirements')}</h5>
 

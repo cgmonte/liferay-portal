@@ -7,22 +7,18 @@ import ClayButton from '@clayui/button';
 import {DisplayType} from '@clayui/button/lib/Button';
 import ClayIcon from '@clayui/icon';
 import ClayManagementToolbar from '@clayui/management-toolbar';
-import {Fragment, ReactNode} from 'react';
+import React, {Fragment} from 'react';
 
 type ButtonProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	displayType?: DisplayType;
 	symbol?: string;
 	toolbar?: boolean;
 } & React.HTMLAttributes<HTMLButtonElement>;
 
-const Button: React.FC<ButtonProps> = ({
-	children,
-	displayType,
-	symbol,
-	toolbar,
-	...otherProps
-}) => {
+const Button: React.FC<
+	{children?: React.ReactNode | undefined} & ButtonProps
+> = ({children, displayType, symbol, toolbar, ...otherProps}) => {
 	const Wrapper = toolbar ? ClayManagementToolbar.Item : Fragment;
 
 	return (

@@ -15,12 +15,9 @@ type MultiSelectCreateableProps = {
 	values: any;
 };
 
-const MultiSelectCreateable: React.FC<MultiSelectCreateableProps> = ({
-	errors,
-	name,
-	setValue,
-	values,
-}) => {
+const MultiSelectCreateable: React.FC<
+	{children?: React.ReactNode | undefined} & MultiSelectCreateableProps
+> = ({errors, name, setValue, values}) => {
 	return (
 		<>
 			<CreatableSelect

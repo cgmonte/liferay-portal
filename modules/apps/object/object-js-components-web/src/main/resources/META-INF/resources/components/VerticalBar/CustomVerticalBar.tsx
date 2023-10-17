@@ -4,12 +4,12 @@
  */
 
 import {VerticalBar} from '@clayui/core';
-import React, {ReactNode} from 'react';
+import React from 'react';
 
 import './CustomVerticalBar.scss';
 
 interface CustomVerticalBarProps {
-	children: ReactNode;
+	children: React.ReactNode;
 	defaultActive: string;
 	panelWidth?: number;
 	panelWidthMax?: number;

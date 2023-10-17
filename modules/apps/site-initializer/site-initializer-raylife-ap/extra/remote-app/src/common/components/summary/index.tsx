@@ -32,7 +32,9 @@ const summaryOnClickRules = (
 	}
 };
 
-const Summary: React.FC<SummaryProps> = ({dataSummary}) => {
+const Summary: React.FC<
+	{children?: React.ReactNode | undefined} & SummaryProps
+> = ({dataSummary}) => {
 	return (
 		<div className="bg-neutral-0 h-100 ray-summary-container rounded w-100">
 			<div className="pt-3 px-5 summary-title">

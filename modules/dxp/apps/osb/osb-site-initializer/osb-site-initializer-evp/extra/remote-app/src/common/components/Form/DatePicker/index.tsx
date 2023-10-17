@@ -24,7 +24,9 @@ type DatePickerTypes = {
 	value: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const DatePicker: React.FC<DatePickerTypes> = ({
+const DatePicker: React.FC<
+	{children?: React.ReactNode | undefined} & DatePickerTypes
+> = ({
 	clearErrors = {},
 	errors = {},
 	label,

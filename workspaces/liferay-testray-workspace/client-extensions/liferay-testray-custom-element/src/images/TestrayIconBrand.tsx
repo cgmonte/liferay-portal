@@ -8,10 +8,9 @@ type TestrayIconBrandProps = {
 	fill?: string;
 };
 
-const TestrayIconBrand: React.FC<TestrayIconBrandProps> = ({
-	className,
-	fill = '#8b8db2',
-}) => (
+const TestrayIconBrand: React.FC<
+	{children?: React.ReactNode | undefined} & TestrayIconBrandProps
+> = ({className, fill = '#8b8db2'}) => (
 	<div className={className}>
 		<svg
 			height="25px"

@@ -15,7 +15,9 @@ type PopoverIconButtonProps = {
 	popoverText?: string;
 };
 
-const PopoverIconButton: React.FC<PopoverIconButtonProps> = ({
+const PopoverIconButton: React.FC<
+	{children?: React.ReactNode | undefined} & PopoverIconButtonProps
+> = ({
 	alignPosition = 'bottom',
 	isSubscriptionCard,
 	popoverLink,

@@ -60,8 +60,9 @@ type Props = {
 	route: any;
 };
 
-const DirectToCustomer: React.FC<Props> = ({route}) =>
-	RaylifeComponents[route] ?? <NoRouteSelected />;
+const DirectToCustomer: React.FC<
+	{children?: React.ReactNode | undefined} & Props
+> = ({route}) => RaylifeComponents[route] ?? <NoRouteSelected />;
 
 class WebComponent extends HTMLElement {
 	connectedCallback() {

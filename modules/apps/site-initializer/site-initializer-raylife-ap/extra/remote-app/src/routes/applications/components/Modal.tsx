@@ -4,11 +4,11 @@
  */
 
 import ClayModal from '@clayui/modal';
-import React, {ReactNode} from 'react';
+import React from 'react';
 
 type ModalProps = {
 	Buttons: () => JSX.Element;
-	children: ReactNode;
+	children: React.ReactNode;
 	modalStyle: string;
 	observer: Observer;
 	size: any;
@@ -26,15 +26,9 @@ export declare enum ObserverType {
 	Open = 1,
 }
 
-const Modal: React.FC<ModalProps> = ({
-	Buttons,
-	children,
-	modalStyle,
-	observer,
-	size,
-	title,
-	visible,
-}) => {
+const Modal: React.FC<
+	{children?: React.ReactNode | undefined} & ModalProps
+> = ({Buttons, children, modalStyle, observer, size, title, visible}) => {
 	return (
 		<div className="modal-container">
 			{visible && (

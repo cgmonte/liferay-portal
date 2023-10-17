@@ -20,10 +20,12 @@ import {CaseResultStatuses} from '../../../../../../util/statuses';
 
 const userId = Number(Liferay.ThemeDisplay.getUserId());
 
-const CaseResultHeaderActions: React.FC<{
-	caseResult: TestrayCaseResult;
-	mutateCaseResult: KeyedMutator<any>;
-}> = ({caseResult, mutateCaseResult}) => {
+const CaseResultHeaderActions: React.FC<
+	{children?: React.ReactNode | undefined} & {
+		caseResult: TestrayCaseResult;
+		mutateCaseResult: KeyedMutator<any>;
+	}
+> = ({caseResult, mutateCaseResult}) => {
 	const {modal} = useFormModal({
 		onSave: (user: UserAccount) =>
 			testrayCaseResultImpl

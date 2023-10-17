@@ -39,6 +39,9 @@ export default function openCreationModal(props: Props) {
 	dispose();
 
 	render(
+
+		// @ts-ignore
+
 		CreationModal,
 		{...props, onCloseModal: dispose},
 		getDefaultModalContainer()

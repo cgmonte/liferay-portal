@@ -19,7 +19,9 @@ const getIconSpriteMap = () => {
 	return spritemap;
 };
 
-const ClayIconProvider: React.FC<EVPComponentType> = ({children}) => (
+const ClayIconProvider: React.FC<
+	{children?: React.ReactNode | undefined} & EVPComponentType
+> = ({children}) => (
 	<ClayIconSpriteContext.Provider value={getIconSpriteMap()}>
 		{children}
 	</ClayIconSpriteContext.Provider>

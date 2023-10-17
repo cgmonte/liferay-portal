@@ -13,11 +13,9 @@ type HeaderBreadcrumbTriggerProps = {
 	title: string;
 };
 
-const HeaderBreadcrumbTrigger: React.FC<HeaderBreadcrumbTriggerProps> = ({
-	displayCarret,
-	symbol,
-	title,
-}) => (
+const HeaderBreadcrumbTrigger: React.FC<
+	{children?: React.ReactNode | undefined} & HeaderBreadcrumbTriggerProps
+> = ({displayCarret, symbol, title}) => (
 	<div className="align-items-center d-flex" title={title}>
 		<TestrayIcons
 			className="dropdown-poll-icon mr-2"

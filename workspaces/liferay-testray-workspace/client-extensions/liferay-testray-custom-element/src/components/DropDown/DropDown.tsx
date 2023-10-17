@@ -20,12 +20,9 @@ type DropDownProps = {
 	position?: any;
 };
 
-const DropDown: React.FC<DropDownProps> = ({
-	actions,
-	item,
-	mutate,
-	position = Align.RightCenter,
-}) => {
+const DropDown: React.FC<
+	{children?: React.ReactNode | undefined} & DropDownProps
+> = ({actions, item, mutate, position = Align.RightCenter}) => {
 	const [active, setActive] = useState(false);
 
 	if (!actions.length) {

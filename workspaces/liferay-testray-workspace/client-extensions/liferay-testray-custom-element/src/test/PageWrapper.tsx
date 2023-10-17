@@ -16,12 +16,9 @@ type PageWrapperProps = {
 	fetcher?: () => any;
 };
 
-const PageWrapper: React.FC<PageWrapperProps> = ({
-	children,
-	clearCache,
-	customRoutes,
-	fetcher = baseFetcher,
-}) => {
+const PageWrapper: React.FC<
+	{children?: React.ReactNode | undefined} & PageWrapperProps
+> = ({children, clearCache, customRoutes, fetcher = baseFetcher}) => {
 	return (
 		<SWRConfig
 			value={{

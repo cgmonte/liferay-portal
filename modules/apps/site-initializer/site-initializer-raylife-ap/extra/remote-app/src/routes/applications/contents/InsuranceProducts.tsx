@@ -33,9 +33,9 @@ enum PRODUCTS {
 	BUSINESS_OWNERS_POLICY = 'Business Owners Policy',
 }
 
-const InsuranceProducts: React.FC<InsuranceProductsProps> = ({
-	selectedCard,
-}) => {
+const InsuranceProducts: React.FC<
+	{children?: React.ReactNode | undefined} & InsuranceProductsProps
+> = ({selectedCard}) => {
 	const [products, setProducts] = useState([]);
 
 	const cardNameSelected =

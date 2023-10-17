@@ -20,10 +20,9 @@ type TestflowAssignUserModalProps = {
 	type: TestflowAssigUserType;
 };
 
-const TestflowAssignUserModal: React.FC<TestflowAssignUserModalProps> = ({
-	modal: {modalState, observer, onClose, onSave, visible},
-	type,
-}) => {
+const TestflowAssignUserModal: React.FC<
+	{children?: React.ReactNode | undefined} & TestflowAssignUserModalProps
+> = ({modal: {modalState, observer, onClose, onSave, visible}, type}) => {
 	const [state, setState] = useState([]);
 
 	return (

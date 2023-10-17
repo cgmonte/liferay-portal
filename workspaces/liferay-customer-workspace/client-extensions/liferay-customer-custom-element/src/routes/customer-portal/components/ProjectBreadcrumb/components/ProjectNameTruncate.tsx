@@ -12,9 +12,9 @@ type ProjectNameTruncateProps = {
 
 export const PROJECT_NAME_LIMIT = 16;
 
-const ProjectNameTruncate: React.FC<ProjectNameTruncateProps> = ({
-	children,
-}) => {
+const ProjectNameTruncate: React.FC<
+	{children?: React.ReactNode | undefined} & ProjectNameTruncateProps
+> = ({children}) => {
 	if (children?.length > PROJECT_NAME_LIMIT) {
 		const splittedProjectName = children?.split('', PROJECT_NAME_LIMIT);
 

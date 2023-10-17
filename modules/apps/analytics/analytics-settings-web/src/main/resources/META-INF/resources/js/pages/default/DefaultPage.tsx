@@ -47,7 +47,9 @@ const PAGES: IPages<IGenericPageProps, EPages>[] = [
 	},
 ];
 
-const DefaultPage: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
+const DefaultPage: React.FC<
+	{children?: React.ReactNode | undefined} & React.HTMLAttributes<HTMLElement>
+> = () => {
 	const [activePage, setactivePage] = useState(EPages.WorkspaceConnection);
 
 	return (

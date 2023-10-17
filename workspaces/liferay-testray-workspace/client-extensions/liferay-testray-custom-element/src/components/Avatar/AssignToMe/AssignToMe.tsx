@@ -12,7 +12,9 @@ type AssignToMeProps = {
 	onClick?: () => void;
 };
 
-const AssignToMe: React.FC<AssignToMeProps> = ({hidden, onClick}) => (
+const AssignToMe: React.FC<
+	{children?: React.ReactNode | undefined} & AssignToMeProps
+> = ({hidden, onClick}) => (
 	<div
 		className="tr-assign-to-me"
 		hidden={hidden}

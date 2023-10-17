@@ -8,10 +8,9 @@ type ForwardIconProps = {
 	fill?: string;
 };
 
-const ForwardIcon: React.FC<ForwardIconProps> = ({
-	className,
-	fill = '#8b8db2',
-}) => {
+const ForwardIcon: React.FC<
+	{children?: React.ReactNode | undefined} & ForwardIconProps
+> = ({className, fill = '#8b8db2'}) => {
 	return (
 		<div className={className}>
 			<svg

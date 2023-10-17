@@ -41,10 +41,9 @@ export type State = {
 	testrayTeams: BoxItem[];
 };
 
-const SelectCaseParameters: React.FC<SelectCaseParametersProps> = ({
-	setState,
-	state,
-}) => {
+const SelectCaseParameters: React.FC<
+	{children?: React.ReactNode | undefined} & SelectCaseParametersProps
+> = ({setState, state}) => {
 	const {projectId} = useParams();
 	const {data: casetypes} = useFetch<APIResponse<TestrayCaseType>>(
 		'/casetypes',
