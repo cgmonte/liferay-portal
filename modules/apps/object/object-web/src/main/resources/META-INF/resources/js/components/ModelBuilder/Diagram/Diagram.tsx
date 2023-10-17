@@ -21,7 +21,7 @@ import {ObjectDefinitionNode} from '../ObjectDefinitionNode/ObjectDefinitionNode
 import './Diagram.scss';
 
 import {API} from '@liferay/object-js-components-web';
-import React, {MouseEvent, useCallback, useState} from 'react';
+import React, {LegacyRef, MouseEvent, useCallback, useState} from 'react';
 
 import {ModalAddObjectRelationship} from '../../ObjectRelationship/ModalAddObjectRelationship';
 import {getUpdatedModelBuilderStructurePayload} from '../../ViewObjectDefinitions/objectDefinitionUtil';
@@ -41,8 +41,10 @@ const EDGE_TYPES = {
 };
 
 function DiagramBuilder({
+	containerRef,
 	setShowModal,
 }: {
+	containerRef: LegacyRef<HTMLDivElement>;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }) {
 	const [
@@ -184,7 +186,7 @@ function DiagramBuilder({
 	};
 
 	return (
-		<div className="lfr-objects__model-builder-diagram-area">
+		<div className="lfr-objects__model-builder-diagram-area" ref={containerRef}>
 			{showAddObjectRelationshipModal && (
 				<ModalAddObjectRelationship
 					baseResourceURL={baseResourceURL}

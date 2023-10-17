@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {useEffect, useState} from 'react';
+import {toSvg} from 'html-to-image';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlowElement, useStore} from 'react-flow-renderer';
 
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
@@ -43,6 +44,8 @@ export default function EditObjectFolder({
 	const store = useStore();
 
 	const {nodes} = store.getState();
+
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [showModal, setShowModal] = useState<ModelBuilderModals>({
 		addObjectDefinition: false,
@@ -89,6 +92,57 @@ export default function EditObjectFolder({
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [objectFolderName]);
+
+	// function downloadImage(dataUrl: any) {
+	// 	console.log('dataUrl', dataUrl);
+	// 	const a = document.createElement('a');
+
+	// 	a.setAttribute('download', 'reactflow.png');
+	// 	a.setAttribute('href', dataUrl);
+	// 	a.click();
+	// }
+
+	const filter = (node: HTMLElement) => {
+		const exclusionClasses = [
+			'dropdown lfr__object-web-view-object-definitions-actions',
+			'lexicon-icon',
+			'react-flow__background',
+			'react-flow__controls',
+			'react-flow__minimap',
+		];
+
+		return !exclusionClasses.some((classname) => {
+			console.log('node.classList', node.classList);
+
+			return (
+				node.classList?.contains(classname) ||
+				(node.classList?.value && node.classList.value === classname)
+			);
+		});
+	};
+
+	const downloadAsPDF = useCallback(() => {
+		console.log('containerRef', containerRef);
+
+		if (containerRef.current === null) {
+			console.log('null', containerRef.current);
+
+			return;
+		}
+
+		toSvg(containerRef.current, {filter})
+			.then((dataUrl) => {
+				const link = document.createElement('a');
+				link.download = 'my-image-name.svg';
+				link.href = dataUrl;
+				link.click();
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+
+		// };
+	}, [containerRef]);
 
 	return (
 		<>
@@ -153,6 +207,7 @@ export default function EditObjectFolder({
 			)}
 
 			<EditObjectFolderHeader
+				downloadAsPDF={downloadAsPDF}
 				hasDraftObjectDefinitions={elements.some(
 					(element) =>
 						(element as FlowElement<ObjectDefinitionNodeData>).data
@@ -164,7 +219,10 @@ export default function EditObjectFolder({
 			<div className="lfr-objects__model-builder-diagram-container">
 				<LeftSidebar setShowModal={setShowModal} />
 
-				<Diagram setShowModal={setShowModal} />
+				<Diagram
+					containerRef={containerRef}
+					setShowModal={setShowModal}
+				/>
 
 				<RightSideBar.Root>
 					{rightSidebarType === 'empty' && <RightSideBar.Empty />}

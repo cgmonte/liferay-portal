@@ -18,12 +18,14 @@ import {getLocalizableLabel} from '@liferay/object-js-components-web';
 import {defaultLanguageId} from '../../../utils/constants';
 
 interface EditObjectFolderHeaderProps {
+	downloadAsPDF: () => void;
 	hasDraftObjectDefinitions: boolean;
 	selectedObjectFolder: ObjectFolder;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }
 
 export default function EditObjectFolderHeader({
+	downloadAsPDF,
 	hasDraftObjectDefinitions,
 	selectedObjectFolder,
 	setShowModal,
@@ -129,6 +131,15 @@ export default function EditObjectFolderHeader({
 				)}
 
 				<div className="lfr-objects__model-builder-header-buttons-container">
+					<ClayButton
+						aria-labelledby={Liferay.Language.get('export-as-pdf')}
+						// disabled={!hasDraftObjectDefinitions}
+						displayType="secondary"
+						onClick={downloadAsPDF}
+					>
+						{Liferay.Language.get('export-as-pdf')}
+					</ClayButton>
+
 					<ClayButton
 						aria-labelledby={Liferay.Language.get('publish')}
 						disabled={!hasDraftObjectDefinitions}

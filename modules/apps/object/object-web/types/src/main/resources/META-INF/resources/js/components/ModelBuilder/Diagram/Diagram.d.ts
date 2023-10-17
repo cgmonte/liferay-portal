@@ -4,10 +4,12 @@
  */
 
 import './Diagram.scss';
-import React from 'react';
+import React, {LegacyRef} from 'react';
 declare function DiagramBuilder({
+	containerRef,
 	setShowModal,
 }: {
+	containerRef: LegacyRef<HTMLDivElement>;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }): JSX.Element;
 export default DiagramBuilder;
