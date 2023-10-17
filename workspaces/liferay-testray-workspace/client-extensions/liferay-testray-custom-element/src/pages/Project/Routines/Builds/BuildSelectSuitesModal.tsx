@@ -28,7 +28,9 @@ type ModalType = {
 	type: 'select-cases' | 'select-suites';
 };
 
-const BuildSelectSuitesModal: React.FC<BuildSelectSuitesModalProps> = ({
+const BuildSelectSuitesModal: React.FC<
+	{children?: React.ReactNode | undefined} & BuildSelectSuitesModalProps
+> = ({
 	displayTitle = false,
 	modal: {modalState, observer, onClose, onSave, visible},
 	setModalContext,

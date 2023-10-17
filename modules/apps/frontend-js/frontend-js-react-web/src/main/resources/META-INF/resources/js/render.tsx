@@ -11,7 +11,7 @@ import {
 } from '@liferay/accessibility-settings-state-web';
 import {useLiferayState} from '@liferay/frontend-js-state-web';
 import React, {useMemo} from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 
 let counter = 0;
 
@@ -64,6 +64,28 @@ export default function render(
 			componentId = `__UNNAMED_COMPONENT__${portletId}__${counter++}`;
 		}
 
+		const Component: React.ElementType =
+			typeof renderable === 'function' ||
+			(renderable as any).$$typeof === Symbol.for('react.forward_ref')
+				? (renderable as any)
+				: null;
+
+		container.classList.add('lfr-tooltip-scope');
+
+		if (renderData.hasBodyContent) {
+			const children = container.querySelectorAll(
+				'.tag-body-content > *'
+			);
+
+			if (children.length) {
+				renderData.children = children;
+			}
+		}
+
+		delete renderData.hasBodyContent;
+
+		const root = createRoot(container);
+
 		(window.Liferay as any).component(
 			componentId,
 			{
@@ -88,7 +110,7 @@ export default function render(
 					 * can be found.
 					 */
 					try {
-						ReactDOM.unmountComponentAtNode(container);
+						root.unmount();
 					}
 					catch (error) {
 						if (process.env.NODE_ENV === 'development') {
@@ -103,32 +125,16 @@ export default function render(
 			}
 		);
 
-		const Component: React.ElementType =
-			typeof renderable === 'function' ||
-			(renderable as any).$$typeof === Symbol.for('react.forward_ref')
-				? (renderable as any)
-				: null;
-
-		container.classList.add('lfr-tooltip-scope');
-
-		if (renderData.hasBodyContent) {
-			const children = container.querySelectorAll(
-				'.tag-body-content > *'
-			);
-
-			if (children.length) {
-				renderData.children = children;
-			}
-		}
-
-		delete renderData.hasBodyContent;
-
-		// eslint-disable-next-line @liferay/portal/no-react-dom-render
-		ReactDOM.render(
+		root.render(
 			<LiferayProvider spritemap={spritemap}>
-				{Component ? <Component {...renderData} /> : renderable}
-			</LiferayProvider>,
-			container
+				{
+					(Component ? (
+						<Component {...renderData} />
+					) : (
+						renderable
+					)) as React.ReactNode
+				}
+			</LiferayProvider>
 		);
 	}
 	else {

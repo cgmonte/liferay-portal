@@ -15,11 +15,9 @@ type DropDownProps = {
 	trigger: ReactElement;
 };
 
-const DropDown: React.FC<DropDownProps> = ({
-	items,
-	position = Align.BottomCenter,
-	trigger,
-}) => {
+const DropDown: React.FC<
+	{children?: React.ReactNode | undefined} & DropDownProps
+> = ({items, position = Align.BottomCenter, trigger}) => {
 	const navigate = useNavigate();
 	const [active, setActive] = useState(false);
 

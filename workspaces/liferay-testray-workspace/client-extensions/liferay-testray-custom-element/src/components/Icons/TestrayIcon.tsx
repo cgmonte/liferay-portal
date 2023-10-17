@@ -12,12 +12,9 @@ type TestrayIconsProps = {
 	symbol: string;
 };
 
-const TestrayIcons: React.FC<TestrayIconsProps> = ({
-	className,
-	fill,
-	size = 20,
-	symbol,
-}) => {
+const TestrayIcons: React.FC<
+	{children?: React.ReactNode | undefined} & TestrayIconsProps
+> = ({className, fill, size = 20, symbol}) => {
 	return (
 		<svg
 			className={className}

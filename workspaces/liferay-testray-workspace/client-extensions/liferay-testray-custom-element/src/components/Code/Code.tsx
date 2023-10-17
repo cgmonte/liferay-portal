@@ -7,7 +7,11 @@ import classNames from 'classnames';
 
 type CodeProps = React.HTMLAttributes<HTMLElement>;
 
-const Code: React.FC<CodeProps> = ({children, className, title}) => {
+const Code: React.FC<{children?: React.ReactNode | undefined} & CodeProps> = ({
+	children,
+	className,
+	title,
+}) => {
 	if (!children) {
 		return null;
 	}

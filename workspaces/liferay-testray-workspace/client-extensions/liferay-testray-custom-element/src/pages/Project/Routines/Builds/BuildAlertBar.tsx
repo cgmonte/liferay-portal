@@ -23,10 +23,10 @@ type BuildAlertBarProps = {
 	testrayTask: TestrayTask;
 };
 
-const BuildAlertBar: React.FC<BuildAlertBarProps> = ({
+const BuildAlertBar = ({
 	testrayBuild,
 	testrayTask,
-}) => {
+}:BuildAlertBarProps) => {
 	const navigate = useNavigate();
 
 	const taskPermission = useObjectPermission('/tasks');

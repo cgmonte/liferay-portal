@@ -17,7 +17,9 @@ type DropDownActionProps<T = any> = {
 	setActive: (active: boolean) => void;
 };
 
-const DropDownAction: React.FC<DropDownActionProps> = ({
+const DropDownAction: React.FC<
+	{children?: React.ReactNode | undefined} & DropDownActionProps
+> = ({
 	action: {action, disabled, hidden, icon, name},
 	item,
 	mutate = () => {},

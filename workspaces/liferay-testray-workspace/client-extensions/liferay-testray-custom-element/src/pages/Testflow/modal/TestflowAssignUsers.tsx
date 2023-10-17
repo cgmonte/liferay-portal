@@ -12,10 +12,9 @@ type TestflowAssignUsersProps = {
 	setState: any;
 };
 
-const TestflowAssignUsers: React.FC<TestflowAssignUsersProps> = ({
-	modalState,
-	setState,
-}) => (
+const TestflowAssignUsers: React.FC<
+	{children?: React.ReactNode | undefined} & TestflowAssignUsersProps
+> = ({modalState, setState}) => (
 	<UserListView
 		listViewProps={{
 			initialContext: {

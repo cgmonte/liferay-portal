@@ -31,7 +31,9 @@ type RunFormModalProps = {
 	modal: FormModalOptions;
 };
 
-const RunFormModal: React.FC<RunFormModalProps> = ({
+const RunFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & RunFormModalProps
+> = ({
 	modal: {
 		modalState,
 		observer,

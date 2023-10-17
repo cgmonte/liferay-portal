@@ -21,7 +21,9 @@ type FactorsToOptionsProps = {
 	shouldRequestCategories: boolean;
 };
 
-const FactorsToOptions: React.FC<FactorsToOptionsProps> = ({
+const FactorsToOptions: React.FC<
+	{children?: React.ReactNode | undefined} & FactorsToOptionsProps
+> = ({
 	factors,
 	register,
 	selectedEnvironmentFactors,

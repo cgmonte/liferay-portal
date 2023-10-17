@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ReactNode, createContext, useEffect, useReducer} from 'react';
+import {createContext, useEffect, useReducer} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import TestrayStorage, {STORAGE_KEYS} from '~/core/Storage';
 import useFilterUrlParams from '~/hooks/useFilterUrlParams';
@@ -304,7 +304,10 @@ export type ListViewContextProviderProps = Partial<InitialState>;
 type Option = {label: string; value: string};
 
 const ListViewContextProvider: React.FC<
-	ListViewContextProviderProps & {children: ReactNode; id: string}
+	{children?: React.ReactNode | undefined} & ListViewContextProviderProps & {
+			children: React.ReactNode;
+			id: string;
+		}
 > = ({children, id, ...initialStateProps}) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 

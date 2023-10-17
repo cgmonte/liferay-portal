@@ -57,11 +57,9 @@ type CustomerPortalAppProps = {
 	route: string;
 } & Properties;
 
-const CustomerPortalApp: React.FC<CustomerPortalAppProps> = ({
-	apis,
-	route,
-	...properties
-}) => {
+const CustomerPortalApp: React.FC<
+	{children?: React.ReactNode | undefined} & CustomerPortalAppProps
+> = ({apis, route, ...properties}) => {
 	const {client, networkStatus} = useApollo(
 		apis.provisioningServerAPI,
 		apis.oktaSessionAPI

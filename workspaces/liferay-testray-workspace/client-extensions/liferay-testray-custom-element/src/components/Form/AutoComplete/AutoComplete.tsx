@@ -18,12 +18,9 @@ export type AutoCompleteProps = {
 	transformData?: (item: any) => any;
 };
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
-	label,
-	onSearch,
-	resource,
-	transformData,
-}) => {
+const AutoComplete: React.FC<
+	{children?: React.ReactNode | undefined} & AutoCompleteProps
+> = ({label, onSearch, resource, transformData}) => {
 	const [showValue, setShowValue] = useState('');
 	const [value, setValue] = useState('');
 	const [active, setActive] = useState(false);

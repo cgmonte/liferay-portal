@@ -37,7 +37,9 @@ export type ManagementToolbarProps = {
 	totalItems: number;
 };
 
-const ManagementToolbar: React.FC<ManagementToolbarProps> = ({
+const ManagementToolbar: React.FC<
+	{children?: React.ReactNode | undefined} & ManagementToolbarProps
+> = ({
 	actions,
 	addButton,
 	applyFilters = true,

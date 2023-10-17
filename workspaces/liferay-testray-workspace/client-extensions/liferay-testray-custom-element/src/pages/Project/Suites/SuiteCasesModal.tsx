@@ -38,9 +38,9 @@ type SelectCaseParametersProps = {
 	state: State;
 };
 
-const SelectCaseParameters: React.FC<SelectCaseParametersProps> = ({
-	setState,
-}) => {
+const SelectCaseParameters: React.FC<
+	{children?: React.ReactNode | undefined} & SelectCaseParametersProps
+> = ({setState}) => {
 	const {data: casetypes} = useFetch<APIResponse<TestrayCaseType>>(
 		'/casetypes',
 		{params: {fields: 'id,name'}}
@@ -170,10 +170,9 @@ export const initialState = {
 	testrayTeams: [],
 };
 
-const SuiteCasesModal: React.FC<SuiteCasesModalProps> = ({
-	modal: {observer, onClose, onSave, visible},
-	type,
-}) => {
+const SuiteCasesModal: React.FC<
+	{children?: React.ReactNode | undefined} & SuiteCasesModalProps
+> = ({modal: {observer, onClose, onSave, visible}, type}) => {
 	const [state, setState] = useState<State>(initialState);
 
 	return (

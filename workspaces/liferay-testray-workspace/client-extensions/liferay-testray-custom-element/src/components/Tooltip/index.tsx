@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {ReactNode, forwardRef} from 'react';
+import React, {forwardRef} from 'react';
 
 export type ALIGN_POSITIONS =
 	| 'bottom-left'
@@ -16,7 +16,7 @@ export type ALIGN_POSITIONS =
 	| 'top';
 
 type TooltipProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	className?: string;
 	position?: ALIGN_POSITIONS;
 	ref?: React.ForwardedRef<HTMLDivElement>;

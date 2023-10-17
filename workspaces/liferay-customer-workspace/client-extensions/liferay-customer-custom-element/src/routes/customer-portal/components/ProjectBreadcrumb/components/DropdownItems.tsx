@@ -23,10 +23,9 @@ const getHref = (accountKey: string) => {
 	return `${Liferay.ThemeDisplay.getLayoutURL()}/${hashLocation}`;
 };
 
-const DropdownItems: React.FC<DropdownItemsProps> = ({
-	koroneikiAccounts,
-	selectedKoroneikiAccount,
-}) => {
+const DropdownItems: React.FC<
+	{children?: React.ReactNode | undefined} & DropdownItemsProps
+> = ({koroneikiAccounts, selectedKoroneikiAccount}) => {
 	return (
 		<>
 			{koroneikiAccounts?.map((koroneikiAccount, index) => {

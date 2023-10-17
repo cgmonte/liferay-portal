@@ -39,7 +39,9 @@ const dropDownItems: Dropdown = [
 	},
 ];
 
-const BuildAddButton: React.FC<BuildAddButtonProps> = ({routineId}) => {
+const BuildAddButton: React.FC<
+	{children?: React.ReactNode | undefined} & BuildAddButtonProps
+> = ({routineId}) => {
 	const navigate = useNavigate();
 
 	const [active, setActive] = useState(false);

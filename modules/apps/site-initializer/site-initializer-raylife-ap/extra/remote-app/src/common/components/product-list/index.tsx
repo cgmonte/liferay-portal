@@ -21,7 +21,9 @@ export type ProductCell = {
 	totalSales: number;
 };
 
-const ProductList: React.FC<ProductListProps> = ({onSelect, productList}) => {
+const ProductList: React.FC<
+	{children?: React.ReactNode | undefined} & ProductListProps
+> = ({onSelect, productList}) => {
 	const currencyConversion = (value: number) =>
 		value.toLocaleString('en-US', {
 			currency: 'USD',

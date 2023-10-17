@@ -16,7 +16,9 @@ type SearchProps = {
 	setSearchTerm: Dispatch<string>;
 };
 
-const Search: React.FC<SearchProps> = ({setSearchTerm}) => {
+const Search: React.FC<
+	{children?: React.ReactNode | undefined} & SearchProps
+> = ({setSearchTerm}) => {
 	const [value, setValue] = useState('');
 	const debouncedValue = useDebounce(value, DELAY_TYPING_TIME);
 

@@ -10,9 +10,9 @@ type ConfirmationMessageModalProps = {
 	onClose: (state: boolean) => void;
 };
 
-const ConfirmationMessageModal: React.FC<ConfirmationMessageModalProps> = ({
-	onClose,
-}) => (
+const ConfirmationMessageModal: React.FC<
+	{children?: React.ReactNode | undefined} & ConfirmationMessageModalProps
+> = ({onClose}) => (
 	<div className="d-flex flex-column p-4">
 		<div className="mb-4">
 			<p className="h2 mb-1">{i18n.translate('set-up-liferay-saas')}</p>

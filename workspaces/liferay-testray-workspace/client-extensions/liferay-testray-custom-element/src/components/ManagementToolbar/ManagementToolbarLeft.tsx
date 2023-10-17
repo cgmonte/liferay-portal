@@ -7,9 +7,9 @@ type ManagementToolbarLeftProps = {
 	title?: string;
 };
 
-const ManagementToolbarLeft: React.FC<ManagementToolbarLeftProps> = ({
-	title,
-}) => {
+const ManagementToolbarLeft: React.FC<
+	{children?: React.ReactNode | undefined} & ManagementToolbarLeftProps
+> = ({title}) => {
 	if (title) {
 		return <h5 className="ml-2">{title}</h5>;
 	}

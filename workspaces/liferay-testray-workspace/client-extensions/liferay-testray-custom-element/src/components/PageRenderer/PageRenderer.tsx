@@ -15,11 +15,9 @@ export type PageRendererProps = {
 	loading: boolean;
 };
 
-const PageRenderer: React.FC<PageRendererProps> = ({
-	children,
-	error,
-	loading,
-}) => {
+const PageRenderer: React.FC<
+	{children?: React.ReactNode | undefined} & PageRendererProps
+> = ({children, error, loading}) => {
 	if (loading) {
 		return <Loading />;
 	}

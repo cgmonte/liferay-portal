@@ -12,7 +12,9 @@ import {Props, TableListHeaders} from '../table-list';
 
 const {Body, Cell, Head, Row} = ClayTable;
 
-const TableListMobileComponent: React.FC<Props> = ({headers, rows}) => {
+const TableListMobileComponent: React.FC<
+	{children?: React.ReactNode | undefined} & Props
+> = ({headers, rows}) => {
 	const [isPanelExpanded, setIsPanelExpanded] = useState<boolean[]>([]);
 	const [isRowSelected, setIsRowSelected] = useState<boolean>(false);
 

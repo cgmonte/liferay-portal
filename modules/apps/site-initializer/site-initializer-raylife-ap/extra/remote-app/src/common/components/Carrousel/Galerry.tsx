@@ -17,7 +17,9 @@ interface DamageSummaryProps {
 	};
 }
 
-const Galerry: React.FC<DamageSummaryProps> = ({images, size}) => {
+const Galerry: React.FC<
+	{children?: React.ReactNode | undefined} & DamageSummaryProps
+> = ({images, size}) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [activeImage, setActiveImage] = useState(0);
 

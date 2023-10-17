@@ -25,7 +25,9 @@ type BuildOverviewProps = {
 	testrayTask?: TestrayTask;
 };
 
-const BuildOverview: React.FC<BuildOverviewProps> = ({testrayBuild}) => {
+const BuildOverview: React.FC<
+	{children?: React.ReactNode | undefined} & BuildOverviewProps
+> = ({testrayBuild}) => {
 	const totalTestCasesGroup = useTotalTestCases(testrayBuild);
 	const {chart, entity, loading} = useCaseResultsChart({
 		buildId: testrayBuild.id,

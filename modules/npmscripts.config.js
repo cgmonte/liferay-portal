@@ -539,6 +539,7 @@ module.exports = {
 	fix: CHECK_AND_FIX_GLOBS,
 	rules: {
 		'allowed-named-scope-exceptions': [
+
 			// A list of placeholder packages registered by Liferay. Anything
 			// outside this list should be under the `@liferay/` named scope.
 
