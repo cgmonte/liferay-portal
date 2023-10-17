@@ -144,8 +144,7 @@ const reducer = (state: InitialState, action: AppActions) => {
 				selectedRows = state.checkAll
 					? selectedRows.filter((row) => !rowIds.includes(row))
 					: getUniqueList([...rowIds, ...selectedRows]);
-			}
-			else {
+			} else {
 				const rowAlreadyInserted = state.selectedRows.includes(
 					rowIds as number
 				);
@@ -238,8 +237,7 @@ const reducer = (state: InitialState, action: AppActions) => {
 					JSON.stringify(action.payload),
 					CONSENT_TYPE.NECESSARY
 				);
-			}
-			else {
+			} else {
 				testrayStorage.removeItem(storageName);
 				testrayStorage.removeItem(schemaName);
 			}
@@ -304,7 +302,10 @@ export type ListViewContextProviderProps = Partial<InitialState>;
 type Option = {label: string; value: string};
 
 const ListViewContextProvider: React.FC<
-	ListViewContextProviderProps & {children: ReactNode; id: string}
+	{children?: React.ReactNode | undefined} & ListViewContextProviderProps & {
+			children: React.ReactNode;
+			id: string;
+		}
 > = ({children, id, ...initialStateProps}) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
@@ -335,8 +336,7 @@ const ListViewContextProvider: React.FC<
 							(options: Option) => options.value || options
 						),
 					};
-				}
-				else {
+				} else {
 					return {
 						name: key,
 						value: filterPinnedStorage?.filter[key],

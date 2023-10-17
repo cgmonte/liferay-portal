@@ -20,7 +20,9 @@ type ProductVersionProps = {
 	projectId: number;
 };
 
-const ProductVersionFormModal: React.FC<ProductVersionProps> = ({
+const ProductVersionFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & ProductVersionProps
+> = ({
 	modal: {modalState, observer, onClose, onError, onSave, onSubmit},
 	projectId,
 }) => {

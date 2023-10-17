@@ -14,12 +14,9 @@ type AnalyticsCloudStatusModalProps = {
 	updateCardStatus: () => void;
 };
 
-const AnalyticsCloudStatusModal: React.FC<AnalyticsCloudStatusModalProps> = ({
-	groupIdValue,
-	observer,
-	onClose,
-	updateCardStatus,
-}) => (
+const AnalyticsCloudStatusModal: React.FC<
+	{children?: React.ReactNode | undefined} & AnalyticsCloudStatusModalProps
+> = ({groupIdValue, observer, onClose, updateCardStatus}) => (
 	<ClayModal center observer={observer}>
 		<div className="bg-neutral-1 cp-analytics-cloud-status-modal">
 			<div className="d-flex justify-content-between">

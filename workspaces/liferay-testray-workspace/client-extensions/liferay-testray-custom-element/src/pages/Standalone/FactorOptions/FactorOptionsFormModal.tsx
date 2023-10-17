@@ -29,9 +29,9 @@ type FactorOptionsProps = {
 	modal: FormModalOptions;
 };
 
-const FactorOptionsFormModal: React.FC<FactorOptionsProps> = ({
-	modal: {modalState, observer, onClose, onError, onSave, onSubmit},
-}) => {
+const FactorOptionsFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & FactorOptionsProps
+> = ({modal: {modalState, observer, onClose, onError, onSave, onSubmit}}) => {
 	const {
 		formState: {errors, isSubmitting},
 		handleSubmit,

@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import classNames from 'classnames';
-import {ReactNode, useCallback, useContext, useState} from 'react';
+import {useCallback, useContext, useState} from 'react';
 
 import MultiSteps from '../../../../../common/components/multi-steps';
 import ClayIconProvider from '../../../../../common/context/ClayIconProvider';
@@ -26,7 +26,7 @@ import {
 } from '../../../context/NewApplicationAutoContextProvider';
 
 type DriverInfoProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 };
 
 const tooltipTitle =

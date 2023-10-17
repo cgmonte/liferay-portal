@@ -26,7 +26,9 @@ type ComponentProps = {
 	projectId: number;
 };
 
-const ComponentFormModal: React.FC<ComponentProps> = ({
+const ComponentFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & ComponentProps
+> = ({
 	modal: {modalState, observer, onClose, onError, onSave, onSubmit},
 	projectId,
 }) => {

@@ -32,11 +32,15 @@ type SubtaskCardProps = {
 	taskId: number;
 };
 
-const TaskBadge: React.FC<TaskBadgeProps> = ({className, count}) => (
+const TaskBadge: React.FC<
+	{children?: React.ReactNode | undefined} & TaskBadgeProps
+> = ({className, count}) => (
 	<span className={classNames(className)}>{count}</span>
 );
 
-const SubtaskCard: React.FC<SubtaskCardProps> = ({subtask, taskId}) => (
+const SubtaskCard: React.FC<
+	{children?: React.ReactNode | undefined} & SubtaskCardProps
+> = ({subtask, taskId}) => (
 	<Link
 		className="tr-task-sidebar__subtask-item__subtask-card"
 		to={`testflow/${taskId}/subtasks/${subtask?.id}`}
@@ -53,7 +57,9 @@ const SubtaskCard: React.FC<SubtaskCardProps> = ({subtask, taskId}) => (
 	</Link>
 );
 
-const TaskSidebar: React.FC<TaskSidebarProps> = ({expanded}) => {
+const TaskSidebar: React.FC<
+	{children?: React.ReactNode | undefined} & TaskSidebarProps
+> = ({expanded}) => {
 	const {tasks} = useSidebarTask();
 
 	if (!tasks.length) {

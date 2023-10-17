@@ -13,11 +13,9 @@ type OktaSessionModalProps = {
 	onClose: () => void;
 };
 
-const OktaSessionModal: React.FC<OktaSessionModalProps> = ({
-	observer,
-	onClick,
-	onClose,
-}) => (
+const OktaSessionModal: React.FC<
+	{children?: React.ReactNode | undefined} & OktaSessionModalProps
+> = ({observer, onClick, onClose}) => (
 	<ClayModal center className="remove-user-modal" observer={observer}>
 		<ClayModal.Header className="h-100 p-4">
 			<h2 className="mb-0 text-neutral-10">

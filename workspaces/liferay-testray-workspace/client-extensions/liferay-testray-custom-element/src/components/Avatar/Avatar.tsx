@@ -51,7 +51,13 @@ const getRandomColor = (name: string) => {
 	}
 };
 
-const Avatar: React.FC<AvatarProps> & {Group: React.FC<AvatarGroupProps>} = ({
+const Avatar: React.FC<
+	{children?: React.ReactNode | undefined} & AvatarProps
+> & {
+	Group: React.FC<
+		{children?: React.ReactNode | undefined} & AvatarGroupProps
+	>;
+} = ({
 	className,
 	displayName = false,
 	displayTooltip = true,

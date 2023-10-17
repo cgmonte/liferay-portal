@@ -21,11 +21,9 @@ type SuiteSelectCasesModalProps = {
 	type: 'select-cases' | 'select-case-parameters';
 };
 
-const SuiteFormSelectModal: React.FC<SuiteSelectCasesModalProps> = ({
-	modal: {observer, onClose, onSave, visible},
-	selectedCaseIds,
-	type,
-}) => {
+const SuiteFormSelectModal: React.FC<
+	{children?: React.ReactNode | undefined} & SuiteSelectCasesModalProps
+> = ({modal: {observer, onClose, onSave, visible}, selectedCaseIds, type}) => {
 	const {testraySuite}: {testraySuite: TestraySuite} = useOutletContext();
 
 	const caseParameters = getCaseParameters(testraySuite);

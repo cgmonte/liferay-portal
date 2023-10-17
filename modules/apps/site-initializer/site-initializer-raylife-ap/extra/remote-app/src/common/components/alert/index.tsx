@@ -15,7 +15,9 @@ type AlertProps = {
 	setVisible?: boolean;
 	visible?: boolean;
 };
-const Alert: React.FC<AlertProps> = ({claimNumber}) => {
+const Alert: React.FC<
+	{children?: React.ReactNode | undefined} & AlertProps
+> = ({claimNumber}) => {
 	const [visible, setVisible] = useState<Boolean>(true);
 
 	return (

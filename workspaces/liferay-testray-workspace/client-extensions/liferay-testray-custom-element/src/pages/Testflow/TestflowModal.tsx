@@ -21,9 +21,9 @@ type TestflowModalProps = {
 
 const MAX_ENTITIES_TO_SEARCH = 3;
 
-const TestflowModal: React.FC<TestflowModalProps> = ({
-	modal: {observer, onClose, visible},
-}) => {
+const TestflowModal: React.FC<
+	{children?: React.ReactNode | undefined} & TestflowModalProps
+> = ({modal: {observer, onClose, visible}}) => {
 	const navigate = useNavigate();
 	const [breadCrumb, setBreadCrumb] = useState([]);
 

@@ -16,7 +16,7 @@ const META_FIELD_NAMES = {
 };
 
 const Trigger = React.forwardRef(
-	({children, ...otherProps}, ref: LegacyRef<HTMLButtonElement>) => (
+	({children, ...otherProps}: any, ref: LegacyRef<HTMLButtonElement>) => (
 		<button
 			{...otherProps}
 			aria-label={Liferay.Language.get('select-a-filter')}
@@ -92,13 +92,11 @@ export default function TranslationFilter({
 						) {
 							contentWrapper.hidden = true;
 							emptyPlaceholder.hidden = false;
-						}
-						else {
+						} else {
 							contentWrapper.hidden = false;
 							emptyPlaceholder.hidden = true;
 						}
-					}
-					else {
+					} else {
 						emptyPlaceholder.hidden = true;
 						metadataWrapper.hidden = false;
 
@@ -108,8 +106,7 @@ export default function TranslationFilter({
 							] ?? 0) > 1
 						) {
 							contentWrapper.hidden = false;
-						}
-						else {
+						} else {
 							contentWrapper.hidden = true;
 						}
 					}
@@ -128,13 +125,11 @@ export default function TranslationFilter({
 						) {
 							contentWrapper.hidden = false;
 							emptyPlaceholder.hidden = true;
-						}
-						else {
+						} else {
 							contentWrapper.hidden = true;
 							emptyPlaceholder.hidden = false;
 						}
-					}
-					else {
+					} else {
 						emptyPlaceholder.hidden = true;
 						metadataWrapper.hidden = false;
 
@@ -145,8 +140,7 @@ export default function TranslationFilter({
 							(translationProgress?.totalItems ?? 0) - 1
 						) {
 							contentWrapper.hidden = false;
-						}
-						else {
+						} else {
 							contentWrapper.hidden = true;
 						}
 					}

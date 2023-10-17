@@ -53,7 +53,9 @@ enum Order {
 
 const {Body, Cell, Head, Row} = ClayTable;
 
-const Table: React.FC<TableProps> = ({
+const Table: React.FC<
+	{children?: React.ReactNode | undefined} & TableProps
+> = ({
 	data,
 	headers,
 	actions,

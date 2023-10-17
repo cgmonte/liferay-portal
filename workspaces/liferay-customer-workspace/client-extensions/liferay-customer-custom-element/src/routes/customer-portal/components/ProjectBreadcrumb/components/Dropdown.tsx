@@ -31,7 +31,9 @@ type DropdownProps = {
 
 const MAX_ITEM_BEFORE_FILTER = 5;
 
-const Dropdown: React.FC<DropdownProps> = ({
+const Dropdown: React.FC<
+	{children?: React.ReactNode | undefined} & DropdownProps
+> = ({
 	fetching,
 	initialTotalCount,
 	koroneikiAccounts,

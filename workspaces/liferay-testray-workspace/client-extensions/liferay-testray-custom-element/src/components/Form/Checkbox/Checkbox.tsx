@@ -11,7 +11,9 @@ type CheckboxProps = {
 	label?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const Checkbox: React.FC<CheckboxProps> = (props) => {
+const Checkbox: React.FC<
+	{children?: React.ReactNode | undefined} & CheckboxProps
+> = (props) => {
 	const [value, setValue] = useState(false);
 
 	return (

@@ -14,7 +14,9 @@ type ComponentsModalProps = {
 	projectId: number;
 };
 
-const ComponentsModal: React.FC<ComponentsModalProps> = ({projectId}) => {
+const ComponentsModal: React.FC<
+	{children?: React.ReactNode | undefined} & ComponentsModalProps
+> = ({projectId}) => {
 	const {actions, formModal} = useComponentActions();
 
 	return (

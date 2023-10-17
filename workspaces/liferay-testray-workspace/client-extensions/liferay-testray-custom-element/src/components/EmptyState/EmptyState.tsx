@@ -4,7 +4,7 @@
  */
 
 import ClayEmptyState from '@clayui/empty-state';
-import React, {ReactNode} from 'react';
+import React from 'react';
 
 import i18n from '../../i18n';
 import {Liferay} from '../../services/liferay';
@@ -41,20 +41,16 @@ export const States = {
 };
 
 export type EmptyStateProps = {
-	children?: ReactNode;
+	children?: React.ReactNode;
 	description?: string;
 	imgSrc?: string;
 	title?: string;
 	type?: keyof typeof States;
 };
 
-const EmptyState: React.FC<EmptyStateProps> = ({
-	children,
-	description,
-	imgSrc,
-	title,
-	type,
-}) => (
+const EmptyState: React.FC<
+	{children?: React.ReactNode | undefined} & EmptyStateProps
+> = ({children, description, imgSrc, title, type}) => (
 	<ClayEmptyState
 		description={
 			description || i18n.translate('sorry-there-are-no-results-found')

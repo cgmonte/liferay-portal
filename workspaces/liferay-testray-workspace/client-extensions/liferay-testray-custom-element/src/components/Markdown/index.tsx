@@ -6,7 +6,9 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-const MarkdownPreview: React.FC<{markdown: string}> = ({markdown}) => (
+const MarkdownPreview: React.FC<
+	{children?: React.ReactNode | undefined} & {markdown: string}
+> = ({markdown}) => (
 	<ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
 );
 

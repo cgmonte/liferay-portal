@@ -33,7 +33,9 @@ type OutletContext = {
 	testrayRoutine: TestrayRoutine;
 };
 
-const BuildOutlet: React.FC<BuildOutletProps> = ({ignorePaths}) => {
+const BuildOutlet: React.FC<
+	{children?: React.ReactNode | undefined} & BuildOutletProps
+> = ({ignorePaths}) => {
 	const {actions} = useBuildActions({isHeaderActions: true});
 	const {buildId, projectId, routineId, ...otherParams} = useParams();
 	const {pathname} = useLocation();

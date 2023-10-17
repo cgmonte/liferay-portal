@@ -25,11 +25,9 @@ type ContextMenuProps = {
 	setContextMenuState: React.Dispatch<ContextMenuState>;
 };
 
-const ContextMenu: React.FC<ContextMenuProps> = ({
-	contextMenuState,
-	mutate,
-	setContextMenuState,
-}) => {
+const ContextMenu: React.FC<
+	{children?: React.ReactNode | undefined} & ContextMenuProps
+> = ({contextMenuState, mutate, setContextMenuState}) => {
 	const [active, setActive] = useState(true);
 
 	if (!contextMenuState.visible) {

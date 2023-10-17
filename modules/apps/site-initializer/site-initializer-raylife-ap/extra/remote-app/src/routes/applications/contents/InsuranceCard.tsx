@@ -25,10 +25,9 @@ type CategoriesCardsTypes = {
 
 type CategoryType = {[keys: string]: string};
 
-const InsuranceCard: React.FC<InsuranceProps> = ({
-	getSelectedCard,
-	loadedCategories,
-}) => {
+const InsuranceCard: React.FC<
+	{children?: React.ReactNode | undefined} & InsuranceProps
+> = ({getSelectedCard, loadedCategories}) => {
 	const [insuranceCards, setInsuranceCards] = useState<
 		CategoriesCardsTypes[]
 	>([]);

@@ -20,7 +20,9 @@ type TaskbarProgress = {
 
 const NaNToZero = (value: number) => (Number.isNaN(value) ? 0 : value);
 
-const TaskbarProgress: React.FC<TaskbarProgress> = ({
+const TaskbarProgress: React.FC<
+	{children?: React.ReactNode | undefined} & TaskbarProgress
+> = ({
 	displayTotalCompleted,
 	items,
 	legend,

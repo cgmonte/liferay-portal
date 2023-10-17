@@ -14,7 +14,9 @@ type TeamsModalProps = {
 	projectId: number;
 };
 
-const TeamsModal: React.FC<TeamsModalProps> = ({projectId}) => {
+const TeamsModal: React.FC<
+	{children?: React.ReactNode | undefined} & TeamsModalProps
+> = ({projectId}) => {
 	const {actions, formModal} = useTeamActions();
 
 	return (

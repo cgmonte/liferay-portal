@@ -16,7 +16,9 @@ type BreadcrumbFinderProps = {
 	heading: HeaderTitle[];
 };
 
-const BreadcrumbFinder: React.FC<BreadcrumbFinderProps> = ({heading}) => {
+const BreadcrumbFinder: React.FC<
+	{children?: React.ReactNode | undefined} & BreadcrumbFinderProps
+> = ({heading}) => {
 	const {
 		active,
 		breadCrumb,

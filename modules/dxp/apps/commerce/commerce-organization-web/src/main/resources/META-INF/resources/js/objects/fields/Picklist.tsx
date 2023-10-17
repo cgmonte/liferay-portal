@@ -63,7 +63,7 @@ const Picklist = ({
 	}, [listTypeDefinitionId]);
 
 	const onSelection = useCallback(
-		({target}) => {
+		({target}: any) => {
 			const option = options.find(({label}) => target?.value === label);
 
 			if (option) {
@@ -80,8 +80,7 @@ const Picklist = ({
 			if (selectedOption) {
 				setSelectedOption(selectedOption || DEFAULT_OPTION);
 			}
-		}
-		else {
+		} else {
 			fetchSourceItems();
 		}
 	}, [fetchSourceItems, options, key]);

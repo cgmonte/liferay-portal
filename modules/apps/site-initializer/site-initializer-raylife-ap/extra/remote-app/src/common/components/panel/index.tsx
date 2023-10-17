@@ -15,7 +15,9 @@ type Props = {
 	setIsPanelExpanded: () => void;
 };
 
-const PanelComponent: React.FC<Props> = ({
+const PanelComponent: React.FC<
+	{children?: React.ReactNode | undefined} & Props
+> = ({
 	Description,
 	children,
 	hasExpandedButton,

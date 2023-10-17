@@ -20,7 +20,9 @@ type FooterProps = {
 	secondaryButtonProps?: ButtonProps;
 };
 
-const Footer: React.FC<FooterProps> = ({
+const Footer: React.FC<
+	{children?: React.ReactNode | undefined} & FooterProps
+> = ({
 	onClose,
 	onSubmit,
 	primaryButtonProps: {loading, ...primaryButtonProps} = {},

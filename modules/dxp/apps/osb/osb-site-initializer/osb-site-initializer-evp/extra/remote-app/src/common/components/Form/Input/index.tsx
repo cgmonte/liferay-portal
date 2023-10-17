@@ -18,7 +18,9 @@ type InputTypes = {
 	type?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Input: React.FC<InputTypes> = ({
+const Input: React.FC<
+	{children?: React.ReactNode | undefined} & InputTypes
+> = ({
 	errors = {},
 	label,
 	name,

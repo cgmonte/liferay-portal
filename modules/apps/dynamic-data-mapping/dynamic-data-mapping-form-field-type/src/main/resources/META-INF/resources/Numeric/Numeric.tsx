@@ -156,7 +156,7 @@ const getFormattedValue = ({
 	};
 };
 
-const Numeric: React.FC<IProps> = ({
+const Numeric: React.FC<{children?: React.ReactNode | undefined} & IProps> = ({
 	append,
 	appendType,
 	dataType = 'integer',

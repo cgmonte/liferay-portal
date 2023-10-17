@@ -12,9 +12,9 @@ type AssignModalProps = {
 	modal: FormModalOptions;
 };
 
-const CaseResultAssignModal: React.FC<AssignModalProps> = ({
-	modal: {observer, onSave, visible},
-}) => (
+const CaseResultAssignModal: React.FC<
+	{children?: React.ReactNode | undefined} & AssignModalProps
+> = ({modal: {observer, onSave, visible}}) => (
 	<Modal
 		observer={observer}
 		size="lg"

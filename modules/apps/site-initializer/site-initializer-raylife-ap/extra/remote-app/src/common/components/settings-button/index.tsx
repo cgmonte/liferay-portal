@@ -22,10 +22,9 @@ export type ActionObject = {
 	value: string;
 };
 
-const SettingsButton: React.FC<SettingsButtonProps> = ({
-	actions,
-	identifier,
-}) => {
+const SettingsButton: React.FC<
+	{children?: React.ReactNode | undefined} & SettingsButtonProps
+> = ({actions, identifier}) => {
 	const [active, setActive] = useState<boolean>(false);
 
 	const handleDisabled = (action: ActionObject, index: number) => {

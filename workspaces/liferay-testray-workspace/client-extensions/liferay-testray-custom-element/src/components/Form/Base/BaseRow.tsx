@@ -4,13 +4,14 @@
  */
 
 import ClayLayout from '@clayui/layout';
-import {ReactNode} from 'react';
 
-const BaseRow: React.FC<{
-	children: ReactNode;
-	separator?: boolean;
-	title: string;
-}> = ({children, separator = true, title}) => (
+const BaseRow: React.FC<
+	{children?: React.ReactNode | undefined} & {
+		children: React.ReactNode;
+		separator?: boolean;
+		title: string;
+	}
+> = ({children, separator = true, title}) => (
 	<>
 		<ClayLayout.Row justify="start">
 			<ClayLayout.Col size={3} sm={12} xl={2}>

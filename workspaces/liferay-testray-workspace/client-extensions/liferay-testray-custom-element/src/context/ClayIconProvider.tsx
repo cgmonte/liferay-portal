@@ -5,7 +5,6 @@
 
 import IconSVG from '@clayui/css/lib/images/icons/icons.svg';
 import {ClayIconSpriteContext} from '@clayui/icon';
-import {ReactNode} from 'react';
 
 import {Liferay} from '../services/liferay';
 
@@ -19,7 +18,9 @@ const getIconSpriteMap = () => {
 	return spritemap;
 };
 
-const ClayIconProvider: React.FC<{children: ReactNode}> = ({children}) => (
+const ClayIconProvider: React.FC<
+	{children?: React.ReactNode | undefined} & {children: React.ReactNode}
+> = ({children}) => (
 	<ClayIconSpriteContext.Provider value={getIconSpriteMap()}>
 		{children}
 	</ClayIconSpriteContext.Provider>

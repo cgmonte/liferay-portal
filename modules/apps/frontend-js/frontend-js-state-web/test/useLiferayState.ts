@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {act, renderHook} from '@testing-library/react-hooks';
+import {act, renderHook} from '@testing-library/react';
 
 import State from '../src/main/resources/META-INF/resources/State';
 import useLiferayState from '../src/main/resources/META-INF/resources/hooks/useLiferayState';

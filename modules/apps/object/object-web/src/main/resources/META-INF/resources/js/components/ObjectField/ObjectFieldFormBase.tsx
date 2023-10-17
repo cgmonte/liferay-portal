@@ -337,8 +337,7 @@ export default function ObjectFieldFormBase({
 						state: toggled,
 					});
 				}
-			}
-			else if (!defaultValueType || !defaultValue) {
+			} else if (!defaultValueType || !defaultValue) {
 				setValues({
 					objectFieldSettings: getUpdatedDefaultValueType(
 						values,
@@ -360,8 +359,7 @@ export default function ObjectFieldFormBase({
 					});
 				}
 			}
-		}
-		else {
+		} else {
 			setValues({
 				required: toggled,
 				state: toggled,

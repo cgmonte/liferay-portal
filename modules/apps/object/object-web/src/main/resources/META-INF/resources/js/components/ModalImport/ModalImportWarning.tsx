@@ -75,7 +75,11 @@ export function ModalImportWarning({
 									striped={false}
 								>
 									<Head items={tableHeaderItems}>
-										{(column) => (
+										{
+
+										// @ts-ignore
+
+										(column) => (
 											<Cell expanded key={column.id}>
 												{column.name}
 											</Cell>
@@ -85,7 +89,11 @@ export function ModalImportWarning({
 									<Body
 										defaultItems={existingObjectDefinitions}
 									>
-										{(objectDefinition) => (
+										{
+
+										// @ts-ignore
+
+										(objectDefinition) => (
 											<Row>
 												<Cell>
 													{stringUtils.getLocalizableLabel(

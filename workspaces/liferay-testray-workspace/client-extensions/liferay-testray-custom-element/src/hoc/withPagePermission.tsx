@@ -22,7 +22,9 @@ type CheckPermissionProps = {
 	properties: PageProperties;
 };
 
-const CheckPermission: React.FC<CheckPermissionProps> = ({
+const CheckPermission: React.FC<
+	{children?: React.ReactNode | undefined} & CheckPermissionProps
+> = ({
 	children,
 	properties: {
 		createPath = '',

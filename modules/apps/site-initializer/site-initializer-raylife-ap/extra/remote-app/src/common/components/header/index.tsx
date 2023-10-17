@@ -13,7 +13,9 @@ type HeaderProps = {
 	title: string;
 };
 
-const Header: React.FC<HeaderProps> = ({children, className = '', title}) => {
+const Header: React.FC<
+	{children?: React.ReactNode | undefined} & HeaderProps
+> = ({children, className = '', title}) => {
 	return (
 		<ClayIconProvider>
 			<div

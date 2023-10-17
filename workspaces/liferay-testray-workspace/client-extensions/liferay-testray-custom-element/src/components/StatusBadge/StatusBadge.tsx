@@ -4,7 +4,6 @@
  */
 
 import classNames from 'classnames';
-import {ReactNode} from 'react';
 
 const statusBarClassNames = {
 	blocked: 'blocked',
@@ -26,11 +25,13 @@ const statusBarClassNames = {
 export type StatusBadgeType = keyof typeof statusBarClassNames;
 
 export type StatusBadgeProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	type: StatusBadgeType;
 };
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({children, type}) => (
+const StatusBadge: React.FC<
+	{children?: React.ReactNode | undefined} & StatusBadgeProps
+> = ({children, type}) => (
 	<span
 		className={classNames(
 			'label label-chart text-uppercase text-nowrap',
