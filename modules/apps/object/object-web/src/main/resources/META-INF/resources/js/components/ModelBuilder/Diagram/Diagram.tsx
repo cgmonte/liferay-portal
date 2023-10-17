@@ -4,7 +4,7 @@
  */
 
 import {API} from '@liferay/object-js-components-web';
-import React, {useCallback, useState} from 'react';
+import React, {LegacyRef, useCallback, useState} from 'react';
 import ReactFlow, {
 	Background,
 	Connection,
@@ -18,16 +18,16 @@ import ReactFlow, {
 	useStore,
 } from 'react-flow-renderer';
 
+import {EmptyNode} from '../ObjectDefinitionNode/EmptyNode';
+import {ObjectDefinitionNode} from '../ObjectDefinitionNode/ObjectDefinitionNode';
+
+import './Diagram.scss';
 import {ModalAddObjectRelationship} from '../../ObjectRelationship/ModalAddObjectRelationship';
 import {getUpdatedModelBuilderStructurePayload} from '../../ViewObjectDefinitions/objectDefinitionUtil';
 import DefaultObjectRelationshipEdge from '../Edges/DefaultObjectRelationshipEdge';
 import SelfObjectRelationshipEdge from '../Edges/SelfObjectRelationshipEdge';
 import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
 import {TYPES} from '../ModelBuilderContext/typesEnum';
-import {EmptyNode} from '../ObjectDefinitionNode/EmptyNode';
-import {ObjectDefinitionNode} from '../ObjectDefinitionNode/ObjectDefinitionNode';
-
-import './Diagram.scss';
 
 const NODE_TYPES = {
 	emptyNode: EmptyNode,
@@ -40,8 +40,10 @@ const EDGE_TYPES = {
 };
 
 function DiagramBuilder({
+	containerRef,
 	setShowModal,
 }: {
+	containerRef: LegacyRef<HTMLDivElement>;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }) {
 	const [
@@ -197,7 +199,7 @@ function DiagramBuilder({
 	};
 
 	return (
-		<div className="lfr-objects__model-builder-diagram-area">
+		<div className="lfr-objects__model-builder-diagram-area" ref={containerRef}>
 			{showAddObjectRelationshipModal && (
 				<ModalAddObjectRelationship
 					baseResourceURL={baseResourceURL}

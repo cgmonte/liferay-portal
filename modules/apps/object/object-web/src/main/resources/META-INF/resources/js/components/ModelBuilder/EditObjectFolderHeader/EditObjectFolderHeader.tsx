@@ -17,12 +17,14 @@ import {TYPES} from '../ModelBuilderContext/typesEnum';
 import './EditObjectFolderHeader.scss';
 
 interface EditObjectFolderHeaderProps {
+	downloadAsPDF: () => void;
 	hasDraftObjectDefinitions: boolean;
 	selectedObjectFolder: ObjectFolder;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }
 
 export default function EditObjectFolderHeader({
+	downloadAsPDF,
 	hasDraftObjectDefinitions,
 	selectedObjectFolder,
 	setShowModal,
@@ -144,6 +146,15 @@ export default function EditObjectFolderHeader({
 						symbol={showSidebars ? 'view' : 'hidden'}
 						title={Liferay.Language.get('toggle-sidebars')}
 					/>
+
+					<ClayButton
+						aria-labelledby={Liferay.Language.get('export-as-pdf')}
+						// disabled={!hasDraftObjectDefinitions}
+						displayType="secondary"
+						onClick={downloadAsPDF}
+					>
+						{Liferay.Language.get('export-as-pdf')}
+					</ClayButton>
 
 					<ClayButton
 						aria-labelledby={Liferay.Language.get('publish')}
