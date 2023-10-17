@@ -60,7 +60,9 @@ const alertProperties: AlertProperties = {
 	},
 };
 
-const BuildAlertBar: React.FC<BuildAlertBarProps> = ({testrayTask}) => {
+const BuildAlertBar: React.FC<
+	{children?: React.ReactNode | undefined} & BuildAlertBarProps
+> = ({testrayTask}) => {
 	const navigate = useNavigate();
 
 	const taskPermission = useObjectPermission('/tasks');

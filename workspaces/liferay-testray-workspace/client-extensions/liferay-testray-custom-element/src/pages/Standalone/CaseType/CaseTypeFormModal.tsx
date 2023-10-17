@@ -22,9 +22,9 @@ type CaseTypeProps = {
 	modal: FormModalOptions;
 };
 
-const CaseTypeFormModal: React.FC<CaseTypeProps> = ({
-	modal: {modalState, observer, onClose, onError, onSave, onSubmit},
-}) => {
+const CaseTypeFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & CaseTypeProps
+> = ({modal: {modalState, observer, onClose, onError, onSave, onSubmit}}) => {
 	const {
 		formState: {errors, isSubmitting},
 		handleSubmit,

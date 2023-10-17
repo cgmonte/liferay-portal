@@ -42,11 +42,9 @@ export type SelectComponentsProps = {
 	teamId: number;
 };
 
-const SelectComponents: React.FC<SelectComponentsProps> = ({
-	projectId,
-	setState,
-	teamId,
-}) => {
+const SelectComponents: React.FC<
+	{children?: React.ReactNode | undefined} & SelectComponentsProps
+> = ({projectId, setState, teamId}) => {
 	const {data: unassigned, isValidating} = useFetch<
 		APIResponse<TestrayComponent>
 	>('/components', {
@@ -96,7 +94,9 @@ const SelectComponents: React.FC<SelectComponentsProps> = ({
 
 export type State = Boxes<{teamId: number}>;
 
-const TeamFormModal: React.FC<TeamProps> = ({
+const TeamFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & TeamProps
+> = ({
 	modal: {modalState, observer, onClose, onError, onSave, onSubmit},
 	projectId,
 }) => {

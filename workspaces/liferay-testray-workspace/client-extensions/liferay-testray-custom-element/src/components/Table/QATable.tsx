@@ -24,10 +24,9 @@ type QATableProps = {
 	orientation?: keyof typeof Orientation;
 };
 
-const QATable: React.FC<QATableProps> = ({
-	items,
-	orientation = Orientation.HORIZONTAL,
-}) => (
+const QATable: React.FC<
+	{children?: React.ReactNode | undefined} & QATableProps
+> = ({items, orientation = Orientation.HORIZONTAL}) => (
 	<table className="tr-qa-table">
 		<tbody>
 			{items

@@ -7,7 +7,6 @@ import {
 	FrontendDataSet,
 
 	// @ts-ignore
-
 } from '@liferay/frontend-data-set-web';
 import React from 'react';
 

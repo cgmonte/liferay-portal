@@ -24,7 +24,9 @@ type FloatingBoxProps = {
 	tooltipText: string;
 };
 
-const FloatingBox: React.FC<FloatingBoxProps> = ({
+const FloatingBox: React.FC<
+	{children?: React.ReactNode | undefined} & FloatingBoxProps
+> = ({
 	alerts = [],
 	clearList,
 	isVisible,

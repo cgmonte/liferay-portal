@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {ReactNode, createContext, useEffect, useReducer} from 'react';
+import React, {createContext, useEffect, useReducer} from 'react';
 
 import {getApplicationByExternalReferenceCode} from '../../../common/services';
 import {ActionMap} from '../../../types';
@@ -565,10 +565,12 @@ const reducer = (state: InitialStateTypes, action: ApplicationActions) => {
 export type NewApplicationAutoProviderProps = Partial<InitialStateTypes>;
 
 const NewApplicationAutoContextProvider: React.FC<
-	NewApplicationAutoProviderProps & {
-		children: ReactNode;
-		defaultState?: Partial<InitialStateTypes>;
-	}
+	{
+		children?: React.ReactNode | undefined;
+	} & NewApplicationAutoProviderProps & {
+			children: React.ReactNode;
+			defaultState?: Partial<InitialStateTypes>;
+		}
 > = ({children}) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 

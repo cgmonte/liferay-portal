@@ -5,21 +5,17 @@
 
 import ClayPanel from '@clayui/panel';
 import classNames from 'classnames';
-import {ReactNode} from 'react';
 
 type ContainerProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	className?: string;
 	collapsable?: boolean;
 	title?: string;
 };
 
-const Container: React.FC<ContainerProps> = ({
-	children,
-	className,
-	collapsable = false,
-	title,
-}) => {
+const Container: React.FC<
+	{children?: React.ReactNode | undefined} & ContainerProps
+> = ({children, className, collapsable = false, title}) => {
 	const containerTitle = <div>{title && <h5>{title}</h5>}</div>;
 
 	if (collapsable) {

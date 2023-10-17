@@ -25,7 +25,9 @@ type InputSelectProps = {
 	type?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const InputSelect: React.FC<InputSelectProps> = ({
+const InputSelect: React.FC<
+	{children?: React.ReactNode | undefined} & InputSelectProps
+> = ({
 	className,
 	disabled = false,
 	registerOptions,

@@ -120,15 +120,24 @@ export function ModalImportFailed({
 						striped={false}
 					>
 						<Head items={tableHeaderItems}>
-							{(column) => (
-								<Cell expanded key={column.id}>
-									{column.name}
-								</Cell>
-							)}
+							{
+
+								// @ts-ignore
+
+								(column) => (
+									<Cell expanded key={column.id}>
+										{column.name}
+									</Cell>
+								)
+							}
 						</Head>
 
 						<Body items={importedObjectDefinitionsStatus}>
-							{({errorType, label, success}) => (
+							{
+
+							// @ts-ignore
+
+							({errorType, label, success}) => (
 								<Row>
 									<Cell>
 										<div className="lfr-object__modal-import-failed-table-body">

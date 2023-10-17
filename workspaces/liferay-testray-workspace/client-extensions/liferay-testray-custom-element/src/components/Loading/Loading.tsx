@@ -5,18 +5,19 @@
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import classNames from 'classnames';
-import {ReactNode} from 'react';
 
 type LoadingProps = {
 	className?: string;
 };
 
 type LoadingWrapperProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	isLoading: boolean;
 } & LoadingProps;
 
-const Loading: React.FC<LoadingProps> = ({className}) => (
+const Loading: React.FC<
+	{children?: React.ReactNode | undefined} & LoadingProps
+> = ({className}) => (
 	<div
 		className={classNames(
 			'align-items-center',
@@ -29,10 +30,9 @@ const Loading: React.FC<LoadingProps> = ({className}) => (
 	</div>
 );
 
-const LoadingWrapper: React.FC<LoadingWrapperProps> = ({
-	children,
-	isLoading,
-}) => {
+const LoadingWrapper: React.FC<
+	{children?: React.ReactNode | undefined} & LoadingWrapperProps
+> = ({children, isLoading}) => {
 	if (isLoading) {
 		return <Loading />;
 	}

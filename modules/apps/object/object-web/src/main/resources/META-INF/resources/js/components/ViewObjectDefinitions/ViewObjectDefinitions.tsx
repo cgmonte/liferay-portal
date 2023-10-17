@@ -356,8 +356,7 @@ export default function ViewObjectDefinitions({
 
 			if (newSelectedObjectFolder) {
 				setSelectedObjectFolder(newSelectedObjectFolder);
-			}
-			else {
+			} else {
 				setDefaultToSearchParams(allObjectFolders, currentURL);
 			}
 

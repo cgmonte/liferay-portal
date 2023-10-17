@@ -31,8 +31,8 @@
 		"history": "4.9.0",
 		"moment": "2.29.4",
 		"prop-types": "15.7.2",
-		"react": "16.12.0",
-		"react-dom": "16.12.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
 		"react-helmet": "^6.1.0",
 		"react-router-dom": "^5.0.1"
 	},
@@ -48,7 +48,7 @@
 		"build": "node-scripts build",
 		"checkFormat": "node-scripts format --check",
 		"format": "node-scripts format",
-		"test": "node-scripts test"
+		"test": "USE_REACT_16=true node-scripts test"
 	},
 	"version": "2.0.119"
 }

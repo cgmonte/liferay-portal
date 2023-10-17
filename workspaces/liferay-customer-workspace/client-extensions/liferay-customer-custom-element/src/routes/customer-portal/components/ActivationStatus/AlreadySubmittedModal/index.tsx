@@ -16,10 +16,9 @@ type AlreadySubmittedFormModalProps = {
 	};
 };
 
-const AlreadySubmittedFormModal: React.FC<AlreadySubmittedFormModalProps> = ({
-	onClose,
-	submittedModalTexts,
-}) => (
+const AlreadySubmittedFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & AlreadySubmittedFormModalProps
+> = ({onClose, submittedModalTexts}) => (
 	<div className="pt-4 px-4">
 		<div className="flex-row mb-2">
 			<header className="mb-5">

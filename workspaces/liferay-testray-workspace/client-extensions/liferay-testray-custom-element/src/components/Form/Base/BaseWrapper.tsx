@@ -5,13 +5,12 @@
 
 import ClayForm from '@clayui/form';
 import classNames from 'classnames';
-import {ReactNode} from 'react';
 
 import i18n from '../../../i18n';
 import InputWarning from '../../Form/Base/BaseWarning';
 
 type BaseWrapperProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	description?: string;
 	disabled?: boolean;
 	error?: string;
@@ -20,15 +19,9 @@ type BaseWrapperProps = {
 	required?: boolean;
 };
 
-const BaseWrapper: React.FC<BaseWrapperProps> = ({
-	children,
-	description,
-	disabled,
-	error,
-	id,
-	label,
-	required,
-}) => {
+const BaseWrapper: React.FC<
+	{children?: React.ReactNode | undefined} & BaseWrapperProps
+> = ({children, description, disabled, error, id, label, required}) => {
 	return (
 		<ClayForm.Group
 			className={classNames({

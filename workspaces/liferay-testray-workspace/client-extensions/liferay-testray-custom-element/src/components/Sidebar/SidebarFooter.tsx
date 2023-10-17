@@ -22,7 +22,9 @@ type SidebarProps = {
 	onClick: () => void;
 };
 
-const SidebarFooter: React.FC<SidebarProps> = ({expanded, onClick}) => {
+const SidebarFooter: React.FC<
+	{children?: React.ReactNode | undefined} & SidebarProps
+> = ({expanded, onClick}) => {
 	const [{myUserAccount}] = useContext(TestrayContext);
 	const MANAGE_DROPDOWN = useSidebarActions();
 

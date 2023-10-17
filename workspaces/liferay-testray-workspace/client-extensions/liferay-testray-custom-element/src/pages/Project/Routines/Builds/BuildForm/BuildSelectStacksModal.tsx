@@ -34,7 +34,9 @@ type BuildSelectStacksModalForm = {
 };
 
 const BuildSelectStacksModal: React.FC<
-	FormModalComponent & {factorItems: TestrayFactor[]}
+	{children?: React.ReactNode | undefined} & FormModalComponent & {
+			factorItems: TestrayFactor[];
+		}
 > = ({factorItems, modal: {observer, onClose, onSave}}) => {
 	const [step, setStep] = useState(0);
 

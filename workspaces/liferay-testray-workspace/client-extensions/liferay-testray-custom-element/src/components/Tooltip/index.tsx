@@ -16,7 +16,7 @@ export type ALIGN_POSITIONS =
 	| 'top';
 
 type TooltipProps = {
-	children: ReactNode;
+	children: React.ReactNode;
 	className?: string;
 	position?: ALIGN_POSITIONS;
 	ref?: React.ForwardedRef<HTMLDivElement>;

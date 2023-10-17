@@ -15,9 +15,9 @@ import {testrayFactorCategoryRest} from '../../../services/rest';
 
 type FactorCategoryForm = typeof yupSchema.factorCategory.__outputType;
 
-const FactorCategoryFormModal: React.FC<FormModalComponent> = ({
-	modal: {modalState, observer, onClose, onError, onSave, onSubmit},
-}) => {
+const FactorCategoryFormModal: React.FC<
+	{children?: React.ReactNode | undefined} & FormModalComponent
+> = ({modal: {modalState, observer, onClose, onError, onSave, onSubmit}}) => {
 	const {
 		formState: {errors, isSubmitting},
 		handleSubmit,

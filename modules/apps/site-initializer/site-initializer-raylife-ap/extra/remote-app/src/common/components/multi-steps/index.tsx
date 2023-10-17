@@ -17,7 +17,9 @@ type StepTypes = {
 	title: string;
 };
 
-const MultiSteps: React.FC<MultiStepsProps> = ({classes, steps}) => {
+const MultiSteps: React.FC<
+	{children?: React.ReactNode | undefined} & MultiStepsProps
+> = ({classes, steps}) => {
 	return (
 		<ClayMultiStepNav className={`container mx-10 ${classes}`}>
 			{steps?.map((step: StepTypes, index: number) => {
