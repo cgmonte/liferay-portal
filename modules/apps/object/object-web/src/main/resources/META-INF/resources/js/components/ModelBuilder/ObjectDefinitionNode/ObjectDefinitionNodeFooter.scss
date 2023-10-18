@@ -1,3 +1,5 @@
+@import 'functions/_global-functions';
+
 .lfr-objects__model-builder-node {
 	&-button-container {
 		align-items: center;
@@ -51,4 +53,34 @@
 			}
 		}
 	}
+}
+
+
+.clay-icon-link-container {
+	display: inline-block;
+	padding-top: 0.25rem;
+}
+
+.clay-icon-link {
+	background-image: clay-icon(link, #6b6c7e);
+	background-size: contain;
+	display: inline-block;
+	height: 12px;
+	width: 12px;
+}
+
+.clay-angle-down-small {
+	background-image: clay-icon(angle-down-small, #6b6c7e);
+	background-size: contain;
+	display: inline-block;
+	height: 12px;
+	width: 12px;
+}
+
+.clay-angle-up-small {
+	background-image: clay-icon(angle-up-small, #6b6c7e);
+	background-size: contain;
+	display: inline-block;
+	height: 12px;
+	width: 12px;
 }

@@ -6,6 +6,7 @@
 import ClayButton from '@clayui/button';
 import DropDown from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
 import {sub} from 'frontend-js-web';
 import React, {SetStateAction} from 'react';
 
@@ -130,14 +131,23 @@ export default function ObjectDefinitionNodeFooter({
 								Liferay.Language.get('fields')
 						  )}
 
-					<ClayIcon
+					{/* <ClayIcon
 						className="c-pt-1 text-4"
 						symbol={
 							showAllObjectFields
 								? 'angle-up-small'
 								: 'angle-down-small'
 						}
-					/>
+					/> */}
+
+					<div className="c-pt-1 clay-icon-link-container text-4">
+						<div
+							className={classNames({
+								'clay-angle-down-small': !showAllObjectFields,
+								'clay-angle-up-small': showAllObjectFields,
+							})}
+						></div>
+					</div>
 				</ClayButton>
 			</div>
 		</>

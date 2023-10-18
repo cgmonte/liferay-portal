@@ -104,8 +104,8 @@ export default function EditObjectFolder({
 
 	const filter = (node: HTMLElement) => {
 		const exclusionClasses = [
-			'dropdown lfr__object-web-view-object-definitions-actions',
-			'lexicon-icon',
+			// 'dropdown lfr__object-web-view-object-definitions-actions',
+			// 'lexicon-icon',
 			'react-flow__background',
 			'react-flow__controls',
 			'react-flow__minimap',
@@ -140,8 +140,6 @@ export default function EditObjectFolder({
 			.catch((error) => {
 				console.log(error);
 			});
-
-		// };
 	}, [containerRef]);
 
 	return (
