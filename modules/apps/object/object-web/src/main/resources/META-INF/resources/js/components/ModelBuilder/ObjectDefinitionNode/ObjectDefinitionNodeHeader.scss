@@ -1,3 +1,5 @@
+@import 'functions/_global-functions';
+
 hr {
 	margin: 6px;
 }
@@ -26,4 +28,37 @@ hr {
 		white-space: nowrap;
 		width: 10rem;
 	}
+}
+
+.clay-icon-ellipsis-v-button {
+    align-items: center;
+	background-color: #fff;
+    color: #6b6c7e;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+	margin-top: 0.5px;
+    padding: 0;
+    width: 24px;
+}
+
+.clay-icon-ellipsis-v-container {
+	background-image: clay-icon(ellipsis-v, #6b6c7e);
+	background-size: contain;
+	display: inline-block;
+	height: 12px;
+	width: 12px;
+}
+
+.clay-icon-link-container {
+	display: inline-block;
+	padding-top: 0.25rem;
+}
+
+.clay-icon-link {
+	background-image: clay-icon(link, #6b6c7e);
+	background-size: contain;
+	display: inline-block;
+	height: 12px;
+	width: 12px;
 }

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayButtonWithIcon} from '@clayui/button';
+import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import {ClayDropDownWithItems} from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
@@ -46,7 +46,11 @@ export default function ObjectDefinitionNodeHeader({
 				<div className="lfr-objects__model-builder-node-header-label-container">
 					<div className="lfr-objects__model-builder-node-header-label-title">
 						{isLinkedObjectDefinition && (
-							<ClayIcon className="c-pt-1 text-4" symbol="link" />
+							// <ClayIcon className="c-pt-1 text-4" symbol="link" />
+
+							<div className="clay-icon-link-container">
+								<div className="clay-icon-link"></div>
+							</div>
 						)}
 
 						<span>{objectDefinitionLabel}</span>
@@ -56,17 +60,31 @@ export default function ObjectDefinitionNodeHeader({
 						className="lfr__object-web-view-object-definitions-actions"
 						items={dropDownItems}
 						trigger={
-							<ClayButtonWithIcon
+							// <ClayButtonWithIcon
+							// 	aria-label={Liferay.Language.get(
+							// 		'show-actions'
+							// 	)}
+							// 	displayType="secondary"
+							// 	onClick={(event) => {
+							// 		event?.stopPropagation();
+							// 	}}
+							// 	size="xs"
+							// 	symbol="ellipsis-v"
+							// />
+
+							<ClayButton
 								aria-label={Liferay.Language.get(
 									'show-actions'
 								)}
+								className="clay-icon-ellipsis-v-button"
 								displayType="secondary"
-								onClick={(event) => {
+								onClick={(event: any) => {
 									event?.stopPropagation();
 								}}
 								size="xs"
-								symbol="ellipsis-v"
-							/>
+							>
+								<div className="clay-icon-ellipsis-v-container"></div>
+							</ClayButton>
 						}
 					/>
 				</div>
