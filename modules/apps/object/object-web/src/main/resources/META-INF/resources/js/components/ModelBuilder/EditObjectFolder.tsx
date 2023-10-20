@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {toSvg} from 'html-to-image';
+import {toPng, toSvg} from 'html-to-image';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlowElement, useStore} from 'react-flow-renderer';
+import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
 
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
 import {ModalAddObjectDefinition} from '../ViewObjectDefinitions/ModalAddObjectDefinition';
@@ -24,6 +24,15 @@ interface EditObjectFolder {
 	objectRelationshipDeletionTypes: LabelValueObject[];
 	siteKeyValuePairs: KeyValuePair[];
 }
+
+type Bounds =
+	| {
+			bottom: number;
+			left: number;
+			right: number;
+			top: number;
+	  }
+	| undefined;
 
 export default function EditObjectFolder({
 	companyKeyValuePairs,
@@ -46,6 +55,8 @@ export default function EditObjectFolder({
 	const {nodes} = store.getState();
 
 	const containerRef = useRef<HTMLDivElement>(null);
+
+	const [bounds, setBounds] = useState<Bounds>();
 
 	const [showModal, setShowModal] = useState<ModelBuilderModals>({
 		addObjectDefinition: false,
@@ -102,45 +113,181 @@ export default function EditObjectFolder({
 	// 	a.click();
 	// }
 
-	const filter = (node: HTMLElement) => {
-		const exclusionClasses = [
-			// 'dropdown lfr__object-web-view-object-definitions-actions',
-			// 'lexicon-icon',
-			'react-flow__background',
-			'react-flow__controls',
-			'react-flow__minimap',
-		];
+	// const filter = (node: HTMLElement) => {
+	// 	const exclusionClasses = [
+	// 		// 'dropdown lfr__object-web-view-object-definitions-actions',
+	// 		// 'lexicon-icon',
+	// 		'react-flow__background',
+	// 		'react-flow__controls',
+	// 		'react-flow__minimap',
+	// 	];
 
-		return !exclusionClasses.some((classname) => {
-			console.log('node.classList', node.classList);
+	// 	return !exclusionClasses.some((classname) => {
+	// 		console.log('node.classList', node.classList);
 
-			return (
-				node.classList?.contains(classname) ||
-				(node.classList?.value && node.classList.value === classname)
-			);
-		});
+	// 		return (
+	// 			node.classList?.contains(classname) ||
+	// 			(node.classList?.value && node.classList.value === classname)
+	// 		);
+	// 	});
+	// };
+
+	const {fitBounds, fitView} = useZoomPanHelper();
+
+	// const bounds: any = {};
+
+	useEffect(() => {
+		const nodes = elements.filter(
+			(element) => element.type === 'objectDefinitionNode'
+		);
+
+		if (nodes.length) {
+			if (!document.querySelector(`[data-id="${nodes[0].id}"]`)) {
+				setTimeout(() => {
+					const localBounds: Partial<Bounds> = {};
+
+					nodes.forEach((node: any) => {
+						console.log('node.id', node.id);
+						const nodeElement = document.querySelector(
+							`[data-id="${node.id}"]`
+						) as HTMLElement;
+
+						console.log('nodeElement', nodeElement);
+
+						console.log('node x', node.position);
+						console.log(
+							'nodeElement width',
+							nodeElement?.offsetWidth
+						);
+						console.log(
+							'nodeElement height',
+							nodeElement?.offsetHeight
+						);
+
+						if (localBounds) {
+							if (!Object.keys(localBounds).length) {
+								localBounds.left = node.position.x;
+								localBounds.top = node.position.y;
+								localBounds.right =
+									node.position.x + nodeElement.offsetWidth;
+								localBounds.bottom =
+									node.position.y + nodeElement.offsetHeight;
+							} else {
+								const {bottom, left, right, top} = localBounds;
+
+								if (bottom && left && right && top) {
+									localBounds.left =
+										node.position.x < left
+											? node.position.x
+											: localBounds.left;
+									localBounds.top =
+										node.position.y < top
+											? node.position.y
+											: localBounds.top;
+									localBounds.right =
+										node.position.x +
+											nodeElement.offsetWidth >
+										right
+											? node.position.x +
+											  nodeElement.offsetWidth
+											: localBounds.right;
+									localBounds.bottom =
+										node.position.y +
+											nodeElement.offsetHeight >
+										bottom
+											? node.position.y +
+											  nodeElement.offsetHeight
+											: localBounds.bottom;
+								}
+							}
+						}
+					});
+
+					// console.log('bounds', bounds);
+
+					setBounds(localBounds as Bounds);
+
+					// fitBounds({ x: bounds.left, y: bounds.top, width: bounds.right, height: bounds.bottom });
+				}, 3000);
+			}
+		}
+
+		// console.log('nodes', nodes);
+	}, [elements]);
+
+	const clamp = (val: number, min = 0, max = 1): number =>
+		Math.min(Math.max(val, min), max);
+
+	const getTransformForBounds = (
+		bounds: any,
+		width: number,
+		height: number,
+		minZoom: number,
+		maxZoom: number,
+		padding = 0.1
+	): any => {
+		const xZoom = width / (bounds.width * (1 + padding));
+		const yZoom = height / (bounds.height * (1 + padding));
+		const zoom = Math.min(xZoom, yZoom);
+		const clampedZoom = clamp(zoom, minZoom, maxZoom);
+		const boundsCenterX = bounds.x + bounds.width / 2;
+		const boundsCenterY = bounds.y + bounds.height / 2;
+		const x = width / 2 - boundsCenterX * clampedZoom;
+		const y = height / 2 - boundsCenterY * clampedZoom;
+
+		return [x, y, clampedZoom];
 	};
 
 	const downloadAsPDF = useCallback(() => {
-		console.log('containerRef', containerRef);
+		if (bounds) {
+			// const containerElement = document.querySelector('.react-flow__nodes')
+			const containerElement = document.querySelector(
+				'.react-flow__renderer'
+			);
 
-		if (containerRef.current === null) {
-			console.log('null', containerRef.current);
+			console.log('containerElement', containerElement);
 
-			return;
-		}
+			if (!containerElement) {
+				// console.log('null', containerElement);
 
-		toSvg(containerRef.current, {filter})
-			.then((dataUrl) => {
-				const link = document.createElement('a');
-				link.download = 'my-image-name.svg';
-				link.href = dataUrl;
-				link.click();
+				return;
+			}
+
+			const transform = getTransformForBounds(
+				{
+					height: bounds.bottom,
+					width: bounds.right,
+					x: bounds.left,
+					y: bounds.top,
+				},
+				bounds.right,
+				bounds.bottom,
+				0.5,
+				2
+			);
+
+			toSvg(containerElement as HTMLElement, {
+				backgroundColor: 'white',
+				height: bounds.bottom,
+				style: {
+					// transform: `translate(101.184px, 170.279px) scale(0.498811)`,
+					height: bounds.bottom.toString(),
+					transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+					width: bounds.right.toString(),
+				},
+				width: bounds.right,
 			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, [containerRef]);
+				.then((dataUrl) => {
+					const link = document.createElement('a');
+					link.download = 'my-image-name.svg';
+					link.href = dataUrl;
+					link.click();
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+	}, [bounds]);
 
 	return (
 		<>
