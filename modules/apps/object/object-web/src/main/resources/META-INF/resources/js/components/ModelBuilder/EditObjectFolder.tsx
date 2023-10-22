@@ -57,6 +57,7 @@ export default function EditObjectFolder({
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [bounds, setBounds] = useState<Bounds>();
+	const {fitView} = useZoomPanHelper();
 
 	const [showModal, setShowModal] = useState<ModelBuilderModals>({
 		addObjectDefinition: false,
@@ -104,6 +105,10 @@ export default function EditObjectFolder({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [objectFolderName]);
 
+	useEffect(() => {
+		console.log('nodes', nodes);
+	}, [nodes]);
+
 	// function downloadImage(dataUrl: any) {
 	// 	console.log('dataUrl', dataUrl);
 	// 	const a = document.createElement('a');
@@ -132,88 +137,61 @@ export default function EditObjectFolder({
 	// 	});
 	// };
 
-	const {fitBounds, fitView} = useZoomPanHelper();
-
-	// const bounds: any = {};
-
-	useEffect(() => {
-		const nodes = elements.filter(
+	const getBounds = () => {
+		const myNodes = elements.filter(
 			(element) => element.type === 'objectDefinitionNode'
 		);
 
-		if (nodes.length) {
-			if (!document.querySelector(`[data-id="${nodes[0].id}"]`)) {
-				setTimeout(() => {
-					const localBounds: Partial<Bounds> = {};
+		console.log('myNodes', myNodes);
 
-					nodes.forEach((node: any) => {
-						console.log('node.id', node.id);
-						const nodeElement = document.querySelector(
-							`[data-id="${node.id}"]`
-						) as HTMLElement;
+		if (myNodes.length) {
+			const localBounds: Partial<Bounds> = {};
 
-						console.log('nodeElement', nodeElement);
+			myNodes.forEach((node: any) => {
+				const nodeElement = document.querySelector(
+					`[data-id="${node.id}"]`
+				) as HTMLElement;
 
-						console.log('node x', node.position);
-						console.log(
-							'nodeElement width',
-							nodeElement?.offsetWidth
-						);
-						console.log(
-							'nodeElement height',
-							nodeElement?.offsetHeight
-						);
+				if (localBounds) {
+					if (!Object.keys(localBounds).length) {
+						localBounds.left = node.position.x;
+						localBounds.top = node.position.y;
+						localBounds.right =
+							node.position.x + nodeElement.offsetWidth;
+						localBounds.bottom =
+							node.position.y + nodeElement.offsetHeight;
+					} else {
+						const {bottom, left, right, top} = localBounds;
 
-						if (localBounds) {
-							if (!Object.keys(localBounds).length) {
-								localBounds.left = node.position.x;
-								localBounds.top = node.position.y;
-								localBounds.right =
-									node.position.x + nodeElement.offsetWidth;
-								localBounds.bottom =
-									node.position.y + nodeElement.offsetHeight;
-							} else {
-								const {bottom, left, right, top} = localBounds;
-
-								if (bottom && left && right && top) {
-									localBounds.left =
-										node.position.x < left
-											? node.position.x
-											: localBounds.left;
-									localBounds.top =
-										node.position.y < top
-											? node.position.y
-											: localBounds.top;
-									localBounds.right =
-										node.position.x +
-											nodeElement.offsetWidth >
-										right
-											? node.position.x +
-											  nodeElement.offsetWidth
-											: localBounds.right;
-									localBounds.bottom =
-										node.position.y +
-											nodeElement.offsetHeight >
-										bottom
-											? node.position.y +
-											  nodeElement.offsetHeight
-											: localBounds.bottom;
-								}
-							}
+						if (bottom && left && right && top) {
+							localBounds.left =
+								node.position.x < left
+									? node.position.x
+									: localBounds.left;
+							localBounds.top =
+								node.position.y < top
+									? node.position.y
+									: localBounds.top;
+							localBounds.right =
+								node.position.x + nodeElement.offsetWidth >
+								right
+									? node.position.x + nodeElement.offsetWidth
+									: localBounds.right;
+							localBounds.bottom =
+								node.position.y + nodeElement.offsetHeight >
+								bottom
+									? node.position.y + nodeElement.offsetHeight
+									: localBounds.bottom;
 						}
-					});
+					}
+				}
+			});
 
-					// console.log('bounds', bounds);
+			console.log('localBounds', localBounds);
 
-					setBounds(localBounds as Bounds);
-
-					// fitBounds({ x: bounds.left, y: bounds.top, width: bounds.right, height: bounds.bottom });
-				}, 3000);
-			}
+			return localBounds as Bounds;
 		}
-
-		// console.log('nodes', nodes);
-	}, [elements]);
+	};
 
 	const clamp = (val: number, min = 0, max = 1): number =>
 		Math.min(Math.max(val, min), max);
@@ -238,20 +216,27 @@ export default function EditObjectFolder({
 		return [x, y, clampedZoom];
 	};
 
-	const downloadAsPDF = useCallback(() => {
+	const downloadAsPDF = () => {
+		const bounds = getBounds();
 		if (bounds) {
 			// const containerElement = document.querySelector('.react-flow__nodes')
 			const containerElement = document.querySelector(
 				'.react-flow__renderer'
-			);
+			) as HTMLElement;
+
+			// const containerEdgesElement = document.querySelector(
+			// 	'.react-flow__edges g'
+			// );
+
+			// console.log('containerEdgesElement', containerEdgesElement);
 
 			console.log('containerElement', containerElement);
 
-			if (!containerElement) {
-				// console.log('null', containerElement);
+			// if (!containerElement) {
+			// 	// console.log('null', containerElement);
 
-				return;
-			}
+			// 	return;
+			// }
 
 			const transform = getTransformForBounds(
 				{
@@ -262,32 +247,82 @@ export default function EditObjectFolder({
 				},
 				bounds.right,
 				bounds.bottom,
-				0.5,
-				2
+				1,
+				1
 			);
 
-			toSvg(containerElement as HTMLElement, {
-				backgroundColor: 'white',
-				height: bounds.bottom,
-				style: {
-					// transform: `translate(101.184px, 170.279px) scale(0.498811)`,
-					height: bounds.bottom.toString(),
-					transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-					width: bounds.right.toString(),
-				},
-				width: bounds.right,
-			})
-				.then((dataUrl) => {
-					const link = document.createElement('a');
-					link.download = 'my-image-name.svg';
-					link.href = dataUrl;
-					link.click();
+			const getInvertScale = () => {
+				const scaledElement = document.querySelector(
+					'.react-flow__nodes'
+				);
+
+				if (scaledElement) {
+					const styleValue = scaledElement.getAttribute('style');
+
+					if (styleValue) {
+						const scaleRegex = /scale\(([^)]+)\)/;
+
+						const match = styleValue.match(scaleRegex);
+
+						if (match) {
+							return 1 / parseFloat(match[1]);
+						}
+					}
+				}
+
+				return 1;
+			};
+
+			setTimeout(() => {
+				const counterScale = getInvertScale();
+
+				console.log('counterScale', counterScale);
+
+				toPng(containerElement, {
+					canvasHeight: containerElement.offsetHeight * counterScale,
+					canvasWidth: containerElement.offsetWidth * counterScale,
+					// backgroundColor: 'white',
+					// height: bounds.bottom,
+					// style: {
+					// 	// height: bounds.bottom.toString(),
+					// 	// transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+					// 	transform: `scale(${counterScale})`,
+					// 	// width: bounds.right.toString(),
+					// },
+					// width: bounds.right,
 				})
-				.catch((error) => {
-					console.log(error);
-				});
+					.then((dataUrl) => {
+						const link = document.createElement('a');
+						link.download = 'nodes.png';
+						link.href = dataUrl;
+						link.click();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}, 2000);
+
+			// toPng(containerEdgesElement as HTMLElement, {
+			// 	backgroundColor: 'white',
+			// 	height: bounds.bottom,
+			// 	style: {
+			// 		height: bounds.bottom.toString(),
+			// 		transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+			// 		width: bounds.right.toString(),
+			// 	},
+			// 	width: bounds.right,
+			// })
+			// 	.then((dataUrl) => {
+			// 		const link = document.createElement('a');
+			// 		link.download = 'edges.png';
+			// 		link.href = dataUrl;
+			// 		link.click();
+			// 	})
+			// 	.catch((error) => {
+			// 		console.log(error);
+			// 	});
 		}
-	}, [bounds]);
+	};
 
 	return (
 		<>
@@ -352,7 +387,10 @@ export default function EditObjectFolder({
 			)}
 
 			<EditObjectFolderHeader
-				downloadAsPDF={downloadAsPDF}
+				downloadAsPDF={() => {
+					fitView({includeHiddenNodes: true, padding: 0.2});
+					downloadAsPDF();
+				}}
 				hasDraftObjectDefinitions={elements.some(
 					(element) =>
 						(element as FlowElement<ObjectDefinitionNodeData>).data
