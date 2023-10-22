@@ -216,6 +216,80 @@ export default function EditObjectFolder({
 		return [x, y, clampedZoom];
 	};
 
+	function cropImageToBoundingBox(dataURL: any) {
+		return new Promise((resolve, reject) => {
+			// Create a new image element
+			const image = new Image();
+
+			// Set the source of the image to the provided data URL
+			image.src = dataURL;
+
+			// Wait for the image to load
+			image.onload = function () {
+				const canvas = document.createElement('canvas');
+				const context = canvas.getContext('2d');
+
+				canvas.width = image.width;
+				canvas.height = image.height;
+
+				context!.drawImage(image, 0, 0);
+
+				const imageData = context!.getImageData(
+					0,
+					0,
+					canvas.width,
+					canvas.height
+				);
+				const data = imageData.data;
+
+				let minX = canvas.width;
+				let minY = canvas.height;
+				let maxX = -1;
+				let maxY = -1;
+
+				for (let y = 0; y < canvas.height; y++) {
+					for (let x = 0; x < canvas.width; x++) {
+						const alpha = data[(y * canvas.width + x) * 4 + 3];
+						if (alpha > 0) {
+							minX = Math.min(minX, x);
+							minY = Math.min(minY, y);
+							maxX = Math.max(maxX, x);
+							maxY = Math.max(maxY, y);
+						}
+					}
+				}
+
+				const croppedWidth = maxX - minX + 1;
+				const croppedHeight = maxY - minY + 1;
+
+				const croppedCanvas = document.createElement('canvas');
+				const croppedContext = croppedCanvas.getContext('2d');
+				croppedCanvas.width = croppedWidth;
+				croppedCanvas.height = croppedHeight;
+
+				croppedContext!.drawImage(
+					image,
+					minX,
+					minY,
+					croppedWidth,
+					croppedHeight,
+					0,
+					0,
+					croppedWidth,
+					croppedHeight
+				);
+
+				const croppedDataURL = croppedCanvas.toDataURL('image/png');
+
+				resolve(croppedDataURL);
+			};
+
+			image.onerror = function () {
+				reject(new Error('Failed to load the image.'));
+			};
+		});
+	}
+
 	const downloadAsPDF = () => {
 		const bounds = getBounds();
 		if (bounds) {
@@ -292,13 +366,17 @@ export default function EditObjectFolder({
 					// width: bounds.right,
 				})
 					.then((dataUrl) => {
-						const link = document.createElement('a');
-						link.download = 'nodes.png';
-						link.href = dataUrl;
-						link.click();
+						cropImageToBoundingBox(dataUrl).then((dataUrl: any) => {
+							const link = document.createElement('a');
+							link.download = 'nodes.png';
+							link.href = dataUrl;
+							link.click();
+						}).catch((error) => {
+							console.log('crop error', error);
+						});
 					})
 					.catch((error) => {
-						console.log(error);
+						console.log('png error', error);
 					});
 			}, 2000);
 
