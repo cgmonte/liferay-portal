@@ -82,8 +82,25 @@ const Grid = ({
 					? `${row.value};${value[row.value]}`
 					: '';
 
+				let inputReference = '';
+
+				if (inputValue !== '' && row.reference) {
+					const inputValues = inputValue.split(';');
+
+					if (inputValues.length > 1) {
+						const columnReference = columns.find(
+							(column) => column.value === inputValues[1]
+						)?.reference;
+
+						if (columnReference) {
+							inputReference = `${row.reference};${columnReference}`;
+						}
+					}
+				}
+
 				return (
 					<input
+						data-field-reference={inputReference}
 						key={`row-${row.value}-${rowIndex}`}
 						name={name}
 						type="hidden"
