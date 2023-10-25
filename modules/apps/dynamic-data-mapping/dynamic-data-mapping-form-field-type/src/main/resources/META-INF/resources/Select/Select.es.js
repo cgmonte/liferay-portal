@@ -140,7 +140,7 @@ const DropdownItem = ({
 					option,
 				});
 			}}
-			value={option.reference}
+			value={option.value}
 		>
 			{multiple ? (
 				<ClayCheckbox
