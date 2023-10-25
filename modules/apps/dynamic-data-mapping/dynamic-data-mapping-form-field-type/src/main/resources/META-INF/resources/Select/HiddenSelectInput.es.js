@@ -27,6 +27,7 @@ const HiddenSelectInput = ({multiple, name, options, value}) => (
 				if (isSelected) {
 					return (
 						<ClaySelect.Option
+							data-field-reference={option.reference}
 							key={`hiddenSelect${index}`}
 							label={option.label}
 							value={option.value}
