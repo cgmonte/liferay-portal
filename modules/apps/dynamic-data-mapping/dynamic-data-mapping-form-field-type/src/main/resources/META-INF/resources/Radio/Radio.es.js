@@ -82,7 +82,15 @@ const Radio = ({
 				))}
 			</div>
 
-			<input name={name} type="hidden" value={currentValue} />
+			<input
+				data-field-reference={
+					options.find((option) => option.value === currentValue)
+						?.reference ?? ''
+				}
+				name={name}
+				type="hidden"
+				value={currentValue}
+			/>
 		</FieldBase>
 	);
 };
