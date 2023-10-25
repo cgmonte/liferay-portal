@@ -49,6 +49,7 @@ const TableBodyColumns = ({
 					aria-label={`${rowLabel}: ${row.label}, ${columnLabel}: ${column.label}`}
 					checked={column.value === value[row.value]}
 					className="form-builder-grid-field"
+					data-field-reference={column.reference}
 					data-name={row.value}
 					disabled={disabled}
 					name={name}
