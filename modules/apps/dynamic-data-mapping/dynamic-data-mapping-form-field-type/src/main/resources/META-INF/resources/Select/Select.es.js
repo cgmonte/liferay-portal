@@ -126,6 +126,7 @@ const DropdownItem = ({
 	<>
 		<ClayDropDown.Item
 			active={expand && currentValue === option.label}
+			data-field-reference={option.reference}
 			data-testid={`dropdownItem-${index}`}
 			disabled={option.disabled}
 			label={option.label}
