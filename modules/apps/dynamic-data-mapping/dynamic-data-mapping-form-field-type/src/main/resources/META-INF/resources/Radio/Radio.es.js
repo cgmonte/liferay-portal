@@ -66,6 +66,7 @@ const Radio = ({
 				{options.map((option, index) => (
 					<ClayRadio
 						checked={currentValue === option.value}
+						data-field-reference={option.reference}
 						disabled={disabled}
 						inline={inline}
 						key={option.value}
