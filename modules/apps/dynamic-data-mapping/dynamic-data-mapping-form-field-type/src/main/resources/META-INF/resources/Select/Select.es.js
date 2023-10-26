@@ -571,6 +571,14 @@ const Main = ({
 		]
 	);
 
+	const reference = useMemo(() => {
+		return value.map(
+			(item) =>
+				normalizedOptions.find((option) => option.value === item)
+					?.reference
+		);
+	}, [value, normalizedOptions]);
+
 	return (
 		<FieldBase
 			label={label}
@@ -610,7 +618,12 @@ const Main = ({
 				{...otherProps}
 			/>
 
-			<input name={name} type="hidden" value={value} />
+			<input
+				data-field-reference={reference}
+				name={name}
+				type="hidden"
+				value={value}
+			/>
 		</FieldBase>
 	);
 };
