@@ -4,6 +4,7 @@
  */
 
 import {toPng, toSvg} from 'html-to-image';
+import jsPDF from 'jspdf';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
 
@@ -120,7 +121,7 @@ export default function EditObjectFolder({
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showChangesSaved]);
-	
+
 	// function downloadImage(dataUrl: any) {
 	// 	console.log('dataUrl', dataUrl);
 	// 	const a = document.createElement('a');
@@ -293,7 +294,7 @@ export default function EditObjectFolder({
 
 				const croppedDataURL = croppedCanvas.toDataURL('image/png');
 
-				resolve(croppedDataURL);
+				resolve({croppedHeight, croppedWidth, dataUrl: croppedDataURL});
 			};
 
 			image.onerror = function () {
@@ -361,12 +362,17 @@ export default function EditObjectFolder({
 
 			setTimeout(() => {
 				const counterScale = getInvertScale();
+				const finalHeight =
+					containerElement.offsetHeight * counterScale;
+				const finalWidth = containerElement.offsetWidth * counterScale;
 
 				console.log('counterScale', counterScale);
+				console.log('finalWidth', finalWidth);
+				console.log('finalHeight', finalHeight);
 
 				toPng(containerElement, {
-					canvasHeight: containerElement.offsetHeight * counterScale,
-					canvasWidth: containerElement.offsetWidth * counterScale,
+					canvasHeight: finalHeight,
+					canvasWidth: finalWidth,
 					// backgroundColor: 'white',
 					// height: bounds.bottom,
 					// style: {
@@ -378,14 +384,45 @@ export default function EditObjectFolder({
 					// width: bounds.right,
 				})
 					.then((dataUrl) => {
-						cropImageToBoundingBox(dataUrl).then((dataUrl: any) => {
-							const link = document.createElement('a');
-							link.download = 'nodes.png';
-							link.href = dataUrl;
-							link.click();
-						}).catch((error) => {
-							console.log('crop error', error);
-						});
+						cropImageToBoundingBox(dataUrl)
+							.then(
+								({
+									croppedHeight,
+									croppedWidth,
+									dataUrl,
+								}: any) => {
+									// const link = document.createElement('a');
+									// link.download = 'Folder.png';
+									// link.href = dataUrl;
+									// link.click();
+
+									console.log('croppedHeight', croppedHeight);
+									console.log('croppedWidth', croppedWidth);
+
+									const pdfFile = new jsPDF({
+										format: [croppedWidth, croppedHeight],
+										hotfixes: ['px_scaling'],
+										orientation:
+											croppedWidth > croppedHeight
+												? 'landscape'
+												: 'portrait',
+										unit: 'px',
+									});
+
+									pdfFile.addImage(
+										dataUrl,
+										'PNG',
+										0,
+										0,
+										croppedWidth,
+										croppedHeight
+									);
+									pdfFile.save('Folder.pdf');
+								}
+							)
+							.catch((error) => {
+								console.log('crop error', error);
+							});
 					})
 					.catch((error) => {
 						console.log('png error', error);
