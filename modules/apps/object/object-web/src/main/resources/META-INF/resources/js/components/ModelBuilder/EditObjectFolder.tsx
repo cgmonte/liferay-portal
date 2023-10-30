@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {toPng, toSvg} from 'html-to-image';
+import {toBlob, toPng, toSvg} from 'html-to-image';
 import jsPDF from 'jspdf';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
@@ -232,12 +232,15 @@ export default function EditObjectFolder({
 	function cropImageToBoundingBox(dataURL: any) {
 		return new Promise((resolve, reject) => {
 			// Create a new image element
+
 			const image = new Image();
 
 			// Set the source of the image to the provided data URL
+
 			image.src = dataURL;
 
 			// Wait for the image to load
+
 			image.onload = function () {
 				const canvas = document.createElement('canvas');
 				const context = canvas.getContext('2d');
@@ -303,10 +306,36 @@ export default function EditObjectFolder({
 		});
 	}
 
+	function dataURItoBlob(dataURI: any) {
+		// convert base64 to raw binary data held in a string
+		// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+		const byteString = atob(dataURI.split(',')[1]);
+
+		// separate out the mime component
+		const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+		// write the bytes of the string to an ArrayBuffer
+		const ab = new ArrayBuffer(byteString.length);
+
+		// create a view into the buffer
+		const ia = new Uint8Array(ab);
+
+		// set the bytes of the buffer to the correct values
+		for (let i = 0; i < byteString.length; i++) {
+			ia[i] = byteString.charCodeAt(i);
+		}
+
+		// write the ArrayBuffer to a blob, and you're done
+		const blob = new Blob([ab], {type: mimeString});
+
+		return blob;
+	}
+
 	const downloadAsPDF = () => {
 		const bounds = getBounds();
 		if (bounds) {
 			// const containerElement = document.querySelector('.react-flow__nodes')
+
 			const containerElement = document.querySelector(
 				'.react-flow__renderer'
 			) as HTMLElement;
@@ -373,6 +402,7 @@ export default function EditObjectFolder({
 				toPng(containerElement, {
 					canvasHeight: finalHeight,
 					canvasWidth: finalWidth,
+
 					// backgroundColor: 'white',
 					// height: bounds.bottom,
 					// style: {
@@ -391,33 +421,73 @@ export default function EditObjectFolder({
 									croppedWidth,
 									dataUrl,
 								}: any) => {
+									const imageBlob = dataURItoBlob(dataUrl);
+
 									// const link = document.createElement('a');
 									// link.download = 'Folder.png';
 									// link.href = dataUrl;
 									// link.click();
 
-									console.log('croppedHeight', croppedHeight);
-									console.log('croppedWidth', croppedWidth);
+									// console.log('croppedHeight', croppedHeight);
+									// console.log('croppedWidth', croppedWidth);
+
+									const finalPDFWidth = croppedWidth + 40;
+									const finalPDFHeight = croppedHeight + 40;
 
 									const pdfFile = new jsPDF({
-										format: [croppedWidth, croppedHeight],
+										format: [finalPDFWidth, finalPDFHeight],
 										hotfixes: ['px_scaling'],
 										orientation:
-											croppedWidth > croppedHeight
+											finalPDFWidth > finalPDFHeight
 												? 'landscape'
 												: 'portrait',
 										unit: 'px',
 									});
 
-									pdfFile.addImage(
-										dataUrl,
-										'PNG',
-										0,
-										0,
-										croppedWidth,
-										croppedHeight
+									// pdfFile.addImage(
+									// 	dataUrl,
+									// 	'PNG',
+									// 	0,
+									// 	0,
+									// 	croppedWidth,
+									// 	croppedHeight
+									// );
+
+									const divElement = document.createElement(
+										'div'
 									);
-									pdfFile.save('Folder.pdf');
+									divElement.style.width =
+										finalPDFWidth + 'px';
+									divElement.style.height =
+										finalPDFHeight - 1 + 'px';
+									divElement.style.padding = '20px';
+									divElement.style.borderStyle = 'solid';
+									// divElement.style.borderColor = 'red';
+									// divElement.style.backgroundColor = 'aqua';
+									divElement.style.display = 'flex';
+									divElement.style.justifyContent = 'center';
+									divElement.style.alignContent = 'center';
+
+									const imageElement = document.createElement(
+										'img'
+									);
+									imageElement.setAttribute(
+										'src',
+										URL.createObjectURL(imageBlob)
+									);
+
+									divElement.appendChild(imageElement);
+
+									pdfFile.html(divElement, {
+										// (unknown, unknown, unknown, left)
+										// margin: [40, 60, 40, 60],
+
+										callback(pdf) {
+											pdf.save('Folder.pdf');
+										},
+									});
+
+									// pdfFile.save('Folder.pdf');
 								}
 							)
 							.catch((error) => {
