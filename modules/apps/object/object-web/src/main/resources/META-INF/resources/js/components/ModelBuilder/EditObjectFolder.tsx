@@ -5,7 +5,13 @@
 
 import {toPng} from 'html-to-image';
 import jsPDF from 'jspdf';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
 
 import {defaultLanguageId} from '../../utils/constants';
@@ -45,8 +51,6 @@ export default function EditObjectFolder({
 		},
 		dispatch,
 	] = useObjectFolderContext();
-
-	const [exportingPDF, setExportingPDF] = useState(false);
 
 	const store = useStore();
 
@@ -204,7 +208,9 @@ export default function EditObjectFolder({
 		return blob;
 	}
 
-	const exportAsPDF = () => {
+	const exportAsPDF = (
+		setExportingPDF: Dispatch<SetStateAction<boolean>>
+	) => {
 		setExportingPDF(true);
 
 		fitView({includeHiddenNodes: true, padding: 0.2});
@@ -377,7 +383,6 @@ export default function EditObjectFolder({
 
 			<EditObjectFolderHeader
 				exportAsPDF={exportAsPDF}
-				exportingPDF={exportingPDF}
 				hasDraftObjectDefinitions={elements.some(
 					(element) =>
 						(element as FlowElement<ObjectDefinitionNodeData>).data

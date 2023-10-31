@@ -9,7 +9,7 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {getLocalizableLabel} from '@liferay/object-js-components-web';
 import classNames from 'classnames';
-import React from 'react';
+import React, {Dispatch, SetStateAction, useState} from 'react';
 
 import {defaultLanguageId} from '../../../utils/constants';
 import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
@@ -18,8 +18,7 @@ import {TYPES} from '../ModelBuilderContext/typesEnum';
 import './EditObjectFolderHeader.scss';
 
 interface EditObjectFolderHeaderProps {
-	exportAsPDF: () => void;
-	exportingPDF: boolean;
+	exportAsPDF: (setExportingPDF: Dispatch<SetStateAction<boolean>>) => void;
 	hasDraftObjectDefinitions: boolean;
 	selectedObjectFolder: ObjectFolder;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
@@ -27,7 +26,6 @@ interface EditObjectFolderHeaderProps {
 
 export default function EditObjectFolderHeader({
 	exportAsPDF,
-	exportingPDF,
 	hasDraftObjectDefinitions,
 	selectedObjectFolder,
 	setShowModal,
@@ -36,6 +34,8 @@ export default function EditObjectFolderHeader({
 		{showChangesSaved, showSidebars},
 		dispatch,
 	] = useObjectFolderContext();
+
+	const [exportingPDF, setExportingPDF] = useState(false);
 
 	return (
 		<div className="lfr-objects__model-builder-header">
@@ -153,7 +153,7 @@ export default function EditObjectFolderHeader({
 					<ClayButton
 						aria-label={Liferay.Language.get('export-as-pdf')}
 						displayType="secondary"
-						onClick={exportAsPDF}
+						onClick={() => exportAsPDF(setExportingPDF)}
 					>
 						{exportingPDF && (
 							<span className="inline-item inline-item-before">
