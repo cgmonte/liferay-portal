@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {toJpeg, toPng} from 'html-to-image';
+import {toPng} from 'html-to-image';
 import jsPDF from 'jspdf';
 import React, {useEffect, useRef, useState} from 'react';
 import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
@@ -45,6 +45,8 @@ export default function EditObjectFolder({
 		},
 		dispatch,
 	] = useObjectFolderContext();
+
+	const [exportingPDF, setExportingPDF] = useState(false);
 
 	const store = useStore();
 
@@ -202,7 +204,11 @@ export default function EditObjectFolder({
 		return blob;
 	}
 
-	const downloadAsPDF = () => {
+	const exportAsPDF = () => {
+		setExportingPDF(true);
+
+		fitView({includeHiddenNodes: true, padding: 0.2});
+
 		const containerElement = document.querySelector(
 			'.react-flow__renderer'
 		) as HTMLElement;
@@ -293,6 +299,7 @@ export default function EditObjectFolder({
 							pdfFile.html(containerElement, {
 								callback(pdf) {
 									pdf.save('Folder.pdf');
+									setExportingPDF(false);
 								},
 							});
 						})
@@ -369,10 +376,8 @@ export default function EditObjectFolder({
 			)}
 
 			<EditObjectFolderHeader
-				downloadAsPDF={() => {
-					fitView({includeHiddenNodes: true, padding: 0.2});
-					downloadAsPDF();
-				}}
+				exportAsPDF={exportAsPDF}
+				exportingPDF={exportingPDF}
 				hasDraftObjectDefinitions={elements.some(
 					(element) =>
 						(element as FlowElement<ObjectDefinitionNodeData>).data

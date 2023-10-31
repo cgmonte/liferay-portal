@@ -6,13 +6,15 @@
 import React from 'react';
 import './EditObjectFolderHeader.scss';
 interface EditObjectFolderHeaderProps {
-	downloadAsPDF: () => void;
+	exportAsPDF: () => void;
+	exportingPDF: boolean;
 	hasDraftObjectDefinitions: boolean;
 	selectedObjectFolder: ObjectFolder;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }
 export default function EditObjectFolderHeader({
-	downloadAsPDF,
+	exportAsPDF,
+	exportingPDF,
 	hasDraftObjectDefinitions,
 	selectedObjectFolder,
 	setShowModal,

@@ -5,6 +5,7 @@
 
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayIcon from '@clayui/icon';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {getLocalizableLabel} from '@liferay/object-js-components-web';
 import classNames from 'classnames';
@@ -17,14 +18,16 @@ import {TYPES} from '../ModelBuilderContext/typesEnum';
 import './EditObjectFolderHeader.scss';
 
 interface EditObjectFolderHeaderProps {
-	downloadAsPDF: () => void;
+	exportAsPDF: () => void;
+	exportingPDF: boolean;
 	hasDraftObjectDefinitions: boolean;
 	selectedObjectFolder: ObjectFolder;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }
 
 export default function EditObjectFolderHeader({
-	downloadAsPDF,
+	exportAsPDF,
+	exportingPDF,
 	hasDraftObjectDefinitions,
 	selectedObjectFolder,
 	setShowModal,
@@ -148,12 +151,22 @@ export default function EditObjectFolderHeader({
 					/>
 
 					<ClayButton
-						aria-labelledby={Liferay.Language.get('export-as-pdf')}
-						// disabled={!hasDraftObjectDefinitions}
+						aria-label={Liferay.Language.get('export-as-pdf')}
 						displayType="secondary"
-						onClick={downloadAsPDF}
+						onClick={exportAsPDF}
 					>
-						{Liferay.Language.get('export-as-pdf')}
+						{exportingPDF && (
+							<span className="inline-item inline-item-before">
+								<ClayLoadingIndicator
+									displayType="secondary"
+									size="sm"
+								/>
+							</span>
+						)}
+
+						{exportingPDF
+							? Liferay.Language.get('exporting')
+							: Liferay.Language.get('export-as-pdf')}
 					</ClayButton>
 
 					<ClayButton
