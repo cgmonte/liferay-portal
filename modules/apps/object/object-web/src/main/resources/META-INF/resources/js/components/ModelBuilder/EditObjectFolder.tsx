@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {toBlob, toPng, toSvg} from 'html-to-image';
+import {toPng} from 'html-to-image';
 import jsPDF from 'jspdf';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
 
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
@@ -60,9 +60,6 @@ export default function EditObjectFolder({
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const [bounds, setBounds] = useState<Bounds>();
-	const {fitView} = useZoomPanHelper();
-
 	const [showModal, setShowModal] = useState<ModelBuilderModals>({
 		addObjectDefinition: false,
 		addObjectField: false,
@@ -77,6 +74,8 @@ export default function EditObjectFolder({
 		publishObjectDefinitions: false,
 		redirectToEditObjectDefinitionDetails: false,
 	});
+
+	const {fitView} = useZoomPanHelper();
 
 	useEffect(() => {
 		dispatch({
@@ -122,124 +121,11 @@ export default function EditObjectFolder({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showChangesSaved]);
 
-	// function downloadImage(dataUrl: any) {
-	// 	console.log('dataUrl', dataUrl);
-	// 	const a = document.createElement('a');
-
-	// 	a.setAttribute('download', 'reactflow.png');
-	// 	a.setAttribute('href', dataUrl);
-	// 	a.click();
-	// }
-
-	// const filter = (node: HTMLElement) => {
-	// 	const exclusionClasses = [
-	// 		// 'dropdown lfr__object-web-view-object-definitions-actions',
-	// 		// 'lexicon-icon',
-	// 		'react-flow__background',
-	// 		'react-flow__controls',
-	// 		'react-flow__minimap',
-	// 	];
-
-	// 	return !exclusionClasses.some((classname) => {
-	// 		console.log('node.classList', node.classList);
-
-	// 		return (
-	// 			node.classList?.contains(classname) ||
-	// 			(node.classList?.value && node.classList.value === classname)
-	// 		);
-	// 	});
-	// };
-
-	const getBounds = () => {
-		const myNodes = elements.filter(
-			(element) => element.type === 'objectDefinitionNode'
-		);
-
-		console.log('myNodes', myNodes);
-
-		if (myNodes.length) {
-			const localBounds: Partial<Bounds> = {};
-
-			myNodes.forEach((node: any) => {
-				const nodeElement = document.querySelector(
-					`[data-id="${node.id}"]`
-				) as HTMLElement;
-
-				if (localBounds) {
-					if (!Object.keys(localBounds).length) {
-						localBounds.left = node.position.x;
-						localBounds.top = node.position.y;
-						localBounds.right =
-							node.position.x + nodeElement.offsetWidth;
-						localBounds.bottom =
-							node.position.y + nodeElement.offsetHeight;
-					} else {
-						const {bottom, left, right, top} = localBounds;
-
-						if (bottom && left && right && top) {
-							localBounds.left =
-								node.position.x < left
-									? node.position.x
-									: localBounds.left;
-							localBounds.top =
-								node.position.y < top
-									? node.position.y
-									: localBounds.top;
-							localBounds.right =
-								node.position.x + nodeElement.offsetWidth >
-								right
-									? node.position.x + nodeElement.offsetWidth
-									: localBounds.right;
-							localBounds.bottom =
-								node.position.y + nodeElement.offsetHeight >
-								bottom
-									? node.position.y + nodeElement.offsetHeight
-									: localBounds.bottom;
-						}
-					}
-				}
-			});
-
-			console.log('localBounds', localBounds);
-
-			return localBounds as Bounds;
-		}
-	};
-
-	const clamp = (val: number, min = 0, max = 1): number =>
-		Math.min(Math.max(val, min), max);
-
-	const getTransformForBounds = (
-		bounds: any,
-		width: number,
-		height: number,
-		minZoom: number,
-		maxZoom: number,
-		padding = 0.1
-	): any => {
-		const xZoom = width / (bounds.width * (1 + padding));
-		const yZoom = height / (bounds.height * (1 + padding));
-		const zoom = Math.min(xZoom, yZoom);
-		const clampedZoom = clamp(zoom, minZoom, maxZoom);
-		const boundsCenterX = bounds.x + bounds.width / 2;
-		const boundsCenterY = bounds.y + bounds.height / 2;
-		const x = width / 2 - boundsCenterX * clampedZoom;
-		const y = height / 2 - boundsCenterY * clampedZoom;
-
-		return [x, y, clampedZoom];
-	};
-
 	function cropImageToBoundingBox(dataURL: any) {
 		return new Promise((resolve, reject) => {
-			// Create a new image element
-
 			const image = new Image();
 
-			// Set the source of the image to the provided data URL
-
 			image.src = dataURL;
-
-			// Wait for the image to load
 
 			image.onload = function () {
 				const canvas = document.createElement('canvas');
@@ -307,218 +193,107 @@ export default function EditObjectFolder({
 	}
 
 	function dataURItoBlob(dataURI: any) {
-		// convert base64 to raw binary data held in a string
-		// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
 		const byteString = atob(dataURI.split(',')[1]);
 
-		// separate out the mime component
 		const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
-		// write the bytes of the string to an ArrayBuffer
 		const ab = new ArrayBuffer(byteString.length);
 
-		// create a view into the buffer
 		const ia = new Uint8Array(ab);
 
-		// set the bytes of the buffer to the correct values
 		for (let i = 0; i < byteString.length; i++) {
 			ia[i] = byteString.charCodeAt(i);
 		}
 
-		// write the ArrayBuffer to a blob, and you're done
 		const blob = new Blob([ab], {type: mimeString});
 
 		return blob;
 	}
 
 	const downloadAsPDF = () => {
-		const bounds = getBounds();
-		if (bounds) {
-			// const containerElement = document.querySelector('.react-flow__nodes')
+		const containerElement = document.querySelector(
+			'.react-flow__renderer'
+		) as HTMLElement;
 
-			const containerElement = document.querySelector(
-				'.react-flow__renderer'
-			) as HTMLElement;
+		const getInvertScale = () => {
+			const scaledElement = document.querySelector('.react-flow__nodes');
 
-			// const containerEdgesElement = document.querySelector(
-			// 	'.react-flow__edges g'
-			// );
+			if (scaledElement) {
+				const styleValue = scaledElement.getAttribute('style');
 
-			// console.log('containerEdgesElement', containerEdgesElement);
+				if (styleValue) {
+					const scaleRegex = /scale\(([^)]+)\)/;
 
-			console.log('containerElement', containerElement);
+					const match = styleValue.match(scaleRegex);
 
-			// if (!containerElement) {
-			// 	// console.log('null', containerElement);
-
-			// 	return;
-			// }
-
-			const transform = getTransformForBounds(
-				{
-					height: bounds.bottom,
-					width: bounds.right,
-					x: bounds.left,
-					y: bounds.top,
-				},
-				bounds.right,
-				bounds.bottom,
-				1,
-				1
-			);
-
-			const getInvertScale = () => {
-				const scaledElement = document.querySelector(
-					'.react-flow__nodes'
-				);
-
-				if (scaledElement) {
-					const styleValue = scaledElement.getAttribute('style');
-
-					if (styleValue) {
-						const scaleRegex = /scale\(([^)]+)\)/;
-
-						const match = styleValue.match(scaleRegex);
-
-						if (match) {
-							return 1 / parseFloat(match[1]);
-						}
+					if (match) {
+						return 1 / parseFloat(match[1]);
 					}
 				}
+			}
 
-				return 1;
-			};
+			return 1;
+		};
 
-			setTimeout(() => {
-				const counterScale = getInvertScale();
-				const finalHeight =
-					containerElement.offsetHeight * counterScale;
-				const finalWidth = containerElement.offsetWidth * counterScale;
+		setTimeout(() => {
+			const counterScale = getInvertScale();
+			const finalHeight = containerElement.offsetHeight * counterScale;
+			const finalWidth = containerElement.offsetWidth * counterScale;
 
-				console.log('counterScale', counterScale);
-				console.log('finalWidth', finalWidth);
-				console.log('finalHeight', finalHeight);
+			toPng(containerElement, {
+				canvasHeight: finalHeight,
+				canvasWidth: finalWidth,
+			})
+				.then((dataUrl) => {
+					cropImageToBoundingBox(dataUrl)
+						.then(({croppedHeight, croppedWidth, dataUrl}: any) => {
+							const imageBlob = dataURItoBlob(dataUrl);
 
-				toPng(containerElement, {
-					canvasHeight: finalHeight,
-					canvasWidth: finalWidth,
+							const finalPDFWidth = croppedWidth + 40;
 
-					// backgroundColor: 'white',
-					// height: bounds.bottom,
-					// style: {
-					// 	// height: bounds.bottom.toString(),
-					// 	// transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-					// 	transform: `scale(${counterScale})`,
-					// 	// width: bounds.right.toString(),
-					// },
-					// width: bounds.right,
-				})
-					.then((dataUrl) => {
-						cropImageToBoundingBox(dataUrl)
-							.then(
-								({
-									croppedHeight,
-									croppedWidth,
-									dataUrl,
-								}: any) => {
-									const imageBlob = dataURItoBlob(dataUrl);
+							const finalPDFHeight = croppedHeight + 40;
 
-									// const link = document.createElement('a');
-									// link.download = 'Folder.png';
-									// link.href = dataUrl;
-									// link.click();
-
-									// console.log('croppedHeight', croppedHeight);
-									// console.log('croppedWidth', croppedWidth);
-
-									const finalPDFWidth = croppedWidth + 40;
-									const finalPDFHeight = croppedHeight + 40;
-
-									const pdfFile = new jsPDF({
-										format: [finalPDFWidth, finalPDFHeight],
-										hotfixes: ['px_scaling'],
-										orientation:
-											finalPDFWidth > finalPDFHeight
-												? 'landscape'
-												: 'portrait',
-										unit: 'px',
-									});
-
-									// pdfFile.addImage(
-									// 	dataUrl,
-									// 	'PNG',
-									// 	0,
-									// 	0,
-									// 	croppedWidth,
-									// 	croppedHeight
-									// );
-
-									const divElement = document.createElement(
-										'div'
-									);
-									divElement.style.width =
-										finalPDFWidth + 'px';
-									divElement.style.height =
-										finalPDFHeight - 1 + 'px';
-									divElement.style.padding = '20px';
-									divElement.style.borderStyle = 'solid';
-									// divElement.style.borderColor = 'red';
-									// divElement.style.backgroundColor = 'aqua';
-									divElement.style.display = 'flex';
-									divElement.style.justifyContent = 'center';
-									divElement.style.alignContent = 'center';
-
-									const imageElement = document.createElement(
-										'img'
-									);
-									imageElement.setAttribute(
-										'src',
-										URL.createObjectURL(imageBlob)
-									);
-
-									divElement.appendChild(imageElement);
-
-									pdfFile.html(divElement, {
-										// (unknown, unknown, unknown, left)
-										// margin: [40, 60, 40, 60],
-
-										callback(pdf) {
-											pdf.save('Folder.pdf');
-										},
-									});
-
-									// pdfFile.save('Folder.pdf');
-								}
-							)
-							.catch((error) => {
-								console.log('crop error', error);
+							const pdfFile = new jsPDF({
+								format: [finalPDFWidth, finalPDFHeight],
+								hotfixes: ['px_scaling'],
+								orientation:
+									finalPDFWidth > finalPDFHeight
+										? 'landscape'
+										: 'portrait',
+								unit: 'px',
 							});
-					})
-					.catch((error) => {
-						console.log('png error', error);
-					});
-			}, 2000);
 
-			// toPng(containerEdgesElement as HTMLElement, {
-			// 	backgroundColor: 'white',
-			// 	height: bounds.bottom,
-			// 	style: {
-			// 		height: bounds.bottom.toString(),
-			// 		transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-			// 		width: bounds.right.toString(),
-			// 	},
-			// 	width: bounds.right,
-			// })
-			// 	.then((dataUrl) => {
-			// 		const link = document.createElement('a');
-			// 		link.download = 'edges.png';
-			// 		link.href = dataUrl;
-			// 		link.click();
-			// 	})
-			// 	.catch((error) => {
-			// 		console.log(error);
-			// 	});
-		}
+							const divElement = document.createElement('div');
+							divElement.style.width = finalPDFWidth + 'px';
+							divElement.style.height = finalPDFHeight - 1 + 'px';
+							divElement.style.padding = '20px';
+							divElement.style.borderStyle = 'solid';
+							divElement.style.display = 'flex';
+							divElement.style.justifyContent = 'center';
+							divElement.style.alignContent = 'center';
+
+							const imageElement = document.createElement('img');
+							imageElement.setAttribute(
+								'src',
+								URL.createObjectURL(imageBlob)
+							);
+
+							divElement.appendChild(imageElement);
+
+							pdfFile.html(divElement, {
+								callback(pdf) {
+									pdf.save('Folder.pdf');
+								},
+							});
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}, 2000);
 	};
 
 	return (
