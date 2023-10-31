@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {toPng} from 'html-to-image';
+import {toJpeg, toPng} from 'html-to-image';
 import jsPDF from 'jspdf';
 import React, {useEffect, useRef, useState} from 'react';
 import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
 
+import {defaultLanguageId} from '../../utils/constants';
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
 import {ModalAddObjectDefinition} from '../ViewObjectDefinitions/ModalAddObjectDefinition';
 import {ModalEditObjectFolder} from '../ViewObjectDefinitions/ModalEditObjectFolder';
@@ -27,15 +28,6 @@ interface EditObjectFolder {
 	objectRelationshipDeletionTypes: LabelValueObject[];
 	siteKeyValuePairs: KeyValuePair[];
 }
-
-type Bounds =
-	| {
-			bottom: number;
-			left: number;
-			right: number;
-			top: number;
-	  }
-	| undefined;
 
 export default function EditObjectFolder({
 	companyKeyValuePairs,
@@ -249,38 +241,56 @@ export default function EditObjectFolder({
 						.then(({croppedHeight, croppedWidth, dataUrl}: any) => {
 							const imageBlob = dataURItoBlob(dataUrl);
 
-							const finalPDFWidth = croppedWidth + 40;
+							const finalPDFWidth = croppedWidth + 80;
 
-							const finalPDFHeight = croppedHeight + 40;
+							const finalPDFHeight = croppedHeight + 160;
 
 							const pdfFile = new jsPDF({
+								compress: true,
 								format: [finalPDFWidth, finalPDFHeight],
 								hotfixes: ['px_scaling'],
 								orientation:
 									finalPDFWidth > finalPDFHeight
 										? 'landscape'
 										: 'portrait',
+								putOnlyUsedFonts: true,
 								unit: 'px',
 							});
 
-							const divElement = document.createElement('div');
-							divElement.style.width = finalPDFWidth + 'px';
-							divElement.style.height = finalPDFHeight - 1 + 'px';
-							divElement.style.padding = '20px';
-							divElement.style.borderStyle = 'solid';
-							divElement.style.display = 'flex';
-							divElement.style.justifyContent = 'center';
-							divElement.style.alignContent = 'center';
+							const containerElement = document.createElement(
+								'div'
+							);
+
+							containerElement.style.width = finalPDFWidth + 'px';
+							containerElement.style.height =
+								finalPDFHeight - 1 + 'px';
+							containerElement.style.padding = '40px';
+							containerElement.style.display = 'flex';
+							containerElement.style.justifyContent = 'end';
+							containerElement.style.flexDirection = 'column';
+
+							if (selectedObjectFolder.label[defaultLanguageId]) {
+								pdfFile.setFont('helvetica', 'bold');
+								pdfFile.setFontSize(15);
+								pdfFile.text(
+									selectedObjectFolder.label[
+										defaultLanguageId
+									]!,
+									40,
+									60
+								);
+							}
 
 							const imageElement = document.createElement('img');
+
 							imageElement.setAttribute(
 								'src',
 								URL.createObjectURL(imageBlob)
 							);
 
-							divElement.appendChild(imageElement);
+							containerElement.appendChild(imageElement);
 
-							pdfFile.html(divElement, {
+							pdfFile.html(containerElement, {
 								callback(pdf) {
 									pdf.save('Folder.pdf');
 								},
