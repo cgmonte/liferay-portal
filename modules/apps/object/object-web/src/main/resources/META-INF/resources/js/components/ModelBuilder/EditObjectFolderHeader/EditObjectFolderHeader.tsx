@@ -154,6 +154,7 @@ export default function EditObjectFolderHeader({
 						aria-label={Liferay.Language.get('export-as-pdf')}
 						displayType="secondary"
 						onClick={() => exportAsPDF(setExportingPDF)}
+						size="sm"
 					>
 						{exportingPDF && (
 							<span className="inline-item inline-item-before">
