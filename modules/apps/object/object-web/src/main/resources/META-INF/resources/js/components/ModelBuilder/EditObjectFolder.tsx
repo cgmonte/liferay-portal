@@ -3,22 +3,24 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {useEffect, useState} from 'react';
-import {FlowElement, useStore} from 'react-flow-renderer';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import {FlowElement, useStore, useZoomPanHelper} from 'react-flow-renderer';
 
+import {defaultLanguageId} from '../../utils/constants';
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
 import {ModalAddObjectDefinition} from '../ViewObjectDefinitions/ModalAddObjectDefinition';
 import {ModalEditObjectFolder} from '../ViewObjectDefinitions/ModalEditObjectFolder';
 import {getUpdatedModelBuilderStructurePayload} from '../ViewObjectDefinitions/objectDefinitionUtil';
 import Diagram from './Diagram/Diagram';
+
+import './EditObjectFolder.scss';
 import EditObjectFolderHeader from './EditObjectFolderHeader/EditObjectFolderHeader';
 import {ModalPublishObjectDefinitions} from './EditObjectFolderHeader/ModalPublishObjectDefinitions';
 import LeftSidebar from './LeftSidebar/LeftSidebar';
 import {useObjectFolderContext} from './ModelBuilderContext/objectFolderContext';
 import {TYPES} from './ModelBuilderContext/typesEnum';
 import {RightSideBar} from './RightSidebar/index';
-
-import './EditObjectFolder.scss';
+import {getInvertScale, getPDF} from './utils/pdf';
 
 interface EditObjectFolder {
 	companyKeyValuePairs: KeyValuePair[];
@@ -61,6 +63,8 @@ export default function EditObjectFolder({
 		publishObjectDefinitions: false,
 		redirectToEditObjectDefinitionDetails: false,
 	});
+
+	const {fitView} = useZoomPanHelper();
 
 	useEffect(() => {
 		dispatch({
@@ -105,6 +109,35 @@ export default function EditObjectFolder({
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [showChangesSaved]);
+
+	const exportAsPDF = (
+		setExportingPDF: Dispatch<SetStateAction<boolean>>
+	) => {
+		setExportingPDF(true);
+
+		fitView({includeHiddenNodes: true, padding: 0.2});
+
+		const title = selectedObjectFolder.label[defaultLanguageId];
+
+		setTimeout(() => {
+			getPDF({
+				htmlElement: document.querySelector(
+					'.react-flow__renderer'
+				) as HTMLElement,
+				invertScale: getInvertScale(
+					document.querySelector('.react-flow__nodes')!
+				),
+				title,
+			}).then((pdf) => {
+				pdf.save(
+					title
+						? `${title.replace(/ /g, '_')}-Folder.pdf`
+						: 'Folder.pdf'
+				);
+				setExportingPDF(false);
+			});
+		}, 3000);
+	};
 
 	return (
 		<>
@@ -169,6 +202,7 @@ export default function EditObjectFolder({
 			)}
 
 			<EditObjectFolderHeader
+				exportAsPDF={exportAsPDF}
 				hasDraftObjectDefinitions={elements.some(
 					(element) =>
 						(element as FlowElement<ObjectDefinitionNodeData>).data

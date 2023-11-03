@@ -5,10 +5,11 @@
 
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayIcon from '@clayui/icon';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {getLocalizableLabel} from '@liferay/object-js-components-web';
 import classNames from 'classnames';
-import React from 'react';
+import React, {Dispatch, SetStateAction, useState} from 'react';
 
 import {defaultLanguageId} from '../../../utils/constants';
 import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
@@ -17,12 +18,14 @@ import {TYPES} from '../ModelBuilderContext/typesEnum';
 import './EditObjectFolderHeader.scss';
 
 interface EditObjectFolderHeaderProps {
+	exportAsPDF: (setExportingPDF: Dispatch<SetStateAction<boolean>>) => void;
 	hasDraftObjectDefinitions: boolean;
 	selectedObjectFolder: ObjectFolder;
 	setShowModal: (value: React.SetStateAction<ModelBuilderModals>) => void;
 }
 
 export default function EditObjectFolderHeader({
+	exportAsPDF,
 	hasDraftObjectDefinitions,
 	selectedObjectFolder,
 	setShowModal,
@@ -31,6 +34,8 @@ export default function EditObjectFolderHeader({
 		{showChangesSaved, showSidebars},
 		dispatch,
 	] = useObjectFolderContext();
+
+	const [exportingPDF, setExportingPDF] = useState(false);
 
 	return (
 		<div className="lfr-objects__model-builder-header">
@@ -144,6 +149,27 @@ export default function EditObjectFolderHeader({
 						symbol={showSidebars ? 'view' : 'hidden'}
 						title={Liferay.Language.get('toggle-sidebars')}
 					/>
+
+					<ClayButton
+						aria-label={Liferay.Language.get('export-as-pdf')}
+						disabled={exportingPDF}
+						displayType="secondary"
+						onClick={() => exportAsPDF(setExportingPDF)}
+						size="sm"
+					>
+						{exportingPDF && (
+							<span className="inline-item inline-item-before">
+								<ClayLoadingIndicator
+									displayType="secondary"
+									size="sm"
+								/>
+							</span>
+						)}
+
+						{exportingPDF
+							? Liferay.Language.get('exporting')
+							: Liferay.Language.get('export-as-pdf')}
+					</ClayButton>
 
 					<ClayButton
 						aria-labelledby={Liferay.Language.get('publish')}
