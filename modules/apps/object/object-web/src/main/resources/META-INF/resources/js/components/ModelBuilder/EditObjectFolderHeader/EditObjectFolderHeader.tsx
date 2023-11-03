@@ -150,26 +150,28 @@ export default function EditObjectFolderHeader({
 						title={Liferay.Language.get('toggle-sidebars')}
 					/>
 
-					<ClayButton
-						aria-label={Liferay.Language.get('export-as-pdf')}
-						disabled={exportingPDF}
-						displayType="secondary"
-						onClick={() => exportAsPDF(setExportingPDF)}
-						size="sm"
-					>
-						{exportingPDF && (
-							<span className="inline-item inline-item-before">
-								<ClayLoadingIndicator
-									displayType="secondary"
-									size="sm"
-								/>
-							</span>
-						)}
+					{Liferay.FeatureFlags['LPS-185678'] && (
+						<ClayButton
+							aria-label={Liferay.Language.get('export-as-pdf')}
+							disabled={exportingPDF}
+							displayType="secondary"
+							onClick={() => exportAsPDF(setExportingPDF)}
+							size="sm"
+						>
+							{exportingPDF && (
+								<span className="inline-item inline-item-before">
+									<ClayLoadingIndicator
+										displayType="secondary"
+										size="sm"
+									/>
+								</span>
+							)}
 
-						{exportingPDF
-							? Liferay.Language.get('exporting')
-							: Liferay.Language.get('export-as-pdf')}
-					</ClayButton>
+							{exportingPDF
+								? Liferay.Language.get('exporting')
+								: Liferay.Language.get('export-as-pdf')}
+						</ClayButton>
+					)}
 
 					<ClayButton
 						aria-labelledby={Liferay.Language.get('publish')}
