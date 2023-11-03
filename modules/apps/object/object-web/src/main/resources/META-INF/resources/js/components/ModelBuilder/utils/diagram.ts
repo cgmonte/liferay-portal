@@ -173,14 +173,3 @@ export function getObjectFolderName(): string {
 
 	return urlSearchParams.get('objectFolderName') || '';
 }
-
-export function updateURLParam(paramType: string, paramValue: string) {
-	const currentURL = window.location.href;
-
-	const newURL = currentURL.replace(
-		new RegExp('(' + paramType + '=)([^&]*)'),
-		paramType + '=' + paramValue
-	);
-
-	window.history.pushState({path: newURL}, '', newURL);
-}

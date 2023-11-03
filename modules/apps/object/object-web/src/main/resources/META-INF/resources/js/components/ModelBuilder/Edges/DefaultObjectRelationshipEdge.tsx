@@ -15,7 +15,7 @@ import {
 import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
 import {TYPES} from '../ModelBuilderContext/typesEnum';
 import {ObjectRelationshipEdgeData} from '../types';
-import {getEdgeParams} from '../utils';
+import {getEdgeParams} from '../utils/diagram';
 import ManyMarker from './ManyMarker';
 import OneMarker from './OneMarker';
 

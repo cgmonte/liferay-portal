@@ -16,7 +16,7 @@ import {
 	TAction,
 	TState,
 } from '../types';
-import {updateURLParam} from '../utils';
+import {updateURLParam} from '../utils/url';
 import {
 	convertAllObjectFieldsToUnselected,
 	getNonOverlappingEdges,
