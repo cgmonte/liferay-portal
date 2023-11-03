@@ -9,6 +9,8 @@ import ClayIcon from '@clayui/icon';
 import {sub} from 'frontend-js-web';
 import React, {SetStateAction} from 'react';
 
+import {BackgroundIcon} from '../BackgroundIcon';
+
 import './ObjectDefinitionNodeFooter.scss';
 
 interface ObjectDefinitionNodeFooterProps {
@@ -132,14 +134,15 @@ export default function ObjectDefinitionNodeFooter({
 								Liferay.Language.get('fields')
 						  )}
 
-					<ClayIcon
-						className="c-pt-1 text-4"
-						symbol={
-							showAllObjectFields
-								? 'angle-up-small'
-								: 'angle-down-small'
-						}
-					/>
+					<div className="lfr-objects__model-builder-node-background-icon-container-show-all">
+						<BackgroundIcon
+							symbol={
+								showAllObjectFields
+									? 'angle-up-small'
+									: 'angle-down-small'
+							}
+						/>
+					</div>
 				</ClayButton>
 			</div>
 		</>

@@ -24,6 +24,13 @@
 		}
 	}
 
+	&-background-icon-container {
+		&-show-all {
+			display: inline-block;
+			margin-left: 2px;
+		}
+	}
+
 	&-show-all-fields {
 		&-button {
 			align-items: center;

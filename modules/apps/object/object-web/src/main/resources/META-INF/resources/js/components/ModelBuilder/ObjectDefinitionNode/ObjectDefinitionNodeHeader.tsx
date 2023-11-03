@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayButtonWithIcon} from '@clayui/button';
+import ClayButton from '@clayui/button';
 import {ClayDropDownWithItems} from '@clayui/drop-down';
-import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import React from 'react';
+
+import {BackgroundIcon} from '../BackgroundIcon';
 
 import './ObjectDefinitionNodeHeader.scss';
 import {DropDownItems} from '../types';
@@ -46,7 +47,12 @@ export default function ObjectDefinitionNodeHeader({
 				<div className="lfr-objects__model-builder-node-header-label-container">
 					<div className="lfr-objects__model-builder-node-header-label-title">
 						{isLinkedObjectDefinition && (
-							<ClayIcon className="c-pt-1 text-4" symbol="link" />
+							<div className="lfr-objects__model-builder-node-background-icon-container-link">
+								<BackgroundIcon
+									className="dark"
+									symbol="link"
+								/>
+							</div>
 						)}
 
 						<span>{objectDefinitionLabel}</span>
@@ -56,17 +62,21 @@ export default function ObjectDefinitionNodeHeader({
 						className="lfr__object-web-view-object-definitions-actions"
 						items={dropDownItems}
 						trigger={
-							<ClayButtonWithIcon
+							<ClayButton
 								aria-label={Liferay.Language.get(
 									'show-actions'
 								)}
+								className="lfr__object-web-view-object-definitions-actions-button"
 								displayType="secondary"
-								onClick={(event) => {
+								onClick={(
+									event: React.MouseEvent<HTMLElement>
+								) => {
 									event?.stopPropagation();
 								}}
 								size="xs"
-								symbol="ellipsis-v"
-							/>
+							>
+								<BackgroundIcon symbol="ellipsis-v" />
+							</ClayButton>
 						}
 					/>
 				</div>

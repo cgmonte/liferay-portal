@@ -1,0 +1,23 @@
+@import 'atlas-variables';
+@import 'functions/_global-functions';
+
+.lfr-objects__model-builder-background-icon {
+	background-size: contain;
+	display: inline-block;
+
+	&-angle-down-small {
+		background-image: clay-icon(angle-down-small, $gray-600);
+	}
+
+	&-angle-up-small {
+		background-image: clay-icon(angle-up-small, $gray-600);
+	}
+
+	&-ellipsis-v {
+		background-image: clay-icon(ellipsis-v, $gray-600);
+	}
+
+	&-link.dark {
+		background-image: clay-icon(link, $dark);
+	}
+}

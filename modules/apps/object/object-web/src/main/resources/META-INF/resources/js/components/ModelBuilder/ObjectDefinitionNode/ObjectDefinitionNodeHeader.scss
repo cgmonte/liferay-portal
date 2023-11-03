@@ -15,9 +15,24 @@ hr {
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
+
+		.lfr__object-web-view-object-definitions-actions {
+			&-button {
+				align-items: center;
+				background-color: #fff;
+				color: #6b6c7e;
+				display: flex;
+				height: 24px;
+				justify-content: center;
+				margin-top: 0.5px;
+				padding: 0;
+				width: 24px;
+			}
+		}
 	}
 
 	&-label-title {
+		display: flex;
 		font-size: 14px;
 		font-weight: 600;
 		line-height: 1.3rem;
@@ -25,5 +40,14 @@ hr {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		width: 10rem;
+	}
+}
+
+.lfr-objects__model-builder-node-background-icon-container {
+	&-link {
+		display: inline-block;
+		margin-right: 0.1rem;
+		padding-left: 0.15rem;
+		padding-top: 0.3rem;
 	}
 }
