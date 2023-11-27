@@ -37,6 +37,9 @@ export default function ObjectFolderCardHeader({
 					<ClayDropDownWithItems
 						className="lfr__object-web-view-object-definitions-actions"
 						items={items}
+						menuElementAttrs={{
+							className: 'lfr__object-web-view-folder-actions',
+						}}
 						trigger={
 							<ClayButton
 								aria-label={Liferay.Language.get(

@@ -266,6 +266,7 @@ export function ObjectDefinitionNode({
 					{Object.keys(nodeHandleRefs).map((position) => (
 						<Handle
 							className="lfr-objects__model-builder-node-handle"
+							data-testid={`${externalReferenceCode}_${position}`}
 							id={`${id}_${position}`}
 							key={`${id}_${position}`}
 							position={nodeHandlePosition[position]}
@@ -284,6 +285,7 @@ export function ObjectDefinitionNode({
 				<>
 					<Handle
 						className="lfr-objects__model-builder-node-handle"
+						data-testid={`${externalReferenceCode}_${Position.Left}`}
 						id="fixedLeftHandle"
 						position={Position.Left}
 						style={{
@@ -295,6 +297,7 @@ export function ObjectDefinitionNode({
 					/>
 					<Handle
 						className="lfr-objects__model-builder-node-handle"
+						data-testid={`${externalReferenceCode}_${Position.Right}`}
 						id="fixedRightHandle"
 						position={Position.Right}
 						style={{
