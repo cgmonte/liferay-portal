@@ -11,6 +11,7 @@ import {API, Input} from '@liferay/object-js-components-web';
 import React, {useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
+import {getRandomInt} from '../../utils/number';
 import {toCamelCase} from '../../utils/string';
 import {
 	ObjectRelationshipFormBase,
@@ -123,6 +124,7 @@ export function ModalAddObjectRelationship({
 
 						<Input
 							error={errors.label}
+							id={`label_${getRandomInt(1, 100000)}`}
 							label={Liferay.Language.get('label')}
 							onChange={({target: {value}}) =>
 								setValues({label: {[defaultLanguageId]: value}})

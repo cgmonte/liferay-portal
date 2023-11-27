@@ -17,6 +17,7 @@ import {createResourceURL} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
+import {getRandomInt} from '../../utils/number';
 import CurrentObjectDefinition from './CurrentObjectDefinition';
 import SelectObjectDefinition from './SelectObjectDefinition';
 
@@ -333,6 +334,7 @@ export function ObjectRelationshipFormBase({
 			<Input
 				disabled={readonly}
 				error={errors.name}
+				id={`name_${getRandomInt(1, 100000)}`}
 				label={Liferay.Language.get('name')}
 				name="name"
 				onChange={handleChange}
@@ -343,6 +345,7 @@ export function ObjectRelationshipFormBase({
 			<SingleSelect
 				disabled={readonly}
 				error={errors.type}
+				id="objectRelationshipSelectObjectRelationshipType"
 				items={objectRelationshipTypes}
 				label={Liferay.Language.get('type')}
 				onSelectionChange={(value) => {
