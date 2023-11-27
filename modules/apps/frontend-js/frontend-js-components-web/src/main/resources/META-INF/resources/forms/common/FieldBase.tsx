@@ -74,10 +74,10 @@ export default function FieldBase({
 			{label && (
 				<label className={classNames({disabled})} htmlFor={id}>
 					{label}
-
-					{required && <RequiredMask />}
 				</label>
 			)}
+
+			{required && <RequiredMask />}
 
 			{tooltip && (
 				<>
