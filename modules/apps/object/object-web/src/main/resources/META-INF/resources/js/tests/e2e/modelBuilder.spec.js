@@ -82,4 +82,24 @@ export default function createTests() {
 			await page.getByRole('link', {name: 'Back'}).click();
 		}
 	});
+
+	test('uncategorized folder does not contains delete and edit options', async ({
+		page,
+	}) => {
+		await page.goto('/');
+
+		await page.getByLabel('Open Applications MenuCtrl+').click();
+		await page.getByRole('tab', {name: 'Control Panel'}).click();
+		await page.getByRole('link', {name: 'Objects'}).click();
+		await page.locator('li').filter({hasText: 'Uncategorized'}).click();
+		await page.getByLabel('folder-actions').click();
+
+		await expect(
+			page
+				.locator('.lfr__object-web-view-folder-actions')
+				.locator('li')
+				.filter({hasNot: page.getByText('Edit Label and ERC')})
+				.filter({hasNot: page.getByText('Delete Folder')})
+		).toHaveCount(1);
+	});
 }
