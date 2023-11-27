@@ -102,4 +102,50 @@ export default function createTests() {
 				.filter({hasNot: page.getByText('Delete Folder')})
 		).toHaveCount(1);
 	});
+
+	test('can create relationship by draging node handles', async ({page}) => {
+		await page.goto('/');
+
+		await page.getByLabel('Open Applications MenuCtrl+').click();
+		await page.getByRole('tab', {name: 'Control Panel'}).click();
+		await page.getByRole('link', {name: 'Objects'}).click();
+		await page.locator('li').filter({hasText: 'New Folder'}).click();
+		await page.getByLabel('View in Model Builder').click();
+
+		await page
+			.locator(
+				'[data-testid="new-test-object-1_right"]:not([data-handleid="fixedRightHandle"])'
+			)
+			.dragTo(
+				page.locator(
+					'[data-testid="new-test-object-2_left"]:not([data-handleid="fixedLeftHandle"])'
+				)
+			);
+
+		await expect(
+			page.getByRole('heading', {name: 'New Relationship'})
+		).toBeVisible();
+
+		await page
+			.getByLabel('Label', {exact: true})
+			.fill('new-one-to-many-relationship-1');
+		await page.getByLabel('Type').click();
+		await page.getByRole('option', {name: 'One to Many'}).click();
+		await page.getByRole('button', {name: 'Save'}).click();
+
+		await expect(
+			page
+				.locator('g > text')
+				.filter({hasText: 'new-one-to-many-relationship-1'})
+		).toBeVisible();
+
+		await page
+			.getByRole('button', {name: 'Show All Fields'})
+			.last()
+			.click();
+
+		await expect(
+			page.getByText('new-one-to-many-relationship-1relationship')
+		).toBeVisible();
+	});
 }
