@@ -48,4 +48,38 @@ export default function createTests() {
 			).toBeVisible();
 		}
 	});
+
+	test('can edit external reference code of custom objects', async ({
+		page,
+	}) => {
+		await page.goto('/');
+
+		await page.getByLabel('Open Applications MenuCtrl+').click();
+		await page.getByRole('tab', {name: 'Control Panel'}).click();
+		await page.getByRole('link', {name: 'Objects'}).click();
+
+		const objectNamePrefix = 'New Test Object';
+
+		for (let i = 1; i < 3; i++) {
+			await page.locator('li').filter({hasText: 'New Folder'}).click();
+
+			await page.getByText(`${objectNamePrefix} ${i}`).click();
+			await page.getByLabel('Edit External Reference Code').click();
+
+			// await page.getByLabel('External Reference Code', {exact: true}).click();
+
+			await page
+				.getByLabel('External Reference Code', {exact: true})
+				.fill(`new-test-object-${i}`);
+			await page
+				.getByRole('dialog')
+				.getByRole('button', {name: 'Save'})
+				.click();
+			await expect(
+				page.getByText('Your request completed successfully.')
+			).toBeVisible();
+
+			await page.getByRole('link', {name: 'Back'}).click();
+		}
+	});
 }
