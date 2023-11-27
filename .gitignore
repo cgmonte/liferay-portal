@@ -3,6 +3,7 @@
 **/.settings
 **/.sonar
 **/TEST-frontend-js.xml
+**/playwright/*
 **/liferay/logs/*.log
 **/liferay/logs/*.xml
 **/liferay/logs/companies/*
