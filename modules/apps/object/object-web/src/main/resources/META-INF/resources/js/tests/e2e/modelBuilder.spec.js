@@ -4,9 +4,13 @@
  */
 
 import {expect, test} from '@playwright/test';
+import * as objectUtil from './utils/objectUtil';
 
 export default function createTests() {
-	test('created object folders are on the left side bar', async ({page}) => {
+	test('created object folders are on the left side bar', async ({page, request}) => {
+
+		const folderERC = 'objectFolder' + objectUtil.getRandomInt(9999999);
+
 		await page.goto('/');
 
 		await page.getByLabel('Open Applications MenuCtrl+').click();
@@ -14,11 +18,11 @@ export default function createTests() {
 		await page.getByRole('link', {name: 'Objects'}).click();
 		await page.getByLabel('Add Object Folder').click();
 		await page.locator('input[name="label"]').click();
-		await page.locator('input[name="label"]').fill('New Folder');
+		await page.locator('input[name="label"]').fill(folderERC);
 		await page.getByRole('button', {name: 'Create Folder'}).click();
 
 		await expect(
-			page.locator('li').filter({hasText: 'New Folder'})
+			page.locator('li').filter({hasText: folderERC})
 		).toBeVisible();
 	});
 
@@ -42,22 +46,28 @@ export default function createTests() {
 		).toHaveCount(1);
 	});
 
-	test('can create relationship by draging node handles', async ({page}) => {
+	test('can create relationship by draging node handles', async ({page, request}) => {
+
+		const objectFolder = await objectUtil.createRandomFolder(request);
+
+		const objectDefintion1 = await objectUtil.createRandomObjectDefinition (request, objectFolder.externalReferenceCode);
+		const objectDefintion2 = await objectUtil.createRandomObjectDefinition (request, objectFolder.externalReferenceCode);
+
 		await page.goto('/');
 
 		await page.getByLabel('Open Applications MenuCtrl+').click();
 		await page.getByRole('tab', {name: 'Control Panel'}).click();
 		await page.getByRole('link', {name: 'Objects'}).click();
-		await page.locator('li').filter({hasText: 'New Folder'}).click();
+		await page.locator('li').filter({hasText: objectFolder.externalReferenceCode}).click();
 		await page.getByLabel('View in Model Builder').click();
 
 		await page
 			.locator(
-				'[data-testid="new-test-object-1_right"]:not([data-handleid="fixedRightHandle"])'
+				`[data-testid="${objectDefintion1.externalReferenceCode}_right"]:not([data-handleid="fixedRightHandle"])`
 			)
 			.dragTo(
 				page.locator(
-					'[data-testid="new-test-object-2_left"]:not([data-handleid="fixedLeftHandle"])'
+					`[data-testid="${objectDefintion2.externalReferenceCode}_left"]:not([data-handleid="fixedLeftHandle"])`
 				)
 			);
 
