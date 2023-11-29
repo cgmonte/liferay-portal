@@ -6,10 +6,9 @@
 import {expect, test} from '@playwright/test';
 
 import teardown from './modelBuilder.teardown';
-
 import * as objectUtil from './utils/objectUtil';
 
-const authFile = 'temp/.auth/user.json';
+const authFile = 'tmp/.auth/user.json';
 
 test.beforeEach(
 	'authenticate',
