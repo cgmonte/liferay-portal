@@ -7,7 +7,6 @@ const {defineConfig, devices} = require('@playwright/test');
 
 module.exports = defineConfig({
 	forbidOnly: !!process.env.CI,
-	fullyParallel: true,
 	projects: [
 		{
 			name: 'chromium',
