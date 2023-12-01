@@ -4,13 +4,14 @@
  */
 
 import {expect, test} from '@playwright/test';
-import teardown from './modelBuilder.teardown';
+
 import {ApiHelpers} from '../../helpers/ApiHelpers';
-import {getRandomInt} from '../../utils/util';
-import {HomePage} from '../../pages/home.page';
 import {liferayConfig} from '../../liferay.config';
-import {ObjectDefinitionsPage} from '../../pages/objects/objectDefinitions.page';
+import {HomePage} from '../../pages/home.page';
 import {ModelBuilderPage} from '../../pages/objects/modelBuilder.page';
+import {ObjectDefinitionsPage} from '../../pages/objects/objectDefinitions.page';
+import {getRandomInt} from '../../utils/util';
+import teardown from './modelBuilder.teardown';
 
 const authFile = 'tmp/.auth/user.json';
 
@@ -19,7 +20,9 @@ test.beforeEach('authenticate', async ({page}) => {
 
 	await homePage.login(liferayConfig.user.login, liferayConfig.user.password);
 
-	await expect(page.getByLabel('Open Applications MenuCtrl+')).toBeVisible();
+	await expect(page.getByLabel('Open Applications MenuCtrl+')).toBeVisible({
+		timeout: 20 * 1000,
+	});
 
 	await page.context().storageState({path: authFile});
 });

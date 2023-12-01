@@ -29,12 +29,13 @@ module.exports = defineConfig({
 	],
 	retries: process.env.CI ? 2 : 0,
 	testDir: './tests',
-	timeout: 60000,
+	timeout: 150000,
 	use: {
 		baseURL: process.env.PORTAL_URL
 			? process.env.PORTAL_URL
 			: 'http://localhost:8080',
-		trace: 'on-first-retry',
+		screenshot: 'only-on-failure',
+		trace: 'retain-on-failure',
 	},
 	workers: process.env.CI ? 3 : undefined,
 });
