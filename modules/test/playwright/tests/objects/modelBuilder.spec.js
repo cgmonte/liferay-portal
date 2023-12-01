@@ -56,10 +56,7 @@ test('uncategorized folder does not contains delete and edit options', async ({
 	).toBeHidden();
 });
 
-test('can create relationship by draging node handles', async ({
-	page,
-	request,
-}) => {
+test('can create relationship by draging node handles', async ({page}) => {
 	const api = new ApiHelpers(page);
 	const objectDefinitionsPage = new ObjectDefinitionsPage(page);
 	const modelBuilderPage = new ModelBuilderPage(page);
