@@ -14,45 +14,45 @@ import teardown from './modelBuilder.teardown';
 export const test = mergeTests(homeTest, objectsTest);
 
 test('created object folders are on the left side bar', async ({
-	objectDefinitionsPage,
-	signedInHomePage,
+	_objectDefinitionsPage,
+	_signedInHomePage,
 }) => {
 	const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
-	await objectDefinitionsPage.goto();
-	await objectDefinitionsPage.createNewObjectFolder(
+	await _objectDefinitionsPage.goto();
+	await _objectDefinitionsPage.createNewObjectFolder(
 		objectFolderExternalReferenceCode
 	);
 
 	await expect(
-		signedInHomePage.page
+		_objectDefinitionsPage.page
 			.locator('li')
 			.filter({hasText: objectFolderExternalReferenceCode})
 	).toBeVisible();
 });
 
 test('uncategorized folder does not contains delete and edit options', async ({
-	objectDefinitionsPage,
-	signedInHomePage,
+	_objectDefinitionsPage,
+	_signedInHomePage,
 }) => {
-	await objectDefinitionsPage.goto();
-	await objectDefinitionsPage.clickUncategorizedObjectFolder();
-	await objectDefinitionsPage.openObjectFolderActions();
+	await _objectDefinitionsPage.goto();
+	await _objectDefinitionsPage.clickUncategorizedObjectFolder();
+	await _objectDefinitionsPage.openObjectFolderActions();
 
 	await expect(
-		objectDefinitionsPage.objectFolderEditLabelAndERCOption
+		_objectDefinitionsPage.objectFolderEditLabelAndERCOption
 	).toBeHidden();
 	await expect(
-		objectDefinitionsPage.objectFolderDeleteFolderOption
+		_objectDefinitionsPage.objectFolderDeleteFolderOption
 	).toBeHidden();
 });
 
 test('can create relationship by dragging node handles', async ({
-	modelBuilderPage,
-	objectDefinitionsPage,
-	signedInHomePage,
+	_modelBuilderPage,
+	_objectDefinitionsPage,
+	_signedInHomePage,
 }) => {
-	const api = new ApiHelpers(modelBuilderPage.page);
+	const api = new ApiHelpers(_modelBuilderPage.page);
 
 	const objectFolder = await api.objects.postRandomObjectFolder();
 	const objectDefinition1 = await api.objects.postRandomObjectDefinition(
@@ -62,15 +62,15 @@ test('can create relationship by dragging node handles', async ({
 		objectFolder.externalReferenceCode
 	);
 
-	await objectDefinitionsPage.goto();
-	await objectDefinitionsPage.openObjectFolder(
+	await _objectDefinitionsPage.goto();
+	await _objectDefinitionsPage.openObjectFolder(
 		objectFolder.externalReferenceCode
 	);
-	await objectDefinitionsPage.viewInModelBuilder();
+	await _objectDefinitionsPage.viewInModelBuilder();
 
 	const objectRelationshipLabel = 'objectRelationship' + getRandomInt();
 
-	await modelBuilderPage.createObjectRelationship(
+	await _modelBuilderPage.createObjectRelationship(
 		objectDefinition1.externalReferenceCode,
 		objectDefinition2.externalReferenceCode,
 		objectRelationshipLabel,
@@ -80,12 +80,12 @@ test('can create relationship by dragging node handles', async ({
 	// -- Missing refact from here --
 
 	await expect(
-		signedInHomePage.page
+		_signedInHomePage.page
 			.locator('g > text')
 			.filter({hasText: objectRelationshipLabel})
 	).toBeVisible();
 
-	await signedInHomePage.page
+	await _signedInHomePage.page
 		.getByRole('button', {name: 'Show All Fields'})
 		.last()
 		.click();

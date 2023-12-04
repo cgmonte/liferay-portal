@@ -11,7 +11,7 @@ import {HomePage} from '../pages/home.page';
 const _AUTH_FILE = 'tmp/.auth/user.json';
 
 exports.test = test.extend({
-	signedInHomePage: async ({page}, use) => {
+	_signedInHomePage: async ({page}, use) => {
 		const homePage = new HomePage(page);
 		await homePage.login(
 			liferayConfig.user.login,

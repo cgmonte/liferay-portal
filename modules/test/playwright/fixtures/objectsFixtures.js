@@ -9,10 +9,10 @@ import {ModelBuilderPage} from '../pages/objects/modelBuilder.page';
 import {ObjectDefinitionsPage} from '../pages/objects/objectDefinitions.page';
 
 exports.test = test.extend({
-	modelBuilderPage: async ({page}, use) => {
+	_modelBuilderPage: async ({page}, use) => {
 		await use(new ModelBuilderPage(page));
 	},
-	objectDefinitionsPage: async ({page}, use) => {
+	_objectDefinitionsPage: async ({page}, use) => {
 		await use(new ObjectDefinitionsPage(page));
 	},
 });
