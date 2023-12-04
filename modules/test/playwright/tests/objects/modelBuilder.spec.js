@@ -45,9 +45,9 @@ test('uncategorized folder does not contains delete and edit options', async ({
 });
 
 test('can create relationship by dragging node handles', async ({
+	_api,
 	_modelBuilderPage,
 	_objectDefinitionsPage,
-	_api,
 	page,
 }) => {
 
