@@ -10,7 +10,15 @@ module.exports = defineConfig({
 	projects: [
 		{
 			name: 'chromium',
-			use: {...devices['Desktop Chrome']},
+			use: {
+				...devices['Desktop Chrome'],
+				storageState: 'tmp/.auth/user.json',
+			},
+			dependencies: ['setup'],
+		},
+		{
+			name: 'setup',
+			testMatch: /global.setup\.js/,
 		},
 	],
 	reporter: [

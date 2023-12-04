@@ -15,7 +15,6 @@ export const test = mergeTests(homeTest, objectsTest);
 
 test('created object folders are on the left side bar', async ({
 	_objectDefinitionsPage,
-	_signedInHomePage,
 }) => {
 	const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
@@ -33,7 +32,6 @@ test('created object folders are on the left side bar', async ({
 
 test('uncategorized folder does not contains delete and edit options', async ({
 	_objectDefinitionsPage,
-	_signedInHomePage,
 }) => {
 	await _objectDefinitionsPage.goto();
 	await _objectDefinitionsPage.clickUncategorizedObjectFolder();
@@ -50,7 +48,6 @@ test('uncategorized folder does not contains delete and edit options', async ({
 test('can create relationship by dragging node handles', async ({
 	_modelBuilderPage,
 	_objectDefinitionsPage,
-	_signedInHomePage,
 }) => {
 	const api = new ApiHelpers(_modelBuilderPage.page);
 
