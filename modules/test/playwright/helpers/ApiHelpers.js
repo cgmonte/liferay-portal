@@ -11,13 +11,27 @@ export class ApiHelpers {
 		this.baseUrl = liferayConfig.environment.baseUrl;
 		this.page = page;
 		this.objects = new ObjectsApiHelper(this);
-		this.user = liferayConfig.user;
+	}
+
+	async delete(url) {
+		const authToken = await this.page.evaluate(() => Liferay.authToken);
+
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-csrf-token': authToken,
+		};
+
+		return this.page.request.delete(url, {
+			headers,
+		});
 	}
 
 	async post(url, data) {
+		const authToken = await this.page.evaluate(() => Liferay.authToken);
+
 		const headers = {
-			Authorization:
-				'Basic ' + btoa(`${this.user.login}:${this.user.password}`),
+			'Content-Type': 'application/json',
+			'x-csrf-token': authToken,
 		};
 
 		const response = await this.page.request.post(url, {

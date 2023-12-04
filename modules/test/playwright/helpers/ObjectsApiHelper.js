@@ -8,6 +8,25 @@ import {getRandomInt} from '../utils/util';
 export class ObjectsApiHelper {
 	constructor(api) {
 		this.api = api;
+		this.basePath = 'object-admin/v1.0';
+	}
+
+	async deleteObjectDefinition(objectDefinitionId) {
+		return this.api.delete(
+			`${this.api.baseUrl}${this.basePath}/object-definitions/${objectDefinitionId}`
+		);
+	}
+
+	async deleteObjectFolder(objectFolderId) {
+		return this.api.delete(
+			`${this.api.baseUrl}${this.basePath}/object-folders/${objectFolderId}`
+		);
+	}
+
+	async deleteObjectRelationship(objectRelationshipId) {
+		return this.api.delete(
+			`${this.api.baseUrl}${this.basePath}/object-relationships/${objectRelationshipId}`
+		);
 	}
 
 	async postRandomObjectDefinition(objectFolderExternalReferenceCode) {
@@ -15,7 +34,7 @@ export class ObjectsApiHelper {
 			'ObjectDefinition' + getRandomInt();
 
 		return this.api.post(
-			this.api.baseUrl + 'object-admin/v1.0/object-definitions',
+			`${this.api.baseUrl}${this.basePath}/object-definitions`,
 			{
 				externalReferenceCode: objectDefinitionExternalReferenceCode,
 				label: {
@@ -36,7 +55,7 @@ export class ObjectsApiHelper {
 			'objectFolder' + getRandomInt();
 
 		return this.api.post(
-			this.api.baseUrl + 'object-admin/v1.0/object-folders',
+			`${this.api.baseUrl}${this.basePath}/object-folders`,
 			{
 				externalReferenceCode: objectFolderExternalReferenceCode,
 				label: {
