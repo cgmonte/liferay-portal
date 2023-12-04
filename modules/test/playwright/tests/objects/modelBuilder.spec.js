@@ -55,11 +55,11 @@ test('can create relationship by dragging node handles', async ({
 }) => {
 	const api = new ApiHelpers(modelBuilderPage.page);
 
-	const objectFolder = await api.objects.createRandomFolder();
-	const objectDefinition1 = await api.objects.createRandomObjectDefinition(
+	const objectFolder = await api.objects.postRandomObjectFolder();
+	const objectDefinition1 = await api.objects.postRandomObjectDefinition(
 		objectFolder.externalReferenceCode
 	);
-	const objectDefinition2 = await api.objects.createRandomObjectDefinition(
+	const objectDefinition2 = await api.objects.postRandomObjectDefinition(
 		objectFolder.externalReferenceCode
 	);
 

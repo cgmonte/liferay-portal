@@ -21,8 +21,8 @@ export class ApiHelpers {
 		};
 
 		const response = await this.page.request.post(url, {
-			headers,
 			data,
+			headers,
 		});
 
 		return await response.json();

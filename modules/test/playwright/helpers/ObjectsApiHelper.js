@@ -10,42 +10,38 @@ export class ObjectsApiHelper {
 		this.api = api;
 	}
 
-	async createRandomObjectDefinition(folderERC) {
-		const objectDefinitionERC = 'ObjectDefinition' + getRandomInt();
-
-		const randomObjectDefinition = {
-			label: {
-				en_US: objectDefinitionERC,
-			},
-			pluralLabel: {
-				en_US: objectDefinitionERC,
-			},
-			name: objectDefinitionERC,
-			scope: 'company',
-			externalReferenceCode: objectDefinitionERC,
-			objectFolderExternalReferenceCode: folderERC,
-		};
+	async postRandomObjectDefinition(objectFolderExternalReferenceCode) {
+		const objectDefinitionExternalReferenceCode = 'ObjectDefinition' + getRandomInt();
 
 		return this.api.post(
-			this.api.baseUrl + 'object-admin/v1.0/' + 'object-definitions',
-			randomObjectDefinition
+			this.api.baseUrl + 'object-admin/v1.0/object-definitions',
+			{
+				externalReferenceCode: objectDefinitionExternalReferenceCode,
+				label: {
+					en_US: objectDefinitionExternalReferenceCode,
+				},
+				name: objectDefinitionExternalReferenceCode,
+				objectFolderExternalReferenceCode: objectFolderExternalReferenceCode,
+				pluralLabel: {
+					en_US: objectDefinitionExternalReferenceCode,
+				},
+				scope: 'company'
+			}
 		);
 	}
 
-	async createRandomFolder() {
-		const objectFolderERC = 'objectFolder' + getRandomInt();
-
-		const randomObjectFolder = {
-			label: {
-				en_US: objectFolderERC,
-			},
-			name: objectFolderERC,
-			externalReferenceCode: objectFolderERC,
-		};
+	async postRandomObjectFolder() {
+		const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
 		return this.api.post(
-			this.api.baseUrl + 'object-admin/v1.0/' + 'object-folders',
-			randomObjectFolder
+			this.api.baseUrl + 'object-admin/v1.0/object-folders',
+			{
+				externalReferenceCode: objectFolderExternalReferenceCode,
+				label: {
+					en_US: objectFolderExternalReferenceCode,
+				},
+				name: objectFolderExternalReferenceCode
+			}
 		);
 	}
 }
