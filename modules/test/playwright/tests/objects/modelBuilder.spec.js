@@ -5,8 +5,8 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
-import {test as homeTest} from '../../fixtures/homePageFixtures';
-import {test as objectsTest} from '../../fixtures/objectsFixtures';
+import {test as homeTest} from '../../fixtures/homePage.fixture';
+import {test as objectsTest} from '../../fixtures/objects.fixture';
 import {ApiHelpers} from '../../helpers/ApiHelpers';
 import {getRandomInt} from '../../utils/util';
 import teardown from './modelBuilder.teardown';
