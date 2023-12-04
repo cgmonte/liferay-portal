@@ -17,15 +17,16 @@ test('created object folders are on the left side bar', async ({
 	objectDefinitionsPage,
 	signedInHomePage,
 }) => {
-	const objectFolderERC = 'objectFolder' + getRandomInt();
+	const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
 	await objectDefinitionsPage.goto();
-	await objectDefinitionsPage.createNewObjectFolder(objectFolderERC);
+	await objectDefinitionsPage.createNewObjectFolder(
+		objectFolderExternalReferenceCode);
 
 	await expect(
 		objectDefinitionsPage.page
 			.locator('li')
-			.filter({hasText: objectFolderERC})
+			.filter({hasText: objectFolderExternalReferenceCode})
 	).toBeVisible();
 });
 
