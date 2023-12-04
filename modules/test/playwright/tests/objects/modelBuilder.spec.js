@@ -3,44 +3,36 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {expect, test} from '@playwright/test';
-import teardown from './modelBuilder.teardown';
+import {expect, mergeTests} from '@playwright/test';
+
+import {test as homeTest} from '../../fixtures/homePageFixtures';
+import {test as objectsTest} from '../../fixtures/objectsFixtures';
 import {ApiHelpers} from '../../helpers/ApiHelpers';
 import {getRandomInt} from '../../utils/util';
-import {HomePage} from '../../pages/home.page';
-import {liferayConfig} from '../../liferay.config';
-import {ObjectDefinitionsPage} from '../../pages/objects/objectDefinitions.page';
-import {ModelBuilderPage} from '../../pages/objects/modelBuilder.page';
+import teardown from './modelBuilder.teardown';
 
-const authFile = 'tmp/.auth/user.json';
+export const test = mergeTests(homeTest, objectsTest);
 
-test.beforeEach('authenticate', async ({page}) => {
-	const homePage = new HomePage(page);
-
-	await homePage.login(liferayConfig.user.login, liferayConfig.user.password);
-
-	await expect(page.getByLabel('Open Applications MenuCtrl+')).toBeVisible();
-
-	await page.context().storageState({path: authFile});
-});
-
-test('created object folders are on the left side bar', async ({page}) => {
+test('created object folders are on the left side bar', async ({
+	objectDefinitionsPage,
+	signedInHomePage,
+}) => {
 	const objectFolderERC = 'objectFolder' + getRandomInt();
-	const objectDefinitionsPage = new ObjectDefinitionsPage(page);
 
 	await objectDefinitionsPage.goto();
 	await objectDefinitionsPage.createNewObjectFolder(objectFolderERC);
 
 	await expect(
-		page.locator('li').filter({hasText: objectFolderERC})
+		objectDefinitionsPage.page
+			.locator('li')
+			.filter({hasText: objectFolderERC})
 	).toBeVisible();
 });
 
 test('uncategorized folder does not contains delete and edit options', async ({
-	page,
+	objectDefinitionsPage,
+	signedInHomePage,
 }) => {
-	const objectDefinitionsPage = new ObjectDefinitionsPage(page);
-
 	await objectDefinitionsPage.goto();
 	await objectDefinitionsPage.clickUncategorizedObjectFolder();
 	await objectDefinitionsPage.openObjectFolderActions();
@@ -54,12 +46,12 @@ test('uncategorized folder does not contains delete and edit options', async ({
 });
 
 test('can create relationship by draging node handles', async ({
-	page,
+	modelBuilderPage,
+	objectDefinitionsPage,
 	request,
+	signedInHomePage,
 }) => {
-	const api = new ApiHelpers(page);
-	const objectDefinitionsPage = new ObjectDefinitionsPage(page);
-	const modelBuilderPage = new ModelBuilderPage(page);
+	const api = new ApiHelpers(modelBuilderPage.page);
 
 	const objectFolder = await api.objects.createRandomFolder();
 	const objectDefintion1 = await api.objects.createRandomObjectDefinition(
@@ -87,14 +79,20 @@ test('can create relationship by draging node handles', async ({
 	// -- Missing refact from here --
 
 	await expect(
-		page.locator('g > text').filter({hasText: objectRelationshipLabel})
+		signedInHomePage.page
+			.locator('g > text')
+			.filter({hasText: objectRelationshipLabel})
 	).toBeVisible();
 
-	await page.getByRole('button', {name: 'Show All Fields'}).last().click();
+	await signedInHomePage.page
+		.getByRole('button', {name: 'Show All Fields'})
+		.last()
+		.click();
 
 	// await expect(
 	// 	page.getByText('new-one-to-many-relationship-1relationship')
 	// ).toBeVisible();
+
 });
 
 test.afterEach(
