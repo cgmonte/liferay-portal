@@ -45,7 +45,7 @@ test('uncategorized folder does not contains delete and edit options', async ({
 	).toBeHidden();
 });
 
-test('can create relationship by draging node handles', async ({
+test('can create relationship by dragging node handles', async ({
 	modelBuilderPage,
 	objectDefinitionsPage,
 	request,
@@ -54,10 +54,10 @@ test('can create relationship by draging node handles', async ({
 	const api = new ApiHelpers(modelBuilderPage.page);
 
 	const objectFolder = await api.objects.createRandomFolder();
-	const objectDefintion1 = await api.objects.createRandomObjectDefinition(
+	const objectDefinition1 = await api.objects.createRandomObjectDefinition(
 		objectFolder.externalReferenceCode
 	);
-	const objectDefintion2 = await api.objects.createRandomObjectDefinition(
+	const objectDefinition2 = await api.objects.createRandomObjectDefinition(
 		objectFolder.externalReferenceCode
 	);
 
@@ -70,8 +70,8 @@ test('can create relationship by draging node handles', async ({
 	const objectRelationshipLabel = 'objectRelationship' + getRandomInt();
 
 	await modelBuilderPage.createObjectRelationship(
-		objectDefintion1.externalReferenceCode,
-		objectDefintion2.externalReferenceCode,
+		objectDefinition1.externalReferenceCode,
+		objectDefinition2.externalReferenceCode,
 		objectRelationshipLabel,
 		'One to Many'
 	);
