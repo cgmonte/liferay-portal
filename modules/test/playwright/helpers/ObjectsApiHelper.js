@@ -11,7 +11,8 @@ export class ObjectsApiHelper {
 	}
 
 	async postRandomObjectDefinition(objectFolderExternalReferenceCode) {
-		const objectDefinitionExternalReferenceCode = 'ObjectDefinition' + getRandomInt();
+		const objectDefinitionExternalReferenceCode =
+			'ObjectDefinition' + getRandomInt();
 
 		return this.api.post(
 			this.api.baseUrl + 'object-admin/v1.0/object-definitions',
@@ -21,17 +22,18 @@ export class ObjectsApiHelper {
 					en_US: objectDefinitionExternalReferenceCode,
 				},
 				name: objectDefinitionExternalReferenceCode,
-				objectFolderExternalReferenceCode: objectFolderExternalReferenceCode,
+				objectFolderExternalReferenceCode,
 				pluralLabel: {
 					en_US: objectDefinitionExternalReferenceCode,
 				},
-				scope: 'company'
+				scope: 'company',
 			}
 		);
 	}
 
 	async postRandomObjectFolder() {
-		const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
+		const objectFolderExternalReferenceCode =
+			'objectFolder' + getRandomInt();
 
 		return this.api.post(
 			this.api.baseUrl + 'object-admin/v1.0/object-folders',
@@ -40,7 +42,7 @@ export class ObjectsApiHelper {
 				label: {
 					en_US: objectFolderExternalReferenceCode,
 				},
-				name: objectFolderExternalReferenceCode
+				name: objectFolderExternalReferenceCode,
 			}
 		);
 	}

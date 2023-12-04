@@ -33,7 +33,7 @@ export class ModelBuilderPage {
 	clickObjectDefinitionCardDot(objectDefinitionERC, position) {
 		let dataHandled = 'fixedRightHandle';
 
-		if (position == 'left') {
+		if (position === 'left') {
 			dataHandled = 'fixedLeftHandle';
 		}
 

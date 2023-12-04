@@ -25,7 +25,7 @@ test('created object folders are on the left side bar', async ({
 	);
 
 	await expect(
-		objectDefinitionsPage.page
+		signedInHomePage.page
 			.locator('li')
 			.filter({hasText: objectFolderExternalReferenceCode})
 	).toBeVisible();
@@ -50,7 +50,6 @@ test('uncategorized folder does not contains delete and edit options', async ({
 test('can create relationship by dragging node handles', async ({
 	modelBuilderPage,
 	objectDefinitionsPage,
-	request,
 	signedInHomePage,
 }) => {
 	const api = new ApiHelpers(modelBuilderPage.page);
