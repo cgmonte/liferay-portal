@@ -21,7 +21,8 @@ test('created object folders are on the left side bar', async ({
 
 	await objectDefinitionsPage.goto();
 	await objectDefinitionsPage.createNewObjectFolder(
-		objectFolderExternalReferenceCode);
+		objectFolderExternalReferenceCode
+	);
 
 	await expect(
 		objectDefinitionsPage.page

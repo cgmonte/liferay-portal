@@ -1,4 +1,9 @@
-import { getRandomInt } from "../utils/util";
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import {getRandomInt} from '../utils/util';
 
 export class ObjectsApiHelper {
 	constructor(api) {
@@ -6,8 +11,7 @@ export class ObjectsApiHelper {
 	}
 
 	async createRandomObjectDefinition(folderERC) {
-		const objectDefinitionERC =
-			'ObjectDefinition' + getRandomInt();
+		const objectDefinitionERC = 'ObjectDefinition' + getRandomInt();
 
 		const randomObjectDefinition = {
 			label: {

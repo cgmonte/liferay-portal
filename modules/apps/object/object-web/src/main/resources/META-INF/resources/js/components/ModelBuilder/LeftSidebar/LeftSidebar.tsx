@@ -141,7 +141,6 @@ export default function LeftSidebar() {
 							!!leftSidebarItems.length && (
 								<>
 									<LeftSidebarTreeView
-
 										expandedKeys={expandedKeys}
 										leftSidebarOtherObjectFoldersItems={
 											leftSidebarOtherObjectFoldersItems
