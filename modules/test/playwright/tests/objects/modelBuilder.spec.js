@@ -5,13 +5,12 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
-import {test as homeTest} from '../../fixtures/homePage.fixture';
-import {test as objectsTest} from '../../fixtures/objects.fixture';
-import {ApiHelpers} from '../../helpers/ApiHelpers';
+import {test as objectsPagesTest} from '../../fixtures/objectsPages.fixture';
+import {test as apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
 import {getRandomInt} from '../../utils/util';
 import teardown from './modelBuilder.teardown';
 
-export const test = mergeTests(homeTest, objectsTest);
+export const test = mergeTests(apiHelpersTest, objectsPagesTest);
 
 test('created object folders are on the left side bar', async ({
 	_objectDefinitionsPage,
@@ -48,14 +47,15 @@ test('uncategorized folder does not contains delete and edit options', async ({
 test('can create relationship by dragging node handles', async ({
 	_modelBuilderPage,
 	_objectDefinitionsPage,
+	_api,
+	page,
 }) => {
-	const api = new ApiHelpers(_modelBuilderPage.page);
 
-	const objectFolder = await api.objects.postRandomObjectFolder();
-	const objectDefinition1 = await api.objects.postRandomObjectDefinition(
+	const objectFolder = await _api.objects.postRandomObjectFolder();
+	const objectDefinition1 = await _api.objects.postRandomObjectDefinition(
 		objectFolder.externalReferenceCode
 	);
-	const objectDefinition2 = await api.objects.postRandomObjectDefinition(
+	const objectDefinition2 = await _api.objects.postRandomObjectDefinition(
 		objectFolder.externalReferenceCode
 	);
 
@@ -77,12 +77,12 @@ test('can create relationship by dragging node handles', async ({
 	// -- Missing refact from here --
 
 	await expect(
-		_signedInHomePage.page
+		page
 			.locator('g > text')
 			.filter({hasText: objectRelationshipLabel})
 	).toBeVisible();
 
-	await _signedInHomePage.page
+	await page
 		.getByRole('button', {name: 'Show All Fields'})
 		.last()
 		.click();
