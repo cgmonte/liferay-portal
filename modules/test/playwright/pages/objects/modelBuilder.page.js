@@ -13,16 +13,16 @@ export class ModelBuilderPage {
 
 		this.objectDefinitionsPage = new ObjectDefinitionsPage(page);
 
-		this.newRelationshipTitle = page.getByRole('heading', {
+		this.newObjectRelationshipTitle = page.getByRole('heading', {
 			name: 'New Relationship',
 		});
-		this.newRelationshipLabel = page.getByLabel('Label', {
+		this.newObjectRelationshipLabel = page.getByLabel('Label', {
 			exact: true,
 		});
-		this.newRelationshipType = page.getByLabel('Type');
+		this.newObjectRelationshipType = page.getByLabel('Type');
 		this.newRelationship = page.getByLabel('Type');
 
-		this.saveNewRelationshipButton = page.getByRole('button', {
+		this.saveNewObjectRelationshipButton = page.getByRole('button', {
 			name: 'Save',
 		});
 		this.showAllFieldsButton = page.getByRole('button', {
@@ -42,8 +42,8 @@ export class ModelBuilderPage {
 		);
 	}
 
-	async chooseNewRelationshipTypeOption(type) {
-		await this.newRelationshipType.click();
+	async chooseNewObjectRelationshipTypeOption(type) {
+		await this.newObjectRelationshipType.click();
 		await this.page.getByRole('option', {name: type}).click();
 	}
 
@@ -53,22 +53,25 @@ export class ModelBuilderPage {
 	}
 
 	async createObjectRelationship(
-		objectDefinitionERC1,
-		objectDefinitionERC2,
+		objectDefinitionExternalReferenceCode1,
+		objectDefinitionExternalReferenceCode2,
 		objectRelationshipLabel,
 		type
 	) {
 		await this.clickObjectDefinitionCardDot(
-			objectDefinitionERC1,
+			objectDefinitionExternalReferenceCode1,
 			'right'
 		).dragTo(
-			this.clickObjectDefinitionCardDot(objectDefinitionERC2, 'left')
+			this.clickObjectDefinitionCardDot(
+				objectDefinitionExternalReferenceCode2,
+				'left'
+			)
 		);
 
-		await expect(this.newRelationshipTitle).toBeVisible();
+		await expect(this.newObjectRelationshipTitle).toBeVisible();
 
-		await this.newRelationshipLabel.fill(objectRelationshipLabel);
-		await this.chooseNewRelationshipTypeOption(type);
-		await this.saveNewRelationshipButton.click();
+		await this.newObjectRelationshipLabel.fill(objectRelationshipLabel);
+		await this.chooseNewObjectRelationshipTypeOption(type);
+		await this.saveNewObjectRelationshipButton.click();
 	}
 }

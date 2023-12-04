@@ -11,13 +11,13 @@ export class ObjectDefinitionsPage {
 
 		this.objectFolderLabel = page.locator('input[name="label"]');
 
-		this.uncategorizedFolderLink = this.page
+		this.uncategorizedObjectFolderLink = this.page
 			.locator('li')
 			.filter({hasText: 'Uncategorized'});
-		this.folderActionsLink = this.page.getByLabel('folder-actions');
+		this.objectFolderActionsLink = this.page.getByLabel('folder-actions');
 
 		this.addObjectFolderButton = this.page.getByLabel('Add Object Folder');
-		this.createFolderButton = this.page.getByRole('button', {
+		this.createObjectFolderButton = this.page.getByRole('button', {
 			name: 'Create Folder',
 		});
 		this.viewInModelBuilderButton = this.page.getByLabel(
@@ -47,25 +47,25 @@ export class ObjectDefinitionsPage {
 		this.viewInModelBuilderButton.click();
 	}
 
-	async createNewObjectFolder(folderLabel) {
+	async createNewObjectFolder(objectFolderLabel) {
 		await this.addObjectFolderButton.click();
 		await this.objectFolderLabel.click();
-		await this.objectFolderLabel.fill(folderLabel);
-		await this.createFolderButton.click();
+		await this.objectFolderLabel.fill(objectFolderLabel);
+		await this.createObjectFolderButton.click();
 	}
 
 	async clickUncategorizedObjectFolder() {
-		await this.uncategorizedFolderLink.click();
+		await this.uncategorizedObjectFolderLink.click();
 	}
 
 	async openObjectFolderActions() {
-		await this.folderActionsLink.click();
+		await this.objectFolderActionsLink.click();
 	}
 
-	async openObjectFolder(objectFolderERC) {
+	async openObjectFolder(objectFolderExternalReferenceCode) {
 		await this.page
 			.locator('li')
-			.filter({hasText: objectFolderERC})
+			.filter({hasText: objectFolderExternalReferenceCode})
 			.click();
 	}
 }
