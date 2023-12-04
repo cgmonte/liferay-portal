@@ -5,7 +5,7 @@
 
 import {getRandomInt} from '../utils/util';
 
-export class ObjectsApiHelper {
+export class ObjectAdminApiHelper {
 	constructor(api) {
 		this.api = api;
 		this.basePath = 'object-admin/v1.0';

@@ -4,13 +4,13 @@
  */
 
 import {liferayConfig} from '../liferay.config';
-import {ObjectsApiHelper} from './ObjectsApiHelper';
+import {ObjectAdminApiHelper} from './ObjectAdminApiHelper';
 
 export class ApiHelpers {
 	constructor(page) {
 		this.baseUrl = liferayConfig.environment.baseUrl;
 		this.page = page;
-		this.objects = new ObjectsApiHelper(this);
+		this.objectAdmin = new ObjectAdminApiHelper(this);
 	}
 
 	async delete(url) {
