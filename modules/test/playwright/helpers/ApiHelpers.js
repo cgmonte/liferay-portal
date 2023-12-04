@@ -25,8 +25,6 @@ export class ApiHelpers {
 			data,
 		});
 
-		const responseJSON = await response.json();
-
-		return responseJSON;
+		return await response.json();
 	}
 }

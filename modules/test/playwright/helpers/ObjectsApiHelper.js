@@ -26,12 +26,10 @@ export class ObjectsApiHelper {
 			objectFolderExternalReferenceCode: folderERC,
 		};
 
-		const objectDefinition = this.api.post(
+		return this.api.post(
 			this.api.baseUrl + 'object-admin/v1.0/' + 'object-definitions',
 			randomObjectDefinition
 		);
-
-		return objectDefinition;
 	}
 
 	async createRandomFolder() {
@@ -45,11 +43,9 @@ export class ObjectsApiHelper {
 			externalReferenceCode: objectFolderERC,
 		};
 
-		const objectFolder = this.api.post(
+		return this.api.post(
 			this.api.baseUrl + 'object-admin/v1.0/' + 'object-folders',
 			randomObjectFolder
 		);
-
-		return objectFolder;
 	}
 }
