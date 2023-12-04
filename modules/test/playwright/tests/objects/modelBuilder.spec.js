@@ -5,8 +5,8 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
-import {test as objectsPagesTest} from '../../fixtures/objectsPages.fixture';
 import {test as apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
+import {test as objectsPagesTest} from '../../fixtures/objectsPages.fixture';
 import {getRandomInt} from '../../utils/util';
 import teardown from './modelBuilder.teardown';
 
@@ -50,7 +50,6 @@ test('can create relationship by dragging node handles', async ({
 	_objectDefinitionsPage,
 	page,
 }) => {
-
 	const objectFolder = await _api.objects.postRandomObjectFolder();
 	const objectDefinition1 = await _api.objects.postRandomObjectDefinition(
 		objectFolder.externalReferenceCode
@@ -77,15 +76,10 @@ test('can create relationship by dragging node handles', async ({
 	// -- Missing refact from here --
 
 	await expect(
-		page
-			.locator('g > text')
-			.filter({hasText: objectRelationshipLabel})
+		page.locator('g > text').filter({hasText: objectRelationshipLabel})
 	).toBeVisible();
 
-	await page
-		.getByRole('button', {name: 'Show All Fields'})
-		.last()
-		.click();
+	await page.getByRole('button', {name: 'Show All Fields'}).last().click();
 
 	// await expect(
 	// 	page.getByText('new-one-to-many-relationship-1relationship')

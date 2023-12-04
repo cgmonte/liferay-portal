@@ -4,11 +4,11 @@
  */
 
 import {test} from '@playwright/test';
-import { ApiHelpers } from '../helpers/ApiHelpers';
+
+import {ApiHelpers} from '../helpers/ApiHelpers';
 
 exports.test = test.extend({
-
-    _api: async ({page}, use) => {
+	_api: async ({page}, use) => {
 		await use(new ApiHelpers(page));
-	}
+	},
 });
