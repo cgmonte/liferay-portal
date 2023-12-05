@@ -7,28 +7,28 @@ import {HomePage} from '../home.page';
 
 export class ObjectDefinitionsPage {
 	constructor(page) {
-		this.addObjectFolderButton = this.page.getByLabel('Add Object Folder');
-		this.createObjectFolderButton = this.page.getByRole('button', {
+		this.addObjectFolderButton = page.getByLabel('Add Object Folder');
+		this.createObjectFolderButton = page.getByRole('button', {
 			name: 'Create Folder',
 		});
 		this.homePage = new HomePage(page);
-		this.objectFolderActionsLink = this.page.getByLabel('folder-actions');
+		this.objectFolderActionsLink = page.getByLabel('folder-actions');
 
-		this.objectFolderDeleteFolderOption = this.page.getByRole('menuitem', {
+		this.objectFolderDeleteFolderOption = page.getByRole('menuitem', {
 			name: 'Delete Folder',
 		});
-		this.objectFolderEditLabelAndERCOption = this.page.getByRole(
+		this.objectFolderEditLabelAndERCOption = page.getByRole(
 			'menuitem',
 			{name: 'Edit Label and ERC'}
 		);
 		this.objectFolderLabel = page.locator('input[name="label"]');
 
 		this.page = page;
-		this.uncategorizedObjectFolderLink = this.page
+		this.uncategorizedObjectFolderLink = page
 			.locator('li')
 			.filter({hasText: 'Uncategorized'});
 
-		this.viewInModelBuilderButton = this.page.getByLabel(
+		this.viewInModelBuilderButton = page.getByLabel(
 			'View in Model Builder'
 		);
 	}

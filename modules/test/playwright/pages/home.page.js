@@ -5,13 +5,13 @@
 
 export class HomePage {
 	constructor(page) {
-		this.applicationMenuButton = this.page.getByLabel(
+		this.applicationMenuButton = page.getByLabel(
 			'Open Applications MenuCtrl+'
 		);
-		this.controlPanelButton = this.page.getByRole('tab', {
+		this.controlPanelButton = page.getByRole('tab', {
 			name: 'Control Panel',
 		});
-		this.objectsLink = this.page.getByRole('link', {name: 'Objects'});
+		this.objectsLink = page.getByRole('link', {name: 'Objects'});
 		this.page = page;
 		this.signInButton = page.getByRole('button', {name: 'Sign In'});
 	}
