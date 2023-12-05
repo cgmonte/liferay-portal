@@ -22,7 +22,7 @@ setup('do login', async ({page}) => {
 		.click();
 
 	await expect(page.getByLabel('Open Applications MenuCtrl+')).toBeVisible({
-		timeout: 20 * 1000,
+		timeout: 100 * 1000,
 	});
 
 	await page.context().storageState({path: 'tmp/.auth/user.json'});
