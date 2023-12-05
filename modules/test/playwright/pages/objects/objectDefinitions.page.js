@@ -24,10 +24,6 @@ export class ObjectDefinitionsPage {
 			'View in Model Builder'
 		);
 
-		this.objectFolderActionsList = this.page
-			.locator('.lfr__object-web-view-folder-actions')
-			.locator('li');
-
 		this.objectFolderEditLabelAndERCOption = this.page.getByRole(
 			'menuitem',
 			{name: 'Edit Label and ERC'}
