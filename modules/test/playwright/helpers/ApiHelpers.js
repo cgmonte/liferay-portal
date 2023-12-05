@@ -9,8 +9,8 @@ import {ObjectAdminApiHelper} from './ObjectAdminApiHelper';
 export class ApiHelpers {
 	constructor(page) {
 		this.baseUrl = liferayConfig.environment.baseUrl;
-		this.page = page;
 		this.objectAdmin = new ObjectAdminApiHelper(this);
+		this.page = page;
 	}
 
 	async delete(url) {

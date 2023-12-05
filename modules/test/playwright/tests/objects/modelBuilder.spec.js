@@ -16,9 +16,10 @@ test('created object folders are on the left side bar', async ({
 	_api,
 	_objectDefinitionsPage,
 }) => {
+	await _objectDefinitionsPage.goto();
+
 	const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
-	await _objectDefinitionsPage.goto();
 	const objectFolder = await _objectDefinitionsPage.createNewObjectFolder(
 		objectFolderExternalReferenceCode
 	);
@@ -42,10 +43,10 @@ test('uncategorized folder does not contains delete and edit options', async ({
 	await _objectDefinitionsPage.openObjectFolderActions();
 
 	await expect(
-		_objectDefinitionsPage.objectFolderEditLabelAndERCOption
+		_objectDefinitionsPage.objectFolderDeleteFolderOption
 	).toBeHidden();
 	await expect(
-		_objectDefinitionsPage.objectFolderDeleteFolderOption
+		_objectDefinitionsPage.objectFolderEditLabelAndERCOption
 	).toBeHidden();
 });
 

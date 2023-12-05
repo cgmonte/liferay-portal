@@ -9,12 +9,12 @@ module.exports = defineConfig({
 	forbidOnly: !!process.env.CI,
 	projects: [
 		{
+			dependencies: ['setup'],
 			name: 'chromium',
 			use: {
 				...devices['Desktop Chrome'],
 				storageState: 'tmp/.auth/user.json',
 			},
-			dependencies: ['setup'],
 		},
 		{
 			name: 'setup',

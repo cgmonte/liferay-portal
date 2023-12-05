@@ -9,24 +9,28 @@ import {ObjectDefinitionsPage} from './objectDefinitions.page';
 
 export class ModelBuilderPage {
 	constructor(page) {
-		this.page = page;
-
-		this.objectDefinitionsPage = new ObjectDefinitionsPage(page);
+		this.newObjectRelationshipLabel = page.getByLabel('Label', {
+			exact: true,
+		});
 
 		this.newObjectRelationshipTitle = page.getByRole('heading', {
 			name: 'New Relationship',
 		});
-		this.newObjectRelationshipLabel = page.getByLabel('Label', {
-			exact: true,
-		});
 		this.newObjectRelationshipType = page.getByLabel('Type');
+
+		this.page = page;
+
+		this.objectDefinitionsPage = new ObjectDefinitionsPage(page);
 
 		this.saveNewObjectRelationshipButton = page.getByRole('button', {
 			name: 'Save',
 		});
 	}
 
-	clickObjectDefinitionCardDot(objectDefinitionERC, position) {
+	clickObjectDefinitionCardDot(
+		objectDefinitionExternalReferenceCode,
+		position
+	) {
 		let dataHandled = 'fixedRightHandle';
 
 		if (position === 'left') {
@@ -34,7 +38,7 @@ export class ModelBuilderPage {
 		}
 
 		return this.page.locator(
-			`[data-testid="${objectDefinitionERC}_${position}"]:not([data-handleid="${dataHandled}"])`
+			`[data-testid="${objectDefinitionExternalReferenceCode}_${position}"]:not([data-handleid="${dataHandled}"])`
 		);
 	}
 
