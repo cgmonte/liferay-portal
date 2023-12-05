@@ -20,7 +20,7 @@ test('created object folders are on the left side bar', async ({
 
 	const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
-	const objectFolder = await _objectDefinitionsPage.createNewObjectFolder(
+	const objectFolder = await _objectDefinitionsPage.createObjectFolder(
 		objectFolderExternalReferenceCode
 	);
 

@@ -41,7 +41,7 @@ export class ObjectDefinitionsPage {
 		this.viewInModelBuilderButton.click();
 	}
 
-	async createNewObjectFolder(objectFolderLabel) {
+	async createObjectFolder(objectFolderLabel) {
 		await this.addObjectFolderButton.click();
 		await this.objectFolderLabel.click();
 		await this.objectFolderLabel.fill(objectFolderLabel);
