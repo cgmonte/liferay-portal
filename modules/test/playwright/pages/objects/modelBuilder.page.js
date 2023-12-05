@@ -72,6 +72,12 @@ export class ModelBuilderPage {
 
 		await this.newObjectRelationshipLabel.fill(objectRelationshipLabel);
 		await this.chooseNewObjectRelationshipTypeOption(type);
+		const responsePromise = this.page.waitForResponse(
+			'**/object-relationships'
+		);
 		await this.saveNewObjectRelationshipButton.click();
+		const response = await responsePromise;
+
+		return await response.json();
 	}
 }

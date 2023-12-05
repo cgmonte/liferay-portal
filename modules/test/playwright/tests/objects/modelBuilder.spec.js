@@ -6,19 +6,20 @@
 import {expect, mergeTests} from '@playwright/test';
 
 import {test as apiHelpersTest} from '../../fixtures/apiHelpers.fixture';
+import {test as homePageTest} from '../../fixtures/homePage.fixture';
 import {test as objectsPagesTest} from '../../fixtures/objectsPages.fixture';
 import {getRandomInt} from '../../utils/util';
-import teardown from './modelBuilder.teardown';
 
-export const test = mergeTests(apiHelpersTest, objectsPagesTest);
+export const test = mergeTests(apiHelpersTest, homePageTest, objectsPagesTest);
 
 test('created object folders are on the left side bar', async ({
+	_api,
 	_objectDefinitionsPage,
 }) => {
 	const objectFolderExternalReferenceCode = 'objectFolder' + getRandomInt();
 
 	await _objectDefinitionsPage.goto();
-	await _objectDefinitionsPage.createNewObjectFolder(
+	const objectFolder = await _objectDefinitionsPage.createNewObjectFolder(
 		objectFolderExternalReferenceCode
 	);
 
@@ -27,6 +28,10 @@ test('created object folders are on the left side bar', async ({
 			.locator('li')
 			.filter({hasText: objectFolderExternalReferenceCode})
 	).toBeVisible();
+
+	// Clean up
+
+	await _api.objectAdmin.deleteObjectFolder(objectFolder.id);
 });
 
 test('uncategorized folder does not contains delete and edit options', async ({
@@ -46,10 +51,13 @@ test('uncategorized folder does not contains delete and edit options', async ({
 
 test('can create relationship by dragging node handles', async ({
 	_api,
+	_homePage,
 	_modelBuilderPage,
 	_objectDefinitionsPage,
 	page,
 }) => {
+	_homePage.goto();
+
 	const objectFolder = await _api.objectAdmin.postRandomObjectFolder();
 	const objectDefinition1 = await _api.objectAdmin.postRandomObjectDefinition(
 		objectFolder.externalReferenceCode
@@ -66,7 +74,7 @@ test('can create relationship by dragging node handles', async ({
 
 	const objectRelationshipLabel = 'objectRelationship' + getRandomInt();
 
-	await _modelBuilderPage.createObjectRelationship(
+	const objectRelationship = await _modelBuilderPage.createObjectRelationship(
 		objectDefinition1.externalReferenceCode,
 		objectDefinition2.externalReferenceCode,
 		objectRelationshipLabel,
@@ -85,9 +93,10 @@ test('can create relationship by dragging node handles', async ({
 	// 	page.getByText('new-one-to-many-relationship-1relationship')
 	// ).toBeVisible();
 
-});
+	// Clean up
 
-test.afterEach(
-	'Teardown: delete all custom Objects and their relationships',
-	teardown
-);
+	await _api.objectAdmin.deleteObjectRelationship(objectRelationship.id);
+	await _api.objectAdmin.deleteObjectDefinition(objectDefinition1.id);
+	await _api.objectAdmin.deleteObjectDefinition(objectDefinition2.id);
+	await _api.objectAdmin.deleteObjectFolder(objectFolder.id);
+});

@@ -11,6 +11,9 @@ import {HomePage} from '../pages/home.page';
 const _AUTH_FILE = 'tmp/.auth/user.json';
 
 exports.test = test.extend({
+	_homePage: async ({page}, use) => {
+		await use(new HomePage(page));
+	},
 	_signedInHomePage: async ({page}, use) => {
 		const homePage = new HomePage(page);
 		await homePage.login(
