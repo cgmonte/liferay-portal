@@ -7,32 +7,30 @@ import {HomePage} from '../home.page';
 
 export class ObjectDefinitionsPage {
 	constructor(page) {
-		this.page = page;
-
-		this.objectFolderLabel = page.locator('input[name="label"]');
-
-		this.uncategorizedObjectFolderLink = this.page
-			.locator('li')
-			.filter({hasText: 'Uncategorized'});
-		this.objectFolderActionsLink = this.page.getByLabel('folder-actions');
-
 		this.addObjectFolderButton = this.page.getByLabel('Add Object Folder');
 		this.createObjectFolderButton = this.page.getByRole('button', {
 			name: 'Create Folder',
 		});
-		this.viewInModelBuilderButton = this.page.getByLabel(
-			'View in Model Builder'
-		);
+		this.homePage = new HomePage(page);
+		this.objectFolderActionsLink = this.page.getByLabel('folder-actions');
 
+		this.objectFolderDeleteFolderOption = this.page.getByRole('menuitem', {
+			name: 'Delete Folder',
+		});
 		this.objectFolderEditLabelAndERCOption = this.page.getByRole(
 			'menuitem',
 			{name: 'Edit Label and ERC'}
 		);
-		this.objectFolderDeleteFolderOption = this.page.getByRole('menuitem', {
-			name: 'Delete Folder',
-		});
+		this.objectFolderLabel = page.locator('input[name="label"]');
 
-		this.homePage = new HomePage(page);
+		this.page = page;
+		this.uncategorizedObjectFolderLink = this.page
+			.locator('li')
+			.filter({hasText: 'Uncategorized'});
+
+		this.viewInModelBuilderButton = this.page.getByLabel(
+			'View in Model Builder'
+		);
 	}
 
 	async goto() {

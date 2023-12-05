@@ -5,8 +5,6 @@
 
 export class HomePage {
 	constructor(page) {
-		this.page = page;
-		this.signInButton = page.getByRole('button', {name: 'Sign In'});
 		this.applicationMenuButton = this.page.getByLabel(
 			'Open Applications MenuCtrl+'
 		);
@@ -14,6 +12,8 @@ export class HomePage {
 			name: 'Control Panel',
 		});
 		this.objectsLink = this.page.getByRole('link', {name: 'Objects'});
+		this.page = page;
+		this.signInButton = page.getByRole('button', {name: 'Sign In'});
 	}
 
 	async goto() {
