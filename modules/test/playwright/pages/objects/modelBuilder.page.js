@@ -20,13 +20,9 @@ export class ModelBuilderPage {
 			exact: true,
 		});
 		this.newObjectRelationshipType = page.getByLabel('Type');
-		this.newRelationship = page.getByLabel('Type');
 
 		this.saveNewObjectRelationshipButton = page.getByRole('button', {
 			name: 'Save',
-		});
-		this.showAllFieldsButton = page.getByRole('button', {
-			name: 'Show All Fields',
 		});
 	}
 
