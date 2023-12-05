@@ -33,12 +33,8 @@ export class ObjectDefinitionsPage {
 		);
 	}
 
-	async goto() {
-		await this.homePage.goToObjects();
-	}
-
-	async viewInModelBuilder() {
-		this.viewInModelBuilderButton.click();
+	async clickUncategorizedObjectFolder() {
+		await this.uncategorizedObjectFolderLink.click();
 	}
 
 	async createObjectFolder(objectFolderLabel) {
@@ -53,8 +49,8 @@ export class ObjectDefinitionsPage {
 		return await response.json();
 	}
 
-	async clickUncategorizedObjectFolder() {
-		await this.uncategorizedObjectFolderLink.click();
+	async goto() {
+		await this.homePage.goToObjects();
 	}
 
 	async openObjectFolderActions() {
@@ -66,5 +62,9 @@ export class ObjectDefinitionsPage {
 			.locator('li')
 			.filter({hasText: objectFolderExternalReferenceCode})
 			.click();
+	}
+
+	async viewInModelBuilder() {
+		this.viewInModelBuilderButton.click();
 	}
 }
