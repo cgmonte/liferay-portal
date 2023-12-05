@@ -56,7 +56,7 @@ test('can create relationship by dragging node handles', async ({
 	_objectDefinitionsPage,
 	page,
 }) => {
-	_homePage.goto();
+	await _homePage.goto();
 
 	const objectFolder = await _api.objectAdmin.postRandomObjectFolder();
 	const objectDefinition1 = await _api.objectAdmin.postRandomObjectDefinition(
