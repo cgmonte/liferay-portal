@@ -9,18 +9,23 @@ import {ObjectDefinitionsPage} from './objectDefinitions.page';
 
 export class ModelBuilderPage {
 	constructor(page) {
-		this.newObjectRelationshipLabel = page.getByLabel('Label', {
-			exact: true,
-		});
+		this.newObjectRelationshipLabel = page
+			.locator('div.form-group')
+			.filter({hasText: /^LabelMandatory$/})
+			.getByRole('textbox');
 
 		this.newObjectRelationshipTitle = page.getByRole('heading', {
 			name: 'New Relationship',
 		});
-		this.newObjectRelationshipType = page.getByLabel('Type');
-
-		this.page = page;
+		this.newObjectRelationshipType = page.getByText('Many to Many');
 
 		this.objectDefinitionsPage = new ObjectDefinitionsPage(page);
+
+		this.objectDefinitionNodes = page.locator('.react-flow__node');
+
+		this.objectRelationshipEdges = page.locator('.react-flow__edge');
+
+		this.page = page;
 
 		this.saveNewObjectRelationshipButton = page.getByRole('button', {
 			name: 'Save',
@@ -38,8 +43,15 @@ export class ModelBuilderPage {
 		}
 
 		return this.page.locator(
-			`[data-testid="${objectDefinitionExternalReferenceCode}_${position}"]:not([data-handleid="${dataHandled}"])`
+			`div[data-handleid="${objectDefinitionExternalReferenceCode}_${position}"]:not([data-handleid="${dataHandled}"])`
 		);
+	}
+
+	async clickObjectDefinitionShowAllFieldsButton(objectDefinitionName) {
+		await this.objectDefinitionNodes
+			.filter({hasText: objectDefinitionName})
+			.getByRole('button', {name: 'Show All Fields'})
+			.click();
 	}
 
 	async chooseNewObjectRelationshipTypeOption(type) {
@@ -53,19 +65,16 @@ export class ModelBuilderPage {
 	}
 
 	async createObjectRelationship(
-		objectDefinitionExternalReferenceCode1,
-		objectDefinitionExternalReferenceCode2,
+		objectDefinitionId1,
+		objectDefinitionId2,
 		objectRelationshipLabel,
 		type
 	) {
 		await this.clickObjectDefinitionCardDot(
-			objectDefinitionExternalReferenceCode1,
+			objectDefinitionId1,
 			'right'
 		).dragTo(
-			this.clickObjectDefinitionCardDot(
-				objectDefinitionExternalReferenceCode2,
-				'left'
-			)
+			this.clickObjectDefinitionCardDot(objectDefinitionId2, 'left')
 		);
 
 		await expect(this.newObjectRelationshipTitle).toBeVisible();

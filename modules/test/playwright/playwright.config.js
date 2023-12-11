@@ -3,24 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-const {defineConfig, devices} = require('@playwright/test');
+import {defineConfig} from '@playwright/test';
 
-module.exports = defineConfig({
+import {globalSetupProjectConfig as setup} from './tests/global.setup.config';
+import {objectProjectConfig as object} from './tests/object/project.config';
+import {portalProjectConfig as portalWeb} from './tests/portal-web/project.config';
+
+export default defineConfig({
 	forbidOnly: !!process.env.CI,
-	projects: [
-		{
-			dependencies: ['setup'],
-			name: 'chromium',
-			use: {
-				...devices['Desktop Chrome'],
-				storageState: 'tmp/.auth/user.json',
-			},
-		},
-		{
-			name: 'setup',
-			testMatch: /global.setup\.js/,
-		},
-	],
+	projects: [object, portalWeb, setup],
 	reporter: [
 		[
 			'html',
@@ -37,7 +28,6 @@ module.exports = defineConfig({
 	],
 	retries: process.env.CI ? 2 : 0,
 	testDir: './tests',
-	timeout: 60000,
 	use: {
 		baseURL: process.env.PORTAL_URL
 			? process.env.PORTAL_URL

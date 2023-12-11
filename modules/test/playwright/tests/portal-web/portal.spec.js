@@ -5,9 +5,14 @@
 
 const {expect, test} = require('@playwright/test');
 
-test('has title', async ({page}) => {
+test('title is Home - Liferay DXP', async ({page}) => {
 	await page.goto('/');
 
 	await expect(page).toHaveTitle('Home - Liferay DXP');
+});
+
+test('has homepage image', async ({page}) => {
+	await page.goto('/');
+
 	await expect(page.locator('#main-content img')).toBeVisible();
 });
