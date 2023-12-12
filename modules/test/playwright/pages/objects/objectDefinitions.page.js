@@ -17,10 +17,9 @@ export class ObjectDefinitionsPage {
 		this.objectFolderDeleteFolderOption = page.getByRole('menuitem', {
 			name: 'Delete Folder',
 		});
-		this.objectFolderEditLabelAndERCOption = page.getByRole(
-			'menuitem',
-			{name: 'Edit Label and ERC'}
-		);
+		this.objectFolderEditLabelAndERCOption = page.getByRole('menuitem', {
+			name: 'Edit Label and ERC',
+		});
 		this.objectFolderLabel = page.locator('input[name="label"]');
 
 		this.page = page;
