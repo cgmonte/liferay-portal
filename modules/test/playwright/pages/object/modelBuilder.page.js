@@ -5,6 +5,8 @@
 
 import {expect} from '@playwright/test';
 
+import {ApiHelpers} from '../../helpers/ApiHelpers';
+import {ObjectAdminApiHelper} from '../../helpers/ObjectAdminApiHelper';
 import {ObjectDefinitionsPage} from './objectDefinitions.page';
 
 export class ModelBuilderPage {
@@ -17,6 +19,7 @@ export class ModelBuilderPage {
 			name: 'New Relationship',
 		});
 		this.newObjectRelationshipType = page.getByText('Many to Many');
+		this.objectAdminApiHelper = new ObjectAdminApiHelper(new ApiHelpers(page));
 		this.objectDefinitionsPage = new ObjectDefinitionsPage(page);
 		this.objectDefinitionNodes = page.locator('.react-flow__node');
 		this.objectRelationshipEdges = page.locator('.react-flow__edge');
@@ -24,6 +27,7 @@ export class ModelBuilderPage {
 		this.saveNewObjectRelationshipButton = page.getByRole('button', {
 			name: 'Save',
 		});
+		this.randomObjectRelationships = [];
 	}
 
 	clickObjectDefinitionCardDot(
@@ -77,6 +81,16 @@ export class ModelBuilderPage {
 		await this.saveNewObjectRelationshipButton.click();
 		const response = await responsePromise;
 
+		this.randomObjectRelationships.push(response);
+
 		return response.json();
+	}
+
+	async deleteAllRandomObjectRelationships() {
+		for (const objectRelationship of this.randomObjectRelationships) {
+			await this.objectAdminApiHelper.deleteObjectRelationship(
+				objectRelationship.id
+			);
+		}
 	}
 }

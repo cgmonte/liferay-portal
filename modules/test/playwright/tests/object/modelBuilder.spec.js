@@ -42,7 +42,7 @@ test('can create relationship by dragging node handles', async ({
 
 	const objectRelationshipLabel = 'objectRelationship' + getRandomInt();
 
-	const objectRelationship = await _modelBuilderPage.createObjectRelationship(
+	await _modelBuilderPage.createObjectRelationship(
 		objectDefinition1.id,
 		objectDefinition2.id,
 		objectRelationshipLabel,
@@ -64,10 +64,4 @@ test('can create relationship by dragging node handles', async ({
 			.filter({hasText: objectDefinition2.name})
 			.getByText(objectRelationshipLabel)
 	).toBeVisible();
-
-	// Relationships Teardown
-
-	await _apiHelpers.objectAdmin.deleteObjectRelationship(
-		objectRelationship.id
-	);
 });

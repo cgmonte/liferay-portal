@@ -10,7 +10,13 @@ import {ObjectDefinitionsPage} from '../pages/object/objectDefinitions.page';
 
 exports.test = test.extend({
 	_modelBuilderPage: async ({page}, use) => {
-		await use(new ModelBuilderPage(page));
+		const modelBuilderPage = new ModelBuilderPage(page);
+
+		await use(modelBuilderPage);
+
+		// Teardown
+
+		await modelBuilderPage.deleteAllRandomObjectRelationships();
 	},
 	_objectDefinitionsPage: async ({page}, use) => {
 		await use(new ObjectDefinitionsPage(page));
