@@ -9,6 +9,8 @@ export class ObjectAdminApiHelper {
 	constructor(apiHelpers) {
 		this.apiHelpers = apiHelpers;
 		this.basePath = 'object-admin/v1.0';
+		this.randomObjectDefinitions = [];
+		this.randomObjectFolders = [];
 	}
 
 	async deleteObjectDefinition(objectDefinitionId) {
@@ -33,7 +35,7 @@ export class ObjectAdminApiHelper {
 		const objectDefinitionExternalReferenceCode =
 			'ObjectDefinition' + getRandomInt();
 
-		return this.apiHelpers.post(
+		const response = await this.apiHelpers.post(
 			`${this.apiHelpers.baseUrl}${this.basePath}/object-definitions`,
 			{
 				externalReferenceCode: objectDefinitionExternalReferenceCode,
@@ -48,13 +50,17 @@ export class ObjectAdminApiHelper {
 				scope: 'company',
 			}
 		);
+
+		this.randomObjectDefinitions.push(response);
+
+		return response;
 	}
 
 	async postRandomObjectFolder() {
 		const objectFolderExternalReferenceCode =
 			'objectFolder' + getRandomInt();
 
-		return this.apiHelpers.post(
+		const response = await this.apiHelpers.post(
 			`${this.apiHelpers.baseUrl}${this.basePath}/object-folders`,
 			{
 				externalReferenceCode: objectFolderExternalReferenceCode,
@@ -64,5 +70,21 @@ export class ObjectAdminApiHelper {
 				name: objectFolderExternalReferenceCode,
 			}
 		);
+
+		this.randomObjectFolders.push(response);
+
+		return response;
+	}
+
+	async deleteAllRandomObjectDefinitions() {
+		for (const objectDefinition of this.randomObjectDefinitions) {
+			await this.deleteObjectDefinition(objectDefinition.id);
+		}
+	}
+
+	async deleteAllRandomObjectFolders() {
+		for (const objectFolder of this.randomObjectFolders) {
+			await this.deleteObjectFolder(objectFolder.id);
+		}
 	}
 }

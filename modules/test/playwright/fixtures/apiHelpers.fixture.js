@@ -9,6 +9,13 @@ import {ApiHelpers} from '../helpers/ApiHelpers';
 
 exports.test = test.extend({
 	_apiHelpers: async ({page}, use) => {
-		await use(new ApiHelpers(page));
+		const helper = new ApiHelpers(page);
+
+		await use(helper);
+
+		// Teardown
+
+		await helper.objectAdmin.deleteAllRandomObjectDefinitions();
+		await helper.objectAdmin.deleteAllRandomObjectFolders();
 	},
 });

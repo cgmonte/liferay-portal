@@ -65,14 +65,9 @@ test('can create relationship by dragging node handles', async ({
 			.getByText(objectRelationshipLabel)
 	).toBeVisible();
 
-	// Clean up
+	// Relationships Teardown
 
 	await _apiHelpers.objectAdmin.deleteObjectRelationship(
 		objectRelationship.id
 	);
-
-	await _apiHelpers.objectAdmin.deleteObjectDefinition(objectDefinition1.id);
-	await _apiHelpers.objectAdmin.deleteObjectDefinition(objectDefinition2.id);
-
-	await _apiHelpers.objectAdmin.deleteObjectFolder(objectFolder.id);
 });
