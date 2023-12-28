@@ -95,6 +95,7 @@ export function RightSidebarObjectFieldDetails() {
 
 			delete objectField.defaultValue;
 			delete objectField.listTypeDefinitionId;
+			delete objectField.system;
 
 			try {
 				const updatedObjectFieldResponse = await API.save<ObjectField>({
