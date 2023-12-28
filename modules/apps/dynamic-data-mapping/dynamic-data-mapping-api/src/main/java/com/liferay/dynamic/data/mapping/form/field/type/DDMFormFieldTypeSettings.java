@@ -56,7 +56,8 @@ public interface DDMFormFieldTypeSettings {
 	}
 
 	@DDMFormField(
-		label = "%field-name", properties = "normalizeField=true",
+		label = "%field.name",
+		properties = {"normalizeField=true", "tooltip=%field.name"},
 		required = true
 	)
 	public String name();
