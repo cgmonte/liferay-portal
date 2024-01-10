@@ -1,0 +1,41 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.collapsable-option-header {
+	border-bottom: none !important;
+	padding: 0.4rem 0 0.4rem 0.5rem !important;
+
+	&.last-option-header {
+		padding: 0.4rem 0 0.4rem 0 !important;
+	}
+
+	.panel-title {
+		text-transform: none;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: calc(100% - 31px);
+	}
+
+	.collapse-icon-closed,
+	.collapse-icon-open {
+		right: 4px !important;
+	}
+}
+
+#_com_liferay_journal_web_portlet_JournalPortlet_dataLayoutBuildercontainer {
+	.collapsable-option-body {
+		margin-bottom: 7px !important;
+		padding-top: 10px !important;
+	}
+}
+
+#_com_liferay_dynamic_data_mapping_form_web_portlet_DDMFormAdminPortlet_-container {
+	.collapsable-option-body {
+		margin-bottom: -7px !important;
+		padding: 10px 0px 0px 0px !important;
+	}
+}

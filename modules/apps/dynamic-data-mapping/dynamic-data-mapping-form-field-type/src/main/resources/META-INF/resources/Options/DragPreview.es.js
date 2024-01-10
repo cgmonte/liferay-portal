@@ -50,6 +50,8 @@ export default function DragPreview({children, component: Component}) {
 		return null;
 	}
 
+	console.log('layerStyles', layerStyles)
+
 	return (
 		<ReactPortal>
 			<div style={layerStyles}>

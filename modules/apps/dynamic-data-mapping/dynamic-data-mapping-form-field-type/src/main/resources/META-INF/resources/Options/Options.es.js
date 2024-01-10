@@ -13,7 +13,7 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import {FieldBase} from '../FieldBase/ReactFieldBase.es';
-import KeyValue from '../KeyValue/KeyValue.es';
+import OptionFieldKeyValue from '../OptionFieldKeyValue/OptionFieldKeyValue.es';
 import DnD from './DnD.es';
 import DragPreview from './DragPreview.es';
 import {
@@ -27,23 +27,29 @@ import {
 } from './util.es';
 
 const Option = React.forwardRef(
-	({children, className, disabled, style}, ref) => (
-		<div
-			className={classNames('ddm-field-options', className)}
-			style={style}
-		>
-			<span
-				className={classNames('ddm-options-drag', {
-					disabled,
+	({children, className, disabled, lastOption, style}, ref) => {
+		return (
+			<div
+				className={classNames('ddm-field-options', className, {
+					'ddm-field-last-option': lastOption,
 				})}
-				ref={disabled ? null : ref}
+				style={style}
 			>
-				<ClayIcon symbol="drag" />
-			</span>
+				{!lastOption && (
+					<span
+						className={classNames('ddm-options-drag', {
+							disabled,
+						})}
+						ref={disabled ? null : ref}
+					>
+						<ClayIcon symbol="drag" />
+					</span>
+				)}
 
-			<div className="ddm-option-entry">{children}</div>
-		</div>
-	)
+				<div className="ddm-option-entry">{children}</div>
+			</div>
+		);
+	}
 );
 
 const getInitialOption = (generateOptionValueUsingOptionLabel) => {
@@ -348,8 +354,7 @@ const Options = ({
 				id,
 				generateOptionValueUsingOptionLabel
 			);
-		}
-		else if (property === 'reference') {
+		} else if (property === 'reference') {
 			setFieldError(
 				checkValidReference(fields, value, fields[index].value)
 			);
@@ -366,8 +371,7 @@ const Options = ({
 					...option,
 					reference: option.value,
 				};
-			}
-			else {
+			} else {
 				set.add(option.reference);
 
 				return option;
@@ -496,8 +500,7 @@ const Options = ({
 				size: 'md',
 				title: Liferay.Language.get('delete-field-with-rule-applied'),
 			});
-		}
-		else {
+		} else {
 			composedDelete(index);
 		}
 	};
@@ -506,31 +509,40 @@ const Options = ({
 		<div className="ddm-field-options-container">
 			<DragPreview component={Option}>{children}</DragPreview>
 
-			{fields.map((option, index) => (
-				<DnD
-					index={index}
-					key={option.id}
-					onDragEnd={composedMove}
-					option={option}
-				>
-					<Option disabled={disabled}>
-						{children({
-							defaultOptionRef,
-							fieldError,
-							handleBlur: composedBlur.bind(this, index),
-							handleField: !(fields.length - 1 === index)
-								? composedChange.bind(this, index)
-								: composedAdd.bind(this, index),
-							index,
-							onClick: () =>
-								handleConfirmDelete(index, option.value),
-							option,
-							showCloseButton:
-								!(fields.length - 1 === index) && !disabled,
-						})}
-					</Option>
-				</DnD>
-			))}
+			{fields.map((option, index) => {
+				// console.log('option', option);
+				// console.log('children', children);
+
+				const lastOption = index === fields.length - 1;
+
+				return (
+					<DnD
+						index={index}
+						key={option.id}
+						onDragEnd={composedMove}
+						option={option}
+					>
+						<Option disabled={disabled} lastOption={lastOption}>
+							{children({
+								defaultOptionRef,
+								expandedPanel: true,
+								fieldError,
+								handleBlur: composedBlur.bind(this, index),
+								handleField: !(fields.length - 1 === index)
+									? composedChange.bind(this, index)
+									: composedAdd.bind(this, index),
+								index,
+								lastOption,
+								onClick: () =>
+									handleConfirmDelete(index, option.value),
+								option,
+								showCloseButton:
+									!(fields.length - 1 === index) && !disabled,
+							})}
+						</Option>
+					</DnD>
+				);
+			})}
 		</div>
 	);
 };
@@ -569,16 +581,18 @@ const Main = ({
 				>
 					{({
 						defaultOptionRef,
+						expandedPanel,
 						fieldError,
 						handleBlur,
 						handleField,
 						index,
+						lastOption,
 						onClick,
 						option,
 						showCloseButton,
 					}) =>
 						option && (
-							<KeyValue
+							<OptionFieldKeyValue
 								allowSpecialCharacters={allowSpecialCharacters}
 								displayErrors={
 									fieldError && fieldError === option.value
@@ -587,9 +601,12 @@ const Main = ({
 								errorMessage={Liferay.Language.get(
 									'this-reference-is-already-being-used'
 								)}
+								expandedPanel={expandedPanel}
 								generateKeyword={option.generateKeyword}
+								index={index}
 								keyword={option.value}
 								keywordReadOnly={keywordReadOnly}
+								lastOption={lastOption}
 								name={`option${index}`}
 								onBlur={handleBlur}
 								onChange={(value) =>
@@ -605,8 +622,7 @@ const Main = ({
 								onKeyDown={(event) => {
 									if (event.key === 'Tab') {
 										setTabPressed(true);
-									}
-									else {
+									} else {
 										setTabPressed(false);
 									}
 								}}
@@ -616,9 +632,9 @@ const Main = ({
 									handleField('value', value);
 								}}
 								onReferenceBlur={handleBlur}
-								onReferenceChange={(value) =>
-									handleField('reference', value)
-								}
+								onReferenceChange={(value) => {
+									handleField('reference', value);
+								}}
 								placeholder={placeholder}
 								readOnly={option.disabled}
 								reference={option.reference}
