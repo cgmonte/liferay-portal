@@ -13,7 +13,7 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import {FieldBase} from '../FieldBase/ReactFieldBase.es';
-import KeyValue from '../KeyValue/KeyValue.es';
+import OptionFieldKeyValue from '../OptionFieldKeyValue/OptionFieldKeyValue.es';
 import DnD from './DnD.es';
 import DragPreview from './DragPreview.es';
 import {
@@ -516,6 +516,7 @@ const Options = ({
 					<Option disabled={disabled}>
 						{children({
 							defaultOptionRef,
+							expandedPanel: true,
 							fieldError,
 							handleBlur: composedBlur.bind(this, index),
 							handleField: !(fields.length - 1 === index)
@@ -569,6 +570,7 @@ const Main = ({
 				>
 					{({
 						defaultOptionRef,
+						expandedPanel,
 						fieldError,
 						handleBlur,
 						handleField,
@@ -578,7 +580,7 @@ const Main = ({
 						showCloseButton,
 					}) =>
 						option && (
-							<KeyValue
+							<OptionFieldKeyValue
 								allowSpecialCharacters={allowSpecialCharacters}
 								displayErrors={
 									fieldError && fieldError === option.value
@@ -587,6 +589,7 @@ const Main = ({
 								errorMessage={Liferay.Language.get(
 									'this-reference-is-already-being-used'
 								)}
+								expandedPanel={expandedPanel}
 								generateKeyword={option.generateKeyword}
 								keyword={option.value}
 								keywordReadOnly={keywordReadOnly}
