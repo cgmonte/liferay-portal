@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import {usePrevious} from '@liferay/frontend-js-react-web';
 import classNames from 'classnames';
@@ -25,6 +26,8 @@ import {
 	normalizeReference,
 	random,
 } from './util.es';
+
+import './Options.scss';
 
 const Option = React.forwardRef(
 	({children, className, disabled, style}, ref) => (
@@ -506,32 +509,42 @@ const Options = ({
 		<div className="ddm-field-options-container">
 			<DragPreview component={Option}>{children}</DragPreview>
 
-			{fields.map((option, index) => (
-				<DnD
-					index={index}
-					key={option.id}
-					onDragEnd={composedMove}
-					option={option}
-				>
-					<Option disabled={disabled}>
-						{children({
-							defaultOptionRef,
-							expandedPanel: true,
-							fieldError,
-							handleBlur: composedBlur.bind(this, index),
-							handleField: !(fields.length - 1 === index)
-								? composedChange.bind(this, index)
-								: composedAdd.bind(this, index),
-							index,
-							onClick: () =>
-								handleConfirmDelete(index, option.value),
-							option,
-							showCloseButton:
-								!(fields.length - 1 === index) && !disabled,
-						})}
-					</Option>
-				</DnD>
-			))}
+			{fields.map((option, index) => {
+				return index !== fields.length - 1 ? (
+					<DnD
+						index={index}
+						key={option.id}
+						onDragEnd={composedMove}
+						option={option}
+					>
+						<Option disabled={disabled}>
+							{children({
+								defaultOptionRef,
+								expandedPanel: true,
+								fieldError,
+								handleBlur: composedBlur.bind(this, index),
+								handleField: composedChange.bind(this, index),
+								index,
+								onClick: () =>
+									handleConfirmDelete(index, option.value),
+								option,
+								showCloseButton:
+									!(fields.length - 1 === index) && !disabled,
+							})}
+						</Option>
+					</DnD>
+				) : null;
+			})}
+
+			<ClayButton
+				className="add-option-button"
+				displayType="secondary"
+				onClick={() => {
+					composedAdd.bind(this, fields.length - 1)('label', '');
+				}}
+			>
+				<span>{Liferay.Language.get('add-option')}</span>
+			</ClayButton>
 		</div>
 	);
 };
@@ -543,7 +556,7 @@ const Main = ({
 	generateOptionValueUsingOptionLabel = false,
 	onChange,
 	keywordReadOnly,
-	placeholder = Liferay.Language.get('enter-an-option'),
+	placeholder = Liferay.Language.get('option'),
 	readOnly,
 	required,
 	showKeyword,
