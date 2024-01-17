@@ -10,7 +10,7 @@ import {disableSubmitButton} from '../utils/submitButtonController.es';
 
 let REVALIDATE_UPDATES = [];
 
-const skipPageEvaluationFieldNames = ['requiredErrorMessage'];
+const skipPageEvaluationFieldNames = ['name', 'requiredErrorMessage'];
 
 const needsPageEvaluation = (fieldName) => {
 	return !skipPageEvaluationFieldNames.includes(fieldName);
