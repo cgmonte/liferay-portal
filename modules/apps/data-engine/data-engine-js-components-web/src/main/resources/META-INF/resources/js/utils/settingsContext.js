@@ -129,11 +129,14 @@ export function updateFieldName(
 
 	let newFieldName;
 
-	if (normalizedFieldName !== '') {
-		newFieldName = fieldNameGenerator(value, fieldName);
+	if (normalizedFieldName === '') {
+		newFieldName = fieldNameGenerator(
+			getDefaultFieldName(false, {name: focusedField.type}),
+			fieldName
+		);
 	}
 	else {
-		newFieldName = fieldNameGenerator(getDefaultFieldName(), fieldName);
+		newFieldName = normalizedFieldName;
 	}
 
 	if (newFieldName) {
