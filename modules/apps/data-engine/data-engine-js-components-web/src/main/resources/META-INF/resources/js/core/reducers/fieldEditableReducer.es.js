@@ -258,27 +258,48 @@ export default function fieldEditableReducer(state, action, config) {
 
 			let focusedField = state.focusedField;
 
-			if (
-				Object.keys(focusedField).length &&
-				propertyName === 'fieldReference' &&
-				(propertyValue === '' ||
-					findInvalidFieldReference(
-						focusedField,
-						state.pages,
-						propertyValue
-					))
-			) {
-				const {defaultLanguageId, editingLanguageId} = state;
+			if (Object.keys(focusedField).length) {
+				if (
+					propertyName === 'fieldReference' &&
+					(propertyValue === '' ||
+						findInvalidFieldReference(
+							focusedField,
+							state.pages,
+							propertyValue
+						))
+				) {
+					const {defaultLanguageId, editingLanguageId} = state;
 
-				focusedField = updateField(
-					{
-						defaultLanguageId,
-						editingLanguageId,
-					},
-					updateFieldReference(focusedField, false, true),
-					propertyName,
-					focusedField.fieldName
-				);
+					focusedField = updateField(
+						{
+							defaultLanguageId,
+							editingLanguageId,
+						},
+						updateFieldReference(focusedField, false, true),
+						propertyName,
+						focusedField.fieldName
+					);
+				}
+				else if (propertyName === 'name' && propertyValue === '') {
+					const {defaultLanguageId, editingLanguageId, pages} = state;
+
+					const fieldNameGenerator = config.getFieldNameGenerator(
+						pages,
+						false
+					);
+
+					focusedField = updateField(
+						{
+							defaultLanguageId,
+							editingLanguageId,
+							fieldNameGenerator,
+						},
+						focusedField,
+						propertyName,
+						propertyValue,
+						'fieldBlurred'
+					);
+				}
 			}
 
 			return {
@@ -371,7 +392,11 @@ export default function fieldEditableReducer(state, action, config) {
 				focusedField: newFocusedField,
 				pages: visitor.mapFields(
 					(field) => {
-						if (field.fieldName === focusedField.fieldName) {
+						if (
+							field.fieldReference ===
+								focusedField.fieldReference ||
+							field.fieldName === focusedField.fieldName
+						) {
 							return newFocusedField;
 						}
 						if (propertyValue && propertyName === 'repeatable') {
