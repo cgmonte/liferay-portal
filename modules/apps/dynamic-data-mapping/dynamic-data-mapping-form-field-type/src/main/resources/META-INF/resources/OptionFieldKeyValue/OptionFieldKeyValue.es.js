@@ -19,6 +19,7 @@ import './OptionFieldKeyValue.scss';
 
 const Main = ({
 	allowSpecialCharacters,
+	displayErrors,
 	editingLanguageId,
 	expandedPanel,
 	generateKeyword,
@@ -82,6 +83,7 @@ const Main = ({
 
 				<FieldBase
 					{...otherProps}
+					displayErrors={false}
 					name={name}
 					readOnly={readOnly}
 					required={required}
@@ -151,6 +153,7 @@ const Main = ({
 
 				<FieldBase
 					{...otherProps}
+					displayErrors={displayErrors}
 					name={reference}
 					readOnly={readOnly}
 					required={required}
@@ -198,6 +201,7 @@ const Main = ({
 
 						<FieldBase
 							{...otherProps}
+							displayErrors={false}
 							name={keyword}
 							readOnly={readOnly}
 							required={required}
