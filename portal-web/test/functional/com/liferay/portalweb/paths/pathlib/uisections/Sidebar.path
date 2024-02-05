@@ -87,7 +87,7 @@
 </tr>
 <tr>
 	<td>OPTION_INPUT_WITHOUT_LABEL</td>
-	<td>xpath=(//div[contains(@class,'ddm-option-entry')]//input[contains(@id,'keyValueDisplayName')][${index}]</td>
+	<td>xpath=(//div[contains(@class,'ddm-option-entry')]//input[contains(@id,'keyValueDisplayName')])[${index}]</td>
 	<td></td>
 </tr>
 <tr>
