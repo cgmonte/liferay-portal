@@ -30,14 +30,20 @@ const RoleType = (props) => {
 		},
 	});
 
+	const {autoCreate, roleKey, roleName, roleType} = props.restProps;
+
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('selected-role')}>
 			<BaseRoleType
+				autoCreate={autoCreate}
 				buttonName={Liferay.Language.get('new-section')}
 				inputLabel={Liferay.Language.get('role-type')}
 				networkStatus={networkStatus}
 				{...props}
 				resource={resource}
+				roleKey={roleKey}
+				roleName={roleName}
+				roleType={roleType}
 			/>
 		</SidebarPanel>
 	);
