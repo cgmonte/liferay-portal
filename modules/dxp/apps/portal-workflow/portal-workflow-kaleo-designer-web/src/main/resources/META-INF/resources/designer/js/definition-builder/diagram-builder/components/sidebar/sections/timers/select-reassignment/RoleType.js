@@ -4,14 +4,22 @@
  */
 
 import {useResource} from '@clayui/data-provider';
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
+import {DefinitionBuilderContext} from '../../../../../../DefinitionBuilderContext';
 import {contextUrl} from '../../../../../../constants';
-import {headers, userBaseURL} from '../../../../../../util/fetchUtil';
+import {
+	headers,
+	retrieveAccountRoles,
+	userBaseURL,
+} from '../../../../../../util/fetchUtil';
 import SidebarPanel from '../../../SidebarPanel';
 import BaseRoleType from '../../shared-components/BaseRoleType';
 
 const RoleType = (props) => {
+	const {accountEntryId} = useContext(DefinitionBuilderContext);
+
+	const [accountRoles, setAccountRoles] = useState([]);
 	const [networkStatus, setNetworkStatus] = useState(4);
 
 	const {resource} = useResource({
@@ -32,9 +40,28 @@ const RoleType = (props) => {
 
 	const {autoCreate, roleKey, roleName, roleType} = props.restProps;
 
+	useEffect(() => {
+		retrieveAccountRoles(accountEntryId)
+			.then((response) => response.json())
+			.then(({items}) => {
+				const accountRoleItems = items.map(({displayName, name}) => {
+					return {
+						roleKey: name,
+						roleName: displayName,
+						roleType: 'Account',
+					};
+				});
+
+				setAccountRoles(accountRoleItems);
+			});
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('selected-role')}>
 			<BaseRoleType
+				accountRoles={accountRoles}
 				autoCreate={autoCreate}
 				buttonName={Liferay.Language.get('new-section')}
 				inputLabel={Liferay.Language.get('role-type')}
