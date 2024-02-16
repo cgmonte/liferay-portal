@@ -4,7 +4,7 @@
  */
 
 import {useThunk} from '@liferay/frontend-js-react-web';
-import React, {useCallback, useContext, useReducer} from 'react';
+import React, {useCallback, useContext, useEffect, useReducer} from 'react';
 
 import {createReducer} from '../reducers/createReducer.es';
 import {useConfig} from './useConfig.es';
@@ -130,6 +130,15 @@ export function FormProvider({
 			onAction
 		)
 	);
+
+	useEffect(() => {
+		console.log('state', state);
+	}, [state]);
+
+	useEffect(() => {
+		console.log('dispatch', dispatch);
+	}, [dispatch]);
+	
 
 	return (
 		<FormDispatchContext.Provider value={dispatch}>

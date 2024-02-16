@@ -2,6 +2,15 @@ definition {
 
 	@summary = "Default summary"
 	macro addField(fieldLocation = null, fieldName = null, fieldFieldLabel = null, numericType = null, fieldType = null) {
+		
+		var javaScript = '''
+			console.log("vai adicionar o field");
+			console.log("${fieldFieldLabel}");
+			console.log("${fieldName}");
+		''';
+
+		var whatever = selenium.getEval(${javaScript});
+		
 		Navigator.gotoSidebarTab(tabName = "Builder");
 
 		Navigator.gotoNavTab(navTab = "Fields");

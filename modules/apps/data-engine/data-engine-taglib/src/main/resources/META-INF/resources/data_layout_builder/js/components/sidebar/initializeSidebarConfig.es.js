@@ -31,6 +31,11 @@ export default function initializeSidebarConfig(backendInfo) {
 		toolbarId,
 	};
 
+	console.log('return intialize sidebar', {
+		...DEFAULT_CONFIG,
+		...syntheticItems,
+	})
+
 	return {
 		...DEFAULT_CONFIG,
 		...syntheticItems,

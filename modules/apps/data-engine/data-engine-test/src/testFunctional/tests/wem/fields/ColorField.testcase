@@ -39,9 +39,21 @@ definition {
 	test AddColorFieldByDragAndDrop {
 		property portal.acceptance = "false";
 
+		var javaScript1 = '''
+			console.log("ANTESSSSS");
+		''';
+
+		var whatever1 = selenium.getEval(${javaScript1});
+
 		DataEngine.addField(
 			fieldFieldLabel = "Color Test",
 			fieldName = "Color");
+
+		var javaScript2 = '''
+			console.log("DEPOISSSSS");
+		''';
+
+		var whatever2 = selenium.getEval(${javaScript2});
 
 		WebContentStructures.saveCP();
 

@@ -302,6 +302,9 @@ export default function fieldEditableReducer(state, action, config) {
 				}
 			}
 
+			focusedField.name = "meu name";
+			focusedField.fieldName = "meu field name";
+
 			return {
 				fieldHovered: {},
 				focusedField,
@@ -392,11 +395,7 @@ export default function fieldEditableReducer(state, action, config) {
 				focusedField: newFocusedField,
 				pages: visitor.mapFields(
 					(field) => {
-						if (
-							field.fieldReference ===
-								focusedField.fieldReference ||
-							field.fieldName === focusedField.fieldName
-						) {
+						if (field.fieldName === focusedField.fieldName) {
 							return newFocusedField;
 						}
 						if (propertyValue && propertyName === 'repeatable') {
