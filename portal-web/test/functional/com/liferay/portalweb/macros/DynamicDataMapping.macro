@@ -209,6 +209,10 @@ definition {
 
 		DoubleClick(locator1 = "DDMEditStructure#FORM_FIELD");
 
+		// Pausing 2 seconds due to LPD-5076
+
+		Pause(value1 = 2000);
+
 		MouseOver(locator1 = "DDMEditStructure#FORM_FIELD");
 
 		Click(locator1 = "DDMEditStructure#FORM_FIELD_DELETE_BUTTON");
