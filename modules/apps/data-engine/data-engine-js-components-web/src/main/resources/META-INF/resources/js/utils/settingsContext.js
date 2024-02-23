@@ -4,7 +4,7 @@
  */
 
 import {updateFieldValidationProperty} from '../core/utils/fields';
-import {generateInstanceId, getDefaultFieldName} from './fieldSupport';
+import {generateInstanceId} from './fieldSupport';
 import {normalizeFieldName} from './fields.es';
 import {PagesVisitor} from './visitors.es';
 
@@ -130,10 +130,7 @@ export function updateFieldName(
 	let newFieldName;
 
 	if (normalizedFieldName === '') {
-		newFieldName = fieldNameGenerator(
-			getDefaultFieldName(false, {name: focusedField.type}),
-			fieldName
-		);
+		newFieldName = focusedField.fieldName;
 	}
 	else {
 		newFieldName = normalizedFieldName;

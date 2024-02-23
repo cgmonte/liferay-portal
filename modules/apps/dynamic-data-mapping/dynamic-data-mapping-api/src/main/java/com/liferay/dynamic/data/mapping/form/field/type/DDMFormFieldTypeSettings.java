@@ -47,8 +47,8 @@ public interface DDMFormFieldTypeSettings {
 	@DDMFormField(
 		label = "%field-reference",
 		properties = {
-			"normalizeField=true",
-			"tooltip=%field-reference-serves-as-a-frienldy-identifier"
+			"normalizeField=true", "preventChangeHandlerOnBlur=true",
+			"tooltip=%field-reference-serves-as-gsgsgssg-a-frienldy-identifier"
 		}
 	)
 	public default String fieldReference() {

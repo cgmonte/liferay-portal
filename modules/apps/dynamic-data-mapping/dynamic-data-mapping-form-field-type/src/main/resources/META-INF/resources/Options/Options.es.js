@@ -23,7 +23,6 @@ import {
 	getDefaultOptionValue,
 	isOptionValueGenerated,
 	normalizeFields,
-	normalizeReference,
 	random,
 } from './util.es';
 
@@ -95,10 +94,6 @@ const refreshFields = (
 						option.label
 				  ),
 		})),
-		{
-			generateKeyword: generateOptionValueUsingOptionLabel,
-			...initialOption,
-		},
 	].filter((field) => field && !!Object.keys(field).length);
 
 	return normalizeFields(
@@ -303,8 +298,6 @@ const Options = ({
 	const getSynchronizedValue = (fields) => {
 		const _fields = [...fields];
 
-		_fields.pop();
-
 		const availableLanguageIds = Object.getOwnPropertyNames(
 			normalizedValue
 		);
@@ -340,7 +333,7 @@ const Options = ({
 	const dedup = (fields, index, property, value) => {
 		const {generateKeyword, id} = fields[index];
 
-		if (index === fields.length - 1 && tabPressed) {
+		if (index === fields.length && tabPressed) {
 			return [fields];
 		}
 
@@ -387,14 +380,6 @@ const Options = ({
 	};
 
 	const add = (fields, index, property, value) => {
-		fields[index][property] = value;
-
-		fields[index]['newField'] = true;
-
-		if (defaultLanguageId !== editingLanguageId) {
-			fields[index]['edited'] = true;
-		}
-
 		const initialOption = getInitialOption(
 			generateOptionValueUsingOptionLabel
 		);
@@ -404,9 +389,19 @@ const Options = ({
 			...initialOption,
 		});
 
+		const newFieldIndex = index + 1;
+
+		fields[newFieldIndex][property] = value;
+
+		fields[newFieldIndex]['newField'] = true;
+
+		if (defaultLanguageId !== editingLanguageId) {
+			fields[newFieldIndex]['edited'] = true;
+		}
+
 		initialOptionRef.current = initialOption;
 
-		return [fields, index, property, value];
+		return [fields, newFieldIndex, property, value];
 	};
 
 	const change = (fields, index, property, value) => {
@@ -434,10 +429,6 @@ const Options = ({
 	const move = (fields, data) => {
 		const {itemPosition, targetPosition} = data;
 
-		if (itemPosition === fields.length - 1) {
-			return [fields];
-		}
-
 		const item = {...fields[itemPosition]};
 		const newTargetPosition =
 			targetPosition > itemPosition ? targetPosition - 1 : targetPosition;
@@ -448,22 +439,37 @@ const Options = ({
 		return [fields];
 	};
 
-	const normalize = (fields, index) => {
+	const normalize = (optionFields, index, {target}) => {
 		clearError();
 
-		fields[index]['reference'] = normalizeReference(
-			fields,
-			fields[index],
-			index
-		);
+		if (target.value === '' && target.id) {
+			const currentNormalizedValue =
+				normalizedValue[defaultLanguageId || editingLanguageId][index];
+			const currentField = fields[index];
+			const currentOtionField = optionFields[index];
 
-		return [
-			normalizeFields(
-				allowSpecialCharacters,
-				fields,
-				generateOptionValueUsingOptionLabel
-			),
-		];
+			if (target.id.includes('keyValueReference')) {
+				const normalizedValueReference =
+					currentNormalizedValue?.reference;
+				const currentFieldReference = currentField?.reference;
+
+				currentOtionField['reference'] =
+					normalizedValueReference ||
+					currentFieldReference ||
+					getDefaultOptionValue(false);
+			}
+			else if (target.id.includes('keyValueName')) {
+				const normalizedValueValue = currentNormalizedValue?.value;
+				const currentFieldValue = currentField?.value;
+
+				currentOtionField['value'] =
+					normalizedValueValue ||
+					currentFieldValue ||
+					getDefaultOptionValue(false);
+			}
+		}
+
+		return [normalizeFields(allowSpecialCharacters, optionFields, true)];
 	};
 
 	const composedAdd = compose(clone, dedup, add, set);
@@ -510,7 +516,7 @@ const Options = ({
 			<DragPreview component={Option}>{children}</DragPreview>
 
 			{fields.map((option, index) => {
-				return index !== fields.length - 1 ? (
+				return (
 					<DnD
 						index={index}
 						key={option.id}
@@ -529,11 +535,13 @@ const Options = ({
 									handleConfirmDelete(index, option.value),
 								option,
 								showCloseButton:
-									!(fields.length - 1 === index) && !disabled,
+									fields.length === 1 && index === 0
+										? false
+										: true,
 							})}
 						</Option>
 					</DnD>
-				) : null;
+				);
 			})}
 
 			<ClayButton
@@ -608,9 +616,6 @@ const Main = ({
 								keywordReadOnly={keywordReadOnly}
 								name={`option${index}`}
 								onBlur={handleBlur}
-								onChange={(value) =>
-									handleField('label', value)
-								}
 								onClick={onClick}
 								onFocus={() => {
 									if (defaultOptionRef.current) {
@@ -631,6 +636,9 @@ const Main = ({
 									handleField('generateKeyword', generate);
 									handleField('value', value);
 								}}
+								onLabelChange={(value) =>
+									handleField('label', value)
+								}
 								onReferenceBlur={handleBlur}
 								onReferenceChange={(value) =>
 									handleField('reference', value)

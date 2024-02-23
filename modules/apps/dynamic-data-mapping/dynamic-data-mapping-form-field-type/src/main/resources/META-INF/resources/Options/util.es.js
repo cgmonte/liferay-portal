@@ -169,16 +169,21 @@ export function normalizeFields(
 			generateValueUsingLabel
 		);
 
+		const reference =
+			field.reference !== ''
+				? normalizeReference(
+						fields,
+						{
+							...field,
+							value,
+						},
+						index
+				  )
+				: field.reference;
+
 		return {
 			...field,
-			reference: normalizeReference(
-				fields,
-				{
-					...field,
-					value,
-				},
-				index
-			),
+			reference,
 			value,
 		};
 	});

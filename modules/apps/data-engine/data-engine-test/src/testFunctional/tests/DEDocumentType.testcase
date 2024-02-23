@@ -102,9 +102,12 @@ definition {
 
 		for (var index : list "1,2,3") {
 			DataEngine.addFieldOption(
-				fieldFieldLabel = "Select from List",
 				index = ${index},
 				optionValue = "Option ${index}");
+
+			if (${index} != 3) {
+				FormFields.clickAddOptionButton();
+			}
 		}
 
 		WebContentStructures.saveCP();

@@ -268,7 +268,14 @@ export default function fieldEditableReducer(state, action, config) {
 							propertyValue
 						))
 				) {
-					const {defaultLanguageId, editingLanguageId} = state;
+					const {
+						dataDefinition,
+						defaultLanguageId,
+						editingLanguageId,
+					} = state;
+					const focusedFieldDataDefinition = dataDefinition.dataDefinitionFields.find(
+						(field) => field.name === focusedField.fieldName
+					);
 
 					focusedField = updateField(
 						{
@@ -277,7 +284,8 @@ export default function fieldEditableReducer(state, action, config) {
 						},
 						updateFieldReference(focusedField, false, true),
 						propertyName,
-						focusedField.fieldName
+						focusedFieldDataDefinition?.customProperties
+							?.fieldReference || focusedField.fieldName
 					);
 				}
 				else if (propertyName === 'name' && propertyValue === '') {
@@ -296,8 +304,7 @@ export default function fieldEditableReducer(state, action, config) {
 						},
 						focusedField,
 						propertyName,
-						propertyValue,
-						'fieldBlurred'
+						propertyValue
 					);
 				}
 			}
@@ -392,11 +399,7 @@ export default function fieldEditableReducer(state, action, config) {
 				focusedField: newFocusedField,
 				pages: visitor.mapFields(
 					(field) => {
-						if (
-							field.fieldReference ===
-								focusedField.fieldReference ||
-							field.fieldName === focusedField.fieldName
-						) {
+						if (field.fieldName === focusedField.fieldName) {
 							return newFocusedField;
 						}
 						if (propertyValue && propertyName === 'repeatable') {

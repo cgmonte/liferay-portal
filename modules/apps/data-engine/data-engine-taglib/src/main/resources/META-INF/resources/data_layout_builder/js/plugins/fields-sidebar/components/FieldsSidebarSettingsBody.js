@@ -76,7 +76,17 @@ export default function FieldsSidebarSettingsBody({field}) {
 				objectFields={objectFields}
 				onAction={({payload, type}) => {
 					switch (type) {
-						case CORE_EVENT_TYPES.FIELD.BLUR:
+						case CORE_EVENT_TYPES.FIELD.BLUR: {
+							dispatch({
+								payload: {
+									propertyName:
+										payload.fieldInstance.fieldName,
+									propertyValue: payload.value,
+								},
+								type,
+							});
+							break;
+						}
 						case CORE_EVENT_TYPES.FIELD.CHANGE: {
 							if (payload.fieldInstance.fieldName !== 'options') {
 								dispatch({
@@ -87,8 +97,7 @@ export default function FieldsSidebarSettingsBody({field}) {
 									},
 									type,
 								});
-							}
-							else {
+							} else {
 								dispatch({
 									payload: {
 										propertyName: focusedField.fieldName,
@@ -97,7 +106,6 @@ export default function FieldsSidebarSettingsBody({field}) {
 									type,
 								});
 							}
-
 							break;
 						}
 						case CORE_EVENT_TYPES.FIELD.EVALUATE:

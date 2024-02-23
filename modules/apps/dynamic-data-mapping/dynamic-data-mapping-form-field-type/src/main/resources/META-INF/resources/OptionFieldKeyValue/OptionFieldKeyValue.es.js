@@ -26,12 +26,12 @@ const Main = ({
 	keyword: initialKeyword,
 	name,
 	onBlur,
-	onChange,
 	onClick,
 	onFocus,
 	onKeyDown,
 	onKeywordBlur,
 	onKeywordChange,
+	onLabelChange,
 	onReferenceBlur,
 	onReferenceChange,
 	placeholder,
@@ -55,6 +55,13 @@ const Main = ({
 	});
 
 	const generateKeywordRef = useRef(generateKeyword);
+
+	const handleKeywordChange = (value) => {
+		value = allowSpecialCharacters ? value : normalizeFieldName(value);
+		generateKeywordRef.current = false;
+		onKeywordChange(value, false);
+		setKeyword(value);
+	};
 
 	return (
 		<ClayPanel
@@ -99,6 +106,7 @@ const Main = ({
 							setPanelState((currentState) => ({
 								...currentState,
 								panelDisplayTitle:
+									event?.target?.value &&
 									event.target.value !== ''
 										? event.target.value
 										: defatulOptionLabel,
@@ -106,16 +114,17 @@ const Main = ({
 							onBlur(event);
 						}}
 						onChange={({target: {value}}) => {
-							onChange(value);
+							onLabelChange(value);
 
-							if (generateKeywordRef.current) {
-								onKeywordChange(
-									allowSpecialCharacters
-										? value
-										: normalizeFieldName(value),
-									true
-								);
-							}
+							// if (generateKeywordRef.current) {
+							// 	onKeywordChange(
+							// 		allowSpecialCharacters
+							// 			? value
+							// 			: normalizeFieldName(value),
+							// 		true
+							// 	);
+							// }
+
 						}}
 						onFocus={onFocus}
 						onKeyDown={onKeyDown}
@@ -170,6 +179,7 @@ const Main = ({
 						onChange={({target: {value}}) => {
 							onReferenceChange(value);
 						}}
+						preventChangeHandlerOnBlur
 						value={reference}
 						visible={visible}
 					/>
@@ -215,13 +225,9 @@ const Main = ({
 								name={`keyValueName${keyword}`}
 								onBlur={onKeywordBlur}
 								onChange={({target: {value}}) => {
-									value = allowSpecialCharacters
-										? value
-										: normalizeFieldName(value);
-									generateKeywordRef.current = false;
-									onKeywordChange(value, false);
-									setKeyword(value);
+									handleKeywordChange(value);
 								}}
+								preventChangeHandlerOnBlur
 								value={keyword}
 								visible={visible}
 							/>
