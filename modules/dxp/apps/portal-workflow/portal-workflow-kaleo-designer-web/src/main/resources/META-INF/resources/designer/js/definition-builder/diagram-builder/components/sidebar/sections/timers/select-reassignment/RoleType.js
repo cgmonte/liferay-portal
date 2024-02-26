@@ -61,16 +61,18 @@ const RoleType = (props) => {
 	return (
 		<SidebarPanel panelTitle={Liferay.Language.get('selected-role')}>
 			<BaseRoleType
+				{...props}
 				accountRoles={accountRoles}
 				autoCreate={autoCreate}
 				buttonName={Liferay.Language.get('new-section')}
+				identifier={props.subSectionIdentifier}
 				inputLabel={Liferay.Language.get('role-type')}
 				networkStatus={networkStatus}
-				{...props}
 				resource={resource}
 				roleKey={roleKey}
 				roleName={roleName}
 				roleType={roleType}
+				sectionsLength={props.subSectionsLength}
 			/>
 		</SidebarPanel>
 	);
