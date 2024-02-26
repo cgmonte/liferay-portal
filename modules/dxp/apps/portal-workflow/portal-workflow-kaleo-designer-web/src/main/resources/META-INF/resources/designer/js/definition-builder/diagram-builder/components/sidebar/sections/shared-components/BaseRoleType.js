@@ -20,6 +20,7 @@ const BaseRoleType = ({
 	index,
 	inputLabel,
 	networkStatus,
+	notificationIndex,
 	resource,
 	roleKey,
 	roleName,
@@ -27,7 +28,6 @@ const BaseRoleType = ({
 	sectionsLength,
 	setErrors,
 	setSections,
-	notificationIndex,
 	updateSelectedItem = () => {},
 }) => {
 	const [filterRoleName, setFilterRoleName] = useState(true);
