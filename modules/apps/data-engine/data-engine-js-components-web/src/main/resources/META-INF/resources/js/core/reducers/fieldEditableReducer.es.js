@@ -256,7 +256,7 @@ export default function fieldEditableReducer(state, action, config) {
 		case EVENT_TYPES.FIELD.BLUR: {
 			const {propertyName, propertyValue} = action.payload;
 
-			let focusedField = state.focusedField;
+			let {focusedField, pages} = state;
 
 			if (Object.keys(focusedField).length) {
 				if (
@@ -281,7 +281,7 @@ export default function fieldEditableReducer(state, action, config) {
 					);
 				}
 				else if (propertyName === 'name' && propertyValue === '') {
-					const {defaultLanguageId, editingLanguageId, pages} = state;
+					const {defaultLanguageId, editingLanguageId} = state;
 
 					const fieldNameGenerator = config.getFieldNameGenerator(
 						pages,
@@ -296,7 +296,24 @@ export default function fieldEditableReducer(state, action, config) {
 						},
 						focusedField,
 						propertyName,
-						propertyValue,
+						propertyValue
+					);
+
+					const visitor = new PagesVisitor(pages);
+
+					pages = visitor.mapFields(
+						(field) => {
+							if (
+								field.fieldReference ===
+								focusedField.fieldReference
+							) {
+								return focusedField;
+							}
+
+							return field;
+						},
+						false,
+						true
 					);
 				}
 			}
@@ -304,6 +321,7 @@ export default function fieldEditableReducer(state, action, config) {
 			return {
 				fieldHovered: {},
 				focusedField,
+				pages,
 			};
 		}
 		case EVENT_TYPES.FIELD.CLICK: {
