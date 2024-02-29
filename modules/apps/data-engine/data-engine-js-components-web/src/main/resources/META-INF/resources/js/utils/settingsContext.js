@@ -25,13 +25,26 @@ export function getSettingsContextProperty(
 	return propertyValue;
 }
 
-export function setFieldReferenceErrorMessage(
+export function setFieldErrorMessage(
 	settingsContext,
 	propertyName,
 	displayErrors = true,
 	shouldUpdateValue = false
 ) {
 	const visitor = new PagesVisitor(settingsContext.pages);
+
+	const getErrorMessage = () => {
+		if (!displayErrors) {
+			return '';
+		}
+		if (propertyName === 'fieldReference') {
+			return Liferay.Language.get('this-reference-is-already-being-used');
+		}
+
+		return Liferay.Language.get(
+			'this-name-is-already-in-use-try-another-one'
+		);
+	};
 
 	return {
 		...settingsContext,
@@ -40,9 +53,7 @@ export function setFieldReferenceErrorMessage(
 				field = {
 					...field,
 					displayErrors,
-					errorMessage: Liferay.Language.get(
-						'this-reference-is-already-being-used'
-					),
+					errorMessage: getErrorMessage(),
 					shouldUpdateValue,
 					valid: !displayErrors,
 				};
@@ -122,11 +133,12 @@ export function updateFieldName(
 	editingLanguageId,
 	fieldNameGenerator,
 	focusedField,
-	value
+	value,
+	invalid = false
 ) {
 	const {fieldName} = focusedField;
 	const normalizedFieldName = normalizeFieldName(value);
-
+	let {settingsContext} = focusedField;
 	let newFieldName;
 
 	if (normalizedFieldName === '') {
@@ -140,8 +152,6 @@ export function updateFieldName(
 	}
 
 	if (newFieldName) {
-		let {settingsContext} = focusedField;
-
 		settingsContext = {
 			...settingsContext,
 			pages: updateFieldValidationProperty(
@@ -152,6 +162,31 @@ export function updateFieldName(
 			),
 		};
 
+		if (invalid) {
+			focusedField = {
+				...focusedField,
+				displayErrors: true,
+				settingsContext: setFieldErrorMessage(
+					settingsContext,
+					'name',
+					true,
+					false,
+				),
+			};
+		}
+		else {
+			focusedField = {
+				...focusedField,
+				displayErrors: false,
+				settingsContext: setFieldErrorMessage(
+					settingsContext,
+					'name',
+					false,
+					false,
+				),
+			};
+		}
+
 		focusedField = {
 			...focusedField,
 			fieldName: newFieldName,
@@ -159,7 +194,7 @@ export function updateFieldName(
 			settingsContext: updateSettingsContextProperty(
 				defaultLanguageId,
 				editingLanguageId,
-				settingsContext,
+				focusedField.settingsContext,
 				'name',
 				newFieldName
 			),
@@ -178,7 +213,7 @@ export function updateFieldReference(
 
 	focusedField = {
 		...focusedField,
-		settingsContext: setFieldReferenceErrorMessage(
+		settingsContext: setFieldErrorMessage(
 			settingsContext,
 			'fieldReference',
 			invalid,
@@ -384,7 +419,8 @@ export function updateField(
 				editingLanguageId,
 				fieldNameGenerator,
 				field,
-				propertyValue
+				propertyValue,
+				field.displayErrors
 			),
 		};
 	}
