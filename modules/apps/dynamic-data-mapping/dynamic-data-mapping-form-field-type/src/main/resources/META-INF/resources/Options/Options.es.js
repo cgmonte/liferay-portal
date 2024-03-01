@@ -49,6 +49,20 @@ const Option = React.forwardRef(
 	)
 );
 
+const getErrorMessage = (propertyName) => {
+	if (propertyName === 'value') {
+		return Liferay.Language.get('this-reference-is-already-being-used');
+	}
+
+	if (propertyName === 'reference') {
+		return Liferay.Language.get(
+			'this-name-is-already-in-use-try-another-one'
+		);
+	}
+
+	return '';
+};
+
 const getInitialOption = (generateOptionValueUsingOptionLabel) => {
 	const optionValue = getDefaultOptionValue(
 		generateOptionValueUsingOptionLabel,
@@ -56,6 +70,8 @@ const getInitialOption = (generateOptionValueUsingOptionLabel) => {
 	);
 
 	const initalOption = {
+		displayErrors: false,
+		errorMessage: '',
 		id: random(),
 		label: '',
 		reference: optionValue,
@@ -74,7 +90,6 @@ const refreshFields = (
 	defaultLanguageId,
 	editingLanguageId,
 	generateOptionValueUsingOptionLabel,
-	initialOption,
 	options
 ) => {
 	const refreshedFields = [
@@ -165,8 +180,6 @@ const Options = ({
 		return formattedValue;
 	});
 
-	const [fieldError, setFieldError] = useState(null);
-
 	const [fields, setFields] = useState(() => {
 		const options =
 			normalizedValue[editingLanguageId] ||
@@ -178,7 +191,6 @@ const Options = ({
 			defaultLanguageId,
 			editingLanguageId,
 			generateOptionValueUsingOptionLabel,
-			initialOptionRef.current,
 			options
 		);
 	});
@@ -229,7 +241,6 @@ const Options = ({
 					defaultLanguageId,
 					editingLanguageId,
 					generateOptionValueUsingOptionLabel,
-					initialOptionRef.current,
 					options
 				)
 			);
@@ -316,8 +327,34 @@ const Options = ({
 		return [[...fields], ...args];
 	};
 
-	const clearError = () => {
-		setFieldError(null);
+	const getFieldErrors = (matchProperty, propertyValue, fields) => {
+		let matched = false;
+
+		const updatedFields = fields.map((field) => {
+			if (field[matchProperty] === propertyValue) {
+				matched = true;
+
+				return {
+					...field,
+					displayErrors: true,
+					errorMessage: getErrorMessage(matchProperty),
+				};
+			}
+
+			return field;
+		});
+
+		return matched ? updatedFields : fields;
+	};
+
+	const getErrorsCleared = (fields) => {
+		return fields.map((field) => {
+			return {
+				...field,
+				displayErrors: false,
+				errorMessage: '',
+			};
+		});
 	};
 
 	const checkValidReference = (fields, value, fieldName) => {
@@ -345,11 +382,18 @@ const Options = ({
 				id,
 				generateOptionValueUsingOptionLabel
 			);
-		}
-		else if (property === 'reference') {
-			setFieldError(
-				checkValidReference(fields, value, fields[index].value)
+		} else if (property === 'reference') {
+			const checkResult = checkValidReference(
+				fields,
+				value,
+				fields[index].value
 			);
+
+			if (checkResult) {
+				fields = getFieldErrors('value', checkResult, fields);
+			} else {
+				fields = getErrorsCleared(fields);
+			}
 		}
 
 		return [fields, index, property, value];
@@ -363,8 +407,7 @@ const Options = ({
 					...option,
 					reference: option.value,
 				};
-			}
-			else {
+			} else {
 				set.add(option.reference);
 
 				return option;
@@ -441,13 +484,13 @@ const Options = ({
 	};
 
 	const normalize = (fields, index) => {
-		clearError();
-
 		fields[index]['reference'] = normalizeReference(
 			fields,
 			fields[index],
 			index
 		);
+
+		fields = getErrorsCleared(fields);
 
 		return [
 			normalizeFields(
@@ -491,8 +534,7 @@ const Options = ({
 				size: 'md',
 				title: Liferay.Language.get('delete-field-with-rule-applied'),
 			});
-		}
-		else {
+		} else {
 			composedDelete(index);
 		}
 	};
@@ -513,7 +555,6 @@ const Options = ({
 							{children({
 								defaultOptionRef,
 								expandedPanel: true,
-								fieldError,
 								handleBlur: composedBlur.bind(this, index),
 								handleField: composedChange.bind(this, index),
 								index,
@@ -578,7 +619,6 @@ const Main = ({
 					{({
 						defaultOptionRef,
 						expandedPanel,
-						fieldError,
 						handleBlur,
 						handleField,
 						index,
@@ -589,13 +629,9 @@ const Main = ({
 						option && (
 							<OptionFieldKeyValue
 								allowSpecialCharacters={allowSpecialCharacters}
-								displayErrors={
-									fieldError && fieldError === option.value
-								}
+								displayErrors={option.displayErrors}
 								editingLanguageId={editingLanguageId}
-								errorMessage={Liferay.Language.get(
-									'this-reference-is-already-being-used'
-								)}
+								errorMessage={option.errorMessage}
 								expandedPanel={expandedPanel}
 								generateKeyword={option.generateKeyword}
 								keyword={option.value}
