@@ -170,6 +170,7 @@ const Main = ({
 						onChange={({target: {value}}) => {
 							onReferenceChange(value);
 						}}
+						preventChangeHandlerOnBlur
 						value={reference}
 						visible={visible}
 					/>
@@ -201,6 +202,7 @@ const Main = ({
 
 						<FieldBase
 							{...otherProps}
+							autocomplete="off"
 							displayErrors={false}
 							name={keyword}
 							readOnly={readOnly}
@@ -222,6 +224,7 @@ const Main = ({
 									onKeywordChange(value, false);
 									setKeyword(value);
 								}}
+								preventChangeHandlerOnBlur
 								value={keyword}
 								visible={visible}
 							/>
