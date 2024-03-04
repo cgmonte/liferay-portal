@@ -19,7 +19,6 @@ import DnD from './DnD.es';
 import DragPreview from './DragPreview.es';
 import {
 	compose,
-	dedupValue,
 	getDefaultOptionValue,
 	isOptionValueGenerated,
 	normalizeFields,
