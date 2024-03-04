@@ -327,7 +327,11 @@ const Options = ({
 		return [[...fields], ...args];
 	};
 
-	const getFieldErrors = (fields, matchProperty, matchPropertyValue) => {
+	const getDuplicatedFieldProperty = (
+		fields,
+		matchProperty,
+		matchPropertyValue
+	) => {
 		let matched = false;
 
 		const updatedFields = fields.map((field) => {
@@ -379,9 +383,7 @@ const Options = ({
 		return field ? fieldReference : null;
 	};
 
-	const dedup = (fields, index, property, value) => {
-		const {generateKeyword, id} = fields[index];
-
+	const validate = (fields, index, property, value) => {
 		if (index === fields.length && tabPressed) {
 			return [fields];
 		}
@@ -394,22 +396,13 @@ const Options = ({
 			);
 
 			if (invalidNameFieldReference) {
-				fields = getFieldErrors(
+				fields = getDuplicatedFieldProperty(
 					fields,
 					'reference',
-					invalidNameFieldReference,
+					invalidNameFieldReference
 				);
 			} else {
 				fields = getErrorsCleared(fields);
-			}
-
-			if (generateKeyword) {
-				value = dedupValue(
-					fields,
-					value ? value : Liferay.Language.get('option'),
-					id,
-					generateOptionValueUsingOptionLabel
-				);
 			}
 		} else if (property === 'reference') {
 			const invalidReferenceFieldName = checkValidOptionReference(
@@ -419,10 +412,10 @@ const Options = ({
 			);
 
 			if (invalidReferenceFieldName) {
-				fields = getFieldErrors(
+				fields = getDuplicatedFieldProperty(
 					fields,
 					'value',
-					invalidReferenceFieldName,
+					invalidReferenceFieldName
 				);
 			} else {
 				fields = getErrorsCleared(fields);
@@ -517,13 +510,7 @@ const Options = ({
 	};
 
 	const normalize = (fields, index) => {
-		fields[index]['reference'] = normalizeReference(
-			fields,
-			fields[index],
-			index
-		);
-
-		fields = getErrorsCleared(fields);
+		fields = dedup(fields, index);
 
 		return [
 			normalizeFields(
@@ -534,9 +521,23 @@ const Options = ({
 		];
 	};
 
-	const composedAdd = compose(clone, dedup, add, set);
+	const dedup = (fields, index) => {
+		fields = fields.map((field) => {
+			if (field.invalidField === 'value') {
+				field['value'] = getDefaultOptionValue();
+			} else if (field.invalidField === 'reference') {
+				field['reference'] = normalizeReference(fields, index);
+			}
+
+			return field;
+		});
+
+		return getErrorsCleared(fields);
+	};
+
+	const composedAdd = compose(clone, add, set);
 	const composedBlur = compose(clone, normalize, set);
-	const composedChange = compose(clone, dedup, change, set);
+	const composedChange = compose(clone, change, validate, set);
 	const composedDelete = compose(clone, handleDelete, set);
 	const composedMove = compose(clone, move, set);
 
