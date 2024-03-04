@@ -327,17 +327,18 @@ const Options = ({
 		return [[...fields], ...args];
 	};
 
-	const getFieldErrors = (matchProperty, propertyValue, fields) => {
+	const getFieldErrors = (fields, matchProperty, matchPropertyValue) => {
 		let matched = false;
 
 		const updatedFields = fields.map((field) => {
-			if (field[matchProperty] === propertyValue) {
+			if (field[matchProperty] === matchPropertyValue) {
 				matched = true;
 
 				return {
 					...field,
-					displayErrors: true,
 					errorMessage: getErrorMessage(matchProperty),
+					invalidField:
+						matchProperty === 'reference' ? 'value' : 'reference',
 				};
 			}
 
@@ -351,21 +352,31 @@ const Options = ({
 		return fields.map((field) => {
 			return {
 				...field,
-				displayErrors: false,
 				errorMessage: '',
+				invalidField: null,
 			};
 		});
 	};
 
-	const checkValidReference = (fields, value, fieldName) => {
+	const checkValidOptionReference = (fields, newValue, fieldName) => {
 		const field = fields
 			.filter(({value}) => value !== fieldName)
 			.find(
 				({reference}) =>
-					reference?.toLowerCase() === value?.toLowerCase()
+					reference?.toLowerCase() === newValue?.toLowerCase()
 			);
 
 		return field ? fieldName : null;
+	};
+
+	const checkValidOptionName = (fields, newValue, fieldReference) => {
+		const field = fields
+			.filter(({reference}) => reference !== fieldReference)
+			.find(
+				({value}) => value?.toLowerCase() === newValue?.toLowerCase()
+			);
+
+		return field ? fieldReference : null;
 	};
 
 	const dedup = (fields, index, property, value) => {
@@ -375,22 +386,44 @@ const Options = ({
 			return [fields];
 		}
 
-		if (property === 'value' && generateKeyword) {
-			value = dedupValue(
+		if (property === 'value') {
+			const invalidNameFieldReference = checkValidOptionName(
 				fields,
-				value ? value : Liferay.Language.get('option'),
-				id,
-				generateOptionValueUsingOptionLabel
+				value,
+				fields[index].reference
 			);
+
+			if (invalidNameFieldReference) {
+				fields = getFieldErrors(
+					fields,
+					'reference',
+					invalidNameFieldReference,
+				);
+			} else {
+				fields = getErrorsCleared(fields);
+			}
+
+			if (generateKeyword) {
+				value = dedupValue(
+					fields,
+					value ? value : Liferay.Language.get('option'),
+					id,
+					generateOptionValueUsingOptionLabel
+				);
+			}
 		} else if (property === 'reference') {
-			const checkResult = checkValidReference(
+			const invalidReferenceFieldName = checkValidOptionReference(
 				fields,
 				value,
 				fields[index].value
 			);
 
-			if (checkResult) {
-				fields = getFieldErrors('value', checkResult, fields);
+			if (invalidReferenceFieldName) {
+				fields = getFieldErrors(
+					fields,
+					'value',
+					invalidReferenceFieldName,
+				);
 			} else {
 				fields = getErrorsCleared(fields);
 			}
@@ -629,11 +662,11 @@ const Main = ({
 						option && (
 							<OptionFieldKeyValue
 								allowSpecialCharacters={allowSpecialCharacters}
-								displayErrors={option.displayErrors}
 								editingLanguageId={editingLanguageId}
 								errorMessage={option.errorMessage}
 								expandedPanel={expandedPanel}
 								generateKeyword={option.generateKeyword}
+								invalidField={option.invalidField}
 								keyword={option.value}
 								keywordReadOnly={keywordReadOnly}
 								name={`option${index}`}

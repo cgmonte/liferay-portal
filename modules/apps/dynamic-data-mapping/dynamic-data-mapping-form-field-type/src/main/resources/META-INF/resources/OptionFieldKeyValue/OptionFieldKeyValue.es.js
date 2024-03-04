@@ -19,10 +19,10 @@ import './OptionFieldKeyValue.scss';
 
 const Main = ({
 	allowSpecialCharacters,
-	displayErrors,
 	editingLanguageId,
 	expandedPanel,
 	generateKeyword,
+	invalidField,
 	keyword: initialKeyword,
 	name,
 	onBlur,
@@ -153,7 +153,7 @@ const Main = ({
 
 				<FieldBase
 					{...otherProps}
-					displayErrors={displayErrors}
+					displayErrors={invalidField === 'reference'}
 					name={reference}
 					readOnly={readOnly}
 					required={required}
@@ -203,7 +203,7 @@ const Main = ({
 						<FieldBase
 							{...otherProps}
 							autocomplete="off"
-							displayErrors={false}
+							displayErrors={invalidField === 'value'}
 							name={keyword}
 							readOnly={readOnly}
 							required={required}
