@@ -56,6 +56,8 @@ const getInitialOption = (generateOptionValueUsingOptionLabel) => {
 	);
 
 	const initalOption = {
+		displayErrors: false,
+		errorMessage: '',
 		id: random(),
 		label: '',
 		reference: optionValue,
