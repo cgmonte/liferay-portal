@@ -47,7 +47,7 @@ public interface DDMFormFieldTypeSettings {
 	@DDMFormField(
 		label = "%field-reference",
 		properties = {
-			"normalizeField=true",
+			"normalizeField=true", "preventChangeHandlerOnBlur=true",
 			"tooltip=%field-reference-serves-as-a-frienldy-identifier"
 		}
 	)
