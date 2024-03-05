@@ -15,10 +15,7 @@ import {formatRules} from '../../utils/rulesSupport';
 import {updateField, updateFieldReference} from '../../utils/settingsContext';
 import {PagesVisitor} from '../../utils/visitors.es';
 import {EVENT_TYPES} from '../actions/eventTypes.es';
-import {
-	createDuplicatedField,
-	findInvalidFieldReference,
-} from '../utils/fields';
+import {createDuplicatedField, isValueAlreadyUsed} from '../utils/fields';
 import {updateRulesReferences} from '../utils/rules';
 import sectionAdded from '../utils/sectionAddedHandler';
 import {enableSubmitButton} from '../utils/submitButtonController.es';
@@ -163,7 +160,12 @@ const updateFieldProperty = ({
 	) {
 		focusedField = updateFieldReference(
 			focusedField,
-			findInvalidFieldReference(focusedField, pages, propertyValue),
+			isValueAlreadyUsed(
+				focusedField,
+				pages,
+				propertyValue,
+				propertyName
+			),
 			false
 		);
 	}
@@ -262,10 +264,11 @@ export default function fieldEditableReducer(state, action, config) {
 				if (
 					propertyName === 'fieldReference' &&
 					(propertyValue === '' ||
-						findInvalidFieldReference(
+						isValueAlreadyUsed(
 							focusedField,
 							state.pages,
-							propertyValue
+							propertyValue,
+							propertyName
 						))
 				) {
 					const {defaultLanguageId, editingLanguageId} = state;
