@@ -166,8 +166,6 @@ const Options = ({
 		return formattedValue;
 	});
 
-	const [fieldError, setFieldError] = useState(null);
-
 	const [fields, setFields] = useState(() => {
 		const options =
 			normalizedValue[editingLanguageId] ||
@@ -579,7 +577,6 @@ const Options = ({
 							{children({
 								defaultOptionRef,
 								expandedPanel: true,
-								fieldError,
 								handleBlur: composedBlur.bind(this, index),
 								handleField: composedChange.bind(this, index),
 								index,
@@ -644,7 +641,6 @@ const Main = ({
 					{({
 						defaultOptionRef,
 						expandedPanel,
-						fieldError,
 						handleBlur,
 						handleField,
 						index,
@@ -655,15 +651,11 @@ const Main = ({
 						option && (
 							<OptionFieldKeyValue
 								allowSpecialCharacters={allowSpecialCharacters}
-								displayErrors={
-									fieldError && fieldError === option.value
-								}
 								editingLanguageId={editingLanguageId}
-								errorMessage={Liferay.Language.get(
-									'this-reference-is-already-being-used'
-								)}
+								errorMessage={option.errorMessage}
 								expandedPanel={expandedPanel}
 								generateKeyword={option.generateKeyword}
+								invalidField={option.invalidField}
 								keyword={option.value}
 								keywordReadOnly={keywordReadOnly}
 								name={`option${index}`}
