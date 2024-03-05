@@ -133,7 +133,8 @@ export function updateFieldName(
 	editingLanguageId,
 	fieldNameGenerator,
 	focusedField,
-	value
+	value,
+	invalid = false
 ) {
 	const {fieldName} = focusedField;
 	const normalizedFieldName = normalizeFieldName(value);
@@ -163,14 +164,22 @@ export function updateFieldName(
 			),
 		};
 
+		const settingsContextWithErrors = setFieldErrorMessage(
+			settingsContext,
+			'name',
+			invalid,
+			false
+		);
+
 		focusedField = {
 			...focusedField,
+			displayErrors: invalid,
 			fieldName: newFieldName,
 			name: newFieldName,
 			settingsContext: updateSettingsContextProperty(
 				defaultLanguageId,
 				editingLanguageId,
-				settingsContext,
+				settingsContextWithErrors,
 				'name',
 				newFieldName
 			),
@@ -395,7 +404,8 @@ export function updateField(
 				editingLanguageId,
 				fieldNameGenerator,
 				field,
-				propertyValue
+				propertyValue,
+				field.displayErrors
 			),
 		};
 	}
