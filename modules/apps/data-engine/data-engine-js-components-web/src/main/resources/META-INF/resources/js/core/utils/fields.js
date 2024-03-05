@@ -324,7 +324,8 @@ export function isValueAlreadyUsed(focusedField, pages, value, propertyName) {
 				foundValue?.toLowerCase() === value?.toLowerCase()
 			) {
 				hasInvalidFieldReference = true;
-			} else if (
+			}
+			else if (
 				propertyName === 'name' &&
 				focusedField.fieldReference !== field.fieldReference &&
 				foundValue?.toLowerCase() === value?.toLowerCase()

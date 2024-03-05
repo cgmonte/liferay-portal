@@ -101,7 +101,8 @@ export default function FieldsSidebarSettingsBody({field}) {
 									},
 									type,
 								});
-							} else {
+							}
+							else {
 								dispatch({
 									payload: {
 										propertyName: focusedField.fieldName,
