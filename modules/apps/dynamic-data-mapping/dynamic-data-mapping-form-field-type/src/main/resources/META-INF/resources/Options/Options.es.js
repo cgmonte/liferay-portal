@@ -367,6 +367,21 @@ const Options = ({
 		return field ? fieldName : null;
 	};
 
+	const dedup = (fields, index) => {
+		fields = fields.map((field) => {
+			if (field.invalidField === 'value') {
+				field['value'] = getDefaultOptionValue();
+			}
+			else if (field.invalidField === 'reference') {
+				field['reference'] = normalizeReference(fields, index);
+			}
+
+			return field;
+		});
+
+		return removeErrorProperties(fields);
+	};
+
 	const dedup = (fields, index, property, value) => {
 		const {generateKeyword, id} = fields[index];
 
@@ -477,13 +492,7 @@ const Options = ({
 	};
 
 	const normalize = (fields, index) => {
-		clearError();
-
-		fields[index]['reference'] = normalizeReference(
-			fields,
-			fields[index],
-			index
-		);
+		fields = dedup(fields, index);
 
 		return [
 			normalizeFields(
