@@ -179,7 +179,6 @@ const Options = ({
 			defaultLanguageId,
 			editingLanguageId,
 			generateOptionValueUsingOptionLabel,
-			initialOptionRef.current,
 			options
 		);
 	});
@@ -230,7 +229,6 @@ const Options = ({
 					defaultLanguageId,
 					editingLanguageId,
 					generateOptionValueUsingOptionLabel,
-					initialOptionRef.current,
 					options
 				)
 			);
