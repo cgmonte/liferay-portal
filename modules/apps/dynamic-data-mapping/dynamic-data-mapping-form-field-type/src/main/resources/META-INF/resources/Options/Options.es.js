@@ -526,7 +526,7 @@ const Options = ({
 
 	const composedAdd = compose(clone, add, normalize, set);
 	const composedBlur = compose(clone, normalize, set);
-	const composedChange = compose(clone, dedup, change, set);
+	const composedChange = compose(clone, change, validate, set);
 	const composedDelete = compose(clone, handleDelete, set);
 	const composedMove = compose(clone, move, set);
 
