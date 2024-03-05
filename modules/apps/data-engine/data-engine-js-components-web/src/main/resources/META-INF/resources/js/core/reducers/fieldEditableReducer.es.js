@@ -12,7 +12,12 @@ import {
 	removeField,
 } from '../../utils/fieldSupport';
 import {formatRules} from '../../utils/rulesSupport';
-import {updateField, updateFieldReference} from '../../utils/settingsContext';
+import {
+	setFieldErrorMessage,
+	updateField,
+	updateFieldName,
+	updateFieldReference,
+} from '../../utils/settingsContext';
 import {PagesVisitor} from '../../utils/visitors.es';
 import {EVENT_TYPES} from '../actions/eventTypes.es';
 import {createDuplicatedField, isValueAlreadyUsed} from '../utils/fields';
@@ -169,6 +174,16 @@ const updateFieldProperty = ({
 			false
 		);
 	}
+	else if (propertyName === 'name') {
+		focusedField = updateFieldName(
+			defaultLanguageId,
+			editingLanguageId,
+			fieldNameGenerator,
+			focusedField,
+			propertyValue,
+			isValueAlreadyUsed(focusedField, pages, propertyValue, propertyName)
+		);
+	}
 
 	return updateField(
 		{
@@ -257,7 +272,7 @@ export default function fieldEditableReducer(state, action, config) {
 		}
 		case EVENT_TYPES.FIELD.BLUR: {
 			const {propertyName, propertyValue} = action.payload;
-
+			const {defaultLanguageId, editingLanguageId} = state;
 			let {focusedField, pages} = state;
 
 			if (Object.keys(focusedField).length) {
@@ -271,8 +286,6 @@ export default function fieldEditableReducer(state, action, config) {
 							propertyName
 						))
 				) {
-					const {defaultLanguageId, editingLanguageId} = state;
-
 					focusedField = updateField(
 						{
 							defaultLanguageId,
@@ -283,41 +296,62 @@ export default function fieldEditableReducer(state, action, config) {
 						focusedField.fieldName
 					);
 				}
-				else if (propertyName === 'name' && propertyValue === '') {
-					const {defaultLanguageId, editingLanguageId} = state;
+				else if (propertyName === 'name') {
+					if (
+						propertyValue === '' ||
+						isValueAlreadyUsed(
+							focusedField,
+							pages,
+							propertyValue,
+							propertyName
+						)
+					) {
+						const fieldNameGenerator = config.getFieldNameGenerator(
+							pages,
+							false
+						);
 
-					const fieldNameGenerator = config.getFieldNameGenerator(
-						pages,
-						false
-					);
+						focusedField = updateField(
+							{
+								defaultLanguageId,
+								editingLanguageId,
+								fieldNameGenerator,
+							},
+							focusedField,
+							propertyName,
+							''
+						);
 
-					focusedField = updateField(
-						{
-							defaultLanguageId,
-							editingLanguageId,
-							fieldNameGenerator,
-						},
-						focusedField,
-						propertyName,
-						propertyValue
-					);
+						const visitor = new PagesVisitor(pages);
 
-					const visitor = new PagesVisitor(pages);
+						pages = visitor.mapFields(
+							(field) => {
+								if (
+									field.fieldReference ===
+									focusedField.fieldReference
+								) {
+									if (field.displayErrors) {
+										focusedField.displayErrors = false;
 
-					pages = visitor.mapFields(
-						(field) => {
-							if (
-								field.fieldReference ===
-								focusedField.fieldReference
-							) {
-								return focusedField;
-							}
+										focusedField.settingsContext = setFieldErrorMessage(
+											focusedField.settingsContext,
+											'name',
+											false,
+											false
+										);
 
-							return field;
-						},
-						false,
-						true
-					);
+										focusedField.errorMessage = '';
+									}
+
+									return focusedField;
+								}
+
+								return field;
+							},
+							false,
+							true
+						);
+					}
 				}
 			}
 
