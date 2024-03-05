@@ -382,25 +382,46 @@ const Options = ({
 		return removeErrorProperties(fields);
 	};
 
-	const dedup = (fields, index, property, value) => {
-		const {generateKeyword, id} = fields[index];
-
+	const validate = (fields, index, property, value) => {
 		if (index === fields.length && tabPressed) {
 			return [fields];
 		}
 
-		if (property === 'value' && generateKeyword) {
-			value = dedupValue(
+		if (property === 'value') {
+			const invalidNameFieldReference = checkValidOptionName(
 				fields,
-				value ? value : Liferay.Language.get('option'),
-				id,
-				generateOptionValueUsingOptionLabel
+				value,
+				fields[index].reference
 			);
+
+			if (invalidNameFieldReference) {
+				fields = addErrorProperties(
+					fields,
+					'reference',
+					invalidNameFieldReference
+				);
+			}
+			else {
+				fields = removeErrorProperties(fields);
+			}
 		}
 		else if (property === 'reference') {
-			setFieldError(
-				checkValidReference(fields, value, fields[index].value)
+			const invalidReferenceFieldName = checkValidOptionReference(
+				fields,
+				value,
+				fields[index].value
 			);
+
+			if (invalidReferenceFieldName) {
+				fields = addErrorProperties(
+					fields,
+					'value',
+					invalidReferenceFieldName
+				);
+			}
+			else {
+				fields = removeErrorProperties(fields);
+			}
 		}
 
 		return [fields, index, property, value];
