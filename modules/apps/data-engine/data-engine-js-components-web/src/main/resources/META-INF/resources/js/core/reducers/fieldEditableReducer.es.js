@@ -12,13 +12,15 @@ import {
 	removeField,
 } from '../../utils/fieldSupport';
 import {formatRules} from '../../utils/rulesSupport';
-import {updateField, updateFieldReference} from '../../utils/settingsContext';
+import {
+	setFieldErrorMessage,
+	updateField,
+	updateFieldName,
+	updateFieldReference,
+} from '../../utils/settingsContext';
 import {PagesVisitor} from '../../utils/visitors.es';
 import {EVENT_TYPES} from '../actions/eventTypes.es';
-import {
-	createDuplicatedField,
-	findInvalidFieldReference,
-} from '../utils/fields';
+import {createDuplicatedField, isValueAlreadyUsed} from '../utils/fields';
 import {updateRulesReferences} from '../utils/rules';
 import sectionAdded from '../utils/sectionAddedHandler';
 import {enableSubmitButton} from '../utils/submitButtonController.es';
@@ -163,8 +165,23 @@ const updateFieldProperty = ({
 	) {
 		focusedField = updateFieldReference(
 			focusedField,
-			findInvalidFieldReference(focusedField, pages, propertyValue),
+			isValueAlreadyUsed(
+				focusedField,
+				pages,
+				propertyValue,
+				propertyName
+			),
 			false
+		);
+	}
+	else if (propertyName === 'name') {
+		focusedField = updateFieldName(
+			defaultLanguageId,
+			editingLanguageId,
+			fieldNameGenerator,
+			focusedField,
+			propertyValue,
+			isValueAlreadyUsed(focusedField, pages, propertyValue, propertyName)
 		);
 	}
 
@@ -255,35 +272,93 @@ export default function fieldEditableReducer(state, action, config) {
 		}
 		case EVENT_TYPES.FIELD.BLUR: {
 			const {propertyName, propertyValue} = action.payload;
+			const {defaultLanguageId, editingLanguageId} = state;
+			let {focusedField, pages} = state;
 
-			let focusedField = state.focusedField;
+			if (Object.keys(focusedField).length) {
+				if (
+					propertyName === 'fieldReference' &&
+					(propertyValue === '' ||
+						isValueAlreadyUsed(
+							focusedField,
+							state.pages,
+							propertyValue,
+							propertyName
+						))
+				) {
+					focusedField = updateField(
+						{
+							defaultLanguageId,
+							editingLanguageId,
+						},
+						updateFieldReference(focusedField, false, true),
+						propertyName,
+						focusedField.fieldName
+					);
+				}
+				else if (propertyName === 'name') {
+					if (
+						propertyValue === '' ||
+						isValueAlreadyUsed(
+							focusedField,
+							pages,
+							propertyValue,
+							propertyName
+						)
+					) {
+						const fieldNameGenerator = config.getFieldNameGenerator(
+							pages,
+							false
+						);
 
-			if (
-				Object.keys(focusedField).length &&
-				propertyName === 'fieldReference' &&
-				(propertyValue === '' ||
-					findInvalidFieldReference(
-						focusedField,
-						state.pages,
-						propertyValue
-					))
-			) {
-				const {defaultLanguageId, editingLanguageId} = state;
+						focusedField = updateField(
+							{
+								defaultLanguageId,
+								editingLanguageId,
+								fieldNameGenerator,
+							},
+							focusedField,
+							propertyName,
+							''
+						);
 
-				focusedField = updateField(
-					{
-						defaultLanguageId,
-						editingLanguageId,
-					},
-					updateFieldReference(focusedField, false, true),
-					propertyName,
-					focusedField.fieldName
-				);
+						const visitor = new PagesVisitor(pages);
+
+						pages = visitor.mapFields(
+							(field) => {
+								if (
+									field.fieldReference ===
+									focusedField.fieldReference
+								) {
+									if (field.displayErrors) {
+										focusedField.displayErrors = false;
+
+										focusedField.settingsContext = setFieldErrorMessage(
+											focusedField.settingsContext,
+											'name',
+											false,
+											false
+										);
+
+										focusedField.errorMessage = '';
+									}
+
+									return focusedField;
+								}
+
+								return field;
+							},
+							false,
+							true
+						);
+					}
+				}
 			}
 
 			return {
 				fieldHovered: {},
 				focusedField,
+				pages,
 			};
 		}
 		case EVENT_TYPES.FIELD.CLICK: {
@@ -372,6 +447,16 @@ export default function fieldEditableReducer(state, action, config) {
 				pages: visitor.mapFields(
 					(field) => {
 						if (field.fieldName === focusedField.fieldName) {
+							if (
+								propertyName === 'name' &&
+								field.fieldReference ===
+									focusedField.fieldReference &&
+								newFocusedField.displayErrors
+							) {
+								newFocusedField.fieldName =
+									focusedField.fieldName;
+							}
+
 							return newFocusedField;
 						}
 						if (propertyValue && propertyName === 'repeatable') {
