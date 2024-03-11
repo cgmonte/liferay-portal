@@ -11,6 +11,11 @@
 	border-bottom: none !important;
 	padding: 0.4rem 0 0.4rem 0.5rem !important;
 
+	.collapse-icon-closed,
+	.collapse-icon-open {
+		right: 4px !important;
+	}
+
 	.panel-title {
 		display: block;
 		max-width: calc(100% - 31px);
@@ -18,11 +23,6 @@
 		text-overflow: ellipsis;
 		text-transform: none;
 		white-space: nowrap;
-	}
-
-	.collapse-icon-closed,
-	.collapse-icon-open {
-		right: 4px !important;
 	}
 }
 
