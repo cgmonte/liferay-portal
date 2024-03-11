@@ -33,8 +33,8 @@ public class KeyValueDDMFormFieldType extends BaseDDMFormFieldType {
 	}
 
 	@Override
-	public String getESModule() {
-		return "{KeyValue} from dynamic-data-mapping-form-field-type";
+	public String getModuleName() {
+		return "{OptionFieldKeyValue} from dynamic-data-mapping-form-field-type";
 	}
 
 	@Override
