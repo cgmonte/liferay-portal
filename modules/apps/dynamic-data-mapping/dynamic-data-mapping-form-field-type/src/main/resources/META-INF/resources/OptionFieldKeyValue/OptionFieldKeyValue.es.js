@@ -25,6 +25,7 @@ const Main = ({
 	generateOptionValueUsingOptionLabel,
 	invalidField,
 	keyword: initialKeyword,
+	keywordReadOnly,
 	name,
 	onBlur,
 	onChange,
@@ -213,7 +214,7 @@ const Main = ({
 							{...otherProps}
 							displayErrors={invalidField === 'value'}
 							name={keyword}
-							readOnly={readOnly}
+							readOnly={keywordReadOnly}
 							required={required}
 							showLabel={showLabel}
 							spritemap={spritemap}
@@ -233,6 +234,7 @@ const Main = ({
 									setKeyword(value);
 								}}
 								preventChangeHandlerOnBlur
+								readOnly={keywordReadOnly}
 								value={keyword}
 								visible={visible}
 							/>
