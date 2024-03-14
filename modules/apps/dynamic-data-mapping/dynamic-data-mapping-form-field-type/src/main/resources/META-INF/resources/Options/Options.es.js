@@ -650,6 +650,9 @@ const Main = ({
 								errorMessage={option.errorMessage}
 								expandedPanel={expandedPanel}
 								generateKeyword={option.generateKeyword}
+								generateOptionValueUsingOptionLabel={
+									generateOptionValueUsingOptionLabel
+								}
 								invalidField={option.invalidField}
 								keyword={option.value}
 								keywordReadOnly={keywordReadOnly}
