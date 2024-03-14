@@ -22,6 +22,7 @@ const Main = ({
 	editingLanguageId,
 	expandedPanel,
 	generateKeyword,
+	generateOptionValueUsingOptionLabel,
 	invalidField,
 	keyword: initialKeyword,
 	name,
@@ -109,9 +110,17 @@ const Main = ({
 							onChange(value);
 
 							if (generateKeywordRef.current) {
+								const getKeywordValueOnEmptyLabel = (value) => {
+									if (generateOptionValueUsingOptionLabel) {
+										return value === '' ? reference : value;
+									}
+
+									return value;
+								};
+
 								onKeywordChange(
 									allowSpecialCharacters
-										? value
+										? getKeywordValueOnEmptyLabel(value)
 										: normalizeFieldName(value),
 									true
 								);
