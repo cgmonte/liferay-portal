@@ -14,7 +14,7 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import FieldBase from '../FieldBase/ReactFieldBase.es';
-import OptionFieldKeyValue from '../KeyValue/OptionFieldKeyValue.es';
+import OptionFieldKeyValue from '../OptionFieldKeyValue/OptionFieldKeyValue.es';
 import DnD from './DnD.es';
 import DragPreview from './DragPreview.es';
 import {
