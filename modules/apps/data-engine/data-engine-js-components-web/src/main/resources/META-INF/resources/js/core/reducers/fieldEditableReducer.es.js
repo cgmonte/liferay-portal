@@ -281,7 +281,7 @@ export default function fieldEditableReducer(state, action, config) {
 					(propertyValue === '' ||
 						isValueAlreadyUsed(
 							focusedField,
-							state.pages,
+							pages,
 							propertyValue,
 							propertyName
 						))
@@ -296,62 +296,61 @@ export default function fieldEditableReducer(state, action, config) {
 						focusedField.fieldName
 					);
 				}
-				else if (propertyName === 'name') {
-					if (
-						propertyValue === '' ||
+				else if (
+					propertyName === 'name' &&
+					(propertyValue === '' ||
 						isValueAlreadyUsed(
 							focusedField,
 							pages,
 							propertyValue,
 							propertyName
-						)
-					) {
-						const fieldNameGenerator = config.getFieldNameGenerator(
-							pages,
-							false
-						);
+						))
+				) {
+					const fieldNameGenerator = config.getFieldNameGenerator(
+						pages,
+						false
+					);
 
-						focusedField = updateField(
-							{
-								defaultLanguageId,
-								editingLanguageId,
-								fieldNameGenerator,
-							},
-							focusedField,
-							propertyName,
-							''
-						);
+					focusedField = updateField(
+						{
+							defaultLanguageId,
+							editingLanguageId,
+							fieldNameGenerator,
+						},
+						focusedField,
+						propertyName,
+						''
+					);
 
-						const visitor = new PagesVisitor(pages);
+					const visitor = new PagesVisitor(pages);
 
-						pages = visitor.mapFields(
-							(field) => {
-								if (
-									field.fieldReference ===
-									focusedField.fieldReference
-								) {
-									if (field.displayErrors) {
-										focusedField.displayErrors = false;
+					pages = visitor.mapFields(
+						(field) => {
+							if (
+								field.fieldReference ===
+								focusedField.fieldReference
+							) {
+								if (field.displayErrors) {
+									focusedField.displayErrors = false;
 
-										focusedField.settingsContext = setFieldErrorMessage(
-											focusedField.settingsContext,
-											'name',
-											false,
-											false
-										);
+									focusedField.settingsContext = setFieldErrorMessage(
+										focusedField.settingsContext,
+										'name',
+										false,
+										false
+									);
 
-										focusedField.errorMessage = '';
-									}
-
-									return focusedField;
+									focusedField.errorMessage = '';
 								}
 
-								return field;
-							},
-							false,
-							true
-						);
-					}
+								return focusedField;
+							}
+
+							return field;
+						},
+						false,
+						true
+					);
 				}
 			}
 
