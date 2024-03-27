@@ -3,17 +3,27 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 
 import {DEFAULT_LANGUAGE} from '../../../../../source-builder/constants';
 import {DiagramBuilderContext} from '../../../../DiagramBuilderContext';
 import BaseSourceCode from '../shared-components/BaseSourceCode';
 
 const TimerSourceCode = () => {
-	const {selectedItem, setSelectedItem} = useContext(DiagramBuilderContext);
+	const {
+		scriptedReassignmentTimerIndex,
+		selectedItem,
+		setSelectedItem,
+	} = useContext(DiagramBuilderContext);
+
+	useEffect(() => {
+		console.log('timerIndex', scriptedReassignmentTimerIndex);
+	}, [scriptedReassignmentTimerIndex]);
 
 	const scriptSourceCode =
-		selectedItem.data.taskTimers?.reassignments?.[0]?.script;
+		selectedItem.data.taskTimers?.reassignments?.[
+			scriptedReassignmentTimerIndex
+		]?.script;
 
 	const updateTimer = (editor) => {
 		if (editor.getData().trim() !== '') {
@@ -23,13 +33,20 @@ const TimerSourceCode = () => {
 					...previousValue.data,
 					taskTimers: {
 						...previousValue.data.taskTimers,
-						reassignments: [
-							{
-								assignmentType: ['scriptedAssignment'],
-								script: [editor.getData()],
-								scriptLanguage: [DEFAULT_LANGUAGE],
-							},
-						],
+						reassignments: previousValue.data.taskTimers.reassignments.map(
+							(reassignment, index) => {
+								if (index === scriptedReassignmentTimerIndex) {
+									return {
+										assignmentType: ['scriptedAssignment'],
+										script: [editor.getData()],
+										scriptLanguage: [DEFAULT_LANGUAGE],
+									};
+								}
+								else {
+									return reassignment;
+								}
+							}
+						),
 					},
 				},
 			}));

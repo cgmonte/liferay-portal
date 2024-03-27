@@ -79,6 +79,14 @@ export default function DiagramBuilder() {
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
 	const [defaultPosition, setDefaultPosition] = useState(null);
+	const [
+		scriptedReassignmentTimerIndex,
+		setScriptedReassignmentTimerIndex,
+	] = useState(null);
+
+	useEffect(() => {
+		console.log('selectedItem', selectedItem);
+	}, [selectedItem]);
 
 	const onConnect = (params) => {
 		if (
@@ -439,10 +447,12 @@ export default function DiagramBuilder() {
 		collidingElements,
 		elementRectangle,
 		functionActionExecutors,
+		scriptedReassignmentTimerIndex,
 		selectedItem,
 		selectedItemNewId,
 		setCollidingElements,
 		setElementRectangle,
+		setScriptedReassignmentTimerIndex,
 		setSelectedItem,
 		setSelectedItemNewId,
 		statuses,
