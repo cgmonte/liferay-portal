@@ -24,6 +24,7 @@ import XMLUtil from '../../../source-builder/xmlUtil';
 import {getAvailableLocalesObject} from '../../../util/availableLocales';
 import {
 	publishDefinitionRequest,
+	retrieveDefinitionRequest,
 	saveDefinitionRequest,
 } from '../../../util/fetchUtil';
 import {isObjectEmpty} from '../../../util/utils';
@@ -47,6 +48,7 @@ export default function UpperToolbar({
 		definitionTitle,
 		definitionTitleTranslations,
 		elements,
+		originalContentRef,
 		scriptManagementConfigurationPortletURL,
 		selectedLanguageId,
 		setAlertMessage,
@@ -63,9 +65,9 @@ export default function UpperToolbar({
 		setSelectedLanguageId,
 		setShowAlert,
 		setShowDefinitionInfo,
-		setShowInvalidContentMessage,
 		setSourceView,
 		setVersion,
+		setXMLContentInvalid,
 		showAlert,
 		sourceView,
 		version,
@@ -211,57 +213,69 @@ export default function UpperToolbar({
 			setAlert(blockingErrors.errorMessage, 'danger', true);
 		}
 		else {
-			let alertMessage;
+			const XMLContent = getXMLContent(true);
 
-			if (definitionNotPublished) {
-				alertMessage = Liferay.Language.get(
-					'workflow-published-successfully'
-				);
-			}
-			else {
-				alertMessage = Liferay.Language.get(
-					'workflow-updated-successfully'
-				);
-			}
+			if (XMLUtil.validateDefinition(XMLContent)) {
+				let alertMessage;
 
-			publishDefinitionRequest({
-				active,
-				content: getXMLContent(true),
-				name: definitionName,
-				title: definitionTitle,
-				title_i18n: definitionTitleTranslations,
-				version,
-			}).then((response) => {
-				if (response.ok) {
-					if (
-						Liferay.FeatureFlags['LPD-11179'] &&
-						!allowScriptContentBeExecutedOrIncluded
-					) {
-						setHadGroovyScriptBefore(false);
-					}
-
-					response.json().then(({name, version}) => {
-						setDefinitionName(name);
-						setVersion(parseInt(version, 10));
-						if (version === '1') {
-							localStorage.setItem(
-								'firstPublished',
-								true,
-								localStorage.TYPES.FUNCTIONAL
-							);
-							redirectToSavedDefinition(name, version);
-						}
-						else {
-							setAlert(alertMessage, 'success', true);
-						}
-					});
+				if (definitionNotPublished) {
+					alertMessage = Liferay.Language.get(
+						'workflow-published-successfully'
+					);
 				}
 				else {
-					response.json().then(({title}) => {
-						setAlert(title, 'danger', true);
-					});
+					alertMessage = Liferay.Language.get(
+						'workflow-updated-successfully'
+					);
 				}
-			});
+
+				publishDefinitionRequest({
+					active,
+					content: XMLContent,
+					name: definitionName,
+					title: definitionTitle,
+					title_i18n: definitionTitleTranslations,
+					version,
+				}).then((response) => {
+					if (response.ok) {
+						if (
+							Liferay.FeatureFlags['LPD-11179'] &&
+							!allowScriptContentBeExecutedOrIncluded
+						) {
+							setHadGroovyScriptBefore(false);
+						}
+
+						response.json().then(({name, version}) => {
+							setDefinitionName(name);
+							setVersion(parseInt(version, 10));
+							if (version === '1') {
+								localStorage.setItem(
+									'firstPublished',
+									true,
+									localStorage.TYPES.FUNCTIONAL
+								);
+								redirectToSavedDefinition(name, version);
+							}
+							else {
+								setAlert(alertMessage, 'success', true);
+								retrieveDefinitionRequest(name)
+									.then((response) => response.json())
+									.then(({content}) => {
+										originalContentRef.current = content;
+									});
+							}
+						});
+					}
+					else {
+						response.json().then(({title}) => {
+							setAlert(title, 'danger', true);
+						});
+					}
+				});
+			}
+			else {
+				setXMLContentInvalid(true);
+			}
 		}
 	};
 
@@ -280,43 +294,55 @@ export default function UpperToolbar({
 			setAlert(blockingErrors.errorMessage, 'danger', true);
 		}
 		else {
-			saveDefinitionRequest({
-				active,
-				content: getXMLContent(true),
-				name: definitionName,
-				title: definitionTitle,
-				title_i18n: definitionTitleTranslations,
-				version,
-			}).then((response) => {
-				if (response.ok) {
-					if (
-						Liferay.FeatureFlags['LPD-11179'] &&
-						!allowScriptContentBeExecutedOrIncluded
-					) {
-						setHadGroovyScriptBefore(false);
-					}
+			const XMLContent = getXMLContent(true);
 
-					response.json().then(({name, version}) => {
-						setDefinitionName(name);
-						setVersion(parseInt(version, 10));
-						if (version === '1') {
-							localStorage.setItem(
-								'firstSaved',
-								true,
-								localStorage.TYPES.FUNCTIONAL
-							);
-							redirectToSavedDefinition(name, version);
+			if (XMLUtil.validateDefinition(XMLContent)) {
+				saveDefinitionRequest({
+					active,
+					content: XMLContent,
+					name: definitionName,
+					title: definitionTitle,
+					title_i18n: definitionTitleTranslations,
+					version,
+				}).then((response) => {
+					if (response.ok) {
+						if (
+							Liferay.FeatureFlags['LPD-11179'] &&
+							!allowScriptContentBeExecutedOrIncluded
+						) {
+							setHadGroovyScriptBefore(false);
 						}
-						else {
-							setAlert(
-								Liferay.Language.get('workflow-saved'),
-								'success',
-								true
-							);
-						}
-					});
-				}
-			});
+
+						response.json().then(({name, version}) => {
+							setDefinitionName(name);
+							setVersion(parseInt(version, 10));
+							if (version === '1') {
+								localStorage.setItem(
+									'firstSaved',
+									true,
+									localStorage.TYPES.FUNCTIONAL
+								);
+								redirectToSavedDefinition(name, version);
+							}
+							else {
+								setAlert(
+									Liferay.Language.get('workflow-saved'),
+									'success',
+									true
+								);
+								retrieveDefinitionRequest(name)
+									.then((response) => response.json())
+									.then(({content}) => {
+										originalContentRef.current = content;
+									});
+							}
+						});
+					}
+				});
+			}
+			else {
+				setXMLContentInvalid(true);
+			}
 		}
 	};
 
@@ -470,7 +496,18 @@ export default function UpperToolbar({
 								<ClayButton
 									disabled={isView}
 									displayType="secondary"
-									onClick={saveDefinition}
+									onClick={() => {
+										if (
+											XMLUtil.validateDefinition(
+												currentEditor.getData()
+											)
+										) {
+											saveDefinition();
+										}
+										else {
+											setXMLContentInvalid(true);
+										}
+									}}
 								>
 									{Liferay.Language.get('save')}
 								</ClayButton>
@@ -503,7 +540,7 @@ export default function UpperToolbar({
 											setDeserialize(true);
 										}
 										else {
-											setShowInvalidContentMessage(true);
+											setXMLContentInvalid(true);
 										}
 									}}
 									symbol="rules"

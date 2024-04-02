@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {useState} from 'react';
+import ClayAlert from '@clayui/alert';
+import React, {useRef, useState} from 'react';
 import {ReactFlowProvider} from 'react-flow-renderer';
 
 import '../../css/definition-builder/main.scss';
@@ -14,6 +15,8 @@ import UpperToolbar from './shared/components/toolbar/UpperToolbar';
 import SourceBuilder from './source-builder/SourceBuilder';
 
 export default function DefinitionBuilder(props) {
+	const originalContentRef = useRef();
+
 	const [accountEntryId, setAccountEntryId] = useState(props.accountEntryId);
 	const [active, setActive] = useState(true);
 	const [alertMessage, setAlertMessage] = useState('');
@@ -34,14 +37,13 @@ export default function DefinitionBuilder(props) {
 	const [hasGroovyScript, setHasGroovyScript] = useState(false);
 	const [selectedLanguageId, setSelectedLanguageId] = useState('');
 	const [showDefinitionInfo, setShowDefinitionInfo] = useState(false);
-	const [showInvalidContentMessage, setShowInvalidContentMessage] = useState(
-		false
-	);
+	const [XMLContentInvalid, setXMLContentInvalid] = useState(false);
 	const [sourceView, setSourceView] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [version, setVersion] = useState(parseInt(props.version, 10));
 
 	const contextProps = {
+		XMLContentInvalid,
 		accountEntryId,
 		active,
 		alertMessage,
@@ -60,6 +62,7 @@ export default function DefinitionBuilder(props) {
 		functionActionExecutors: props.functionActionExecutors,
 		hadGroovyScriptBefore,
 		hasGroovyScript,
+		originalContentRef,
 		scriptManagementConfigurationPortletURL:
 			props.scriptManagementConfigurationPortletURL,
 		selectedLanguageId,
@@ -81,12 +84,11 @@ export default function DefinitionBuilder(props) {
 		setSelectedLanguageId,
 		setShowAlert,
 		setShowDefinitionInfo,
-		setShowInvalidContentMessage,
 		setSourceView,
 		setVersion,
+		setXMLContentInvalid,
 		showAlert,
 		showDefinitionInfo,
-		showInvalidContentMessage,
 		sourceView,
 		statuses: props.statuses,
 		version,
@@ -99,6 +101,20 @@ export default function DefinitionBuilder(props) {
 					<UpperToolbar {...props} />
 
 					{sourceView ? <SourceBuilder /> : <DiagramBuilder />}
+
+					{XMLContentInvalid && (
+						<ClayAlert.ToastContainer>
+							<ClayAlert
+								autoClose={5000}
+								displayType="danger"
+								title={`${Liferay.Language.get('error')}:`}
+							>
+								{Liferay.Language.get(
+									'definition-is-invalid-please-define-a-valid-definition'
+								)}
+							</ClayAlert>
+						</ClayAlert.ToastContainer>
+					)}
 				</ReactFlowProvider>
 			</div>
 		</DefinitionBuilderContextProvider>

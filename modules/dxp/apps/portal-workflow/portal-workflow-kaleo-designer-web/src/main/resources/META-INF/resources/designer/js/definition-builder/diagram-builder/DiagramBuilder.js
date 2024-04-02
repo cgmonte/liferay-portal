@@ -56,6 +56,7 @@ export default function DiagramBuilder() {
 		elements,
 		functionActionExecutors,
 		hadGroovyScriptBefore,
+		originalContentRef,
 		selectedLanguageId,
 		setActive,
 		setBlockingErrors,
@@ -389,6 +390,7 @@ export default function DiagramBuilder() {
 						title_i18n,
 						version,
 					}) => {
+						originalContentRef.current = content;
 						setActive(active);
 						setDefinitionDescription(description);
 						setDefinitionInfo({
