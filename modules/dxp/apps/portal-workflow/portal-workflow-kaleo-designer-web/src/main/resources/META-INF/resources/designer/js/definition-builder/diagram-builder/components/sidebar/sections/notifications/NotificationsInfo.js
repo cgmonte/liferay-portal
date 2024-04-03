@@ -299,15 +299,17 @@ const NotificationsInfo = ({
 
 	const updateNotificationInfo = (item) => {
 		if (item.name && item.template && item.notificationTypes.length) {
-			setSections((prev) => {
-				prev[notificationIndex] = {
-					...prev[notificationIndex],
+			setSections((previousSections) => {
+				const newSections = [...previousSections];
+
+				newSections[notificationIndex] = {
+					...newSections[notificationIndex],
 					...item,
 				};
 
-				updateSelectedItem(prev);
+				updateSelectedItem(newSections);
 
-				return prev;
+				return newSections;
 			});
 		}
 	};
