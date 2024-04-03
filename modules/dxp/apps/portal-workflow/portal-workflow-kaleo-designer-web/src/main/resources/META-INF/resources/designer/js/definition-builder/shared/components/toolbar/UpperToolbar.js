@@ -37,6 +37,7 @@ export default function UpperToolbar({
 	portletNamespace,
 }) {
 	const {
+		XMLContentInvalid,
 		active,
 		alertMessage,
 		alertType,
@@ -127,7 +128,7 @@ export default function UpperToolbar({
 		let currentName;
 		let xmlContent;
 
-		if (currentEditor && !exporting) {
+		if (currentEditor) {
 			xmlContent = currentEditor.getData();
 		}
 		else {
@@ -572,6 +573,20 @@ export default function UpperToolbar({
 						}
 					>
 						{alertMessage}
+					</ClayAlert>
+				</ClayAlert.ToastContainer>
+			)}
+
+			{XMLContentInvalid && (
+				<ClayAlert.ToastContainer>
+					<ClayAlert
+						autoClose={5000}
+						displayType="danger"
+						title={`${Liferay.Language.get('error')}:`}
+					>
+						{Liferay.Language.get(
+							'this-process-definition-is-invalid-please-check-for-any-invalid-content'
+						)}
 					</ClayAlert>
 				</ClayAlert.ToastContainer>
 			)}

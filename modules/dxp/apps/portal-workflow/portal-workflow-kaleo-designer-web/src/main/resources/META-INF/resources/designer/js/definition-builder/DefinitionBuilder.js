@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayAlert from '@clayui/alert';
 import React, {useRef, useState} from 'react';
 import {ReactFlowProvider} from 'react-flow-renderer';
 
@@ -101,20 +100,6 @@ export default function DefinitionBuilder(props) {
 					<UpperToolbar {...props} />
 
 					{sourceView ? <SourceBuilder /> : <DiagramBuilder />}
-
-					{XMLContentInvalid && (
-						<ClayAlert.ToastContainer>
-							<ClayAlert
-								autoClose={5000}
-								displayType="danger"
-								title={`${Liferay.Language.get('error')}:`}
-							>
-								{Liferay.Language.get(
-									'definition-is-invalid-please-define-a-valid-definition'
-								)}
-							</ClayAlert>
-						</ClayAlert.ToastContainer>
-					)}
 				</ReactFlowProvider>
 			</div>
 		</DefinitionBuilderContextProvider>
