@@ -508,18 +508,7 @@ export default function UpperToolbar({
 								<ClayButton
 									disabled={isView}
 									displayType="secondary"
-									onClick={() => {
-										if (
-											XMLUtil.validateDefinition(
-												currentEditor.getData()
-											)
-										) {
-											saveDefinition();
-										}
-										else {
-											setXMLContentInvalid(true);
-										}
-									}}
+									onClick={saveDefinition}
 								>
 									{Liferay.Language.get('save')}
 								</ClayButton>
@@ -587,20 +576,6 @@ export default function UpperToolbar({
 					</ClayAlert>
 				</ClayAlert.ToastContainer>
 			)}
-
-			{/* {XMLContentInvalid && (
-				<ClayAlert.ToastContainer>
-					<ClayAlert
-						autoClose={5000}
-						displayType="danger"
-						title={`${Liferay.Language.get('error')}:`}
-					>
-						{Liferay.Language.get(
-							'this-process-definition-is-invalid-please-check-for-any-invalid-content'
-						)}
-					</ClayAlert>
-				</ClayAlert.ToastContainer>
-			)} */}
 
 			{showGroovyScriptWarningModal && (
 				<GroovyScriptWarningModal
