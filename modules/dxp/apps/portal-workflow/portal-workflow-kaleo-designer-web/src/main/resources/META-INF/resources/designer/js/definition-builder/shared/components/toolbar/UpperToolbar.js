@@ -37,7 +37,6 @@ export default function UpperToolbar({
 	portletNamespace,
 }) {
 	const {
-		XMLContentInvalid,
 		active,
 		alertMessage,
 		alertType,
@@ -172,6 +171,18 @@ export default function UpperToolbar({
 		return xmlContent;
 	};
 
+	const handleContentInvalid = () => {
+		setXMLContentInvalid(true);
+
+		setAlert(
+			Liferay.Language.get(
+				'this-process-definition-is-invalid-please-check-for-any-invalid-content'
+			),
+			'danger',
+			true
+		);
+	};
+
 	const onSelectedLanguageIdChange = (id) => {
 		if (id) {
 			setSelectedLanguageId(id);
@@ -275,7 +286,7 @@ export default function UpperToolbar({
 				});
 			}
 			else {
-				setXMLContentInvalid(true);
+				handleContentInvalid();
 			}
 		}
 	};
@@ -342,7 +353,7 @@ export default function UpperToolbar({
 				});
 			}
 			else {
-				setXMLContentInvalid(true);
+				handleContentInvalid();
 			}
 		}
 	};
@@ -541,7 +552,7 @@ export default function UpperToolbar({
 											setDeserialize(true);
 										}
 										else {
-											setXMLContentInvalid(true);
+											handleContentInvalid();
 										}
 									}}
 									symbol="rules"
@@ -577,7 +588,7 @@ export default function UpperToolbar({
 				</ClayAlert.ToastContainer>
 			)}
 
-			{XMLContentInvalid && (
+			{/* {XMLContentInvalid && (
 				<ClayAlert.ToastContainer>
 					<ClayAlert
 						autoClose={5000}
@@ -589,7 +600,7 @@ export default function UpperToolbar({
 						)}
 					</ClayAlert>
 				</ClayAlert.ToastContainer>
-			)}
+			)} */}
 
 			{showGroovyScriptWarningModal && (
 				<GroovyScriptWarningModal
