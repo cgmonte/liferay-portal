@@ -9,32 +9,31 @@ import ClayLayout from '@clayui/layout';
 import ClayLink from '@clayui/link';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import ClayToolbar from '@clayui/toolbar';
-import {Editor} from 'frontend-editor-ckeditor-web';
+import {ClassicEditor} from 'frontend-editor-ckeditor-web';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {isEdge, isNode} from 'react-flow-renderer';
 
+import XMLUtil from '../../../js/definition-builder/source-builder/xmlUtil';
 import {DefinitionBuilderContext} from '../DefinitionBuilderContext';
 import {editorConfig} from '../constants';
 import {xmlNamespace} from './constants';
 import {serializeDefinition} from './serializeUtil';
 
-const REGEX_ALERT = /alert\((.*?)\)/;
-
 export default function SourceBuilder() {
 	const {
+		XMLContentInvalid,
 		currentEditor,
 		definitionDescription,
 		definitionName,
 		elements,
+		originalContentRef,
 		setCurrentEditor,
+		setXMLContentInvalid,
 		version,
 	} = useContext(DefinitionBuilderContext);
 	const editorRef = useRef();
 	const [loading, setLoading] = useState(true);
 	const [showImportSuccessMessage, setShowImportSuccessMessage] = useState(
-		false
-	);
-	const [showInvalidContentMessage, setShowInvalidContentMessage] = useState(
 		false
 	);
 
@@ -55,22 +54,7 @@ export default function SourceBuilder() {
 				);
 
 				if (xmlContent) {
-					const codeEditor = document.querySelector(
-						'div.cke_contents'
-					);
-
-					codeEditor.addEventListener('keyup', () => {
-						if (currentEditor.getData() !== xmlContent) {
-							const newXmlContent = currentEditor.getData();
-							const sanitizedXmlContent = newXmlContent.replace(
-								REGEX_ALERT,
-								''
-							);
-
-							currentEditor.setData(sanitizedXmlContent);
-						}
-					});
-
+					originalContentRef.current = xmlContent;
 					currentEditor.setData(xmlContent);
 
 					setLoading(false);
@@ -96,18 +80,18 @@ export default function SourceBuilder() {
 	}, [currentEditor, definitionName, elements, version]);
 
 	useEffect(() => {
-		if (showInvalidContentMessage) {
+		if (XMLContentInvalid) {
 			document.addEventListener('keydown', () => {
-				setShowInvalidContentMessage(false);
+				setXMLContentInvalid(false);
 			});
 
 			return () => {
 				document.removeEventListener('keydown', () => {
-					setShowInvalidContentMessage(false);
+					setXMLContentInvalid(false);
 				});
 			};
 		}
-	}, [setShowInvalidContentMessage, showInvalidContentMessage]);
+	}, [setXMLContentInvalid, XMLContentInvalid]);
 
 	const writeDefinitionMessage = Liferay.Language.get(
 		'write-your-definition-or-x'
@@ -118,7 +102,7 @@ export default function SourceBuilder() {
 	).toLowerCase();
 
 	function loadFile(event) {
-		setShowInvalidContentMessage(false);
+		setXMLContentInvalid(false);
 
 		const files = event.target.files;
 
@@ -127,13 +111,6 @@ export default function SourceBuilder() {
 
 			reader.onloadend = (event) => {
 				if (event.target.readyState === FileReader.DONE) {
-					const sanitizedData = event.target.result.replace(
-						REGEX_ALERT,
-						''
-					);
-
-					currentEditor.setData(sanitizedData);
-
 					const fileInput = document.querySelector('#fileInput');
 
 					fileInput.value = '';
@@ -145,7 +122,7 @@ export default function SourceBuilder() {
 			reader.readAsText(files[0]);
 		}
 		else if (files[0].type !== 'text/xml') {
-			setShowInvalidContentMessage(true);
+			setXMLContentInvalid(true);
 		}
 	}
 
@@ -189,8 +166,17 @@ export default function SourceBuilder() {
 				/>
 			)}
 
-			<Editor
+			<ClassicEditor
 				config={editorConfig}
+				name="sourceBuilderEditor"
+				onBeforeDestroy={({editor}) => {
+					if (
+						editor.checkDirty() &&
+						!XMLUtil.validateDefinition(editor.getData())
+					) {
+						editor.setData(originalContentRef.current);
+					}
+				}}
 				onInstanceReady={({editor}) => {
 					editor.setMode('source');
 
@@ -210,19 +196,6 @@ export default function SourceBuilder() {
 						{Liferay.Language.get(
 							'definition-imported-successfully'
 						)}
-					</ClayAlert>
-				</ClayAlert.ToastContainer>
-			)}
-
-			{showInvalidContentMessage && (
-				<ClayAlert.ToastContainer>
-					<ClayAlert
-						autoClose={5000}
-						displayType="danger"
-						onClose={() => showInvalidContentMessage(false)}
-						title={`${Liferay.Language.get('error')}:`}
-					>
-						{Liferay.Language.get('please-select-a-valid-xml-file')}
 					</ClayAlert>
 				</ClayAlert.ToastContainer>
 			)}
