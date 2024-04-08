@@ -18,6 +18,7 @@ import {DefinitionBuilderContext} from '../../../DefinitionBuilderContext';
 import {defaultLanguageId} from '../../../constants';
 import {detectGroovyScript} from '../../../diagram-builder/util/detectGroovyScript';
 import {xmlNamespace} from '../../../source-builder/constants';
+import DeserializeUtil from '../../../source-builder/deserializeUtil';
 import {serializeDefinition} from '../../../source-builder/serializeUtil';
 import XMLUtil from '../../../source-builder/xmlUtil';
 import {getAvailableLocalesObject} from '../../../util/availableLocales';
@@ -51,10 +52,12 @@ export default function UpperToolbar({
 		setAlertMessage,
 		setAlertType,
 		setBlockingError,
+		setDefinitionDescription,
 		setDefinitionName,
 		setDefinitionTitle,
 		setDefinitionTitleTranslations,
 		setDeserialize,
+		setElements,
 		setHadGroovyScriptBefore,
 		setHasGroovyScript,
 		setSelectedLanguageId,
@@ -117,19 +120,39 @@ export default function UpperToolbar({
 
 	const getXMLContent = () => {
 		if (sourceView) {
-			return currentEditor.getData();
+			const deserializeUtil = new DeserializeUtil();
+			const xmlDefinition = currentEditor.getData();
+
+			deserializeUtil.updateXMLDefinition(
+				encodeURIComponent(xmlDefinition)
+			);
+
+			const metadata = deserializeUtil.getMetadata();
+
+			setDefinitionName(metadata.name);
+			setDefinitionDescription(metadata.description);
+			setElements(deserializeUtil.getElements());
+
+			return {metadata, xmlDefinition};
 		}
 
-		return serializeDefinition(
-			xmlNamespace,
-			{
+		return {
+			metadata: {
 				description: definitionDescription,
 				name: definitionName,
 				version,
 			},
-			elements.filter(isNode),
-			elements.filter(isEdge)
-		);
+			xmlDefinition: serializeDefinition(
+				xmlNamespace,
+				{
+					description: definitionDescription,
+					name: definitionName,
+					version,
+				},
+				elements.filter(isNode),
+				elements.filter(isEdge)
+			),
+		};
 	};
 
 	const handleInvalidXMLBlockingError = () => {
@@ -188,9 +211,12 @@ export default function UpperToolbar({
 			return;
 		}
 
-		const XMLContent = getXMLContent();
+		const {
+			metadata: {name, version},
+			xmlDefinition,
+		} = getXMLContent();
 
-		if (!XMLUtil.validateDefinition(XMLContent)) {
+		if (!XMLUtil.validateDefinition(xmlDefinition)) {
 			handleInvalidXMLBlockingError();
 
 			return;
@@ -198,8 +224,8 @@ export default function UpperToolbar({
 
 		publishDefinitionRequest({
 			active,
-			content: XMLContent,
-			name: definitionName,
+			content: xmlDefinition,
+			name,
 			title: definitionTitle,
 			title_i18n: definitionTitleTranslations,
 			version,
@@ -263,9 +289,12 @@ export default function UpperToolbar({
 			return;
 		}
 
-		const XMLContent = getXMLContent();
+		const {
+			metadata: {name, version},
+			xmlDefinition,
+		} = getXMLContent();
 
-		if (!XMLUtil.validateDefinition(XMLContent)) {
+		if (!XMLUtil.validateDefinition(xmlDefinition)) {
 			handleInvalidXMLBlockingError();
 
 			return;
@@ -273,8 +302,8 @@ export default function UpperToolbar({
 
 		saveDefinitionRequest({
 			active,
-			content: XMLContent,
-			name: definitionName,
+			content: xmlDefinition,
+			name,
 			title: definitionTitle,
 			title_i18n: definitionTitleTranslations,
 			version,
