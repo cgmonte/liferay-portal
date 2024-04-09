@@ -111,36 +111,34 @@ const RequiredProperty = () => {
 
 const TooltipProperty = ({showPopover = false, tooltip}) => {
 	return showPopover ? (
-		<Popover tooltip={tooltip} />
+		<Popover {...tooltip} />
 	) : Liferay.FeatureFlags['LPS-114700'] ? (
 		<span
 			className="c-ml-2 text-4 text-secondary"
 			tabIndex={0}
-			title={tooltip}
+			title={tooltip.content}
 		>
 			<ClayIcon symbol="question-circle-full" />
 		</span>
 	) : (
-		<span className="ddm-tooltip" title={tooltip}>
+		<span className="ddm-tooltip" title={tooltip.content}>
 			<ClayIcon symbol="question-circle-full" />
 		</span>
 	);
 };
 
-const Popover = ({tooltip}) => {
+const Popover = ({alignPosition, content, header, hideOnTriggerOut, image}) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 
-	const POPOVER_IMAGE_HEIGHT = 170;
-	const POPOVER_IMAGE_WIDTH = 232;
 	const POPOVER_MAX_WIDTH = 256;
 
 	return (
 		<ClayPopover
-			alignPosition="right-bottom"
+			alignPosition={alignPosition}
 			closeOnClickOutside
 			data-testid="clayPopover"
 			disableScroll
-			header={Liferay.Language.get('input-mask-format')}
+			header={header}
 			onShowChange={setIsPopoverVisible}
 			show={isPopoverVisible}
 			style={{maxWidth: POPOVER_MAX_WIDTH}}
@@ -157,7 +155,9 @@ const Popover = ({tooltip}) => {
 				) : (
 					<span
 						className="ddm-tooltip"
-						onMouseOut={() => setIsPopoverVisible(false)}
+						onMouseOut={() =>
+							hideOnTriggerOut && setIsPopoverVisible(false)
+						}
 						onMouseOver={() => setIsPopoverVisible(true)}
 					>
 						<ClayIcon symbol="question-circle-full" />
@@ -165,14 +165,21 @@ const Popover = ({tooltip}) => {
 				)
 			}
 		>
-			<p>{tooltip}</p>
-
-			<img
-				alt={Liferay.Language.get('input-mask-format')}
-				height={POPOVER_IMAGE_HEIGHT}
-				src={`${themeDisplay.getPathThemeImages()}/forms/input_mask_format.png`}
-				width={POPOVER_IMAGE_WIDTH}
+			<p
+				className="mb-4"
+				dangerouslySetInnerHTML={{
+					__html: content,
+				}}
 			/>
+
+			{image && (
+				<img
+					alt={image.alt}
+					height={image.height}
+					src={image.src}
+					width={image.width}
+				/>
+			)}
 		</ClayPopover>
 	);
 };

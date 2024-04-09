@@ -14,6 +14,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 import FieldBase from '../FieldBase/ReactFieldBase.es';
 import {useSyncValue} from '../hooks/useSyncValue.es';
+import fieldTooltipMap from '../util/fieldTooltipMap';
 import {getTooltipTitle} from '../util/tooltip';
 import withConfirmationField from '../util/withConfirmationField.es';
 
@@ -500,6 +501,7 @@ const Main = ({
 			name={name}
 			readOnly={readOnly}
 			repeatable={repeatable}
+			tooltip={fieldTooltipMap[fieldName]}
 			valid={error.valid ?? valid}
 		>
 			<Component
