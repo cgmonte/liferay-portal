@@ -64,6 +64,7 @@ const CounterContainer = ({
 };
 
 const Text = ({
+	HTMLAutocompleteAttribute,
 	accessibleProps,
 	defaultLanguageId,
 	disabled,
@@ -164,6 +165,9 @@ const Text = ({
 				>
 					<ClayInput
 						{...accessibleProps}
+						{...(HTMLAutocompleteAttribute && {
+							autoComplete: HTMLAutocompleteAttribute,
+						})}
 						className="ddm-field-text"
 						dir={Liferay.Language.direction[editingLanguageId]}
 						disabled={disabled}
@@ -207,6 +211,7 @@ const Text = ({
 };
 
 const Textarea = ({
+	HTMLAutocompleteAttribute,
 	accessibleProps,
 	disabled,
 	displayErrors,
@@ -236,6 +241,9 @@ const Textarea = ({
 				>
 					<textarea
 						{...accessibleProps}
+						{...(HTMLAutocompleteAttribute && {
+							autoComplete: HTMLAutocompleteAttribute,
+						})}
 						className="ddm-field-text form-control"
 						dir={Liferay.Language.direction[editingLanguageId]}
 						disabled={disabled}
@@ -269,6 +277,7 @@ const Textarea = ({
 };
 
 const Autocomplete = ({
+	HTMLAutocompleteAttribute,
 	accessibleProps,
 	disabled,
 	editingLanguageId,
@@ -351,6 +360,9 @@ const Autocomplete = ({
 		<ClayAutocomplete>
 			<ClayAutocomplete.Input
 				{...accessibleProps}
+				{...(HTMLAutocompleteAttribute && {
+					autoComplete: HTMLAutocompleteAttribute,
+				})}
 				dir={Liferay.Language.direction[editingLanguageId]}
 				disabled={disabled}
 				id={id}
@@ -446,6 +458,7 @@ const DISPLAY_STYLE = {
 };
 
 const Main = ({
+	HTMLAutocompleteAttribute,
 	autocomplete,
 	autocompleteEnabled,
 	defaultLanguageId,
@@ -505,6 +518,7 @@ const Main = ({
 			valid={error.valid ?? valid}
 		>
 			<Component
+				HTMLAutocompleteAttribute={HTMLAutocompleteAttribute}
 				accessibleProps={{
 					...(otherProps.tip && {
 						'aria-describedby': `${id ?? name}_fieldHelp`,
