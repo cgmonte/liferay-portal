@@ -50,6 +50,11 @@ public class DateDDMFormFieldTemplateContextContributor
 			"firstDayOfWeek",
 			_getFirstDayOfWeek(ddmFormFieldRenderingContext.getLocale())
 		).put(
+			"HTMLAutocompleteAttribute",
+			DDMFormFieldTypeUtil.getPropertyValue(
+				ddmFormField, ddmFormFieldRenderingContext.getLocale(),
+				"htmlAutocompleteAttribute")
+		).put(
 			"months",
 			Arrays.asList(
 				CalendarUtil.getMonths(

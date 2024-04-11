@@ -78,7 +78,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 				"setVisible('ddmDataProviderInstanceOutput', equals(getValue('dataSourceType'), \"data-provider\") and getValue('autocomplete'))",
 				"setVisible('direction', getValue('requireConfirmation'))",
 				"setVisible('options', contains(getValue('dataSourceType'), \"manual\") and getValue('autocomplete'))",
-				"setVisible('requiredErrorMessage', getValue('required'))"
+				"setVisible('requiredErrorMessage', getValue('required'))",
+				"setVisible('htmlAutocompleteAttribute', true)"
 			},
 			condition = "TRUE"
 		),
@@ -118,7 +119,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 						@DDMFormLayoutColumn(
 							size = 12,
 							value = {
-								"fieldReference", "name", "predefinedValue",
+								"fieldReference", "name",
+								"htmlAutocompleteAttribute", "predefinedValue",
 								"objectFieldName", "visibilityExpression",
 								"fieldNamespace", "indexType",
 								"labelAtStructureLevel", "localizable",
@@ -221,6 +223,16 @@ public interface TextDDMFormFieldTypeSettings
 		}
 	)
 	public boolean hideField();
+
+	@DDMFormField(
+		dataType = "string", label = "%html-autocomplete-attribute",
+		properties = {
+			"invalidCharacters=[^a-z0-9-]|-{2,}", "visualProperty=true",
+			"maxLength=20"
+		},
+		type = "text"
+	)
+	public LocalizedValue htmlAutocompleteAttribute();
 
 	@DDMFormField(
 		label = "%searchable", optionLabels = {"%disable", "%keyword", "%text"},

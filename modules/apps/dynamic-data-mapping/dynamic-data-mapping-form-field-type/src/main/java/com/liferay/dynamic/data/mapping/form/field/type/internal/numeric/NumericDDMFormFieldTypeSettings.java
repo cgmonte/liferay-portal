@@ -68,7 +68,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 				"setVisible('inputMaskFormat', equals(getValue('dataType'), 'integer') and equals(getValue('inputMask'), TRUE))",
 				"setVisible('numericInputMask', equals(getValue('dataType'), 'double') and equals(getValue('inputMask'), TRUE))",
 				"setVisible('requiredErrorMessage', getValue('required'))",
-				"setVisible('tooltip', false)"
+				"setVisible('tooltip', false)",
+				"setVisible('htmlAutocompleteAttribute', true)"
 			},
 			condition = "TRUE"
 		)
@@ -101,7 +102,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 						@DDMFormLayoutColumn(
 							size = 12,
 							value = {
-								"fieldReference", "name", "predefinedValue",
+								"fieldReference", "name",
+								"htmlAutocompleteAttribute", "predefinedValue",
 								"objectFieldName", "visibilityExpression",
 								"fieldNamespace", "indexType",
 								"labelAtStructureLevel", "localizable",
@@ -163,6 +165,16 @@ public interface NumericDDMFormFieldTypeSettings
 		}
 	)
 	public boolean hideField();
+
+	@DDMFormField(
+		dataType = "string", label = "%html-autocomplete-attribute",
+		properties = {
+			"invalidCharacters=[^a-z0-9-]|-{2,}", "visualProperty=true",
+			"maxLength=20"
+		},
+		type = "text"
+	)
+	public LocalizedValue htmlAutocompleteAttribute();
 
 	@DDMFormField(label = "%input-mask", properties = "showAsSwitcher=true")
 	public boolean inputMask();

@@ -29,7 +29,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 			actions = {
 				"setEnabled('required', not(hasObjectField(getValue('objectFieldName'))))",
 				"setVisible('dataType', false)",
-				"setVisible('requiredErrorMessage', getValue('required'))"
+				"setVisible('requiredErrorMessage', getValue('required'))",
+				"setVisible('htmlAutocompleteAttribute', true)"
 			},
 			condition = "TRUE"
 		)
@@ -62,7 +63,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 						@DDMFormLayoutColumn(
 							size = 12,
 							value = {
-								"fieldReference", "name", "predefinedValue",
+								"fieldReference", "name",
+								"htmlAutocompleteAttribute", "predefinedValue",
 								"objectFieldName", "visibilityExpression",
 								"fieldNamespace", "indexType",
 								"labelAtStructureLevel", "localizable",
@@ -82,6 +84,16 @@ public interface DateDDMFormFieldTypeSettings
 	@DDMFormField(predefinedValue = "date", required = true)
 	@Override
 	public String dataType();
+
+	@DDMFormField(
+		dataType = "string", label = "%html-autocomplete-attribute",
+		properties = {
+			"invalidCharacters=[^a-z0-9-]|-{2,}", "visualProperty=true",
+			"maxLength=20"
+		},
+		type = "text"
+	)
+	public LocalizedValue htmlAutocompleteAttribute();
 
 	@DDMFormField(
 		dataType = "string", label = "%predefined-value",
