@@ -69,6 +69,7 @@ public class TextDDMFormFieldTemplateContextContributorTest
 		Assert.assertTrue(parameters.containsKey("normalizeField"));
 		Assert.assertTrue(parameters.containsKey("placeholder"));
 		Assert.assertTrue(parameters.containsKey("tooltip"));
+		Assert.assertTrue(parameters.containsKey("HTMLAutocompleteAttribute"));
 	}
 
 	private void _setUpDDMFormFieldOptionsFactory() {

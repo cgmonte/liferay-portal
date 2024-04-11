@@ -110,6 +110,17 @@ public class NumericDDMFormFieldTypeSettingsTest
 		Assert.assertEquals(
 			"true", hideFieldDDMFormField.getProperty("showAsSwitcher"));
 
+		DDMFormField htmlAutocompleteAttribute = ddmFormFieldsMap.get(
+			"htmlAutocompleteAttribute");
+
+		Assert.assertNotNull(htmlAutocompleteAttribute);
+		Assert.assertNotNull(htmlAutocompleteAttribute.getLabel());
+		Assert.assertNotNull(
+			htmlAutocompleteAttribute.getProperty("invalidCharacters"));
+		Assert.assertEquals(
+			"true", htmlAutocompleteAttribute.getProperty("visualProperty"));
+		Assert.assertEquals("text", htmlAutocompleteAttribute.getType());
+
 		DDMFormField inputMaskDDMFormField = ddmFormFieldsMap.get("inputMask");
 
 		Assert.assertEquals(
@@ -317,14 +328,15 @@ public class NumericDDMFormFieldTypeSettingsTest
 					"label", "placeholder", "tip", "dataType", "required",
 					"requiredErrorMessage"),
 				DDMFormLayoutTestUtil.createDDMFormLayoutPage(
-					"fieldReference", "name", "predefinedValue",
-					"objectFieldName", "visibilityExpression", "fieldNamespace",
-					"indexType", "labelAtStructureLevel", "localizable",
-					"nativeField", "readOnly", "type", "hideField", "showLabel",
-					"repeatable", "requireConfirmation", "direction",
-					"confirmationLabel", "confirmationErrorMessage",
-					"validation", "tooltip", "inputMask", "inputMaskFormat",
-					"characterOptions", "numericInputMask")));
+					"fieldReference", "name", "htmlAutocompleteAttribute",
+					"predefinedValue", "objectFieldName",
+					"visibilityExpression", "fieldNamespace", "indexType",
+					"labelAtStructureLevel", "localizable", "nativeField",
+					"readOnly", "type", "hideField", "showLabel", "repeatable",
+					"requireConfirmation", "direction", "confirmationLabel",
+					"confirmationErrorMessage", "validation", "tooltip",
+					"inputMask", "inputMaskFormat", "characterOptions",
+					"numericInputMask")));
 	}
 
 	@Override
