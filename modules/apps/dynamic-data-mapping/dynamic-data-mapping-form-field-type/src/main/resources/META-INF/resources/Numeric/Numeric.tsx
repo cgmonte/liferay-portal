@@ -157,6 +157,7 @@ const getFormattedValue = ({
 };
 
 const Numeric: React.FC<IProps> = ({
+	HTMLAutocompleteAttribute,
 	append,
 	appendType,
 	dataType = 'integer',
@@ -317,6 +318,9 @@ const Numeric: React.FC<IProps> = ({
 			>
 				<ClayInput
 					{...accessibleProps}
+					{...(HTMLAutocompleteAttribute && {
+						autoComplete: HTMLAutocompleteAttribute,
+					})}
 					className={classNames({
 						'ddm-form-field-type__numeric--rtl':
 							Liferay.Language.direction[editingLanguageId] ===
@@ -393,6 +397,7 @@ interface INumberMaskConfig {
 }
 
 interface IProps {
+	HTMLAutocompleteAttribute: string;
 	append: string;
 	appendType: 'prefix' | 'suffix';
 	dataType: NumericDataType;

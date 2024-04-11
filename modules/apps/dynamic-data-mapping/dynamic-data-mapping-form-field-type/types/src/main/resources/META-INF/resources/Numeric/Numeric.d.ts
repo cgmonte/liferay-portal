@@ -12,6 +12,7 @@ export {Numeric};
 declare const _default: any;
 export default _default;
 interface IProps {
+	HTMLAutocompleteAttribute: string;
 	append: string;
 	appendType: 'prefix' | 'suffix';
 	dataType: NumericDataType;
