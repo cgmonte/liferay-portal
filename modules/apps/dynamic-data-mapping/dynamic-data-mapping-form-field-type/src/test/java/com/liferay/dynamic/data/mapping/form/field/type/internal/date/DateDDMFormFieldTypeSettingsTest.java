@@ -58,6 +58,17 @@ public class DateDDMFormFieldTypeSettingsTest
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(false);
 
+		DDMFormField htmlAutocompleteAttribute = ddmFormFieldsMap.get(
+			"htmlAutocompleteAttribute");
+
+		Assert.assertNotNull(htmlAutocompleteAttribute);
+		Assert.assertNotNull(htmlAutocompleteAttribute.getLabel());
+		Assert.assertNotNull(
+			htmlAutocompleteAttribute.getProperty("invalidCharacters"));
+		Assert.assertEquals(
+			"true", htmlAutocompleteAttribute.getProperty("visualProperty"));
+		Assert.assertEquals("text", htmlAutocompleteAttribute.getType());
+
 		DDMFormField predefinedValueDDMFormField = ddmFormFieldsMap.get(
 			"predefinedValue");
 
@@ -109,7 +120,7 @@ public class DateDDMFormFieldTypeSettingsTest
 
 		actions = ddmFormRule1.getActions();
 
-		Assert.assertEquals(actions.toString(), 3, actions.size());
+		Assert.assertEquals(actions.toString(), 4, actions.size());
 
 		Assert.assertEquals(
 			"setEnabled('required', not(hasObjectField(" +
@@ -119,6 +130,8 @@ public class DateDDMFormFieldTypeSettingsTest
 		Assert.assertEquals(
 			"setVisible('requiredErrorMessage', getValue('required'))",
 			actions.get(2));
+		Assert.assertEquals(
+			"setVisible('htmlAutocompleteAttribute', true)", actions.get(3));
 	}
 
 	@Test
@@ -130,11 +143,12 @@ public class DateDDMFormFieldTypeSettingsTest
 				DDMFormLayoutTestUtil.createDDMFormLayoutPage(
 					"label", "tip", "required", "requiredErrorMessage"),
 				DDMFormLayoutTestUtil.createDDMFormLayoutPage(
-					"fieldReference", "name", "predefinedValue",
-					"objectFieldName", "visibilityExpression", "fieldNamespace",
-					"indexType", "labelAtStructureLevel", "localizable",
-					"nativeField", "readOnly", "dataType", "type", "showLabel",
-					"repeatable", "validation")));
+					"fieldReference", "name", "htmlAutocompleteAttribute",
+					"predefinedValue", "objectFieldName",
+					"visibilityExpression", "fieldNamespace", "indexType",
+					"labelAtStructureLevel", "localizable", "nativeField",
+					"readOnly", "dataType", "type", "showLabel", "repeatable",
+					"validation")));
 	}
 
 	@Override

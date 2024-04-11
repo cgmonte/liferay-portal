@@ -110,6 +110,17 @@ public class NumericDDMFormFieldTypeSettingsTest
 		Assert.assertEquals(
 			"true", hideFieldDDMFormField.getProperty("showAsSwitcher"));
 
+		DDMFormField htmlAutocompleteAttribute = ddmFormFieldsMap.get(
+			"htmlAutocompleteAttribute");
+
+		Assert.assertNotNull(htmlAutocompleteAttribute);
+		Assert.assertNotNull(htmlAutocompleteAttribute.getLabel());
+		Assert.assertNotNull(
+			htmlAutocompleteAttribute.getProperty("invalidCharacters"));
+		Assert.assertEquals(
+			"true", htmlAutocompleteAttribute.getProperty("visualProperty"));
+		Assert.assertEquals("text", htmlAutocompleteAttribute.getType());
+
 		DDMFormField inputMaskDDMFormField = ddmFormFieldsMap.get("inputMask");
 
 		Assert.assertEquals(
@@ -241,7 +252,7 @@ public class NumericDDMFormFieldTypeSettingsTest
 
 		actions = ddmFormRule3.getActions();
 
-		Assert.assertEquals(actions.toString(), 18, actions.size());
+		Assert.assertEquals(actions.toString(), 19, actions.size());
 		Assert.assertEquals(
 			"setDataType('predefinedValue', getValue('dataType'))",
 			actions.get(0));
@@ -305,6 +316,8 @@ public class NumericDDMFormFieldTypeSettingsTest
 			"setVisible('requiredErrorMessage', getValue('required'))",
 			actions.get(16));
 		Assert.assertEquals("setVisible('tooltip', false)", actions.get(17));
+		Assert.assertEquals(
+			"setVisible('htmlAutocompleteAttribute', true)", actions.get(18));
 	}
 
 	@Test
@@ -317,14 +330,15 @@ public class NumericDDMFormFieldTypeSettingsTest
 					"label", "placeholder", "tip", "dataType", "required",
 					"requiredErrorMessage"),
 				DDMFormLayoutTestUtil.createDDMFormLayoutPage(
-					"fieldReference", "name", "predefinedValue",
-					"objectFieldName", "visibilityExpression", "fieldNamespace",
-					"indexType", "labelAtStructureLevel", "localizable",
-					"nativeField", "readOnly", "type", "hideField", "showLabel",
-					"repeatable", "requireConfirmation", "direction",
-					"confirmationLabel", "confirmationErrorMessage",
-					"validation", "tooltip", "inputMask", "inputMaskFormat",
-					"characterOptions", "numericInputMask")));
+					"fieldReference", "name", "htmlAutocompleteAttribute",
+					"predefinedValue", "objectFieldName",
+					"visibilityExpression", "fieldNamespace", "indexType",
+					"labelAtStructureLevel", "localizable", "nativeField",
+					"readOnly", "type", "hideField", "showLabel", "repeatable",
+					"requireConfirmation", "direction", "confirmationLabel",
+					"confirmationErrorMessage", "validation", "tooltip",
+					"inputMask", "inputMaskFormat", "characterOptions",
+					"numericInputMask")));
 	}
 
 	@Override
