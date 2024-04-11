@@ -17,6 +17,7 @@ import FieldBase from '../FieldBase/ReactFieldBase.es';
 import {getTooltipTitle} from '../util/tooltip';
 
 export default function DatePicker({
+	HTMLAutocompleteAttribute,
 	defaultLanguageId = themeDisplay.getDefaultLanguageId(),
 	dir,
 	locale,
@@ -179,6 +180,9 @@ export default function DatePicker({
 					{...getTooltipTitle({placeholder, value: formattedDate})}
 				>
 					<ClayDatePicker
+						{...(HTMLAutocompleteAttribute && {
+							autoComplete: HTMLAutocompleteAttribute,
+						})}
 						aria-required={otherProps.required}
 						ariaLabels={{
 							buttonChooseDate: `${Liferay.Language.get(
