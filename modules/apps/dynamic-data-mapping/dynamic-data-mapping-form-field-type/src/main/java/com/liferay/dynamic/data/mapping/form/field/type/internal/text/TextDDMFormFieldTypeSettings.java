@@ -226,8 +226,8 @@ public interface TextDDMFormFieldTypeSettings
 	@DDMFormField(
 		dataType = "string", label = "%html-autocomplete-attribute",
 		properties = {
-			"invalidCharacters=[^a-z0-9-]|-{2,}", "visualProperty=true",
-			"maxLength=20"
+			"invalidCharacters=[^a-z0-9-]|-{2,}", "maxLength=20",
+			"visualProperty=true"
 		},
 		type = "text"
 	)
