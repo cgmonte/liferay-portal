@@ -438,9 +438,13 @@ module.exports = {
 				'formik',
 				'prop-types',
 				'react',
+				'react-16',
+				'react-18',
 				'react-dnd',
 				'react-dnd-html5-backend',
 				'react-dom',
+				'react-dom-16',
+				'react-dom-18',
 			],
 			'@liferay/frontend-js-state-web': [],
 			'@liferay/frontend-js-walkthrough-web': [],
@@ -535,7 +539,6 @@ module.exports = {
 	fix: CHECK_AND_FIX_GLOBS,
 	rules: {
 		'allowed-named-scope-exceptions': [
-
 			// A list of placeholder packages registered by Liferay. Anything
 			// outside this list should be under the `@liferay/` named scope.
 
