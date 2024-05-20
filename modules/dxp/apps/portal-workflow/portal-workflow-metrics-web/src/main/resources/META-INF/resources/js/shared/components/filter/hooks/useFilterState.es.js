@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {useFilter} from '../../../hooks/useFilter.es';
 import {useRouterParams} from '../../../hooks/useRouterParams.es';
@@ -28,13 +28,16 @@ const useFilterState = (prefixedKey, withoutRouteParams) => {
 			);
 		}
 
-		if (!withoutRouteParams) {
-			dispatchFilter(prefixedKey, selectedItems);
-		}
-
 		return selectedItems;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [items, selectedKeys]);
+
+	useEffect(() => {
+		if (!withoutRouteParams) {
+			dispatchFilter(prefixedKey, selectedItems);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [prefixedKey, selectedItems]);
 
 	return {items, selectedItems, selectedKeys, setItems};
 };
