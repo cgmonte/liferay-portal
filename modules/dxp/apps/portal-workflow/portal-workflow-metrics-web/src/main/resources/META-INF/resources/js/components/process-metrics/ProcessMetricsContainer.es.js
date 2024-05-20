@@ -5,7 +5,7 @@
 
 import ClayLayout from '@clayui/layout';
 import {usePrevious} from '@liferay/frontend-js-react-web';
-import React, {useContext, useMemo} from 'react';
+import React, {useContext, useEffect, useMemo} from 'react';
 import {Route, Switch} from 'react-router-dom';
 
 import HeaderKebab from '../../shared/components/header/HeaderKebab.es';
@@ -140,19 +140,22 @@ export default function ProcessMetricsContainer({history, processId, query}) {
 		},
 	};
 
-	if (history.location.pathname === `/metrics/${processId}`) {
-		const pathname = getPathname(
-			tabs.dashboard.params,
-			tabs.dashboard.path
-		);
+	useEffect(() => {
+		if (history.location.pathname === `/metrics/${processId}`) {
+			const pathname = getPathname(
+				tabs.dashboard.params,
+				tabs.dashboard.path
+			);
 
-		const search = stringify({
-			...parse(query),
-			filters: {taskNames: ['allSteps']},
-		});
+			const search = stringify({
+				...parse(query),
+				filters: {taskNames: ['allSteps']},
+			});
 
-		history.replace({pathname, search});
-	}
+			history.replace({pathname, search});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<div className="workflow-process-tabs">
