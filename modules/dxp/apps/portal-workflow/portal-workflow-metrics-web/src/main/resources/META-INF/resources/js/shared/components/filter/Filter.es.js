@@ -40,6 +40,7 @@ const Filter = ({
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [changed, setChanged] = useState(false);
+	const [selectedItems, setSelectedItems] = useState([]);
 
 	const prefixedFilterKey = getCapitalizedFilterKey(prefixKey, filterKey);
 	const routerProps = useRouter();
@@ -99,8 +100,6 @@ const Filter = ({
 
 	const selectDefaultItem = useCallback(() => {
 		if (defaultItem && !multiple) {
-			const selectedItems = getSelectedItems(items);
-
 			if (!selectedItems.length) {
 				const index = items.findIndex(
 					(item) => item.key === defaultItem.key
@@ -118,7 +117,11 @@ const Filter = ({
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [applyFilterChanges, defaultItem, items]);
+	}, [applyFilterChanges, defaultItem, items, selectedItems]);
+
+	useEffect(() => {
+		setSelectedItems(getSelectedItems(items));
+	}, [items]);
 
 	useEffect(() => {
 		selectDefaultItem();
