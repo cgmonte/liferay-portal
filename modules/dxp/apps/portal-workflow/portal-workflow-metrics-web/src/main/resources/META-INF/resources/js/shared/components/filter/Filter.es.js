@@ -32,6 +32,7 @@ const Filter = ({
 	name,
 	onClickFilter,
 	prefixKey = '',
+	setItems,
 	show = true,
 	withoutRouteParams,
 }) => {
@@ -71,13 +72,31 @@ const Filter = ({
 
 	const onSelect = useCallback(
 		(item) => {
-			if (!multiple) {
-				items.forEach((item) => {
-					item.active = false;
-				});
-			}
+			if (setItems) {
+				setItems(
+					items.map((arrayItem) => {
+						if (arrayItem.key === item.key) {
+							item.active = !arrayItem.active;
 
-			item.active = !item.active;
+							return item;
+						}
+						if (!multiple) {
+							arrayItem.active = false;
+						}
+
+						return arrayItem;
+					})
+				);
+			}
+			else {
+				if (!multiple) {
+					items.forEach((item) => {
+						item.active = false;
+					});
+				}
+
+				item.active = !item.active;
+			}
 
 			if (onClickFilter) {
 				onClickFilter(item);
@@ -105,7 +124,18 @@ const Filter = ({
 					(item) => item.key === defaultItem.key
 				);
 
-				items[index].active = true;
+				if (setItems) {
+					setItems(
+						items.map((item, itemIndex) => {
+							item.active = itemIndex === index;
+
+							return item;
+						})
+					);
+				}
+				else {
+					items[index].active = true;
+				}
 
 				if (!onClickFilter) {
 					applyFilterChanges();
