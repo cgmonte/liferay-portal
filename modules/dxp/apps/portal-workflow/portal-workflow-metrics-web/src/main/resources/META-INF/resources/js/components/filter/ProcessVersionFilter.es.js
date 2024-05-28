@@ -40,7 +40,7 @@ export default function ProcessVersionFilter({
 		...options,
 	};
 
-	const {items, selectedItems} = useFilterFetch({
+	const {items, selectedItems, setItems} = useFilterFetch({
 		filterKey,
 		formatItem,
 		prefixKey,
@@ -73,6 +73,7 @@ export default function ProcessVersionFilter({
 			labelPropertyName="label"
 			name={filterName}
 			prefixKey={prefixKey}
+			setItems={setItems}
 			{...options}
 		/>
 	);
