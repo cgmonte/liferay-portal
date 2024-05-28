@@ -32,7 +32,7 @@ export default function ProcessStepFilter({
 		...options,
 	};
 
-	const {items, selectedItems} = useFilterFetch({
+	const {items, selectedItems, setItems} = useFilterFetch({
 		filterKey,
 		prefixKey,
 		propertyKey: 'name',
@@ -64,6 +64,7 @@ export default function ProcessStepFilter({
 			labelPropertyName="label"
 			name={filterName}
 			prefixKey={prefixKey}
+			setItems={setItems}
 			{...options}
 		/>
 	);
