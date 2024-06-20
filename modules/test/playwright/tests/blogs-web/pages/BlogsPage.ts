@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {FrameLocator, Page, expect} from '@playwright/test';
+import {FrameLocator, Locator, Page, expect} from '@playwright/test';
 
 import {clickAndExpectToBeVisible} from '../../../utils/clickAndExpectToBeVisible';
 import {PORTLET_URLS} from '../../../utils/portletUrls';
@@ -11,12 +11,20 @@ import {PORTLET_URLS} from '../../../utils/portletUrls';
 export class BlogsPage {
 	readonly page: Page;
 	readonly permissionsFrameLocator: FrameLocator;
+	readonly selectAllBlogEntriesCheckBox: Locator;
+	readonly deleteAllBlogEntriesButton: Locator;
 
 	constructor(page: Page) {
 		this.page = page;
 		this.permissionsFrameLocator = page.frameLocator(
 			'iframe[title="Permissions"]'
 		);
+		this.selectAllBlogEntriesCheckBox = page.getByLabel(
+			'Select All Items on the Page'
+		);
+		this.deleteAllBlogEntriesButton = page.getByRole('button', {
+			name: 'Delete',
+		});
 	}
 
 	async goto(siteUrl?: Site['friendlyUrlPath']) {
@@ -52,6 +60,11 @@ export class BlogsPage {
 		await this.goToBlogEntryAction('Permissions', title);
 
 		await this.assertPermissions(permissions);
+	}
+
+	async deleteAllBlogEntries() {
+		await this.selectAllBlogEntriesCheckBox.check();
+		await this.deleteAllBlogEntriesButton.click();
 	}
 
 	async assertPermissions(
