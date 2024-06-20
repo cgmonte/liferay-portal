@@ -11,8 +11,8 @@ import {waitForSuccessAlert} from '../../../utils/waitForSuccessAlert';
 
 export class WorkflowTasksPage {
 	readonly page: Page;
-
 	readonly assignedToMyRolesLink: Locator;
+	assetTitle: Locator;
 
 	constructor(page: Page) {
 		this.page = page;
@@ -26,12 +26,19 @@ export class WorkflowTasksPage {
 		await this.page.goto(
 			`/group${siteUrl || '/guest'}${PORTLET_URLS.myWorkflowTasks}`
 		);
+
+		await this.page.waitForLoadState();
 	}
 
 	async goToAssignedToMyRoles(siteUrl?: Site['friendlyUrlPath']) {
 		await this.goto(siteUrl);
 
 		await this.assignedToMyRolesLink.click();
+	}
+
+	async goToReviewPage(assetTitle: string) {
+		this.assetTitle = this.page.getByRole('link', {name: assetTitle});
+		await this.assetTitle.click({force: true});
 	}
 
 	async approve(articleTitle: string) {
