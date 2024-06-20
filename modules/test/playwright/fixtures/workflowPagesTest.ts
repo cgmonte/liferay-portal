@@ -9,12 +9,14 @@ import {ScriptManagementPage} from '../pages/portal-security-script-management-w
 import {ActionPage} from '../pages/portal-workflow-kaleo-designer-web/ActionPage';
 import {ActionReassignmentPage} from '../pages/portal-workflow-kaleo-designer-web/ActionReassignmentPage';
 import {ConditionNode} from '../pages/portal-workflow-kaleo-designer-web/ConditionNodePage';
+import {ConfigurationTabPage} from '../pages/portal-workflow-kaleo-designer-web/ConfigurationTabPage';
 import {DiagramViewPage} from '../pages/portal-workflow-kaleo-designer-web/DiagramViewPage';
 import {NodePropertiesSidebarPage} from '../pages/portal-workflow-kaleo-designer-web/NodePropertiesSidebarPage';
 import {NotificationSectionPage} from '../pages/portal-workflow-kaleo-designer-web/NotificationSectionPage';
 import {ProcessBuilderPage} from '../pages/portal-workflow-kaleo-designer-web/ProcessBuilderPage';
 import {SourceViewPage} from '../pages/portal-workflow-kaleo-designer-web/SourceViewPage';
 import {TimerPage} from '../pages/portal-workflow-kaleo-designer-web/TimerPage';
+import {WorkflowReviewTaskPage} from '../tests/portal-workflow-task-web/pages/WorkflowReviewTaskPage';
 import {WorkflowTasksPage} from '../tests/portal-workflow-task-web/pages/WorkflowTasksPage';
 import {WorkflowPage} from '../tests/portal-workflow-web/pages/WorkflowPage';
 
@@ -22,6 +24,7 @@ const workflowPagesTest = test.extend<{
 	actionPage: ActionPage;
 	actionReassignmentPage: ActionReassignmentPage;
 	conditionNode: ConditionNode;
+	configurationTabPage: ConfigurationTabPage;
 	diagramViewPage: DiagramViewPage;
 	nodePropertiesSidebarPage: NodePropertiesSidebarPage;
 	notificationSectionPage: NotificationSectionPage;
@@ -30,6 +33,7 @@ const workflowPagesTest = test.extend<{
 	sourceViewPage: SourceViewPage;
 	timerPage: TimerPage;
 	workflowPage: WorkflowPage;
+	workflowReviewTasksPage: WorkflowReviewTaskPage;
 	workflowTasksPage: WorkflowTasksPage;
 }>({
 	actionPage: async ({page}, use) => {
@@ -40,6 +44,9 @@ const workflowPagesTest = test.extend<{
 	},
 	conditionNode: async ({page}, use) => {
 		await use(new ConditionNode(page));
+	},
+	configurationTabPage: async ({page}, use) => {
+		await use(new ConfigurationTabPage(page));
 	},
 	diagramViewPage: async ({page}, use) => {
 		await use(new DiagramViewPage(page));
@@ -64,6 +71,9 @@ const workflowPagesTest = test.extend<{
 	},
 	workflowPage: async ({page}, use) => {
 		await use(new WorkflowPage(page));
+	},
+	workflowReviewTasksPage: async ({page}, use) => {
+		await use(new WorkflowReviewTaskPage(page));
 	},
 	workflowTasksPage: async ({page}, use) => {
 		await use(new WorkflowTasksPage(page));
