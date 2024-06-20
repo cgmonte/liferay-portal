@@ -34,10 +34,11 @@ export class HeadlessAdminWorkflowApiHelper {
 			`${this.apiHelpers.baseUrl}${this.basePath}/workflow-definitions/save`,
 			{
 				data: {
-					...workflowDefinition,
+					active: true,
 					name,
 					title: name,
 					title_i18n: {...workflowDefinition.title_i18n, en_US: name},
+					...workflowDefinition,
 				},
 			}
 		);
