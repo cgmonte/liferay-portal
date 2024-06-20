@@ -6,20 +6,27 @@
 import {Page} from '@playwright/test';
 
 import {ApplicationsMenuPage} from '../product-navigation-applications-menu/ApplicationsMenuPage';
+import {ConfigurationTabPage} from './ConfigurationTabPage';
 import {DiagramViewPage} from './DiagramViewPage';
 import {SourceViewPage} from './SourceViewPage';
 
 export class ProcessBuilderPage {
 	readonly applicationsMenuPage: ApplicationsMenuPage;
 	readonly diagramViewPage: DiagramViewPage;
+	readonly configurationTabPage: ConfigurationTabPage;
 	readonly page: Page;
 	readonly sourceViewPage: SourceViewPage;
 
 	constructor(page: Page) {
 		this.applicationsMenuPage = new ApplicationsMenuPage(page);
 		this.diagramViewPage = new DiagramViewPage(page);
+		this.configurationTabPage = new ConfigurationTabPage(page);
 		this.page = page;
 		this.sourceViewPage = new SourceViewPage(page);
+	}
+
+	async goToConfigurationTab() {
+		await this.configurationTabPage.goTo();
 	}
 
 	async clickWorkflowDefinitionName(name: string) {
@@ -45,5 +52,6 @@ export class ProcessBuilderPage {
 
 	async goto() {
 		await this.applicationsMenuPage.goToProcessBuilder();
+		await this.page.waitForLoadState('networkidle');
 	}
 }
