@@ -10,16 +10,14 @@ import {PORTLET_URLS} from '../../../utils/portletUrls';
 import {waitForSuccessAlert} from '../../../utils/waitForSuccessAlert';
 
 export class WorkflowTasksPage {
-	readonly page: Page;
 	readonly assignedToMyRolesLink: Locator;
-	assetTitle: Locator;
+	readonly page: Page;
 
 	constructor(page: Page) {
-		this.page = page;
-
 		this.assignedToMyRolesLink = page.getByRole('link', {
 			name: 'Assigned to my roles',
 		});
+		this.page = page;
 	}
 
 	async goto(siteUrl?: Site['friendlyUrlPath']) {
@@ -34,11 +32,6 @@ export class WorkflowTasksPage {
 		await this.goto(siteUrl);
 
 		await this.assignedToMyRolesLink.click();
-	}
-
-	async goToReviewPage(assetTitle: string) {
-		this.assetTitle = this.page.getByRole('link', {name: assetTitle});
-		await this.assetTitle.click({force: true});
 	}
 
 	async approve(articleTitle: string) {

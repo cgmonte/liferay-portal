@@ -16,5 +16,6 @@ export class NotificationsPage {
 
 	async goto() {
 		await this.page.goto(PORTLET_URLS.notifications);
+		await this.page.reload();
 	}
 }

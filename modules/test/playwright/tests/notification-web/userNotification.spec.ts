@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {expect, mergeTests} from '@playwright/test';
-import {readFileSync} from 'fs';
+import { expect, mergeTests } from '@playwright/test';
+import { readFileSync } from 'fs';
 
-import {apiHelpersTest} from '../../fixtures/apiHelpersTest';
-import {loginTest} from '../../fixtures/loginTest';
-import {notificationPagesTest} from '../../fixtures/notificationPagesTest';
-import {workflowPagesTest} from '../../fixtures/workflowPagesTest';
-import {blogsPagesTest} from '../../tests/blogs-web/fixtures/blogsPagesTest';
-import {getRandomInt} from '../../utils/getRandomInt';
+import { apiHelpersTest } from '../../fixtures/apiHelpersTest';
+import { loginTest } from '../../fixtures/loginTest';
+import { notificationPagesTest } from '../../fixtures/notificationPagesTest';
+import { workflowPagesTest } from '../../fixtures/workflowPagesTest';
+import { blogsPagesTest } from '../../tests/blogs-web/fixtures/blogsPagesTest';
+import { getRandomInt } from '../../utils/getRandomInt';
 import getRandomString from '../../utils/getRandomString';
 
 export const test = mergeTests(
@@ -33,11 +33,8 @@ test.afterEach(
 		apiHelpers,
 		blogsPage,
 		configurationTabPage,
-		processBuilderPage,
 	}) => {
 		if (assetType && workflowDefinitionName) {
-			await processBuilderPage.goto();
-
 			await configurationTabPage.goTo();
 
 			await configurationTabPage.unassignWorkflowFromAssetType(assetType);
@@ -71,20 +68,19 @@ test('review comment is added to user notification', async ({
 	notificationsPage,
 	page,
 	processBuilderPage,
-	workflowReviewTasksPage,
-	workflowTasksPage,
+	workflowTaskDetailsPage,
 }) => {
 	workflowDefinitionName = 'Workflow Definition' + getRandomInt();
 	workflowXMLDefinition = readFileSync(
 		__dirname +
-			'/dependencies/review-user-notification-workflow-definition.xml',
+		'/dependencies/review-user-notification-workflow-definition.xml',
 		'utf8'
 	);
 
 	const workflowDefinition =
 		await apiHelpers.headlessAdminWorkflow.postWorkflowDefinitionSave(
 			workflowDefinitionName,
-			{content: workflowXMLDefinition}
+			{ content: workflowXMLDefinition }
 		);
 
 	workflowDefinitionId = workflowDefinition.id;
@@ -95,7 +91,7 @@ test('review comment is added to user notification', async ({
 		workflowDefinitionName
 	);
 
-	await diagramViewPage.publishWorkflowDefinition();
+	await diagramViewPage.publishWorkflowDefinitionButton.click();
 
 	await diagramViewPage.goBack();
 
@@ -120,27 +116,23 @@ test('review comment is added to user notification', async ({
 		title: blogTitle,
 	});
 
-	await workflowTasksPage.goto();
-
-	await workflowTasksPage.goToReviewPage(blogTitle);
+	await workflowTaskDetailsPage.goTo(blogTitle);
 
 	await page.waitForLoadState('networkidle');
 
-	await workflowReviewTasksPage.clickReviewActionMenu();
+	await workflowTaskDetailsPage.reviewActionMenu.click();
 
-	await workflowReviewTasksPage.clickApproveMenuItem();
+	await workflowTaskDetailsPage.approveMenuItem.click();
 
 	const approvalComment = 'Aproval Comment' + getRandomString();
 
-	await workflowReviewTasksPage.fillReviewComment(approvalComment);
+	await workflowTaskDetailsPage.reviewComment.fill(approvalComment);
 
-	await workflowReviewTasksPage.clickDoneButton();
+	await workflowTaskDetailsPage.clickDoneButton();
 
 	await page.waitForLoadState('networkidle');
 
 	await notificationsPage.goto();
-
-	await page.reload();
 
 	await expect(
 		page.getByRole('link', {

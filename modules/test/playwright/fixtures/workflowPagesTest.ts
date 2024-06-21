@@ -16,7 +16,7 @@ import {NotificationSectionPage} from '../pages/portal-workflow-kaleo-designer-w
 import {ProcessBuilderPage} from '../pages/portal-workflow-kaleo-designer-web/ProcessBuilderPage';
 import {SourceViewPage} from '../pages/portal-workflow-kaleo-designer-web/SourceViewPage';
 import {TimerPage} from '../pages/portal-workflow-kaleo-designer-web/TimerPage';
-import {WorkflowReviewTaskPage} from '../tests/portal-workflow-task-web/pages/WorkflowReviewTaskPage';
+import {WorkflowTaskDetailsPage} from '../tests/portal-workflow-task-web/pages/WorkflowTaskDetailsPage';
 import {WorkflowTasksPage} from '../tests/portal-workflow-task-web/pages/WorkflowTasksPage';
 import {WorkflowPage} from '../tests/portal-workflow-web/pages/WorkflowPage';
 
@@ -33,7 +33,7 @@ const workflowPagesTest = test.extend<{
 	sourceViewPage: SourceViewPage;
 	timerPage: TimerPage;
 	workflowPage: WorkflowPage;
-	workflowReviewTasksPage: WorkflowReviewTaskPage;
+	workflowTaskDetailsPage: WorkflowTaskDetailsPage;
 	workflowTasksPage: WorkflowTasksPage;
 }>({
 	actionPage: async ({page}, use) => {
@@ -72,8 +72,8 @@ const workflowPagesTest = test.extend<{
 	workflowPage: async ({page}, use) => {
 		await use(new WorkflowPage(page));
 	},
-	workflowReviewTasksPage: async ({page}, use) => {
-		await use(new WorkflowReviewTaskPage(page));
+	workflowTaskDetailsPage: async ({page}, use) => {
+		await use(new WorkflowTaskDetailsPage(page));
 	},
 	workflowTasksPage: async ({page}, use) => {
 		await use(new WorkflowTasksPage(page));

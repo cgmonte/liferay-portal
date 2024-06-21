@@ -7,45 +7,36 @@ import {Locator, Page} from '@playwright/test';
 
 import {waitForSuccessAlert} from '../../../utils/waitForSuccessAlert';
 import {WorkflowTasksPage} from './WorkflowTasksPage';
+import { PORTLET_URLS } from '../../../utils/portletUrls';
 
-export class WorkflowReviewTaskPage {
-	readonly page: Page;
+export class WorkflowTaskDetailsPage {
 	readonly approveMenuItem: Locator;
 	readonly doneButton: Locator;
+	readonly page: Page;
 	readonly reviewActionMenu: Locator;
 	readonly reviewComment: Locator;
 	readonly workflowTasksPage: WorkflowTasksPage;
 
 	constructor(page: Page) {
-		this.page = page;
 		this.approveMenuItem = page.getByRole('menuitem', {name: 'approve'});
 		this.doneButton = page.getByRole('button', {name: 'Done'});
 		this.reviewActionMenu = page.locator(
 			'[id="_com_liferay_portal_workflow_task_web_portlet_MyWorkflowTaskPortlet_kldx___menu"]'
 		);
 		this.reviewComment = page.getByRole('textbox', {name: 'Comment'});
+		this.page = page;
 		this.workflowTasksPage = new WorkflowTasksPage(page);
-	}
-
-	async goto(assetTitle: string) {
-		await this.workflowTasksPage.goToReviewPage(assetTitle);
-	}
-
-	async clickReviewActionMenu() {
-		await this.reviewActionMenu.click();
-	}
-
-	async clickApproveMenuItem() {
-		await this.approveMenuItem.click();
-	}
-
-	async fillReviewComment(comment: string) {
-		await this.reviewComment.fill(comment);
 	}
 
 	async clickDoneButton() {
 		await this.doneButton.click();
 
 		await waitForSuccessAlert(this.page);
+	}
+
+	async goTo(assetTitle: string) {
+		await this.workflowTasksPage.goto();
+		const assetLink = this.page.getByRole('link', {name: assetTitle});
+		await assetLink.click({force: true});
 	}
 }

@@ -7,25 +7,27 @@ import {Locator, Page} from '@playwright/test';
 
 import {waitForSuccessAlert} from '../../utils/waitForSuccessAlert';
 
+import { ProcessBuilderPage } from './ProcessBuilderPage';
+
 export class ConfigurationTabPage {
 	readonly configurationTabLink: Locator;
 	readonly page: Page;
+	readonly processBuilderPage: ProcessBuilderPage;
 	readonly workflowAssigned: Locator;
-	cancelButton: Locator;
-	editButton: Locator;
-	saveButton: Locator;
 
 	constructor(page: Page) {
-		this.page = page;
 		this.configurationTabLink = page.getByRole('link', {
 			name: 'Configuration',
 		});
+		this.page = page;
+		this.processBuilderPage = new ProcessBuilderPage(page);
 		this.workflowAssigned = page
 			.getByRole('cell', {name: 'Workflow Definition'})
 			.getByTitle('Workflow Definition');
 	}
 
 	async goTo() {
+		await this.processBuilderPage.goto();
 		await this.configurationTabLink.waitFor({state: 'visible'});
 		await this.configurationTabLink.click({force: true});
 		await this.page.waitForURL((url) =>
@@ -37,23 +39,23 @@ export class ConfigurationTabPage {
 	private async clickAssetTypeEditButton(assetType: string) {
 		await this.page.waitForLoadState('networkidle');
 
-		this.editButton = this.page
+		const editButton = this.page
 			.getByRole('row', {name: assetType})
 			.getByRole('button', {name: 'Edit'});
 
-		await this.editButton.click();
+		await editButton.click();
 	}
 
 	private async clickAssetTypeSaveButton(
 		actionResult: 'assigned' | 'unassigned',
 		assetType: string
 	) {
-		this.saveButton = this.page
+		const saveButton = this.page
 			.getByRole('row', {name: assetType})
 			.getByRole('button', {name: 'Save'});
 
-		await this.saveButton.waitFor({state: 'visible'});
-		await this.saveButton.click();
+		await saveButton.waitFor({state: 'visible'});
+		await saveButton.click();
 
 		if (actionResult === 'assigned') {
 			await waitForSuccessAlert(
@@ -64,8 +66,6 @@ export class ConfigurationTabPage {
 	}
 
 	async assignWorkflowToAssetType(workflowName: string, assetType: string) {
-		await this.page.reload();
-
 		await this.clickAssetTypeEditButton(assetType);
 
 		await this.workflowAssigned.selectOption(workflowName);

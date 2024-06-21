@@ -1,3 +1,5 @@
+import { ProcessBuilderPage } from "../pages/portal-workflow-kaleo-designer-web/ProcessBuilderPage";
+
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
@@ -37,6 +39,7 @@ export const PORTLET_URLS = {
 		'/manage?p_p_id=com_liferay_notifications_web_portlet_NotificationsPortlet',
 	objects:
 		'/~/control_panel/manage?p_p_id=com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet',
+	processBuilder: '/~/control_panel/manage?p_p_id=com_liferay_portal_workflow_web_portlet_ControlPanelWorkflowPortlet',
 	pages: '/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet',
 	publications:
 		'/~/control_panel/manage?p_p_id=com_liferay_change_tracking_web_portlet_PublicationsPortlet',
