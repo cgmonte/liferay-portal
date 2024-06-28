@@ -196,10 +196,7 @@ public class DLFileEntryModelDocumentContributor
 				document.addText(fieldName, text);
 
 				_textEmbeddingDocumentContributor.contribute(
-					document, dlFileEntry,
-					StringBundler.concat(
-						dlFileEntry.getTitle(), StringPool.PERIOD,
-						StringPool.SPACE, text));
+					document, dlFileEntry, text, dlFileEntry.getTitle());
 			}
 		}
 		catch (IOException | PortalException exception) {
