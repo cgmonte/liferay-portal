@@ -262,17 +262,13 @@ public class JournalArticleModelDocumentContributor
 			return;
 		}
 
-		for (Locale locale :
-				_language.getAvailableLocales(latestArticle.getGroupId())) {
-
+		for (Locale locale : ddmFormValues.getAvailableLocales()) {
 			String languageId = LocaleUtil.toLanguageId(locale);
 
 			_textEmbeddingDocumentContributor.contribute(
 				document, languageId, journalArticle,
-				StringBundler.concat(
-					journalArticle.getTitle(locale), StringPool.PERIOD,
-					StringPool.SPACE,
-					_getEmbeddingText(ddmFormValues, locale)));
+				_getEmbeddingText(ddmFormValues, locale),
+				journalArticle.getTitle());
 		}
 	}
 
