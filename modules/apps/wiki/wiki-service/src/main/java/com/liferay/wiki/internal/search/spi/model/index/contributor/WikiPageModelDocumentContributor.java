@@ -90,6 +90,9 @@ public class WikiPageModelDocumentContributor
 
 		document.addNumber(
 			"versionCount", GetterUtil.getDouble(wikiPage.getVersion()));
+
+		_textEmbeddingDocumentContributor.contribute(
+			document, wikiPage, content, wikiPage.getTitle());
 	}
 
 	@Reference
