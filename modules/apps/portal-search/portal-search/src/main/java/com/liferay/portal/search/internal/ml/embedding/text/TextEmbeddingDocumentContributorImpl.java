@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.configuration.SemanticSearchConfiguration;
 import com.liferay.portal.search.configuration.SemanticSearchConfigurationProvider;
@@ -47,11 +46,8 @@ public class TextEmbeddingDocumentContributorImpl
 	implements TextEmbeddingDocumentContributor {
 
 	public <T extends BaseModel<T>> void contribute(
-		Document document, String languageId, T model, String text) {
-
-		if (Validator.isBlank(text)) {
-			return;
-		}
+		Document document, String languageId, T model, String text,
+		String title) {
 
 		EmbeddingProviderConfiguration embeddingProviderConfiguration =
 			getEmbeddingProviderConfiguration(model);
@@ -68,7 +64,10 @@ public class TextEmbeddingDocumentContributorImpl
 		}
 
 		Double[] textEmbedding = _textEmbeddingRetriever.getTextEmbedding(
-			embeddingProviderConfiguration.getProviderName(), text);
+			embeddingProviderConfiguration.getProviderName(),
+			StringBundler.concat(
+				title, StringPool.PERIOD, StringPool.SPACE, text),
+			true);
 
 		if (textEmbedding.length == 0) {
 			return;
@@ -78,11 +77,7 @@ public class TextEmbeddingDocumentContributorImpl
 	}
 
 	public <T extends BaseModel<T>> void contribute(
-		Document document, T model, String text) {
-
-		if (Validator.isBlank(text)) {
-			return;
-		}
+		Document document, T model, String text, String title) {
 
 		EmbeddingProviderConfiguration embeddingProviderConfiguration =
 			getEmbeddingProviderConfiguration(model);
@@ -92,7 +87,10 @@ public class TextEmbeddingDocumentContributorImpl
 		}
 
 		Double[] textEmbedding = _textEmbeddingRetriever.getTextEmbedding(
-			embeddingProviderConfiguration.getProviderName(), text);
+			embeddingProviderConfiguration.getProviderName(),
+			StringBundler.concat(
+				title, StringPool.PERIOD, StringPool.SPACE, text),
+			true);
 
 		if (textEmbedding.length == 0) {
 			return;

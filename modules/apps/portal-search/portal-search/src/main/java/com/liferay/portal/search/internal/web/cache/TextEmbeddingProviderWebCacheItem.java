@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -12,8 +12,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.webcache.WebCacheItem;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.portal.search.configuration.SemanticSearchConfiguration;
-import com.liferay.portal.search.internal.ml.embedding.text.TextEmbeddingProvider;
-import com.liferay.portal.search.rest.dto.v1_0.EmbeddingProviderConfiguration;
+import com.liferay.portal.search.ml.embedding.text.TextEmbeddingRetriever;
 
 /**
  * @author Petteri Karttunen
@@ -21,20 +20,18 @@ import com.liferay.portal.search.rest.dto.v1_0.EmbeddingProviderConfiguration;
 public class TextEmbeddingProviderWebCacheItem implements WebCacheItem {
 
 	public static Double[] get(
-		EmbeddingProviderConfiguration embeddingProviderConfiguration,
+		String providerName,
 		SemanticSearchConfiguration semanticSearchConfiguration, String text,
-		TextEmbeddingProvider textEmbeddingProvider) {
+		TextEmbeddingRetriever textEmbeddingRetriever) {
 
 		try {
 			return (Double[])WebCachePoolUtil.get(
 				StringBundler.concat(
 					TextEmbeddingProviderWebCacheItem.class.getName(),
-					StringPool.POUND,
-					embeddingProviderConfiguration.getProviderName(),
-					StringPool.POUND, text),
+					StringPool.POUND, providerName, StringPool.POUND, text),
 				new TextEmbeddingProviderWebCacheItem(
-					embeddingProviderConfiguration, semanticSearchConfiguration,
-					text, textEmbeddingProvider));
+					providerName, semanticSearchConfiguration, text,
+					textEmbeddingRetriever));
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -46,21 +43,21 @@ public class TextEmbeddingProviderWebCacheItem implements WebCacheItem {
 	}
 
 	public TextEmbeddingProviderWebCacheItem(
-		EmbeddingProviderConfiguration embeddingProviderConfiguration,
+		String providerName,
 		SemanticSearchConfiguration semanticSearchConfiguration, String text,
-		TextEmbeddingProvider textEmbeddingProvider) {
+		TextEmbeddingRetriever textEmbeddingRetriever) {
 
-		_embeddingProviderConfiguration = embeddingProviderConfiguration;
+		_providerName = providerName;
 		_semanticSearchConfiguration = semanticSearchConfiguration;
 		_text = text;
-		_textEmbeddingProvider = textEmbeddingProvider;
+		_textEmbeddingRetriever = textEmbeddingRetriever;
 	}
 
 	@Override
 	public Double[] convert(String key) {
 		try {
-			return _textEmbeddingProvider.getEmbedding(
-				_embeddingProviderConfiguration, _text);
+			return _textEmbeddingRetriever.getTextEmbedding(
+				_providerName, _text, false);
 		}
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
@@ -75,10 +72,9 @@ public class TextEmbeddingProviderWebCacheItem implements WebCacheItem {
 	private static final Log _log = LogFactoryUtil.getLog(
 		TextEmbeddingProviderWebCacheItem.class);
 
-	private final EmbeddingProviderConfiguration
-		_embeddingProviderConfiguration;
+	private final String _providerName;
 	private final SemanticSearchConfiguration _semanticSearchConfiguration;
 	private final String _text;
-	private final TextEmbeddingProvider _textEmbeddingProvider;
+	private final TextEmbeddingRetriever _textEmbeddingRetriever;
 
 }
