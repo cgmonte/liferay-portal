@@ -25,17 +25,15 @@ import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
-import com.liferay.portal.search.rest.client.dto.v1_0.EmbeddingModel;
+import com.liferay.portal.search.rest.client.dto.v1_0.EmbeddingProviderValidationResult;
 import com.liferay.portal.search.rest.client.http.HttpInvoker;
 import com.liferay.portal.search.rest.client.pagination.Page;
-import com.liferay.portal.search.rest.client.pagination.Pagination;
-import com.liferay.portal.search.rest.client.resource.v1_0.EmbeddingModelResource;
-import com.liferay.portal.search.rest.client.serdes.v1_0.EmbeddingModelSerDes;
+import com.liferay.portal.search.rest.client.resource.v1_0.EmbeddingProviderValidationResultResource;
+import com.liferay.portal.search.rest.client.serdes.v1_0.EmbeddingProviderValidationResultSerDes;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsValues;
@@ -73,7 +71,7 @@ import org.junit.Test;
  * @generated
  */
 @Generated("")
-public abstract class BaseEmbeddingModelResourceTestCase {
+public abstract class BaseEmbeddingProviderValidationResultResourceTestCase {
 
 	@ClassRule
 	@Rule
@@ -94,12 +92,13 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 		testCompany = CompanyLocalServiceUtil.getCompany(
 			testGroup.getCompanyId());
 
-		_embeddingModelResource.setContextCompany(testCompany);
+		_embeddingProviderValidationResultResource.setContextCompany(
+			testCompany);
 
-		EmbeddingModelResource.Builder builder =
-			EmbeddingModelResource.builder();
+		EmbeddingProviderValidationResultResource.Builder builder =
+			EmbeddingProviderValidationResultResource.builder();
 
-		embeddingModelResource = builder.authentication(
+		embeddingProviderValidationResultResource = builder.authentication(
 			"test@liferay.com", PropsValues.DEFAULT_ADMIN_PASSWORD
 		).locale(
 			LocaleUtil.getDefault()
@@ -130,13 +129,19 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 			}
 		};
 
-		EmbeddingModel embeddingModel1 = randomEmbeddingModel();
+		EmbeddingProviderValidationResult embeddingProviderValidationResult1 =
+			randomEmbeddingProviderValidationResult();
 
-		String json = objectMapper.writeValueAsString(embeddingModel1);
+		String json = objectMapper.writeValueAsString(
+			embeddingProviderValidationResult1);
 
-		EmbeddingModel embeddingModel2 = EmbeddingModelSerDes.toDTO(json);
+		EmbeddingProviderValidationResult embeddingProviderValidationResult2 =
+			EmbeddingProviderValidationResultSerDes.toDTO(json);
 
-		Assert.assertTrue(equals(embeddingModel1, embeddingModel2));
+		Assert.assertTrue(
+			equals(
+				embeddingProviderValidationResult1,
+				embeddingProviderValidationResult2));
 	}
 
 	@Test
@@ -156,10 +161,13 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 			}
 		};
 
-		EmbeddingModel embeddingModel = randomEmbeddingModel();
+		EmbeddingProviderValidationResult embeddingProviderValidationResult =
+			randomEmbeddingProviderValidationResult();
 
-		String json1 = objectMapper.writeValueAsString(embeddingModel);
-		String json2 = EmbeddingModelSerDes.toJSON(embeddingModel);
+		String json1 = objectMapper.writeValueAsString(
+			embeddingProviderValidationResult);
+		String json2 = EmbeddingProviderValidationResultSerDes.toJSON(
+			embeddingProviderValidationResult);
 
 		Assert.assertEquals(
 			objectMapper.readTree(json1), objectMapper.readTree(json2));
@@ -169,155 +177,46 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 	public void testEscapeRegexInStringFields() throws Exception {
 		String regex = "^[0-9]+(\\.[0-9]{1,2})\"?";
 
-		EmbeddingModel embeddingModel = randomEmbeddingModel();
+		EmbeddingProviderValidationResult embeddingProviderValidationResult =
+			randomEmbeddingProviderValidationResult();
 
-		embeddingModel.setModelId(regex);
+		embeddingProviderValidationResult.setErrorMessage(regex);
 
-		String json = EmbeddingModelSerDes.toJSON(embeddingModel);
+		String json = EmbeddingProviderValidationResultSerDes.toJSON(
+			embeddingProviderValidationResult);
 
 		Assert.assertFalse(json.contains(regex));
 
-		embeddingModel = EmbeddingModelSerDes.toDTO(json);
+		embeddingProviderValidationResult =
+			EmbeddingProviderValidationResultSerDes.toDTO(json);
 
-		Assert.assertEquals(regex, embeddingModel.getModelId());
+		Assert.assertEquals(
+			regex, embeddingProviderValidationResult.getErrorMessage());
 	}
 
 	@Test
-	public void testGetEmbeddingEmbeddingModelsPage() throws Exception {
-		Page<EmbeddingModel> page =
-			embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-				RandomTestUtil.randomString(), null, Pagination.of(1, 10));
-
-		long totalCount = page.getTotalCount();
-
-		EmbeddingModel embeddingModel1 =
-			testGetEmbeddingEmbeddingModelsPage_addEmbeddingModel(
-				randomEmbeddingModel());
-
-		EmbeddingModel embeddingModel2 =
-			testGetEmbeddingEmbeddingModelsPage_addEmbeddingModel(
-				randomEmbeddingModel());
-
-		page = embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-			null, null, Pagination.of(1, 10));
-
-		Assert.assertEquals(totalCount + 2, page.getTotalCount());
-
-		assertContains(embeddingModel1, (List<EmbeddingModel>)page.getItems());
-		assertContains(embeddingModel2, (List<EmbeddingModel>)page.getItems());
-		assertValid(
-			page, testGetEmbeddingEmbeddingModelsPage_getExpectedActions());
-	}
-
-	protected Map<String, Map<String, String>>
-			testGetEmbeddingEmbeddingModelsPage_getExpectedActions()
+	public void testPostEmbeddingValidateProviderConfiguration()
 		throws Exception {
 
-		Map<String, Map<String, String>> expectedActions = new HashMap<>();
+		EmbeddingProviderValidationResult
+			randomEmbeddingProviderValidationResult =
+				randomEmbeddingProviderValidationResult();
 
-		return expectedActions;
+		EmbeddingProviderValidationResult
+			postEmbeddingProviderValidationResult =
+				testPostEmbeddingValidateProviderConfiguration_addEmbeddingProviderValidationResult(
+					randomEmbeddingProviderValidationResult);
+
+		assertEquals(
+			randomEmbeddingProviderValidationResult,
+			postEmbeddingProviderValidationResult);
+		assertValid(postEmbeddingProviderValidationResult);
 	}
 
-	@Test
-	public void testGetEmbeddingEmbeddingModelsPageWithPagination()
-		throws Exception {
-
-		Page<EmbeddingModel> embeddingModelPage =
-			embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-				null, null, null);
-
-		int totalCount = GetterUtil.getInteger(
-			embeddingModelPage.getTotalCount());
-
-		EmbeddingModel embeddingModel1 =
-			testGetEmbeddingEmbeddingModelsPage_addEmbeddingModel(
-				randomEmbeddingModel());
-
-		EmbeddingModel embeddingModel2 =
-			testGetEmbeddingEmbeddingModelsPage_addEmbeddingModel(
-				randomEmbeddingModel());
-
-		EmbeddingModel embeddingModel3 =
-			testGetEmbeddingEmbeddingModelsPage_addEmbeddingModel(
-				randomEmbeddingModel());
-
-		// See com.liferay.portal.vulcan.internal.configuration.HeadlessAPICompanyConfiguration#pageSizeLimit
-
-		int pageSizeLimit = 500;
-
-		if (totalCount >= (pageSizeLimit - 2)) {
-			Page<EmbeddingModel> page1 =
-				embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-					null, null,
-					Pagination.of(
-						(int)Math.ceil((totalCount + 1.0) / pageSizeLimit),
-						pageSizeLimit));
-
-			Assert.assertEquals(totalCount + 3, page1.getTotalCount());
-
-			assertContains(
-				embeddingModel1, (List<EmbeddingModel>)page1.getItems());
-
-			Page<EmbeddingModel> page2 =
-				embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-					null, null,
-					Pagination.of(
-						(int)Math.ceil((totalCount + 2.0) / pageSizeLimit),
-						pageSizeLimit));
-
-			assertContains(
-				embeddingModel2, (List<EmbeddingModel>)page2.getItems());
-
-			Page<EmbeddingModel> page3 =
-				embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-					null, null,
-					Pagination.of(
-						(int)Math.ceil((totalCount + 3.0) / pageSizeLimit),
-						pageSizeLimit));
-
-			assertContains(
-				embeddingModel3, (List<EmbeddingModel>)page3.getItems());
-		}
-		else {
-			Page<EmbeddingModel> page1 =
-				embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-					null, null, Pagination.of(1, totalCount + 2));
-
-			List<EmbeddingModel> embeddingModels1 =
-				(List<EmbeddingModel>)page1.getItems();
-
-			Assert.assertEquals(
-				embeddingModels1.toString(), totalCount + 2,
-				embeddingModels1.size());
-
-			Page<EmbeddingModel> page2 =
-				embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-					null, null, Pagination.of(2, totalCount + 2));
-
-			Assert.assertEquals(totalCount + 3, page2.getTotalCount());
-
-			List<EmbeddingModel> embeddingModels2 =
-				(List<EmbeddingModel>)page2.getItems();
-
-			Assert.assertEquals(
-				embeddingModels2.toString(), 1, embeddingModels2.size());
-
-			Page<EmbeddingModel> page3 =
-				embeddingModelResource.getEmbeddingEmbeddingModelsPage(
-					null, null, Pagination.of(1, (int)totalCount + 3));
-
-			assertContains(
-				embeddingModel1, (List<EmbeddingModel>)page3.getItems());
-			assertContains(
-				embeddingModel2, (List<EmbeddingModel>)page3.getItems());
-			assertContains(
-				embeddingModel3, (List<EmbeddingModel>)page3.getItems());
-		}
-	}
-
-	protected EmbeddingModel
-			testGetEmbeddingEmbeddingModelsPage_addEmbeddingModel(
-				EmbeddingModel embeddingModel)
+	protected EmbeddingProviderValidationResult
+			testPostEmbeddingValidateProviderConfiguration_addEmbeddingProviderValidationResult(
+				EmbeddingProviderValidationResult
+					embeddingProviderValidationResult)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -325,12 +224,16 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 	}
 
 	protected void assertContains(
-		EmbeddingModel embeddingModel, List<EmbeddingModel> embeddingModels) {
+		EmbeddingProviderValidationResult embeddingProviderValidationResult,
+		List<EmbeddingProviderValidationResult>
+			embeddingProviderValidationResults) {
 
 		boolean contains = false;
 
-		for (EmbeddingModel item : embeddingModels) {
-			if (equals(embeddingModel, item)) {
+		for (EmbeddingProviderValidationResult item :
+				embeddingProviderValidationResults) {
+
+			if (equals(embeddingProviderValidationResult, item)) {
 				contains = true;
 
 				break;
@@ -338,7 +241,9 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 		}
 
 		Assert.assertTrue(
-			embeddingModels + " does not contain " + embeddingModel, contains);
+			embeddingProviderValidationResults + " does not contain " +
+				embeddingProviderValidationResult,
+			contains);
 	}
 
 	protected void assertHttpResponseStatusCode(
@@ -350,38 +255,65 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 	}
 
 	protected void assertEquals(
-		EmbeddingModel embeddingModel1, EmbeddingModel embeddingModel2) {
+		EmbeddingProviderValidationResult embeddingProviderValidationResult1,
+		EmbeddingProviderValidationResult embeddingProviderValidationResult2) {
 
 		Assert.assertTrue(
-			embeddingModel1 + " does not equal " + embeddingModel2,
-			equals(embeddingModel1, embeddingModel2));
+			embeddingProviderValidationResult1 + " does not equal " +
+				embeddingProviderValidationResult2,
+			equals(
+				embeddingProviderValidationResult1,
+				embeddingProviderValidationResult2));
 	}
 
 	protected void assertEquals(
-		List<EmbeddingModel> embeddingModels1,
-		List<EmbeddingModel> embeddingModels2) {
+		List<EmbeddingProviderValidationResult>
+			embeddingProviderValidationResults1,
+		List<EmbeddingProviderValidationResult>
+			embeddingProviderValidationResults2) {
 
-		Assert.assertEquals(embeddingModels1.size(), embeddingModels2.size());
+		Assert.assertEquals(
+			embeddingProviderValidationResults1.size(),
+			embeddingProviderValidationResults2.size());
 
-		for (int i = 0; i < embeddingModels1.size(); i++) {
-			EmbeddingModel embeddingModel1 = embeddingModels1.get(i);
-			EmbeddingModel embeddingModel2 = embeddingModels2.get(i);
+		for (int i = 0; i < embeddingProviderValidationResults1.size(); i++) {
+			EmbeddingProviderValidationResult
+				embeddingProviderValidationResult1 =
+					embeddingProviderValidationResults1.get(i);
+			EmbeddingProviderValidationResult
+				embeddingProviderValidationResult2 =
+					embeddingProviderValidationResults2.get(i);
 
-			assertEquals(embeddingModel1, embeddingModel2);
+			assertEquals(
+				embeddingProviderValidationResult1,
+				embeddingProviderValidationResult2);
 		}
 	}
 
 	protected void assertEqualsIgnoringOrder(
-		List<EmbeddingModel> embeddingModels1,
-		List<EmbeddingModel> embeddingModels2) {
+		List<EmbeddingProviderValidationResult>
+			embeddingProviderValidationResults1,
+		List<EmbeddingProviderValidationResult>
+			embeddingProviderValidationResults2) {
 
-		Assert.assertEquals(embeddingModels1.size(), embeddingModels2.size());
+		Assert.assertEquals(
+			embeddingProviderValidationResults1.size(),
+			embeddingProviderValidationResults2.size());
 
-		for (EmbeddingModel embeddingModel1 : embeddingModels1) {
+		for (EmbeddingProviderValidationResult
+				embeddingProviderValidationResult1 :
+					embeddingProviderValidationResults1) {
+
 			boolean contains = false;
 
-			for (EmbeddingModel embeddingModel2 : embeddingModels2) {
-				if (equals(embeddingModel1, embeddingModel2)) {
+			for (EmbeddingProviderValidationResult
+					embeddingProviderValidationResult2 :
+						embeddingProviderValidationResults2) {
+
+				if (equals(
+						embeddingProviderValidationResult1,
+						embeddingProviderValidationResult2)) {
+
 					contains = true;
 
 					break;
@@ -389,19 +321,37 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 			}
 
 			Assert.assertTrue(
-				embeddingModels2 + " does not contain " + embeddingModel1,
+				embeddingProviderValidationResults2 + " does not contain " +
+					embeddingProviderValidationResult1,
 				contains);
 		}
 	}
 
-	protected void assertValid(EmbeddingModel embeddingModel) throws Exception {
+	protected void assertValid(
+			EmbeddingProviderValidationResult embeddingProviderValidationResult)
+		throws Exception {
+
 		boolean valid = true;
 
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
 
-			if (Objects.equals("modelId", additionalAssertFieldName)) {
-				if (embeddingModel.getModelId() == null) {
+			if (Objects.equals("errorMessage", additionalAssertFieldName)) {
+				if (embeddingProviderValidationResult.getErrorMessage() ==
+						null) {
+
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"expectedDimensions", additionalAssertFieldName)) {
+
+				if (embeddingProviderValidationResult.getExpectedDimensions() ==
+						null) {
+
 					valid = false;
 				}
 
@@ -416,19 +366,20 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 		Assert.assertTrue(valid);
 	}
 
-	protected void assertValid(Page<EmbeddingModel> page) {
+	protected void assertValid(Page<EmbeddingProviderValidationResult> page) {
 		assertValid(page, Collections.emptyMap());
 	}
 
 	protected void assertValid(
-		Page<EmbeddingModel> page,
+		Page<EmbeddingProviderValidationResult> page,
 		Map<String, Map<String, String>> expectedActions) {
 
 		boolean valid = false;
 
-		java.util.Collection<EmbeddingModel> embeddingModels = page.getItems();
+		java.util.Collection<EmbeddingProviderValidationResult>
+			embeddingProviderValidationResults = page.getItems();
 
-		int size = embeddingModels.size();
+		int size = embeddingProviderValidationResults.size();
 
 		if ((page.getLastPage() > 0) && (page.getPage() > 0) &&
 			(page.getPageSize() > 0) && (page.getTotalCount() > 0) &&
@@ -468,8 +419,8 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(
-					com.liferay.portal.search.rest.dto.v1_0.EmbeddingModel.
-						class)) {
+					com.liferay.portal.search.rest.dto.v1_0.
+						EmbeddingProviderValidationResult.class)) {
 
 			if (!ArrayUtil.contains(
 					getAdditionalAssertFieldNames(), field.getName())) {
@@ -518,19 +469,37 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 	}
 
 	protected boolean equals(
-		EmbeddingModel embeddingModel1, EmbeddingModel embeddingModel2) {
+		EmbeddingProviderValidationResult embeddingProviderValidationResult1,
+		EmbeddingProviderValidationResult embeddingProviderValidationResult2) {
 
-		if (embeddingModel1 == embeddingModel2) {
+		if (embeddingProviderValidationResult1 ==
+				embeddingProviderValidationResult2) {
+
 			return true;
 		}
 
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
 
-			if (Objects.equals("modelId", additionalAssertFieldName)) {
+			if (Objects.equals("errorMessage", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						embeddingModel1.getModelId(),
-						embeddingModel2.getModelId())) {
+						embeddingProviderValidationResult1.getErrorMessage(),
+						embeddingProviderValidationResult2.getErrorMessage())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"expectedDimensions", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						embeddingProviderValidationResult1.
+							getExpectedDimensions(),
+						embeddingProviderValidationResult2.
+							getExpectedDimensions())) {
 
 					return false;
 				}
@@ -594,13 +563,15 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 	protected java.util.Collection<EntityField> getEntityFields()
 		throws Exception {
 
-		if (!(_embeddingModelResource instanceof EntityModelResource)) {
+		if (!(_embeddingProviderValidationResultResource instanceof
+				EntityModelResource)) {
+
 			throw new UnsupportedOperationException(
 				"Resource is not an instance of EntityModelResource");
 		}
 
 		EntityModelResource entityModelResource =
-			(EntityModelResource)_embeddingModelResource;
+			(EntityModelResource)_embeddingProviderValidationResultResource;
 
 		EntityModel entityModel = entityModelResource.getEntityModel(
 			new MultivaluedHashMap());
@@ -634,7 +605,7 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 
 	protected String getFilterString(
 		EntityField entityField, String operator,
-		EmbeddingModel embeddingModel) {
+		EmbeddingProviderValidationResult embeddingProviderValidationResult) {
 
 		StringBundler sb = new StringBundler();
 
@@ -646,8 +617,8 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 		sb.append(operator);
 		sb.append(" ");
 
-		if (entityFieldName.equals("modelId")) {
-			Object object = embeddingModel.getModelId();
+		if (entityFieldName.equals("errorMessage")) {
+			Object object = embeddingProviderValidationResult.getErrorMessage();
 
 			String value = String.valueOf(object);
 
@@ -688,6 +659,14 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 				sb.append(value);
 				sb.append("'");
 			}
+
+			return sb.toString();
+		}
+
+		if (entityFieldName.equals("expectedDimensions")) {
+			sb.append(
+				String.valueOf(
+					embeddingProviderValidationResult.getExpectedDimensions()));
 
 			return sb.toString();
 		}
@@ -734,25 +713,39 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 			invoke(queryGraphQLField.toString()));
 	}
 
-	protected EmbeddingModel randomEmbeddingModel() throws Exception {
-		return new EmbeddingModel() {
+	protected EmbeddingProviderValidationResult
+			randomEmbeddingProviderValidationResult()
+		throws Exception {
+
+		return new EmbeddingProviderValidationResult() {
 			{
-				modelId = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				errorMessage = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
+				expectedDimensions = RandomTestUtil.randomInt();
 			}
 		};
 	}
 
-	protected EmbeddingModel randomIrrelevantEmbeddingModel() throws Exception {
-		EmbeddingModel randomIrrelevantEmbeddingModel = randomEmbeddingModel();
+	protected EmbeddingProviderValidationResult
+			randomIrrelevantEmbeddingProviderValidationResult()
+		throws Exception {
 
-		return randomIrrelevantEmbeddingModel;
+		EmbeddingProviderValidationResult
+			randomIrrelevantEmbeddingProviderValidationResult =
+				randomEmbeddingProviderValidationResult();
+
+		return randomIrrelevantEmbeddingProviderValidationResult;
 	}
 
-	protected EmbeddingModel randomPatchEmbeddingModel() throws Exception {
-		return randomEmbeddingModel();
+	protected EmbeddingProviderValidationResult
+			randomPatchEmbeddingProviderValidationResult()
+		throws Exception {
+
+		return randomEmbeddingProviderValidationResult();
 	}
 
-	protected EmbeddingModelResource embeddingModelResource;
+	protected EmbeddingProviderValidationResultResource
+		embeddingProviderValidationResultResource;
 	protected com.liferay.portal.kernel.model.Group irrelevantGroup;
 	protected com.liferay.portal.kernel.model.Company testCompany;
 	protected com.liferay.portal.kernel.model.Group testGroup;
@@ -938,12 +931,14 @@ public abstract class BaseEmbeddingModelResourceTestCase {
 	}
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseEmbeddingModelResourceTestCase.class);
+		LogFactoryUtil.getLog(
+			BaseEmbeddingProviderValidationResultResourceTestCase.class);
 
 	private static DateFormat _dateFormat;
 
 	@Inject
-	private com.liferay.portal.search.rest.resource.v1_0.EmbeddingModelResource
-		_embeddingModelResource;
+	private com.liferay.portal.search.rest.resource.v1_0.
+		EmbeddingProviderValidationResultResource
+			_embeddingProviderValidationResultResource;
 
 }
