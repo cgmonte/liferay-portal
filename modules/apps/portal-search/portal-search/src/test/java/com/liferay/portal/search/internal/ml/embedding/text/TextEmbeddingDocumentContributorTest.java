@@ -51,24 +51,12 @@ public class TextEmbeddingDocumentContributorTest {
 
 	@Test
 	public void testContribute() throws Exception {
+		BlogsEntry blogsEntry = _getBlogsEntry();
+
 		Document document = Mockito.mock(Document.class);
 
 		_textEmbeddingDocumentContributorImpl.contribute(
-			document, _getBlogsEntry(), RandomTestUtil.randomString());
-
-		Mockito.verify(
-			document
-		).add(
-			Mockito.any()
-		);
-	}
-
-	@Test
-	public void testContributeWithLanguageId() throws Exception {
-		Document document = Mockito.mock(Document.class);
-
-		_textEmbeddingDocumentContributorImpl.contribute(
-			document, LocaleUtil.toLanguageId(LocaleUtil.US), _getBlogsEntry(),
+			document, blogsEntry, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString());
 
 		Mockito.verify(
@@ -79,12 +67,31 @@ public class TextEmbeddingDocumentContributorTest {
 	}
 
 	@Test
-	public void testContributeWithNotConfiguredLanguage() throws Exception {
+	public void testContributeWithLanguageId() throws Exception {
+		BlogsEntry blogsEntry = _getBlogsEntry();
+
 		Document document = Mockito.mock(Document.class);
 
 		_textEmbeddingDocumentContributorImpl.contribute(
-			document, LocaleUtil.toLanguageId(LocaleUtil.FRENCH),
-			_getBlogsEntry(), RandomTestUtil.randomString());
+			document, LocaleUtil.toLanguageId(LocaleUtil.US), blogsEntry,
+			RandomTestUtil.randomString(), RandomTestUtil.randomString());
+
+		Mockito.verify(
+			document
+		).add(
+			Mockito.any()
+		);
+	}
+
+	@Test
+	public void testContributeWithNotConfiguredLanguage() throws Exception {
+		BlogsEntry blogsEntry = _getBlogsEntry();
+
+		Document document = Mockito.mock(Document.class);
+
+		_textEmbeddingDocumentContributorImpl.contribute(
+			document, LocaleUtil.toLanguageId(LocaleUtil.FRENCH), blogsEntry,
+			RandomTestUtil.randomString(), RandomTestUtil.randomString());
 
 		Mockito.verifyNoInteractions(document);
 	}
@@ -110,7 +117,7 @@ public class TextEmbeddingDocumentContributorTest {
 	}
 
 	@Test
-	public void testGetEmbeddingProviderConfigurationWithTextEmbeddingsDisabled()
+	public void testGetEmbeddingProviderConfigurationWithTextEmbeddingsNotEnabled()
 		throws Exception {
 
 		_setSemanticSearchConfiguration(
@@ -176,9 +183,9 @@ public class TextEmbeddingDocumentContributorTest {
 				) {
 
 					{
-						setLanguageIds(embeddingProviderLanguageIds);
-						setModelClassNames(embeddingProviderModelClassNames);
-						setProviderName(RandomTestUtil.randomString());
+						languageIds = embeddingProviderLanguageIds;
+						modelClassNames = embeddingProviderModelClassNames;
+						providerName = RandomTestUtil.randomString();
 					}
 				}.toString()
 			}
@@ -200,13 +207,11 @@ public class TextEmbeddingDocumentContributorTest {
 		).thenReturn(
 			RandomTestUtil.randomLong()
 		);
-
 		Mockito.doReturn(
 			BlogsEntry.class
 		).when(
 			blogsEntry
 		).getModelClass();
-
 		Mockito.when(
 			blogsEntry.getStatus()
 		).thenReturn(
@@ -271,7 +276,7 @@ public class TextEmbeddingDocumentContributorTest {
 
 		Mockito.when(
 			textEmbeddingRetriever.getTextEmbedding(
-				Mockito.anyString(), Mockito.anyString())
+				Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean())
 		).thenReturn(
 			new Double[768]
 		);

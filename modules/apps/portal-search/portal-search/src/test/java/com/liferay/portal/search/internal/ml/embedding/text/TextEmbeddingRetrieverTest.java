@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.search.configuration.SemanticSearchConfiguration;
 import com.liferay.portal.search.configuration.SemanticSearchConfigurationProvider;
+import com.liferay.portal.search.internal.web.cache.TextEmbeddingProviderWebCacheItem;
 import com.liferay.portal.search.ml.embedding.EmbeddingProviderStatus;
 import com.liferay.portal.search.rest.dto.v1_0.EmbeddingProviderConfiguration;
 import com.liferay.portal.test.rule.FeatureFlags;
@@ -20,11 +21,13 @@ import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 /**
@@ -37,27 +40,31 @@ public class TextEmbeddingRetrieverTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		_textEmbeddingProviderWebCacheItemMockedStatic.close();
+	}
+
 	@Before
 	public void setUp() {
 		_setSemanticSearchConfiguration(
 			new String[] {LocaleUtil.toLanguageId(LocaleUtil.US)},
 			new String[] {BlogsEntry.class.getName()});
 		_setUpTextEmbeddingProvider();
+		_setUpTextEmbeddingProviderWebCacheItemMockedStatic();
 		_setUpTextEmbeddingRetrieverImpl();
 	}
 
 	@Test
 	public void testDisabledProvider() {
-		String providerName = RandomTestUtil.randomString();
-
 		_textEmbeddingRetrieverImpl.addProvider(
-			new String[] {providerName}, providerName,
+			new String[] {"disabledProvider"}, "disabledProvider",
 			Mockito.mock(TextEmbeddingProvider.class));
 
 		List<String> availableProviderNames =
 			_textEmbeddingRetrieverImpl.getAvailableProviderNames();
 
-		Assert.assertFalse(availableProviderNames.contains(providerName));
+		Assert.assertFalse(availableProviderNames.contains("disabledProvider"));
 	}
 
 	@Test
@@ -68,26 +75,25 @@ public class TextEmbeddingRetrieverTest {
 		Assert.assertEquals(
 			availableProviderNames.toString(), 1,
 			availableProviderNames.size());
-		Assert.assertTrue(availableProviderNames.contains(_TEST_PROVIDER_NAME));
+		Assert.assertTrue(availableProviderNames.contains("testProvider"));
 	}
 
 	@Test
 	public void testGetEmbeddingProviderConfiguration() {
 		EmbeddingProviderConfiguration embeddingProviderConfiguration =
 			_textEmbeddingRetrieverImpl.getEmbeddingProviderConfiguration(
-				_TEST_PROVIDER_NAME);
+				"testProvider");
 
 		Assert.assertNotNull(embeddingProviderConfiguration);
 		Assert.assertEquals(
-			_TEST_PROVIDER_NAME,
-			embeddingProviderConfiguration.getProviderName());
+			"testProvider", embeddingProviderConfiguration.getProviderName());
 	}
 
 	@Test
 	public void testGetEmbeddingProviderConfigurationNotFound() {
 		Assert.assertNull(
 			_textEmbeddingRetrieverImpl.getEmbeddingProviderConfiguration(
-				RandomTestUtil.randomString()));
+				"notFoundProvider"));
 	}
 
 	@Test
@@ -98,13 +104,13 @@ public class TextEmbeddingRetrieverTest {
 				) {
 
 					{
-						providerName = _TEST_PROVIDER_NAME;
+						providerName = "testProvider";
 					}
 				}.toString());
 
 		Assert.assertNotNull(embeddingProviderStatus);
 		Assert.assertEquals(
-			_TEST_PROVIDER_NAME, embeddingProviderStatus.getProviderName());
+			"testProvider", embeddingProviderStatus.getProviderName());
 	}
 
 	@Test
@@ -117,19 +123,17 @@ public class TextEmbeddingRetrieverTest {
 			Arrays.toString(embeddingProviderStatuses), 1,
 			embeddingProviderStatuses.length);
 		Assert.assertEquals(
-			Arrays.toString(embeddingProviderStatuses), _TEST_PROVIDER_NAME,
+			Arrays.toString(embeddingProviderStatuses), "testProvider",
 			embeddingProviderStatuses[0].getProviderName());
 	}
 
 	@Test
 	public void testGetEmbeddingProviderStatusWithException() {
-		String message = RandomTestUtil.randomString();
-
 		Mockito.when(
 			_textEmbeddingProvider.getEmbedding(
 				Mockito.any(), Mockito.anyString())
 		).thenThrow(
-			new RuntimeException(message)
+			new RuntimeException("Test exception")
 		);
 
 		EmbeddingProviderStatus embeddingProviderStatus =
@@ -138,42 +142,41 @@ public class TextEmbeddingRetrieverTest {
 				) {
 
 					{
-						providerName = _TEST_PROVIDER_NAME;
+						providerName = "testProvider";
 					}
 				}.toString());
 
 		Assert.assertNotNull(embeddingProviderStatus);
-		Assert.assertEquals(message, embeddingProviderStatus.getErrorMessage());
 		Assert.assertEquals(
-			_TEST_PROVIDER_NAME, embeddingProviderStatus.getProviderName());
+			"Test exception", embeddingProviderStatus.getErrorMessage());
+		Assert.assertEquals(
+			"testProvider", embeddingProviderStatus.getProviderName());
 	}
 
 	@Test
 	public void testGetEmbeddingProviderStatusWithProviderNotFound() {
-		String invalidProviderName = RandomTestUtil.randomString();
-
 		EmbeddingProviderStatus embeddingProviderStatus =
 			_textEmbeddingRetrieverImpl.getEmbeddingProviderStatus(
 				new EmbeddingProviderConfiguration(
 				) {
 
 					{
-						providerName = invalidProviderName;
+						providerName = "notFoundProvider";
 					}
 				}.toString());
 
 		Assert.assertNotNull(embeddingProviderStatus);
 		Assert.assertEquals(
-			"Embedding provider " + invalidProviderName + " was not found",
+			"Embedding provider notFoundProvider was not found",
 			embeddingProviderStatus.getErrorMessage());
 		Assert.assertEquals(
-			invalidProviderName, embeddingProviderStatus.getProviderName());
+			"notFoundProvider", embeddingProviderStatus.getProviderName());
 	}
 
 	@Test
 	public void testGetTextEmbedding() {
 		Double[] textEmbedding = _textEmbeddingRetrieverImpl.getTextEmbedding(
-			_TEST_PROVIDER_NAME, RandomTestUtil.randomString());
+			"testProvider", "testText", false);
 
 		Assert.assertNotNull(textEmbedding);
 		Assert.assertArrayEquals(new Double[] {1.0, 2.0, 3.0}, textEmbedding);
@@ -191,13 +194,43 @@ public class TextEmbeddingRetrieverTest {
 			textEmbeddingProviderConfigurationJSONs.length);
 		Assert.assertTrue(
 			textEmbeddingProviderConfigurationJSONs[0].contains(
-				_TEST_PROVIDER_NAME));
+				"testProvider"));
+	}
+
+	@Test
+	public void testGetTextEmbeddingWithCache() {
+		Double[] textEmbedding = _textEmbeddingRetrieverImpl.getTextEmbedding(
+			"testProvider", "testText", true);
+
+		Assert.assertNotNull(textEmbedding);
+		Assert.assertArrayEquals(new Double[] {1.0, 2.0, 3.0}, textEmbedding);
+
+		Mockito.verify(
+			_textEmbeddingProvider, Mockito.times(0)
+		).getEmbedding(
+			Mockito.any(), Mockito.anyString()
+		);
+	}
+
+	@Test
+	public void testGetTextEmbeddingWithoutCache() {
+		Double[] textEmbedding = _textEmbeddingRetrieverImpl.getTextEmbedding(
+			"testProvider", RandomTestUtil.randomString(), false);
+
+		Assert.assertNotNull(textEmbedding);
+		Assert.assertArrayEquals(new Double[] {1.0, 2.0, 3.0}, textEmbedding);
+
+		Mockito.verify(
+			_textEmbeddingProvider, Mockito.times(1)
+		).getEmbedding(
+			Mockito.any(), Mockito.anyString()
+		);
 	}
 
 	@Test
 	public void testGetTextEmbeddingWithProviderNotFound() {
 		Double[] textEmbedding = _textEmbeddingRetrieverImpl.getTextEmbedding(
-			RandomTestUtil.randomString(), RandomTestUtil.randomString());
+			"notFoundProvider", "testText", false);
 
 		Assert.assertNotNull(textEmbedding);
 		Assert.assertEquals(
@@ -222,7 +255,7 @@ public class TextEmbeddingRetrieverTest {
 					{
 						languageIds = embeddingProviderLanguageIds;
 						modelClassNames = embeddingProviderModelClassNames;
-						providerName = _TEST_PROVIDER_NAME;
+						providerName = "testProvider";
 					}
 				}.toString()
 			}
@@ -261,6 +294,15 @@ public class TextEmbeddingRetrieverTest {
 		);
 	}
 
+	private void _setUpTextEmbeddingProviderWebCacheItemMockedStatic() {
+		_textEmbeddingProviderWebCacheItemMockedStatic.when(
+			() -> TextEmbeddingProviderWebCacheItem.get(
+				Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())
+		).thenReturn(
+			new Double[] {1.0, 2.0, 3.0}
+		);
+	}
+
 	private void _setUpTextEmbeddingRetrieverImpl() {
 		_textEmbeddingRetrieverImpl = new TextEmbeddingRetrieverImpl();
 
@@ -270,12 +312,13 @@ public class TextEmbeddingRetrieverTest {
 		ReflectionTestUtil.setFieldValue(
 			_textEmbeddingRetrieverImpl, "_textEmbeddingProviders",
 			HashMapBuilder.put(
-				_TEST_PROVIDER_NAME, _textEmbeddingProvider
+				"testProvider", _textEmbeddingProvider
 			).build());
 	}
 
-	private static final String _TEST_PROVIDER_NAME =
-		RandomTestUtil.randomString();
+	private static final MockedStatic<TextEmbeddingProviderWebCacheItem>
+		_textEmbeddingProviderWebCacheItemMockedStatic = Mockito.mockStatic(
+			TextEmbeddingProviderWebCacheItem.class);
 
 	private final SemanticSearchConfigurationProvider
 		_semanticSearchConfigurationProvider = Mockito.mock(
