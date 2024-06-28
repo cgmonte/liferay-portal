@@ -65,6 +65,10 @@ public class BlogsEntryModelDocumentContributor
 					blogsEntry.getTitle(), StringPool.PERIOD, StringPool.SPACE,
 					blogsEntry.getContent()));
 		}
+
+		_textEmbeddingDocumentContributor.contribute(
+			document, blogsEntry, blogsEntry.getContent(),
+			blogsEntry.getTitle());
 	}
 
 	@Reference
