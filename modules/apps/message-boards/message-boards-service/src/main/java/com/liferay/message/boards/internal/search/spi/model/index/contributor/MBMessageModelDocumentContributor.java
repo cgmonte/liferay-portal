@@ -145,6 +145,9 @@ public class MBMessageModelDocumentContributor
 			document.addNumber("viewCount", mbThread.getViewCount());
 		}
 
+		_textEmbeddingDocumentContributor.contribute(
+			document, mbMessage, content, mbMessage.getSubject());
+
 		if (!mbMessage.isDiscussion()) {
 			return;
 		}
