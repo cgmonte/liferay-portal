@@ -87,7 +87,7 @@ public class MLSXPParameterContributor implements SXPParameterContributor {
 
 		Double[] textEmbedding = _textEmbeddingRetriever.getTextEmbedding(
 			embeddingProviderConfiguration.getProviderName(),
-			searchContext.getKeywords());
+			searchContext.getKeywords(), true);
 
 		if (ArrayUtil.isEmpty(textEmbedding)) {
 			return;
