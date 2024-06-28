@@ -17,9 +17,10 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface TextEmbeddingDocumentContributor {
 
 	public <T extends BaseModel<T>> void contribute(
-		Document document, String languageId, T model, String text);
+		Document document, String languageId, T model, String text,
+		String title);
 
 	public <T extends BaseModel<T>> void contribute(
-		Document document, T model, String text);
+		Document document, T model, String text, String title);
 
 }
