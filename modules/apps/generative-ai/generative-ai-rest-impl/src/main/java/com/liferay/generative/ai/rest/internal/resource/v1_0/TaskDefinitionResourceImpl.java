@@ -10,7 +10,6 @@ import com.liferay.generative.ai.rest.internal.odata.entity.v1_0.TaskDefinitionE
 import com.liferay.generative.ai.rest.internal.util.SearchUtil;
 import com.liferay.generative.ai.rest.internal.util.TitleMapUtil;
 import com.liferay.generative.ai.rest.resource.v1_0.TaskDefinitionResource;
-
 import com.liferay.generative.ai.task.constants.TaskDefinitionActionKeys;
 import com.liferay.generative.ai.task.constants.TaskDefinitionConstants;
 import com.liferay.generative.ai.task.exception.DuplicateTaskDefinitionExternalReferenceCodeException;
@@ -23,9 +22,7 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -37,18 +34,18 @@ import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Petteri Karttunen
@@ -70,7 +67,8 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 	}
 
 	@Override
-	public TaskDefinition getTaskDefinition(Long taskDefinitionId) throws Exception {
+	public TaskDefinition getTaskDefinition(Long taskDefinitionId)
+		throws Exception {
 
 		return _taskDefinitionDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
@@ -81,16 +79,14 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 			_taskDefinitionService.getTaskDefinition(taskDefinitionId));
 	}
 
-
 	@Override
 	public TaskDefinition getTaskDefinitionByExternalReferenceCode(
-		String externalReferenceCode)
+			String externalReferenceCode)
 		throws Exception {
 
 		com.liferay.generative.ai.task.model.TaskDefinition taskDefinition =
 			_taskDefinitionService.getTaskDefinitionByExternalReferenceCode(
 				contextCompany.getCompanyId(), externalReferenceCode);
-
 
 		return _taskDefinitionDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
@@ -123,7 +119,8 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 					_jsonFactory.looseSerialize(
 						taskDefinition.getDescriptionMap()))
 			).put(
-				"externalReferenceCode", taskDefinition.getExternalReferenceCode()
+				"externalReferenceCode",
+				taskDefinition.getExternalReferenceCode()
 			).put(
 				"schemaVersion", taskDefinition.getSchemaVersion()
 			).put(
@@ -143,7 +140,7 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 
 	@Override
 	public Page<TaskDefinition> getTaskDefinitionsPage(
-		String search, Filter filter, Pagination pagination, Sort[] sorts)
+			String search, Filter filter, Pagination pagination, Sort[] sorts)
 		throws Exception {
 
 		if (sorts == null) {
@@ -174,15 +171,16 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 					document.get(Field.ENTRY_CLASS_PK));
 
 				TaskDefinition taskDefinition =
-					 _taskDefinitionDTOConverter.toDTO(
-					new DefaultDTOConverterContext(
-						contextAcceptLanguage.isAcceptAllLanguages(),
-						new HashMap<>(), _dtoConverterRegistry,
-						contextHttpServletRequest,
-						document.get(Field.ENTRY_CLASS_PK),
-						contextAcceptLanguage.getPreferredLocale(),
-						contextUriInfo, contextUser),
-					_taskDefinitionService.getTaskDefinition(taskDefinitionId));
+					_taskDefinitionDTOConverter.toDTO(
+						new DefaultDTOConverterContext(
+							contextAcceptLanguage.isAcceptAllLanguages(),
+							new HashMap<>(), _dtoConverterRegistry,
+							contextHttpServletRequest,
+							document.get(Field.ENTRY_CLASS_PK),
+							contextAcceptLanguage.getPreferredLocale(),
+							contextUriInfo, contextUser),
+						_taskDefinitionService.getTaskDefinition(
+							taskDefinitionId));
 
 				String permissionName =
 					com.liferay.generative.ai.task.model.TaskDefinition.class.
@@ -192,24 +190,37 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 					() -> HashMapBuilder.put(
 						"create",
 						() -> addAction(
-							TaskDefinitionActionKeys.ADD_TASK_DEFINITION, "postTaskDefinition",
+							TaskDefinitionActionKeys.ADD_TASK_DEFINITION,
+							"postTaskDefinition",
 							TaskDefinitionConstants.RESOURCE_NAME,
 							contextCompany.getCompanyId())
 					).put(
 						"delete",
-						() -> addAction(
-							ActionKeys.DELETE, "deleteTaskDefinition",
-							permissionName, taskDefinitionId)
+						() -> {
+							if (taskDefinition.getReadOnly()) {
+								return null;
+							}
+
+							return addAction(
+								ActionKeys.DELETE, "deleteTaskDefinition",
+								permissionName, taskDefinitionId);
+						}
 					).put(
 						"get",
 						() -> addAction(
-							ActionKeys.VIEW, "getTaskDefinition", permissionName,
-							taskDefinitionId)
+							ActionKeys.VIEW, "getTaskDefinition",
+							permissionName, taskDefinitionId)
 					).put(
 						"update",
-						() -> addAction(
-							ActionKeys.UPDATE, "putTaskDefinition",
-							permissionName, taskDefinitionId)
+						() -> {
+							if (taskDefinition.getReadOnly()) {
+								return null;
+							}
+
+							return addAction(
+								ActionKeys.UPDATE, "putTaskDefinition",
+								permissionName, taskDefinitionId);
+						}
 					).build());
 
 				return taskDefinition;
@@ -235,13 +246,13 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 					contextAcceptLanguage.getPreferredLocale(),
 					taskDefinition.getDescription(),
 					taskDefinition.getDescription_i18n()),
-				taskDefinition.getExternalReferenceCode(),
-				 _getSchemaVersion(),
+				taskDefinition.getExternalReferenceCode(), false,
+				_getSchemaVersion(),
 				ServiceContextFactory.getInstance(contextHttpServletRequest),
 				LocalizedMapUtil.getLocalizedMap(
 					contextAcceptLanguage.getPreferredLocale(),
-					taskDefinition.getTitle(), taskDefinition.getTitle_i18n())
-				));
+					taskDefinition.getTitle(),
+					taskDefinition.getTitle_i18n())));
 	}
 
 	@Override
@@ -251,7 +262,6 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 		com.liferay.generative.ai.task.model.TaskDefinition taskDefinition =
 			_taskDefinitionService.getTaskDefinition(taskDefinitionId);
 
-
 		return _taskDefinitionDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
 				contextAcceptLanguage.isAcceptAllLanguages(), new HashMap<>(),
@@ -259,15 +269,18 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 				taskDefinition.getTaskDefinitionId(),
 				contextAcceptLanguage.getPreferredLocale(), contextUriInfo,
 				contextUser),
-
 			_taskDefinitionService.addTaskDefinition(
-			taskDefinition.getConfigurationJSON(), taskDefinition.getDescriptionMap(), null, taskDefinition.getSchemaVersion(),
-			ServiceContextFactory.getInstance(contextHttpServletRequest),
+				taskDefinition.getConfigurationJSON(),
+				taskDefinition.getDescriptionMap(), null, false,
+				taskDefinition.getSchemaVersion(),
+				ServiceContextFactory.getInstance(contextHttpServletRequest),
 				TitleMapUtil.copy(taskDefinition.getTitleMap())));
 	}
 
 	@Override
-	public TaskDefinition postTaskDefinitionValidate(String json) throws Exception {
+	public TaskDefinition postTaskDefinitionValidate(String json)
+		throws Exception {
+
 		TaskDefinition taskDefinition = TaskDefinition.unsafeToDTO(json);
 
 		_validateTaskDefinitionExternalReferenceCode(taskDefinition);
@@ -277,39 +290,42 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 
 	@Override
 	public TaskDefinition putTaskDefinition(
-		Long taskDefinitionId, TaskDefinition taskDefinition)
-		throws Exception {
-
-		//TaskDefinitionUtil.unpack(taskDefinition);
-
-		taskDefinition.setId(() -> taskDefinitionId);
-
-		com.liferay.generative.ai.task.model.TaskDefinition
-			serviceBuilderTaskDefinition = _taskDefinitionService.fetchTaskDefinition(
-			taskDefinitionId);
-
-		if (serviceBuilderTaskDefinition != null) {
-			return _updateTaskDefinition(taskDefinitionId, taskDefinition);
-		}
-
-		return postTaskDefinition(taskDefinition);
-	}
-
-	@Override
-	public TaskDefinition putTaskDefinitionByExternalReferenceCode(
-		String externalReferenceCode, TaskDefinition taskDefinition)
+			Long taskDefinitionId, TaskDefinition taskDefinition)
 		throws Exception {
 
 		com.liferay.generative.ai.task.model.TaskDefinition
 			serviceBuilderTaskDefinition =
-			_taskDefinitionService.fetchTaskDefinitionByExternalReferenceCode(
-				externalReferenceCode, contextCompany.getCompanyId());
+				_taskDefinitionService.fetchTaskDefinition(taskDefinitionId);
+
+		if (serviceBuilderTaskDefinition == null) {
+			return postTaskDefinition(taskDefinition);
+		}
+
+		if (!serviceBuilderTaskDefinition.isReadOnly()) {
+			return _updateTaskDefinition(taskDefinitionId, taskDefinition);
+		}
+
+		return getTaskDefinition(
+			serviceBuilderTaskDefinition.getTaskDefinitionId());
+	}
+
+	@Override
+	public TaskDefinition putTaskDefinitionByExternalReferenceCode(
+			String externalReferenceCode, TaskDefinition taskDefinition)
+		throws Exception {
+
+		com.liferay.generative.ai.task.model.TaskDefinition
+			serviceBuilderTaskDefinition =
+				_taskDefinitionService.
+					fetchTaskDefinitionByExternalReferenceCode(
+						externalReferenceCode, contextCompany.getCompanyId());
 
 		taskDefinition.setExternalReferenceCode(() -> externalReferenceCode);
 
 		if (serviceBuilderTaskDefinition != null) {
 			return _updateTaskDefinition(
-				serviceBuilderTaskDefinition.getTaskDefinitionId(), taskDefinition);
+				serviceBuilderTaskDefinition.getTaskDefinitionId(),
+				taskDefinition);
 		}
 
 		return postTaskDefinition(taskDefinition);
@@ -322,21 +338,24 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 
 		// TODO: fixme
 
-		JSONObject j = 	JSONFactoryUtil.createJSONObject((Map<?, ?>) taskDefinition.getConfiguration());
+		JSONObject j = JSONFactoryUtil.createJSONObject(
+			(Map<?, ?>)taskDefinition.getConfiguration());
+
 		JSONObject t = j.getJSONObject("taskConfiguration");
+
 		if (t == null) {
 			return String.valueOf(j);
 		}
+
 		return String.valueOf(t);
 	}
-
 
 	private String _getSchemaVersion() {
 		return "1.0";
 	}
 
 	private TaskDefinition _updateTaskDefinition(
-		Long taskDefinitionId, TaskDefinition taskDefinition)
+			Long taskDefinitionId, TaskDefinition taskDefinition)
 		throws Exception {
 
 		return _taskDefinitionDTOConverter.toDTO(
@@ -346,21 +365,23 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 				taskDefinition.getId(),
 				contextAcceptLanguage.getPreferredLocale(), contextUriInfo,
 				contextUser),
-
 			_taskDefinitionService.updateTaskDefinition(
-				_getConfigurationJSON(taskDefinition), LocalizedMapUtil.getLocalizedMap(
+				_getConfigurationJSON(taskDefinition),
+				LocalizedMapUtil.getLocalizedMap(
 					contextAcceptLanguage.getPreferredLocale(),
 					taskDefinition.getDescription(),
 					taskDefinition.getDescription_i18n()),
 				taskDefinition.getExternalReferenceCode(), taskDefinitionId,
-				_getSchemaVersion(), ServiceContextFactory.getInstance(contextHttpServletRequest),
-			LocalizedMapUtil.getLocalizedMap(
-				contextAcceptLanguage.getPreferredLocale(),
-				taskDefinition.getTitle(), taskDefinition.getTitle_i18n())));
+				_getSchemaVersion(),
+				ServiceContextFactory.getInstance(contextHttpServletRequest),
+				LocalizedMapUtil.getLocalizedMap(
+					contextAcceptLanguage.getPreferredLocale(),
+					taskDefinition.getTitle(),
+					taskDefinition.getTitle_i18n())));
 	}
 
 	private void _validateTaskDefinitionExternalReferenceCode(
-		TaskDefinition taskDefinition)
+			TaskDefinition taskDefinition)
 		throws Exception {
 
 		if (Validator.isBlank(taskDefinition.getExternalReferenceCode())) {
@@ -369,10 +390,10 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 
 		com.liferay.generative.ai.task.model.TaskDefinition
 			serviceBuilderTaskDefinition =
-			_taskDefinitionService.
-				fetchTaskDefinitionByExternalReferenceCode(
-					taskDefinition.getExternalReferenceCode(),
-					contextCompany.getCompanyId());
+				_taskDefinitionService.
+					fetchTaskDefinitionByExternalReferenceCode(
+						taskDefinition.getExternalReferenceCode(),
+						contextCompany.getCompanyId());
 
 		if ((serviceBuilderTaskDefinition != null) &&
 			!Objects.equals(
@@ -392,14 +413,14 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 	@Reference
 	private JSONFactory _jsonFactory;
 
-
 	@Reference(
 		target = "(component.name=com.liferay.generative.ai.rest.internal.dto.v1_0.converter.TaskDefinitionDTOConverter)"
 	)
 	private DTOConverter
 		<com.liferay.generative.ai.task.model.TaskDefinition, TaskDefinition>
-		_taskDefinitionDTOConverter;
+			_taskDefinitionDTOConverter;
 
 	@Reference
 	private TaskDefinitionService _taskDefinitionService;
+
 }

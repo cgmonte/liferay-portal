@@ -1,10 +1,9 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.generative.ai.rest.internal.dto.v1_0.converter;
-
 
 import com.liferay.generative.ai.rest.dto.v1_0.TaskDefinition;
 import com.liferay.generative.ai.task.service.TaskDefinitionLocalService;
@@ -16,10 +15,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
-
-
-import java.util.Locale;
-import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -33,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class TaskDefinitionDTOConverter
 	implements DTOConverter
-	<com.liferay.generative.ai.task.model.TaskDefinition, TaskDefinition> {
+		<com.liferay.generative.ai.task.model.TaskDefinition, TaskDefinition> {
 
 	@Override
 	public String getContentType() {
@@ -53,14 +48,14 @@ public class TaskDefinitionDTOConverter
 
 	@Override
 	public TaskDefinition toDTO(
-		DTOConverterContext dtoConverterContext,
-		com.liferay.generative.ai.task.model.TaskDefinition taskDefinition)
+			DTOConverterContext dtoConverterContext,
+			com.liferay.generative.ai.task.model.TaskDefinition taskDefinition)
 		throws Exception {
 
 		return new TaskDefinition() {
 			{
-				setConfiguration(_toJSONObject(
-						taskDefinition.getConfigurationJSON()));
+				setConfiguration(
+					_toJSONObject(taskDefinition.getConfigurationJSON()));
 				setCreateDate(taskDefinition::getCreateDate);
 				setDescription(
 					() -> _language.get(
@@ -75,6 +70,7 @@ public class TaskDefinitionDTOConverter
 					taskDefinition::getExternalReferenceCode);
 				setId(taskDefinition::getTaskDefinitionId);
 				setModifiedDate(taskDefinition::getModifiedDate);
+				setReadOnly(taskDefinition::getReadOnly);
 				setSchemaVersion(taskDefinition::getSchemaVersion);
 				setTitle(
 					() -> _language.get(
@@ -97,8 +93,8 @@ public class TaskDefinitionDTOConverter
 
 		return new TaskDefinition() {
 			{
-				setConfiguration(_toJSONObject(
-						taskDefinition.getConfigurationJSON()));
+				setConfiguration(
+					_toJSONObject(taskDefinition.getConfigurationJSON()));
 				setCreateDate(taskDefinition::getCreateDate);
 				setDescription(taskDefinition::getDescription);
 				setDescription_i18n(
@@ -108,6 +104,7 @@ public class TaskDefinitionDTOConverter
 					taskDefinition::getExternalReferenceCode);
 				setId(taskDefinition::getTaskDefinitionId);
 				setModifiedDate(taskDefinition::getModifiedDate);
+				setReadOnly(taskDefinition::getReadOnly);
 				setSchemaVersion(taskDefinition::getSchemaVersion);
 				setTitle(taskDefinition::getTitle);
 				setTitle_i18n(
@@ -125,6 +122,7 @@ public class TaskDefinitionDTOConverter
 		}
 		catch (Exception e) {
 			_log.error(e);
+
 			return null;
 		}
 	}
