@@ -42,6 +42,8 @@ components:
                 modifiedDate:
                     format: date
                     type: string
+                readOnly:
+                    type: boolean
                 schemaVersion:
                     type: string
                 title:
@@ -67,6 +69,37 @@ info:
     version: v1.0
 openapi: 3.0.1
 paths:
+    "/generate/{externalReferenceCode}":
+        post:
+            description:
+                "TBD"
+            operationId: postGenerateExternalReferenceCode
+            parameters:
+                - in: path
+                  description:
+                      The chat configuration external reference code.
+                  name: externalReferenceCode
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/GenerativeAIRequest"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/GenerativeAIRequest"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenerativeAIResponse"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/GenerativeAIResponse"
+            tags: ["GenerativeAIResponse"]
     /task-definitions:
         get:
             operationId: getTaskDefinitionsPage
@@ -326,35 +359,3 @@ paths:
                             schema:
                                 type: string
             tags: ["TaskDefinition"]
-    
-    "/generate/{externalReferenceCode}":
-        post:
-            description:
-                "TBD"
-            operationId: postGenerateExternalReferenceCode
-            parameters:
-                - in: path
-                  description:
-                      The chat configuration external reference code.
-                  name: externalReferenceCode
-                  required: true
-                  schema:
-                      type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: "#/components/schemas/GenerativeAIRequest"
-                    application/xml:
-                        schema:
-                            $ref: "#/components/schemas/GenerativeAIRequest"
-            responses:
-                200:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/GenerativeAIResponse"
-                        application/xml:
-                            schema:
-                                $ref: "#/components/schemas/GenerativeAIResponse"
-            tags: ["GenerativeAIResponse"]
