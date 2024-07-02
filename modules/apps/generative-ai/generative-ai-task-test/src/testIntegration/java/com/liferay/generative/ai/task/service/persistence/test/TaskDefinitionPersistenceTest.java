@@ -138,6 +138,8 @@ public class TaskDefinitionPersistenceTest {
 
 		newTaskDefinition.setDescription(RandomTestUtil.randomString());
 
+		newTaskDefinition.setReadOnly(RandomTestUtil.randomBoolean());
+
 		newTaskDefinition.setSchemaVersion(RandomTestUtil.randomString());
 
 		newTaskDefinition.setTitle(RandomTestUtil.randomString());
@@ -188,6 +190,9 @@ public class TaskDefinitionPersistenceTest {
 		Assert.assertEquals(
 			existingTaskDefinition.getDescription(),
 			newTaskDefinition.getDescription());
+		Assert.assertEquals(
+			existingTaskDefinition.isReadOnly(),
+			newTaskDefinition.isReadOnly());
 		Assert.assertEquals(
 			existingTaskDefinition.getSchemaVersion(),
 			newTaskDefinition.getSchemaVersion());
@@ -257,6 +262,14 @@ public class TaskDefinitionPersistenceTest {
 	}
 
 	@Test
+	public void testCountByC_R() throws Exception {
+		_persistence.countByC_R(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean());
+
+		_persistence.countByC_R(0L, RandomTestUtil.randomBoolean());
+	}
+
+	@Test
 	public void testCountByERC_C() throws Exception {
 		_persistence.countByERC_C("", RandomTestUtil.nextLong());
 
@@ -293,10 +306,10 @@ public class TaskDefinitionPersistenceTest {
 			"TaskDefinition", "mvccVersion", true, "uuid", true,
 			"externalReferenceCode", true, "taskDefinitionId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "description", true, "schemaVersion",
-			true, "title", true, "version", true, "status", true,
-			"statusByUserId", true, "statusByUserName", true, "statusDate",
-			true);
+			true, "modifiedDate", true, "description", true, "readOnly", true,
+			"schemaVersion", true, "title", true, "version", true, "status",
+			true, "statusByUserId", true, "statusByUserName", true,
+			"statusDate", true);
 	}
 
 	@Test
@@ -600,6 +613,8 @@ public class TaskDefinitionPersistenceTest {
 		taskDefinition.setConfigurationJSON(RandomTestUtil.randomString());
 
 		taskDefinition.setDescription(RandomTestUtil.randomString());
+
+		taskDefinition.setReadOnly(RandomTestUtil.randomBoolean());
 
 		taskDefinition.setSchemaVersion(RandomTestUtil.randomString());
 
