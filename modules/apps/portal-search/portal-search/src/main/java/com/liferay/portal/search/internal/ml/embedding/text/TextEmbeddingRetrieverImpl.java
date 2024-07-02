@@ -167,6 +167,8 @@ public class TextEmbeddingRetrieverImpl implements TextEmbeddingRetriever {
 			"disabledProviders");
 
 		addProvider(
+			disabledProviders, "vertexAI", new VertexAITextEmbeddingProvider());
+		addProvider(
 			disabledProviders, "huggingFaceInferenceAPI",
 			new HuggingFaceInferenceAPITextEmbeddingProvider());
 		addProvider(
