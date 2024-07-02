@@ -78,10 +78,10 @@ public class TaskDefinitionModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"configurationJSON", Types.CLOB}, {"description", Types.VARCHAR},
-		{"schemaVersion", Types.VARCHAR}, {"title", Types.VARCHAR},
-		{"version", Types.VARCHAR}, {"status", Types.INTEGER},
-		{"statusByUserId", Types.BIGINT}, {"statusByUserName", Types.VARCHAR},
-		{"statusDate", Types.TIMESTAMP}
+		{"readOnly", Types.BOOLEAN}, {"schemaVersion", Types.VARCHAR},
+		{"title", Types.VARCHAR}, {"version", Types.VARCHAR},
+		{"status", Types.INTEGER}, {"statusByUserId", Types.BIGINT},
+		{"statusByUserName", Types.VARCHAR}, {"statusDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -99,6 +99,7 @@ public class TaskDefinitionModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("configurationJSON", Types.CLOB);
 		TABLE_COLUMNS_MAP.put("description", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("readOnly", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("schemaVersion", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("title", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("version", Types.VARCHAR);
@@ -109,7 +110,7 @@ public class TaskDefinitionModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table TaskDefinition (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,taskDefinitionId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,configurationJSON TEXT null,description STRING null,schemaVersion VARCHAR(75) null,title STRING null,version VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+		"create table TaskDefinition (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,taskDefinitionId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,configurationJSON TEXT null,description STRING null,readOnly BOOLEAN,schemaVersion VARCHAR(75) null,title STRING null,version VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table TaskDefinition";
 
@@ -144,14 +145,20 @@ public class TaskDefinitionModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 4L;
+	public static final long READONLY_COLUMN_BITMASK = 4L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long TASKDEFINITIONID_COLUMN_BITMASK = 8L;
+	public static final long TASKDEFINITIONID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -285,6 +292,8 @@ public class TaskDefinitionModelImpl
 			attributeGetterFunctions.put(
 				"description", TaskDefinition::getDescription);
 			attributeGetterFunctions.put(
+				"readOnly", TaskDefinition::getReadOnly);
+			attributeGetterFunctions.put(
 				"schemaVersion", TaskDefinition::getSchemaVersion);
 			attributeGetterFunctions.put("title", TaskDefinition::getTitle);
 			attributeGetterFunctions.put("version", TaskDefinition::getVersion);
@@ -353,6 +362,10 @@ public class TaskDefinitionModelImpl
 				"description",
 				(BiConsumer<TaskDefinition, String>)
 					TaskDefinition::setDescription);
+			attributeSetterBiConsumers.put(
+				"readOnly",
+				(BiConsumer<TaskDefinition, Boolean>)
+					TaskDefinition::setReadOnly);
 			attributeSetterBiConsumers.put(
 				"schemaVersion",
 				(BiConsumer<TaskDefinition, String>)
@@ -715,6 +728,37 @@ public class TaskDefinitionModelImpl
 			LocalizationUtil.updateLocalization(
 				descriptionMap, getDescription(), "Description",
 				LocaleUtil.toLanguageId(defaultLocale)));
+	}
+
+	@JSON
+	@Override
+	public boolean getReadOnly() {
+		return _readOnly;
+	}
+
+	@JSON
+	@Override
+	public boolean isReadOnly() {
+		return _readOnly;
+	}
+
+	@Override
+	public void setReadOnly(boolean readOnly) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_readOnly = readOnly;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public boolean getOriginalReadOnly() {
+		return GetterUtil.getBoolean(
+			this.<Boolean>getColumnOriginalValue("readOnly"));
 	}
 
 	@JSON
@@ -1188,6 +1232,7 @@ public class TaskDefinitionModelImpl
 		taskDefinitionImpl.setModifiedDate(getModifiedDate());
 		taskDefinitionImpl.setConfigurationJSON(getConfigurationJSON());
 		taskDefinitionImpl.setDescription(getDescription());
+		taskDefinitionImpl.setReadOnly(isReadOnly());
 		taskDefinitionImpl.setSchemaVersion(getSchemaVersion());
 		taskDefinitionImpl.setTitle(getTitle());
 		taskDefinitionImpl.setVersion(getVersion());
@@ -1227,6 +1272,8 @@ public class TaskDefinitionModelImpl
 			this.<String>getColumnOriginalValue("configurationJSON"));
 		taskDefinitionImpl.setDescription(
 			this.<String>getColumnOriginalValue("description"));
+		taskDefinitionImpl.setReadOnly(
+			this.<Boolean>getColumnOriginalValue("readOnly"));
 		taskDefinitionImpl.setSchemaVersion(
 			this.<String>getColumnOriginalValue("schemaVersion"));
 		taskDefinitionImpl.setTitle(
@@ -1389,6 +1436,8 @@ public class TaskDefinitionModelImpl
 			taskDefinitionCacheModel.description = null;
 		}
 
+		taskDefinitionCacheModel.readOnly = isReadOnly();
+
 		taskDefinitionCacheModel.schemaVersion = getSchemaVersion();
 
 		String schemaVersion = taskDefinitionCacheModel.schemaVersion;
@@ -1508,6 +1557,7 @@ public class TaskDefinitionModelImpl
 	private String _configurationJSON;
 	private String _description;
 	private String _descriptionCurrentLanguageId;
+	private boolean _readOnly;
 	private String _schemaVersion;
 	private String _title;
 	private String _titleCurrentLanguageId;
@@ -1559,6 +1609,7 @@ public class TaskDefinitionModelImpl
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("configurationJSON", _configurationJSON);
 		_columnOriginalValues.put("description", _description);
+		_columnOriginalValues.put("readOnly", _readOnly);
 		_columnOriginalValues.put("schemaVersion", _schemaVersion);
 		_columnOriginalValues.put("title", _title);
 		_columnOriginalValues.put("version", _version);
@@ -1611,19 +1662,21 @@ public class TaskDefinitionModelImpl
 
 		columnBitmasks.put("description", 1024L);
 
-		columnBitmasks.put("schemaVersion", 2048L);
+		columnBitmasks.put("readOnly", 2048L);
 
-		columnBitmasks.put("title", 4096L);
+		columnBitmasks.put("schemaVersion", 4096L);
 
-		columnBitmasks.put("version", 8192L);
+		columnBitmasks.put("title", 8192L);
 
-		columnBitmasks.put("status", 16384L);
+		columnBitmasks.put("version", 16384L);
 
-		columnBitmasks.put("statusByUserId", 32768L);
+		columnBitmasks.put("status", 32768L);
 
-		columnBitmasks.put("statusByUserName", 65536L);
+		columnBitmasks.put("statusByUserId", 65536L);
 
-		columnBitmasks.put("statusDate", 131072L);
+		columnBitmasks.put("statusByUserName", 131072L);
+
+		columnBitmasks.put("statusDate", 262144L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

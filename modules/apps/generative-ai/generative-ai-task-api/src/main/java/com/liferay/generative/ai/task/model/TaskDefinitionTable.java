@@ -51,6 +51,8 @@ public class TaskDefinitionTable extends BaseTable<TaskDefinitionTable> {
 			"configurationJSON", Clob.class, Types.CLOB, Column.FLAG_DEFAULT);
 	public final Column<TaskDefinitionTable, String> description = createColumn(
 		"description", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<TaskDefinitionTable, Boolean> readOnly = createColumn(
+		"readOnly", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<TaskDefinitionTable, String> schemaVersion =
 		createColumn(
 			"schemaVersion", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);

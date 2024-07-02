@@ -336,6 +336,27 @@ public interface TaskDefinitionModel
 		Map<Locale, String> descriptionMap, Locale defaultLocale);
 
 	/**
+	 * Returns the read only of this task definition.
+	 *
+	 * @return the read only of this task definition
+	 */
+	public boolean getReadOnly();
+
+	/**
+	 * Returns <code>true</code> if this task definition is read only.
+	 *
+	 * @return <code>true</code> if this task definition is read only; <code>false</code> otherwise
+	 */
+	public boolean isReadOnly();
+
+	/**
+	 * Sets whether this task definition is read only.
+	 *
+	 * @param readOnly the read only of this task definition
+	 */
+	public void setReadOnly(boolean readOnly);
+
+	/**
 	 * Returns the schema version of this task definition.
 	 *
 	 * @return the schema version of this task definition

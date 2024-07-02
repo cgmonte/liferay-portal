@@ -46,8 +46,9 @@ public interface TaskDefinitionService extends BaseService {
 	 */
 	public TaskDefinition addTaskDefinition(
 			String configurationJSON, Map<Locale, String> descriptionMap,
-			String externalReferenceCode, String schemaVersion,
-			ServiceContext serviceContext, Map<Locale, String> titleMap)
+			String externalReferenceCode, boolean readOnly,
+			String schemaVersion, ServiceContext serviceContext,
+			Map<Locale, String> titleMap)
 		throws PortalException;
 
 	public TaskDefinition deleteTaskDefinition(long taskDefinitionId)

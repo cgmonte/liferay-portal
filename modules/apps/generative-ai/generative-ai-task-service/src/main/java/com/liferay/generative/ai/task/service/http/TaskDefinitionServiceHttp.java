@@ -45,7 +45,8 @@ public class TaskDefinitionServiceHttp {
 			addTaskDefinition(
 				HttpPrincipal httpPrincipal, String configurationJSON,
 				java.util.Map<java.util.Locale, String> descriptionMap,
-				String externalReferenceCode, String schemaVersion,
+				String externalReferenceCode, boolean readOnly,
+				String schemaVersion,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext,
 				java.util.Map<java.util.Locale, String> titleMap)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -57,7 +58,8 @@ public class TaskDefinitionServiceHttp {
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, configurationJSON, descriptionMap,
-				externalReferenceCode, schemaVersion, serviceContext, titleMap);
+				externalReferenceCode, readOnly, schemaVersion, serviceContext,
+				titleMap);
 
 			Object returnObj = null;
 
@@ -356,7 +358,8 @@ public class TaskDefinitionServiceHttp {
 
 	private static final Class<?>[] _addTaskDefinitionParameterTypes0 =
 		new Class[] {
-			String.class, java.util.Map.class, String.class, String.class,
+			String.class, java.util.Map.class, String.class, boolean.class,
+			String.class,
 			com.liferay.portal.kernel.service.ServiceContext.class,
 			java.util.Map.class
 		};

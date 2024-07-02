@@ -34,13 +34,14 @@ public class TaskDefinitionLocalServiceWrapper
 			addTaskDefinition(
 				String configurationJSON,
 				java.util.Map<java.util.Locale, String> descriptionMap,
-				String externalReferenceCode, String schemaVersion,
+				String externalReferenceCode, boolean readOnly,
+				String schemaVersion,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext,
 				java.util.Map<java.util.Locale, String> titleMap, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _taskDefinitionLocalService.addTaskDefinition(
-			configurationJSON, descriptionMap, externalReferenceCode,
+			configurationJSON, descriptionMap, externalReferenceCode, readOnly,
 			schemaVersion, serviceContext, titleMap, userId);
 	}
 
@@ -391,9 +392,10 @@ public class TaskDefinitionLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.generative.ai.task.model.TaskDefinition>
-		getTaskDefinitions(long companyId) {
+		getTaskDefinitions(long companyId, boolean readOnly) {
 
-		return _taskDefinitionLocalService.getTaskDefinitions(companyId);
+		return _taskDefinitionLocalService.getTaskDefinitions(
+			companyId, readOnly);
 	}
 
 	/**
@@ -407,8 +409,9 @@ public class TaskDefinitionLocalServiceWrapper
 	}
 
 	@Override
-	public int getTaskDefinitionsCount(long companyId) {
-		return _taskDefinitionLocalService.getTaskDefinitionsCount(companyId);
+	public int getTaskDefinitionsCount(long companyId, boolean readOnly) {
+		return _taskDefinitionLocalService.getTaskDefinitionsCount(
+			companyId, readOnly);
 	}
 
 	@Override
