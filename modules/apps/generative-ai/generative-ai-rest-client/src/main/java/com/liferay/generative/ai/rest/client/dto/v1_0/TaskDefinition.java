@@ -195,6 +195,27 @@ public class TaskDefinition implements Cloneable, Serializable {
 
 	protected Date modifiedDate;
 
+	public Boolean getReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(Boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+
+	public void setReadOnly(
+		UnsafeSupplier<Boolean, Exception> readOnlyUnsafeSupplier) {
+
+		try {
+			readOnly = readOnlyUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Boolean readOnly;
+
 	public String getSchemaVersion() {
 		return schemaVersion;
 	}

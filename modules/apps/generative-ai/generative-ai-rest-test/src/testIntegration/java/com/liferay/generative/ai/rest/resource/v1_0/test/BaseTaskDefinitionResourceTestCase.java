@@ -1344,6 +1344,14 @@ public abstract class BaseTaskDefinitionResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("readOnly", additionalAssertFieldName)) {
+				if (taskDefinition.getReadOnly() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("schemaVersion", additionalAssertFieldName)) {
 				if (taskDefinition.getSchemaVersion() == null) {
 					valid = false;
@@ -1585,6 +1593,17 @@ public abstract class BaseTaskDefinitionResourceTestCase {
 				if (!Objects.deepEquals(
 						taskDefinition1.getModifiedDate(),
 						taskDefinition2.getModifiedDate())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("readOnly", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						taskDefinition1.getReadOnly(),
+						taskDefinition2.getReadOnly())) {
 
 					return false;
 				}
@@ -1929,6 +1948,11 @@ public abstract class BaseTaskDefinitionResourceTestCase {
 			return sb.toString();
 		}
 
+		if (entityFieldName.equals("readOnly")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("schemaVersion")) {
 			Object object = taskDefinition.getSchemaVersion();
 
@@ -2170,6 +2194,7 @@ public abstract class BaseTaskDefinitionResourceTestCase {
 					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				modifiedDate = RandomTestUtil.nextDate();
+				readOnly = RandomTestUtil.randomBoolean();
 				schemaVersion = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				title = StringUtil.toLowerCase(RandomTestUtil.randomString());
