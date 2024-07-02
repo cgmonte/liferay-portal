@@ -15,14 +15,12 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
-
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
-import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.UserMessage;
 
 import java.util.HashMap;
@@ -33,7 +31,7 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 
 	interface Assistant {
 
-		String chat(@MemoryId int memoryId, @UserMessage String userMessage);
+		String chat(@UserMessage String userMessage);
 
 	}
 
@@ -60,9 +58,9 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 		AiServices builder = AiServices.builder(
 			Assistant.class
 		).chatLanguageModel(
-			_getChatLanguageModel()
-		).chatMemoryProvider(
-			_geminiChatMemoryProvider.get());
+			_getChatLanguageModel());
+		//).chatMemoryProvider(
+		//	_geminiChatMemoryProvider.get());
 
 		if (systemMessage != null) {
 			builder.systemMessageProvider(
@@ -80,10 +78,10 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 
 		if (prompt != null) {
 			output = assistant.chat(
-				(int)taskContext.getUserId(), prompt.text());
+				 prompt.text());
 		}
 		else {
-			output = assistant.chat((int)taskContext.getUserId(), textInput);
+			output = assistant.chat( textInput);
 		}
 
 		return new TaskResponseImpl(
