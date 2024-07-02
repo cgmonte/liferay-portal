@@ -158,6 +158,16 @@ public class TaskDefinitionSerDes {
 			sb.append("\"");
 		}
 
+		if (taskDefinition.getReadOnly() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"readOnly\": ");
+
+			sb.append(taskDefinition.getReadOnly());
+		}
+
 		if (taskDefinition.getSchemaVersion() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -314,6 +324,13 @@ public class TaskDefinitionSerDes {
 					taskDefinition.getModifiedDate()));
 		}
 
+		if (taskDefinition.getReadOnly() == null) {
+			map.put("readOnly", null);
+		}
+		else {
+			map.put("readOnly", String.valueOf(taskDefinition.getReadOnly()));
+		}
+
 		if (taskDefinition.getSchemaVersion() == null) {
 			map.put("schemaVersion", null);
 		}
@@ -396,6 +413,9 @@ public class TaskDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "modifiedDate")) {
 				return false;
 			}
+			else if (Objects.equals(jsonParserFieldName, "readOnly")) {
+				return false;
+			}
 			else if (Objects.equals(jsonParserFieldName, "schemaVersion")) {
 				return false;
 			}
@@ -467,6 +487,11 @@ public class TaskDefinitionSerDes {
 				if (jsonParserFieldValue != null) {
 					taskDefinition.setModifiedDate(
 						toDate((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "readOnly")) {
+				if (jsonParserFieldValue != null) {
+					taskDefinition.setReadOnly((Boolean)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "schemaVersion")) {
