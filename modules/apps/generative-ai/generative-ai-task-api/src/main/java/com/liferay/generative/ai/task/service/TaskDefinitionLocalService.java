@@ -62,9 +62,9 @@ public interface TaskDefinitionLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public TaskDefinition addTaskDefinition(
 			String configurationJSON, Map<Locale, String> descriptionMap,
-			String externalReferenceCode, String schemaVersion,
-			ServiceContext serviceContext, Map<Locale, String> titleMap,
-			long userId)
+			String externalReferenceCode, boolean readOnly,
+			String schemaVersion, ServiceContext serviceContext,
+			Map<Locale, String> titleMap, long userId)
 		throws PortalException;
 
 	/**
@@ -296,7 +296,8 @@ public interface TaskDefinitionLocalService
 	public List<TaskDefinition> getTaskDefinitions(int start, int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<TaskDefinition> getTaskDefinitions(long companyId);
+	public List<TaskDefinition> getTaskDefinitions(
+		long companyId, boolean readOnly);
 
 	/**
 	 * Returns the number of task definitions.
@@ -307,7 +308,7 @@ public interface TaskDefinitionLocalService
 	public int getTaskDefinitionsCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getTaskDefinitionsCount(long companyId);
+	public int getTaskDefinitionsCount(long companyId, boolean readOnly);
 
 	@Indexable(type = IndexableType.REINDEX)
 	public TaskDefinition updateStatus(

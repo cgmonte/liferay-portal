@@ -6,9 +6,11 @@
 package com.liferay.generative.ai.web.internal.task.definition.admin.portlet.action;
 
 import com.liferay.generative.ai.task.constants.TaskDefinitionPortletKeys;
+import com.liferay.generative.ai.task.exception.TaskDefinitionReadOnlyException;
 import com.liferay.generative.ai.task.service.TaskDefinitionService;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -41,11 +43,19 @@ public class EditTaskDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 		try {
 			if (cmd.equals(Constants.DELETE)) {
-				_deleteTaskDefinitions(actionRequest);
+				_deleteSXPElements(actionRequest);
 			}
 		}
 		catch (Exception exception) {
-			throw new PortletException(exception);
+			if (exception instanceof TaskDefinitionReadOnlyException) {
+				hideDefaultErrorMessage(actionRequest);
+			}
+
+			SessionErrors.add(actionRequest, exception.getClass(), exception);
+
+			String redirect = ParamUtil.getString(actionRequest, "redirect");
+
+			sendRedirect(actionRequest, actionResponse, redirect);
 		}
 	}
 

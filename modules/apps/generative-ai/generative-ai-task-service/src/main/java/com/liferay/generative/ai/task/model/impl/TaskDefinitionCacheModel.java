@@ -68,7 +68,7 @@ public class TaskDefinitionCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -92,6 +92,8 @@ public class TaskDefinitionCacheModel
 		sb.append(configurationJSON);
 		sb.append(", description=");
 		sb.append(description);
+		sb.append(", readOnly=");
+		sb.append(readOnly);
 		sb.append(", schemaVersion=");
 		sb.append(schemaVersion);
 		sb.append(", title=");
@@ -170,6 +172,8 @@ public class TaskDefinitionCacheModel
 			taskDefinitionImpl.setDescription(description);
 		}
 
+		taskDefinitionImpl.setReadOnly(readOnly);
+
 		if (schemaVersion == null) {
 			taskDefinitionImpl.setSchemaVersion("");
 		}
@@ -231,6 +235,8 @@ public class TaskDefinitionCacheModel
 		modifiedDate = objectInput.readLong();
 		configurationJSON = (String)objectInput.readObject();
 		description = objectInput.readUTF();
+
+		readOnly = objectInput.readBoolean();
 		schemaVersion = objectInput.readUTF();
 		title = objectInput.readUTF();
 		version = objectInput.readUTF();
@@ -290,6 +296,8 @@ public class TaskDefinitionCacheModel
 			objectOutput.writeUTF(description);
 		}
 
+		objectOutput.writeBoolean(readOnly);
+
 		if (schemaVersion == null) {
 			objectOutput.writeUTF("");
 		}
@@ -336,6 +344,7 @@ public class TaskDefinitionCacheModel
 	public long modifiedDate;
 	public String configurationJSON;
 	public String description;
+	public boolean readOnly;
 	public String schemaVersion;
 	public String title;
 	public String version;

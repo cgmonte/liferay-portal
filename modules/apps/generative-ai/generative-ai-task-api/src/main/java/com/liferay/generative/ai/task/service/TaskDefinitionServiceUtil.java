@@ -33,13 +33,14 @@ public class TaskDefinitionServiceUtil {
 	public static TaskDefinition addTaskDefinition(
 			String configurationJSON,
 			Map<java.util.Locale, String> descriptionMap,
-			String externalReferenceCode, String schemaVersion,
+			String externalReferenceCode, boolean readOnly,
+			String schemaVersion,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext,
 			Map<java.util.Locale, String> titleMap)
 		throws PortalException {
 
 		return getService().addTaskDefinition(
-			configurationJSON, descriptionMap, externalReferenceCode,
+			configurationJSON, descriptionMap, externalReferenceCode, readOnly,
 			schemaVersion, serviceContext, titleMap);
 	}
 

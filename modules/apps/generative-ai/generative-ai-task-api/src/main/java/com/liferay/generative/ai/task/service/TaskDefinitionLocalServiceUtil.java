@@ -40,13 +40,14 @@ public class TaskDefinitionLocalServiceUtil {
 	public static TaskDefinition addTaskDefinition(
 			String configurationJSON,
 			Map<java.util.Locale, String> descriptionMap,
-			String externalReferenceCode, String schemaVersion,
+			String externalReferenceCode, boolean readOnly,
+			String schemaVersion,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext,
 			Map<java.util.Locale, String> titleMap, long userId)
 		throws PortalException {
 
 		return getService().addTaskDefinition(
-			configurationJSON, descriptionMap, externalReferenceCode,
+			configurationJSON, descriptionMap, externalReferenceCode, readOnly,
 			schemaVersion, serviceContext, titleMap, userId);
 	}
 
@@ -338,8 +339,10 @@ public class TaskDefinitionLocalServiceUtil {
 		return getService().getTaskDefinitions(start, end);
 	}
 
-	public static List<TaskDefinition> getTaskDefinitions(long companyId) {
-		return getService().getTaskDefinitions(companyId);
+	public static List<TaskDefinition> getTaskDefinitions(
+		long companyId, boolean readOnly) {
+
+		return getService().getTaskDefinitions(companyId, readOnly);
 	}
 
 	/**
@@ -351,8 +354,10 @@ public class TaskDefinitionLocalServiceUtil {
 		return getService().getTaskDefinitionsCount();
 	}
 
-	public static int getTaskDefinitionsCount(long companyId) {
-		return getService().getTaskDefinitionsCount(companyId);
+	public static int getTaskDefinitionsCount(
+		long companyId, boolean readOnly) {
+
+		return getService().getTaskDefinitionsCount(companyId, readOnly);
 	}
 
 	public static TaskDefinition updateStatus(

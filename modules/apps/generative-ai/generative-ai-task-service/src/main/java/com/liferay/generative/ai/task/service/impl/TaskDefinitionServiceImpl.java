@@ -7,8 +7,10 @@ package com.liferay.generative.ai.task.service.impl;
 
 import com.liferay.generative.ai.task.constants.TaskDefinitionActionKeys;
 import com.liferay.generative.ai.task.constants.TaskDefinitionConstants;
+import com.liferay.generative.ai.task.exception.TaskDefinitionReadOnlyException;
 import com.liferay.generative.ai.task.model.TaskDefinition;
 import com.liferay.generative.ai.task.service.base.TaskDefinitionServiceBaseImpl;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -37,7 +39,7 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 	@Override
 	public TaskDefinition addTaskDefinition(
 			String configurationJSON, Map<Locale, String> descriptionMap,
-			String externalReferenceCode, String schemaVersion,
+			String externalReferenceCode, boolean readOnly, String schemaVersion,
 			ServiceContext serviceContext, Map<Locale, String> titleMap)
 		throws PortalException {
 
@@ -46,7 +48,7 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 			TaskDefinitionActionKeys.ADD_TASK_DEFINITION);
 
 		return taskDefinitionLocalService.addTaskDefinition(
-			configurationJSON, descriptionMap, externalReferenceCode,
+			configurationJSON, descriptionMap, externalReferenceCode, readOnly,
 			schemaVersion, serviceContext, titleMap, getUserId());
 	}
 
@@ -56,6 +58,16 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 
 		_taskDefinitionModelResourcePermission.check(
 			getPermissionChecker(), taskDefinitionId, ActionKeys.DELETE);
+
+		TaskDefinition taskDefinition = taskDefinitionPersistence.findByPrimaryKey(
+			taskDefinitionId);
+
+		if (taskDefinition.isReadOnly()) {
+			throw new TaskDefinitionReadOnlyException(
+				StringBundler.concat(
+					"Task definition  ", taskDefinitionId,
+					" is read-only"));
+		}
 
 		return taskDefinitionLocalService.deleteTaskDefinition(
 			taskDefinitionId);
@@ -134,6 +146,16 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 
 		_taskDefinitionModelResourcePermission.check(
 			getPermissionChecker(), taskDefinitionId, ActionKeys.UPDATE);
+
+		TaskDefinition taskDefinition = taskDefinitionPersistence.findByPrimaryKey(
+			taskDefinitionId);
+
+		if (taskDefinition.isReadOnly()) {
+			throw new TaskDefinitionReadOnlyException(
+				StringBundler.concat(
+					"Task definition ", taskDefinitionId,
+					" is read-only"));
+		}
 
 		return taskDefinitionLocalService.updateTaskDefinition(
 			configurationJSON, descriptionMap, externalReferenceCode,

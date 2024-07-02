@@ -45,6 +45,7 @@ public class TaskDefinitionWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("configurationJSON", getConfigurationJSON());
 		attributes.put("description", getDescription());
+		attributes.put("readOnly", isReadOnly());
 		attributes.put("schemaVersion", getSchemaVersion());
 		attributes.put("title", getTitle());
 		attributes.put("version", getVersion());
@@ -123,6 +124,12 @@ public class TaskDefinitionWrapper
 
 		if (description != null) {
 			setDescription(description);
+		}
+
+		Boolean readOnly = (Boolean)attributes.get("readOnly");
+
+		if (readOnly != null) {
+			setReadOnly(readOnly);
 		}
 
 		String schemaVersion = (String)attributes.get("schemaVersion");
@@ -327,6 +334,16 @@ public class TaskDefinitionWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
+	}
+
+	/**
+	 * Returns the read only of this task definition.
+	 *
+	 * @return the read only of this task definition
+	 */
+	@Override
+	public boolean getReadOnly() {
+		return model.getReadOnly();
 	}
 
 	/**
@@ -596,6 +613,16 @@ public class TaskDefinitionWrapper
 	}
 
 	/**
+	 * Returns <code>true</code> if this task definition is read only.
+	 *
+	 * @return <code>true</code> if this task definition is read only; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isReadOnly() {
+		return model.isReadOnly();
+	}
+
+	/**
 	 * Returns <code>true</code> if this task definition is scheduled.
 	 *
 	 * @return <code>true</code> if this task definition is scheduled; <code>false</code> otherwise
@@ -760,6 +787,16 @@ public class TaskDefinitionWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	 * Sets whether this task definition is read only.
+	 *
+	 * @param readOnly the read only of this task definition
+	 */
+	@Override
+	public void setReadOnly(boolean readOnly) {
+		model.setReadOnly(readOnly);
 	}
 
 	/**

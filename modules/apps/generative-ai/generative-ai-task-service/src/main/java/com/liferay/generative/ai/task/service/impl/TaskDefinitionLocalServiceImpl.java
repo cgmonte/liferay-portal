@@ -44,7 +44,8 @@ public class TaskDefinitionLocalServiceImpl
 	@Override
 	public TaskDefinition addTaskDefinition(
 			String configurationJSON, Map<Locale, String> descriptionMap,
-			String externalReferenceCode, String schemaVersion,
+			String externalReferenceCode,
+			boolean readOnly, String schemaVersion,
 			ServiceContext serviceContext, Map<Locale, String> titleMap,
 			long userId)
 		throws PortalException {
@@ -62,6 +63,7 @@ public class TaskDefinitionLocalServiceImpl
 		taskDefinition.setUserName(user.getFullName());
 		taskDefinition.setConfigurationJSON(configurationJSON);
 		taskDefinition.setDescriptionMap(descriptionMap);
+		taskDefinition.setReadOnly(readOnly);
 		taskDefinition.setSchemaVersion(schemaVersion);
 		taskDefinition.setTitleMap(titleMap);
 		taskDefinition.setVersion(
@@ -118,13 +120,13 @@ public class TaskDefinitionLocalServiceImpl
 	}
 
 	@Override
-	public List<TaskDefinition> getTaskDefinitions(long companyId) {
-		return taskDefinitionPersistence.findByCompanyId(companyId);
+	public List<TaskDefinition> getTaskDefinitions(long companyId, boolean readOnly) {
+		return taskDefinitionPersistence.findByC_R(companyId, readOnly);
 	}
 
 	@Override
-	public int getTaskDefinitionsCount(long companyId) {
-		return taskDefinitionPersistence.countByCompanyId(companyId);
+	public int getTaskDefinitionsCount(long companyId, boolean readOnly) {
+		return taskDefinitionPersistence.countByC_R(companyId, readOnly);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)

@@ -672,6 +672,231 @@ public interface TaskDefinitionPersistence
 	public int filterCountByCompanyId(long companyId);
 
 	/**
+	 * Returns all the task definitions where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @return the matching task definitions
+	 */
+	public java.util.List<TaskDefinition> findByC_R(
+		long companyId, boolean readOnly);
+
+	/**
+	 * Returns a range of all the task definitions where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TaskDefinitionModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param start the lower bound of the range of task definitions
+	 * @param end the upper bound of the range of task definitions (not inclusive)
+	 * @return the range of matching task definitions
+	 */
+	public java.util.List<TaskDefinition> findByC_R(
+		long companyId, boolean readOnly, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the task definitions where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TaskDefinitionModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param start the lower bound of the range of task definitions
+	 * @param end the upper bound of the range of task definitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching task definitions
+	 */
+	public java.util.List<TaskDefinition> findByC_R(
+		long companyId, boolean readOnly, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the task definitions where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TaskDefinitionModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param start the lower bound of the range of task definitions
+	 * @param end the upper bound of the range of task definitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching task definitions
+	 */
+	public java.util.List<TaskDefinition> findByC_R(
+		long companyId, boolean readOnly, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first task definition in the ordered set where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching task definition
+	 * @throws NoSuchTaskDefinitionException if a matching task definition could not be found
+	 */
+	public TaskDefinition findByC_R_First(
+			long companyId, boolean readOnly,
+			com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+				orderByComparator)
+		throws NoSuchTaskDefinitionException;
+
+	/**
+	 * Returns the first task definition in the ordered set where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching task definition, or <code>null</code> if a matching task definition could not be found
+	 */
+	public TaskDefinition fetchByC_R_First(
+		long companyId, boolean readOnly,
+		com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+			orderByComparator);
+
+	/**
+	 * Returns the last task definition in the ordered set where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching task definition
+	 * @throws NoSuchTaskDefinitionException if a matching task definition could not be found
+	 */
+	public TaskDefinition findByC_R_Last(
+			long companyId, boolean readOnly,
+			com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+				orderByComparator)
+		throws NoSuchTaskDefinitionException;
+
+	/**
+	 * Returns the last task definition in the ordered set where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching task definition, or <code>null</code> if a matching task definition could not be found
+	 */
+	public TaskDefinition fetchByC_R_Last(
+		long companyId, boolean readOnly,
+		com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+			orderByComparator);
+
+	/**
+	 * Returns the task definitions before and after the current task definition in the ordered set where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param taskDefinitionId the primary key of the current task definition
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next task definition
+	 * @throws NoSuchTaskDefinitionException if a task definition with the primary key could not be found
+	 */
+	public TaskDefinition[] findByC_R_PrevAndNext(
+			long taskDefinitionId, long companyId, boolean readOnly,
+			com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+				orderByComparator)
+		throws NoSuchTaskDefinitionException;
+
+	/**
+	 * Returns all the task definitions that the user has permission to view where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @return the matching task definitions that the user has permission to view
+	 */
+	public java.util.List<TaskDefinition> filterFindByC_R(
+		long companyId, boolean readOnly);
+
+	/**
+	 * Returns a range of all the task definitions that the user has permission to view where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TaskDefinitionModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param start the lower bound of the range of task definitions
+	 * @param end the upper bound of the range of task definitions (not inclusive)
+	 * @return the range of matching task definitions that the user has permission to view
+	 */
+	public java.util.List<TaskDefinition> filterFindByC_R(
+		long companyId, boolean readOnly, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the task definitions that the user has permissions to view where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TaskDefinitionModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param start the lower bound of the range of task definitions
+	 * @param end the upper bound of the range of task definitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching task definitions that the user has permission to view
+	 */
+	public java.util.List<TaskDefinition> filterFindByC_R(
+		long companyId, boolean readOnly, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+			orderByComparator);
+
+	/**
+	 * Returns the task definitions before and after the current task definition in the ordered set of task definitions that the user has permission to view where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param taskDefinitionId the primary key of the current task definition
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next task definition
+	 * @throws NoSuchTaskDefinitionException if a task definition with the primary key could not be found
+	 */
+	public TaskDefinition[] filterFindByC_R_PrevAndNext(
+			long taskDefinitionId, long companyId, boolean readOnly,
+			com.liferay.portal.kernel.util.OrderByComparator<TaskDefinition>
+				orderByComparator)
+		throws NoSuchTaskDefinitionException;
+
+	/**
+	 * Removes all the task definitions where companyId = &#63; and readOnly = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 */
+	public void removeByC_R(long companyId, boolean readOnly);
+
+	/**
+	 * Returns the number of task definitions where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @return the number of matching task definitions
+	 */
+	public int countByC_R(long companyId, boolean readOnly);
+
+	/**
+	 * Returns the number of task definitions that the user has permission to view where companyId = &#63; and readOnly = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param readOnly the read only
+	 * @return the number of matching task definitions that the user has permission to view
+	 */
+	public int filterCountByC_R(long companyId, boolean readOnly);
+
+	/**
 	 * Returns the task definition where externalReferenceCode = &#63; and companyId = &#63; or throws a <code>NoSuchTaskDefinitionException</code> if it could not be found.
 	 *
 	 * @param externalReferenceCode the external reference code
