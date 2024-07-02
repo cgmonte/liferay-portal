@@ -92,6 +92,18 @@ function TestConfigurationButton({
 			};
 		}
 
+		if (
+			textEmbeddingProvider ===
+			TEXT_EMBEDDING_PROVIDER_TYPES.VERTEX_AI
+		) {
+			return {
+				autoTruncate,
+				location,
+				model,
+				projectId,
+			};
+		}
+
 		return {};
 	};
 
@@ -273,6 +285,17 @@ function TestConfigurationButton({
 
 		if (textEmbeddingProvider === TEXT_EMBEDDING_PROVIDER_TYPES.TXTAI) {
 			return errors?.attributes?.hostAddress;
+		}
+
+		if (
+			textEmbeddingProvider ===
+			TEXT_EMBEDDING_PROVIDER_TYPES.VERTEX_AI
+		) {
+			return (
+				errors?.attributes?.model ||
+				errors?.attributes?.location ||
+				errors?.attributes?.projectId
+			);
 		}
 
 		return false;
