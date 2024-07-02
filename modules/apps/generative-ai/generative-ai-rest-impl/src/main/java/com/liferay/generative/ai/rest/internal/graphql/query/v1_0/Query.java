@@ -78,7 +78,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {taskDefinitionByExternalReferenceCode(externalReferenceCode: ___){actions, configuration, createDate, description, description_i18n, externalReferenceCode, id, modifiedDate, schemaVersion, title, title_i18n, userName, version}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {taskDefinitionByExternalReferenceCode(externalReferenceCode: ___){actions, configuration, createDate, description, description_i18n, externalReferenceCode, id, modifiedDate, readOnly, schemaVersion, title, title_i18n, userName, version}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
 	public TaskDefinition taskDefinitionByExternalReferenceCode(
@@ -96,7 +96,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {taskDefinition(taskDefinitionId: ___){actions, configuration, createDate, description, description_i18n, externalReferenceCode, id, modifiedDate, schemaVersion, title, title_i18n, userName, version}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {taskDefinition(taskDefinitionId: ___){actions, configuration, createDate, description, description_i18n, externalReferenceCode, id, modifiedDate, readOnly, schemaVersion, title, title_i18n, userName, version}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
 	public TaskDefinition taskDefinition(

@@ -65,7 +65,7 @@ public abstract class BaseGenerativeAIResponseResourceImpl
 		}
 	)
 	@javax.ws.rs.Consumes({"application/json", "application/xml"})
-	@javax.ws.rs.Path("/generate/{externalReferenceCode: .+}")
+	@javax.ws.rs.Path("/generate/{externalReferenceCode}")
 	@javax.ws.rs.POST
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override

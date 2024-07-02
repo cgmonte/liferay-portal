@@ -25,8 +25,8 @@ import java.util.Arrays;
 public class SearchUtil extends com.liferay.portal.vulcan.util.SearchUtil {
 
 	public static void processTaskDefinitionSearchBooleanQuery(
-		AcceptLanguage acceptLanguage, BooleanQuery booleanQuery1,
-		String search)
+			AcceptLanguage acceptLanguage, BooleanQuery booleanQuery1,
+			String search)
 		throws Exception {
 
 		if (Validator.isBlank(search)) {

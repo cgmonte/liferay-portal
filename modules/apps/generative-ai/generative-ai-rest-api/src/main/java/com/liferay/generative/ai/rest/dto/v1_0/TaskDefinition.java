@@ -387,6 +387,47 @@ public class TaskDefinition implements Serializable {
 	private Supplier<Date> _modifiedDateSupplier;
 
 	@Schema
+	public Boolean getReadOnly() {
+		if (_readOnlySupplier != null) {
+			readOnly = _readOnlySupplier.get();
+
+			_readOnlySupplier = null;
+		}
+
+		return readOnly;
+	}
+
+	public void setReadOnly(Boolean readOnly) {
+		this.readOnly = readOnly;
+
+		_readOnlySupplier = null;
+	}
+
+	@JsonIgnore
+	public void setReadOnly(
+		UnsafeSupplier<Boolean, Exception> readOnlyUnsafeSupplier) {
+
+		_readOnlySupplier = () -> {
+			try {
+				return readOnlyUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Boolean readOnly;
+
+	@JsonIgnore
+	private Supplier<Boolean> _readOnlySupplier;
+
+	@Schema
 	public String getSchemaVersion() {
 		if (_schemaVersionSupplier != null) {
 			schemaVersion = _schemaVersionSupplier.get();
@@ -744,6 +785,18 @@ public class TaskDefinition implements Serializable {
 			sb.append(liferayToJSONDateFormat.format(modifiedDate));
 
 			sb.append("\"");
+		}
+
+		Boolean readOnly = getReadOnly();
+
+		if (readOnly != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"readOnly\": ");
+
+			sb.append(readOnly);
 		}
 
 		String schemaVersion = getSchemaVersion();

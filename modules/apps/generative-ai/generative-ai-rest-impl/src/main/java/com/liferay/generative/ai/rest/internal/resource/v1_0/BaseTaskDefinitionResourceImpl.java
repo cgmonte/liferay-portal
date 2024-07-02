@@ -203,7 +203,7 @@ public abstract class BaseTaskDefinitionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "readOnly": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {
@@ -287,7 +287,7 @@ public abstract class BaseTaskDefinitionResourceImpl
 	)
 	@javax.ws.rs.GET
 	@javax.ws.rs.Path(
-		"/task-definitions/by-external-reference-code/{externalReferenceCode: .+}"
+		"/task-definitions/by-external-reference-code/{externalReferenceCode}"
 	)
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
@@ -304,7 +304,7 @@ public abstract class BaseTaskDefinitionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions/by-external-reference-code/{externalReferenceCode}' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions/by-external-reference-code/{externalReferenceCode}' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "readOnly": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -321,7 +321,7 @@ public abstract class BaseTaskDefinitionResourceImpl
 	)
 	@javax.ws.rs.Consumes({"application/json", "application/xml"})
 	@javax.ws.rs.Path(
-		"/task-definitions/by-external-reference-code/{externalReferenceCode: .+}"
+		"/task-definitions/by-external-reference-code/{externalReferenceCode}"
 	)
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@javax.ws.rs.PUT
@@ -469,7 +469,7 @@ public abstract class BaseTaskDefinitionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions/{taskDefinitionId}' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions/{taskDefinitionId}' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "readOnly": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -525,6 +525,10 @@ public abstract class BaseTaskDefinitionResourceImpl
 				taskDefinition.getModifiedDate());
 		}
 
+		if (taskDefinition.getReadOnly() != null) {
+			existingTaskDefinition.setReadOnly(taskDefinition.getReadOnly());
+		}
+
 		if (taskDefinition.getSchemaVersion() != null) {
 			existingTaskDefinition.setSchemaVersion(
 				taskDefinition.getSchemaVersion());
@@ -555,7 +559,7 @@ public abstract class BaseTaskDefinitionResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions/{taskDefinitionId}' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/generative-ai/v1.0/task-definitions/{taskDefinitionId}' -d $'{"configuration": ___, "createDate": ___, "description": ___, "description_i18n": ___, "externalReferenceCode": ___, "id": ___, "modifiedDate": ___, "readOnly": ___, "schemaVersion": ___, "title": ___, "title_i18n": ___, "userName": ___, "version": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -807,6 +811,10 @@ public abstract class BaseTaskDefinitionResourceImpl
 		throws Exception {
 
 		return null;
+	}
+
+	public String getResourceName() {
+		return "TaskDefinition";
 	}
 
 	public String getVersion() {

@@ -5,7 +5,6 @@
 
 package com.liferay.generative.ai.rest.internal.resource.v1_0;
 
-
 import com.liferay.generative.ai.request.GenerativeAIRequestBuilder;
 import com.liferay.generative.ai.request.GenerativeAIRequestBuilderFactory;
 import com.liferay.generative.ai.request.GenerativeAIRequestExecutor;
@@ -18,11 +17,12 @@ import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
+
+import java.util.Map;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
-
-import java.util.Map;
 
 /**
  * @author Petteri Karttunen
@@ -36,77 +36,92 @@ public class GenerativeAIResponseResourceImpl
 
 	@Override
 	public GenerativeAIResponse postGenerateExternalReferenceCode(
-		String externalReferenceCode,
-		GenerativeAIRequest generativeAIRequest) throws Exception {
+			String externalReferenceCode,
+			GenerativeAIRequest generativeAIRequest)
+		throws Exception {
 
-		return	_toDTO(
+		return _toDTO(
 			_generativeAIRequestExecutor.execute(
 				_createGenerativeAIRequest(
 					externalReferenceCode, generativeAIRequest)));
-
 	}
 
-	private GenerativeAIResponse _toDTO(
-		com.liferay.generative.ai.response.GenerativeAIResponse generativeAIResponse) {
-
-		return new GenerativeAIResponse(){{
-			if (generativeAIResponse.getDebugInfo() != null) {
-				debugInfo = generativeAIResponse.getDebugInfo();
-			}
-			output = generativeAIResponse.getOutput();
-			took = generativeAIResponse.getTook();
-		}};
-	}
-
-	private com.liferay.generative.ai.request.GenerativeAIRequest _createGenerativeAIRequest(
-		String externalReferenceCode, GenerativeAIRequest generativeAIRequest) throws Exception {
+	private com.liferay.generative.ai.request.GenerativeAIRequest
+			_createGenerativeAIRequest(
+				String externalReferenceCode,
+				GenerativeAIRequest generativeAIRequest)
+		throws Exception {
 
 		GenerativeAIRequestBuilder generativeAIRequestBuilder =
 			_generativeAIRequestBuilderFactory.builder();
 
 		TaskDefinition taskDefinition =
-			_taskDefinitionService.getTaskDefinitionByExternalReferenceCode(contextCompany.getCompanyId(),
-				externalReferenceCode);
+			_taskDefinitionService.getTaskDefinitionByExternalReferenceCode(
+				contextCompany.getCompanyId(), externalReferenceCode);
 
-		JSONObject configurationJSONObject =
-			_jsonFactory.createJSONObject(taskDefinition.getConfigurationJSON());
+		JSONObject configurationJSONObject = _jsonFactory.createJSONObject(
+			taskDefinition.getConfigurationJSON());
 
-		generativeAIRequestBuilder.input((Map<String, Object>)generativeAIRequest.getInput());
+		generativeAIRequestBuilder.input(
+			(Map<String, Object>)generativeAIRequest.getInput());
 		generativeAIRequestBuilder.task(
 			_taskBuilder.build(
-				configurationJSONObject, _createTaskContext(configurationJSONObject)));
+				configurationJSONObject,
+				_createTaskContext(configurationJSONObject)));
 
 		return generativeAIRequestBuilder.build();
 	}
 
-	@Reference
-	private TaskDefinitionService _taskDefinitionService;
-
-	@Reference
-	private JSONFactory _jsonFactory;
-
-	private TaskContext _createTaskContext (JSONObject configurationJSONObject) throws Exception {
+	private TaskContext _createTaskContext(JSONObject configurationJSONObject)
+		throws Exception {
 
 		TaskContext.Builder builder = new TaskContext.Builder();
 
-		builder.audioInputField(configurationJSONObject.getString("audio_input_field", "audio"));
+		builder.audioInputField(
+			configurationJSONObject.getString("audio_input_field", "audio"));
 		builder.companyId(contextCompany.getCompanyId());
-		builder.imageInputField(configurationJSONObject.getString("image_input_field", "image"));
+		builder.imageInputField(
+			configurationJSONObject.getString("image_input_field", "image"));
 		builder.ipAddress(contextHttpServletRequest.getRemoteAddr());
 		builder.locale(contextAcceptLanguage.getPreferredLocale());
-		builder.textInputField(configurationJSONObject.getString("text_input_field", "text"));
+		builder.textInputField(
+			configurationJSONObject.getString("text_input_field", "text"));
 		builder.timeZone(contextUser.getTimeZone());
 		builder.userId(contextUser.getUserId());
 
 		return builder.build();
 	}
 
+	private GenerativeAIResponse _toDTO(
+		com.liferay.generative.ai.response.GenerativeAIResponse
+			generativeAIResponse) {
+
+		return new GenerativeAIResponse() {
+			{
+				if (generativeAIResponse.getDebugInfo() != null) {
+					debugInfo = generativeAIResponse.getDebugInfo();
+				}
+
+				output = generativeAIResponse.getOutput();
+				took = generativeAIResponse.getTook();
+			}
+		};
+	}
+
+	@Reference
+	private GenerativeAIRequestBuilderFactory
+		_generativeAIRequestBuilderFactory;
+
 	@Reference
 	private GenerativeAIRequestExecutor _generativeAIRequestExecutor;
 
 	@Reference
-	private GenerativeAIRequestBuilderFactory _generativeAIRequestBuilderFactory;
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private TaskBuilder _taskBuilder;
+
+	@Reference
+	private TaskDefinitionService _taskDefinitionService;
+
 }
