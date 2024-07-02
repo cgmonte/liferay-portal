@@ -21,6 +21,7 @@
 
 		<column name="configurationJSON" type="String" />
 		<column localized="true" name="description" type="String" />
+		<column name="readOnly" type="boolean" />
 		<column name="schemaVersion" type="String" />
 		<column localized="true" name="title" type="String" />
 		<column name="version" type="String" />
@@ -33,6 +34,10 @@
 
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
+		</finder>
+		<finder name="C_R" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="readOnly" />
 		</finder>
 	</entity>
 	<exceptions>
