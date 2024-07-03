@@ -27,6 +27,11 @@ import fetchData, {DEFAULT_HEADERS} from '../utils/fetch/fetch_data';
 import isDefined from '../utils/functions/is_defined';
 import formatLocaleWithUnderscores from '../utils/language/format_locale_with_underscores';
 import renameKeys from '../utils/language/rename_keys';
+import {
+	SIDEBAR_STATE,
+	setStorageAddSXPElementSidebar,
+} from '../utils/sessionStorage';
+import transformToSearchPreviewHits from '../utils/sxp_element/transform_to_search_preview_hits';
 import {TEST_IDS} from '../utils/testIds';
 import {
 	openErrorToast,
@@ -40,12 +45,15 @@ import validateJSON from '../utils/validation/validate_json';
 import validateNumberRange from '../utils/validation/validate_number_range';
 import validateRequired from '../utils/validation/validate_required';
 import ConfigurationTab from './configuration_tab/index';
+import PreviewSidebar from './preview_sidebar/index';
 
 // Tabs in display order
+
 /* eslint-disable sort-keys */
 const TABS = {
 	configuration: Liferay.Language.get('configuration'),
 };
+
 /* eslint-enable sort-keys */
 
 function EditTaskDefinitionForm({
@@ -65,10 +73,8 @@ function EditTaskDefinitionForm({
 	const controllerRef = useRef();
 
 	const [errors, setErrors] = useState([]);
-	const [
-		isTitleAndDescriptionEdited,
-		setIsTitleAndDescriptionEdited,
-	] = useState(false);
+	const [isTitleAndDescriptionEdited, setIsTitleAndDescriptionEdited] =
+		useState(false);
 	const [previewInfo, setPreviewInfo] = useState(() => ({
 		loading: false,
 		results: {},
@@ -108,10 +114,8 @@ function EditTaskDefinitionForm({
 			// using the "Continue To Save" action and should skip the schema
 			// validation step.
 
-
 			if (!showSubmitWarningModal) {
 				const validateErrors = {errors: []};
-
 
 				if (validateErrors.errors?.length) {
 					setErrors(validateErrors.errors);
@@ -159,7 +163,9 @@ function EditTaskDefinitionForm({
 			}
 			else {
 				setInitialSuccessToast(
-					Liferay.Language.get('the-task-definition-was-saved-successfully')
+					Liferay.Language.get(
+						'the-task-definition-was-saved-successfully'
+					)
 				);
 
 				navigate(redirectURL);
@@ -180,9 +186,7 @@ function EditTaskDefinitionForm({
 	const _handleFormikValidate = (values) => {
 		const errors = {};
 
-		[
-			'taskConfig'
-		].map((configName) => {
+		['taskConfig'].map((configName) => {
 			const configError = validateJSON(
 				values[configName],
 				INPUT_TYPES.JSON
@@ -198,14 +202,10 @@ function EditTaskDefinitionForm({
 
 	const formik = useFormik({
 		initialValues: {
-			taskConfig: JSON.stringify(
-				initialConfiguration,
-				null,
-				'\t'
-			),
+			taskConfig: JSON.stringify(initialConfiguration, null, '\t'),
 			description_i18n: initialDescriptionI18n,
 			externalReferenceCode: initialExternalReferenceCode,
-			title_i18n: initialTitleI18n
+			title_i18n: initialTitleI18n,
 		},
 		onSubmit: _handleFormikSubmit,
 		validate: _handleFormikValidate,
@@ -219,13 +219,9 @@ function EditTaskDefinitionForm({
 	 * @param {Object} values Form values
 	 * @return {Object}
 	 */
-	const _getConfiguration = ({
-								   taskConfig
-							   }) => {
+	const _getConfiguration = ({taskConfig}) => {
 		const configuration = {
-			taskConfiguration: taskConfig
-				? JSON.parse(taskConfig)
-				: {}
+			taskConfiguration: taskConfig ? JSON.parse(taskConfig) : {},
 		};
 
 		return configuration;
@@ -234,7 +230,203 @@ function EditTaskDefinitionForm({
 	const _handleExternalReferenceCodeChange = (externalReferenceCode) => {
 		formik.setFieldValue('externalReferenceCode', externalReferenceCode);
 	};
+
+	/**
+	 * Used by the preview sidebar to cancel any unexpectedly slow search.
+	 */
+	const _handleFetchPreviewCancel = () => {
+		controllerRef.current.abort();
+	};
+
+		/**
+	 * Used by the preview sidebar to perform searches.
+	 * @param {string} query The keyword search query
+	 * @param {number} delta The number of results to return
+	 * @param {number} page The page to return
+	 * @param {Array} attributes The search context attributes
+	 */
+		const _handleFetchPreviewSearch = async (
+			query,
+			delta,
+			page,
+			attributes
+		) => {
+			controllerRef.current = new AbortController();
 	
+			setPreviewInfo((previewInfo) => ({
+				...previewInfo,
+				loading: true,
+			}));
+	
+			let configuration;
+			let elementInstances;
+	
+			try {
+				configuration = _getConfiguration(formik.values);
+				elementInstances = _getElementInstances(formik.values);
+	
+				// Touch inputs with errors to show validation errors.
+	
+				const errors = await formik.validateForm();
+	
+				formik.setTouched(setNestedObjectValues(errors, true));
+	
+				// Don't perform a search if there are missing required fields.
+	
+				if (!formik.isValid) {
+					throw Liferay.Language.get(
+						'the-configuration-has-missing-or-invalid-values'
+					);
+				}
+			}
+			catch (error) {
+	
+				// Add a delay so the loading indicator is visible before showing
+				// the error message. This provides feedback that a new search has
+				// been made.
+	
+				setTimeout(() => {
+					setPreviewInfo({
+						loading: false,
+						results: {
+							errors: [
+								{
+									msg: Liferay.Language.get(
+										'the-configuration-has-missing-or-invalid-values'
+									),
+								},
+							],
+						},
+					});
+				}, 100);
+	
+				if (process.env.NODE_ENV === 'development') {
+					console.error(error);
+				}
+	
+				return;
+			}
+	
+			const parseResponseContent = (responseContent) => {
+				const exceptionKey = 'java.lang.RuntimeException';
+	
+				if (
+					responseContent.searchHits?.totalHits > 0 ||
+					!responseContent.responseString?.startsWith(exceptionKey)
+				) {
+					return responseContent;
+				}
+	
+				let exceptionClass;
+	
+				const exceptionKeyIndex = responseContent.responseString.indexOf(
+					':',
+					exceptionKey.length + 1
+				);
+	
+				if (exceptionKeyIndex !== -1) {
+					exceptionClass = responseContent.responseString.substring(
+						exceptionKey.length + 1,
+						exceptionKeyIndex
+					);
+				}
+	
+				let msg;
+	
+				const errorObjectIndex =
+					responseContent.responseString.indexOf('{"error":{');
+	
+				if (errorObjectIndex > 0) {
+					const errorJSONObject = JSON.parse(
+						responseContent.responseString.substring(errorObjectIndex)
+					);
+	
+					msg = errorJSONObject.error.root_cause[0]?.reason;
+				}
+	
+				return getResultsError({
+					exceptionClass,
+					exceptionTrace: responseContent.responseString,
+					msg,
+				});
+			};
+	
+			return fetchPreviewSearch(
+				{
+					page,
+					pageSize: delta,
+					query,
+				},
+				{
+					body: JSON.stringify({
+						configuration: {
+							...configuration,
+							generalConfiguration: {
+								...configuration?.generalConfiguration,
+								emptySearchEnabled: true,
+								explain: true,
+								includeResponseString: true,
+								languageId: Liferay.ThemeDisplay.getLanguageId(),
+							},
+							searchContextAttributes:
+								transformToSearchContextAttributes(attributes),
+						},
+						elementInstances,
+					}),
+					signal: controllerRef.current.signal,
+				}
+			)
+				.then((response) => {
+					return response.json().then((data) => ({
+						ok: response.ok,
+						responseContent: data,
+					}));
+				})
+				.then(({ok, responseContent}) => {
+					setPreviewInfo({
+						loading: false,
+						results: parseResponseContent(
+							ok
+								? responseContent
+								: getResultsError({
+										msg: responseContent?.title,
+									})
+						),
+					});
+				})
+				.catch((error) => {
+					setPreviewInfo({
+						loading: false,
+						results:
+							error.name === 'AbortError'
+								? previewInfo.results
+								: getResultsError({}),
+					});
+				});
+		};
+
+		const _handleFocusSXPElement = (prefixedId) => {
+			const sxpElement = document.getElementById(prefixedId);
+	
+			if (sxpElement) {
+				window.scrollTo({
+					behavior: 'smooth',
+					top:
+						sxpElement.getBoundingClientRect().top +
+						window.pageYOffset -
+						55 - // Control menu height
+						104 - // Page toolbar height
+						20, // Additional padding
+				});
+	
+				sxpElement.classList.remove('focus');
+	
+				void sxpElement.offsetWidth; // Triggers reflow to restart animation
+	
+				sxpElement.classList.add('focus');
+			}
+		};
+
 	const _handleTitleAndDescriptionChange = ({
 		description_i18n,
 		title_i18n,
@@ -244,7 +436,10 @@ function EditTaskDefinitionForm({
 
 		setIsTitleAndDescriptionEdited(true);
 	};
-
+	
+	const _handleSidebarClose = () => {
+		setOpenSidebar('');
+	};
 
 	const _handleSubmit = (event) => {
 		event.preventDefault();
@@ -260,63 +455,101 @@ function EditTaskDefinitionForm({
 		}
 	};
 
-const _renderTabContent = () => {
-console.log("ASDASDASDASD" + formik.values.taskConfig);
-	switch (tab) {
-		default:
-			return (
-				<ConfigurationTab
-					errors={formik.errors}
-					setFieldTouched={formik.setFieldTouched}
-					setFieldValue={formik.setFieldValue}
-					taskConfig={formik.values.taskConfig}
-					touched={formik.touched}
-				/>
-			);
-	}
-};
+	const _handleToggleSidebar = (type) => () => {
+		if (type === SIDEBAR_TYPES.PREVIEW) {
+			setStorageAddSXPElementSidebar(SIDEBAR_STATE.CLOSED);
+		}
 
+		setOpenSidebar(openSidebar === type ? '' : type);
+	};
 
+	const _renderTabContent = () => {
+		console.log('ASDASDASDASD' + formik.values.taskConfig);
+		switch (tab) {
+			default:
+				return (
+					<ConfigurationTab
+						errors={formik.errors}
+						setFieldTouched={formik.setFieldTouched}
+						setFieldValue={formik.setFieldValue}
+						taskConfig={formik.values.taskConfig}
+						touched={formik.touched}
+					/>
+				);
+		}
+	};
 
-return (
-	<form ref={formRef}>
-		<SubmitWarningModal
-			errors={errors}
-			isSubmitting={formik.isSubmitting}
-			message={Liferay.Language.get(
-				'the-task-definition-configuration-has-errors-that-may-cause-unexpected-results.-use-the-preview-panel-to-review-these-errors'
-			)}
-			onClose={() => setShowSubmitWarningModal(false)}
-			onSubmit={_handleSubmit}
-			visible={showSubmitWarningModal}
-		/>
+	return (
+		<form ref={formRef}>
+			<SubmitWarningModal
+				errors={errors}
+				isSubmitting={formik.isSubmitting}
+				message={Liferay.Language.get(
+					'the-task-definition-configuration-has-errors-that-may-cause-unexpected-results.-use-the-preview-panel-to-review-these-errors'
+				)}
+				onClose={() => setShowSubmitWarningModal(false)}
+				onSubmit={_handleSubmit}
+				visible={showSubmitWarningModal}
+			/>
 
-		<PageToolbar
-			description={initialDescription}
-			descriptionI18n={formik.values.description_i18n}
-			entityId={taskDefinitionId}
-			externalReferenceCode={formik.values.externalReferenceCode}
-			isSubmitting={formik.isSubmitting}
-			onCancel={redirectURL}
-			onExternalReferenceCodeChange={
-				_handleExternalReferenceCodeChange
-			}
-			onSubmit={_handleSubmit}
-			onTitleAndDescriptionChange={_handleTitleAndDescriptionChange}
-			tab={tab}
-			tabs={TABS}
-			title={initialTitle}
-			titleAndDescriptionEdited={isTitleAndDescriptionEdited}
-			titleI18n={formik.values.title_i18n}
-		>
-		</PageToolbar>
+			<PageToolbar
+				description={initialDescription}
+				descriptionI18n={formik.values.description_i18n}
+				entityId={taskDefinitionId}
+				externalReferenceCode={formik.values.externalReferenceCode}
+				isSubmitting={formik.isSubmitting}
+				onCancel={redirectURL}
+				onExternalReferenceCodeChange={
+					_handleExternalReferenceCodeChange
+				}
+				onSubmit={_handleSubmit}
+				onTitleAndDescriptionChange={_handleTitleAndDescriptionChange}
+				tab={tab}
+				tabs={TABS}
+				title={initialTitle}
+				titleAndDescriptionEdited={isTitleAndDescriptionEdited}
+				titleI18n={formik.values.title_i18n}
+			>
+				<ClayToolbar.Item>
+					<ClayButton
+						borderless
+						className={getCN({
+							active: openSidebar === SIDEBAR_TYPES.PREVIEW,
+						})}
+						data-testid={TEST_IDS.PREVIEW_SIDEBAR_BUTTON}
+						displayType="secondary"
+						onClick={_handleToggleSidebar(SIDEBAR_TYPES.PREVIEW)}
+						small
+					>
+						{Liferay.Language.get('preview')}
+					</ClayButton>
+				</ClayToolbar.Item>
+			</PageToolbar>
 
-       				{_renderTabContent()}
+			<PreviewSidebar
+				errors={previewInfo.results.errors}
+				hits={transformToSearchPreviewHits(previewInfo.results)}
+				loading={previewInfo.loading}
+				onClose={_handleSidebarClose}
+				onFetchCancel={_handleFetchPreviewCancel}
+				onFetchResults={_handleFetchPreviewSearch}
+				onFocusSXPElement={_handleFocusSXPElement}
+				requestString={previewInfo.results.requestString}
+				responseString={previewInfo.results.responseString}
+				totalHits={previewInfo.results.searchHits?.totalHits}
+				visible={openSidebar === SIDEBAR_TYPES.PREVIEW}
+			/>
 
-	</form>
+			<div
+				className={getCN({
+					'open-preview': openSidebar === SIDEBAR_TYPES.PREVIEW,
+				})}
+			>
+				{_renderTabContent()}
+			</div>
+		</form>
 	);
 }
-
 
 EditTaskDefinitionForm.propTypes = {
 	entityJSON: PropTypes.object,
