@@ -7,6 +7,7 @@ package com.liferay.generative.ai.task.internal.task;
 
 import com.liferay.generative.ai.task.internal.task.google.GeminiChatMemoryProvider;
 import com.liferay.generative.ai.task.internal.task.google.GeminiChatModelTask;
+import com.liferay.generative.ai.task.internal.task.google.GeminiChatModelToolsTask;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.TaskContext;
@@ -48,13 +49,18 @@ public class TaskBuilderImpl implements TaskBuilder {
 				configurationJSONObject, _geminiChatMemoryProvider,
 				taskContext);
 		}
+		else if (name.equals("gemini_chat_model_tools")) {
+			return new GeminiChatModelToolsTask(
+				configurationJSONObject, _geminiChatMemoryProvider,
+				taskContext);
+		}
 		else if (name.equals("local_retrieve_documents")) {
 			return new RetrieveLocalDocumentsTask(
 				configurationJSONObject, taskContext, _searcher,
 				_searchRequestBuilderFactory);
 		}
-		else if (name.equals("text_input_agent")) {
-			return new TextInputAgentTask(configurationJSONObject, taskContext);
+		else if (name.equals("simple_text_input_agent")) {
+			return new SimpleTextInputAgentTask(configurationJSONObject, taskContext);
 		}
 		else if (name.equals("webhook")) {
 			return new WebHookTask(configurationJSONObject, taskContext);
