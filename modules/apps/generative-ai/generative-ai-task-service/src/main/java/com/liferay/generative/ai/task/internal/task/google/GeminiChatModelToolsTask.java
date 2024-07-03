@@ -7,6 +7,8 @@ package com.liferay.generative.ai.task.internal.task.google;
 
 import com.liferay.generative.ai.task.internal.task.BaseTask;
 import com.liferay.generative.ai.task.internal.task.TaskResponseImpl;
+import com.liferay.generative.ai.task.internal.task.tools.SiteTools;
+import com.liferay.generative.ai.task.internal.task.tools.UserTools;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
@@ -15,26 +17,36 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
+import dev.langchain4j.agent.tool.ToolSpecification;
+import dev.langchain4j.agent.tool.ToolSpecifications;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
+import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GeminiChatModelTask extends BaseTask implements Task {
+public class GeminiChatModelToolsTask extends BaseTask implements Task {
+
 
 	interface Assistant {
 
 		String chat(@dev.langchain4j.service.UserMessage String userMessage);
 
+
+		//String chat(@UserMessage String userMessage);
+
 	}
 
-	public GeminiChatModelTask(
+	public GeminiChatModelToolsTask(
 		JSONObject definitionJSONObject,
 		GeminiChatMemoryProvider geminiChatMemoryProvider,
 		TaskContext taskContext) {
@@ -50,44 +62,78 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 	public TaskResponse execute(
 		Map<String, Object> chainInput, Map<String, Object> input) {
 
-		// Memory ja systemmessage
+		ChatLanguageModel chatLanguageModel =  _getChatLanguageModel();
 
 		SystemMessage systemMessage = _getSystemMessage();
-
-		AiServices builder = AiServices.builder(
-			Assistant.class
-		).chatLanguageModel(
-			_getChatLanguageModel());
-		//).chatMemoryProvider(
-		//	_geminiChatMemoryProvider.get());
-
-		if (systemMessage != null) {
-			builder.systemMessageProvider(
-				memoryId -> systemMessage.text());
-		}
-
-		Assistant assistant = (Assistant) builder.build();
 
 		String textInput = MapUtil.getString(
 			input, taskContext.getTextInputField());
 
+		List<ToolSpecification> toolSpecifications = ToolSpecifications.toolSpecificationsFrom(
+			SiteTools.class);
+
+		List<ChatMessage> messages = new ArrayList<>();
+
+		if (systemMessage != null) {
+			messages.add(systemMessage);
+		}
+
 		Prompt prompt = _getPrompt(chainInput, textInput);
 
-		String output = "";
+		UserMessage userMessage = null;
 
 		if (prompt != null) {
-			output = assistant.chat(
-				prompt.text());
+			userMessage = UserMessage.from(prompt.text());
 		}
 		else {
-			output = assistant.chat( textInput);
-		}
+			userMessage = UserMessage.from(textInput);
+		}		
+		messages.add(userMessage);
+
+		AiServices builder = AiServices.builder(
+			Assistant.class
+		).chatLanguageModel(
+			chatLanguageModel
+		).tools(new SiteTools(), new UserTools());
+
+		Assistant assistant = (Assistant) builder.build();
+
+		String output = assistant.chat(textInput);
 
 		return new TaskResponseImpl(
 			null,
 			HashMapBuilder.<String, Object>put(
 				attributesJSONObject.getString("output_field", "text"), output
 			).build());
+
+		/*
+
+		List<ToolSpecification> toolSpecifications = ToolSpecifications.toolSpecificationsFrom(
+			SiteTools.class);
+
+		AiServices builder = AiServices.builder(
+			Assistant.class
+		).chatLanguageModel(
+			_getChatLanguageModel()
+		).tools(toolSpecifications);
+
+		//).chatMemoryProvider(
+		//	_geminiChatMemoryProvider.get());
+
+		// Assistant assistant = (Assistant) builder.build();
+
+
+
+
+		return new TaskResponseImpl(
+			null,
+			HashMapBuilder.<String, Object>put(
+				attributesJSONObject.getString("output_field", "text"), output
+			).build());
+
+
+
+		 */
 	}
 
 	@Override

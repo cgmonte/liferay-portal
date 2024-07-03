@@ -9,6 +9,7 @@ import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.MapUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,9 @@ import java.util.Map;
 /**
  * @author Petteri Karttunen
  */
-public class TextInputAgentTask extends BaseTask implements Task {
+public class SimpleTextInputAgentTask extends BaseTask implements Task {
 
-	public TextInputAgentTask(
+	public SimpleTextInputAgentTask(
 		JSONObject configurationJSONObject, TaskContext taskContext) {
 
 		super(configurationJSONObject, "webhook", taskContext);
@@ -27,6 +28,10 @@ public class TextInputAgentTask extends BaseTask implements Task {
 	@Override
 	public TaskResponse execute(
 		Map<String, Object> chainInput, Map<String, Object> input) {
+
+		String textInput = MapUtil.getString(
+			input, taskContext.getTextInputField());
+
 
 		return null;
 	}
