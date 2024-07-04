@@ -11,6 +11,7 @@ import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import { fetch } from 'frontend-js-web';
 import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface AssistantChatProps {
 	assistantName: string;
@@ -48,7 +49,7 @@ function Message({ content, sender }: Message) {
 				{sender}:
 			</Text>
 
-			<Text as="p">{content}</Text>
+			<ReactMarkdown>{content}</ReactMarkdown>
 		</div>
 	);
 }
