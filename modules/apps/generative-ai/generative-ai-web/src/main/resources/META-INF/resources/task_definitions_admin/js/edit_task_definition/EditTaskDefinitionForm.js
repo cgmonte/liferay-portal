@@ -162,13 +162,7 @@ function EditTaskDefinitionForm({
 				);
 			}
 			else {
-				setInitialSuccessToast(
-					Liferay.Language.get(
-						'the-task-definition-was-saved-successfully'
-					)
-				);
-
-				navigate(redirectURL);
+				openSuccessToast();
 			}
 		}
 		catch (error) {
