@@ -18,6 +18,7 @@ import {TEXT_EMBEDDING_PROVIDER_TYPES} from './constants';
  */
 function TestConfigurationButton({
 	accessToken,
+	autoTruncate,
 	availableTextEmbeddingProviders,
 	basicAuthPassword,
 	basicAuthUsername,
@@ -26,10 +27,12 @@ function TestConfigurationButton({
 	errors,
 	hostAddress,
 	languageIds,
+	location,
 	maxCharacterCount,
 	model,
 	modelClassNames,
 	modelTimeout,
+	projectId,
 	textEmbeddingProvider,
 	textTruncationStrategy,
 }) {
