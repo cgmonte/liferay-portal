@@ -26,16 +26,14 @@ interface Endpoints {
 
 interface GenerativeAiRequestBody {
 	input: {
-		text: {
-			value: string;
-		};
+		text: string;
 		history: ChatHistoryEntry[];
 	};
 }
 
 interface Message {
 	content: string;
-	sender?: string;
+	sender: string;
 }
 
 interface ChatHistoryEntry {
@@ -43,14 +41,14 @@ interface ChatHistoryEntry {
 	text: string;
 }
 
-function Message({ message }: any) {
+function Message({ content, sender }: Message) {
 	return (
 		<div className="ray-assistant__message">
 			<Text truncate weight="semi-bold">
-				{message.sender}:
+				{sender}:
 			</Text>
 
-			<Text as="p">{message.content}</Text>
+			<Text as="p">{content}</Text>
 		</div>
 	);
 }
@@ -60,14 +58,11 @@ export default function AssistantChat({
 	endpoints,
 	greetingMessage = 'Hi, I am your assistant. How can I help you?',
 }: AssistantChatProps) {
-	const [messages, setMessages] = useState<Message[]>([
-		{ content: greetingMessage, sender: assistantName },
-	]);
 	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(802);
 
 	const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
 
-	const [chatHistory, setChatHistory] = useState();
+	const [chatHistory, setChatHistory] = useState<ChatHistoryEntry[]>([]);
 
 	const [prompt, setPrompt] = useState('');
 
@@ -87,7 +82,7 @@ export default function AssistantChat({
 		if (chatInput) {
 			chatInput.value = '';
 		};
-		setPrompt(''); 
+		setPrompt('');
 	};
 
 	useEffect(() => {
@@ -107,15 +102,15 @@ export default function AssistantChat({
 			messageBody.scrollTop =
 				messageBody.scrollHeight - messageBody.clientHeight;
 		}
-	}, [messages]);
+	}, [chatHistory]);
 
 	const handleReceiveMessage = (value: any) => {
 		if (value) {
-			setMessages((currentMessages) => [
-				...currentMessages,
+			setChatHistory((currentHistory) => [
+				...currentHistory,
 				{
-					content: value.output.text,
-					sender: assistantName,
+					text: value.output.text,
+					role: 'AI',
 				},
 			]);
 		}
@@ -123,19 +118,23 @@ export default function AssistantChat({
 	};
 
 	const handleSendMessage = async (value: string) => {
+		const oldHistory = chatHistory;
+
 		if (value) {
-			setMessages((currentMessages) => [
-				...currentMessages,
-				{
-					content: value,
-					sender: Liferay.ThemeDisplay.getUserName(),
-				},
-			]);
+			setChatHistory((currentHistory) => {
+				return [
+					...currentHistory,
+					{
+						text: value,
+						role: 'USER',
+					},
+				]
+			});
 			setIsWaitingForResponse(true);
 
 			try {
 				const response = await fetch(endpoints.sendMessageEndpoint, {
-					body: JSON.stringify({ input: { text: value } }),
+					body: JSON.stringify({ input: { text: value, ...(oldHistory.length && { history: oldHistory }) } } as GenerativeAiRequestBody),
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -181,8 +180,16 @@ export default function AssistantChat({
 				<ClayCard.Body className="ray-assistant__card-body">
 					<div id="rayAssistantContainer">
 						<div id="rayAssistantConversationContainer">
-							{messages.map((message, index) => (
-								<Message key={index} message={message} />
+							<Message key={0} content = {greetingMessage} sender = {assistantName} />
+
+							{chatHistory.map((historyEntry: ChatHistoryEntry, index) => (
+								<Message 
+									key={index + 1}
+									content={historyEntry.text}
+									sender= {historyEntry.role === 'AI' ?
+										assistantName
+										: Liferay.ThemeDisplay.getUserName()}
+								 />
 							))}
 						</div>
 
@@ -194,6 +201,9 @@ export default function AssistantChat({
 										component="textarea"
 										disabled={isWaitingForResponse}
 										id="rayAssistantChatInput"
+										onBlur={({ target }) => {
+											setPrompt(target.value);
+										}}
 										onKeyDown={(
 											event: React.KeyboardEvent<HTMLInputElement>
 										) => {
@@ -208,9 +218,6 @@ export default function AssistantChat({
 												);
 												cleanupChatInput();
 											}
-										}}
-										onBlur={({ target }) => {
-											setPrompt(target.value);
 										}}
 										placeholder={isWaitingForResponse ? `${assistantName} is thinking...` : "Type a message..."}
 										type="text"
