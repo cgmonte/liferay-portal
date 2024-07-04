@@ -1,13 +1,16 @@
 .edit-task-definition-root {
 	.layout-section-main {
 		padding-bottom: 40px;
-		padding-top: $pageToolbarHeight + 40px;
+		padding-top: $pageToolbarHeight;
 
 		.layout-section-main-shift {
 			margin-left: auto;
-			margin-right: calc(50% - #{$layoutSectionMainMaxWidth} / 2);
 			max-width: $layoutSectionMainMaxWidth;
 			transition: margin-right ease 0.2s;
+
+			.configuration-sheet {
+				height: calc(100vh - $configurationSheetStart - 40px);
+			}
 		}
 
 		.configuration-header {
@@ -48,6 +51,12 @@
 
 			.sheet-text {
 				margin-bottom: 0.5rem;
+			}
+		}
+
+		.codemirror-editor-wrapper {
+			.CodeMirror {
+				height: calc(100vh - $configurationSheetStart - 162px);
 			}
 		}
 
