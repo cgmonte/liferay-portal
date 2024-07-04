@@ -515,7 +515,7 @@ function EditTaskDefinitionForm({
 						onClick={_handleToggleSidebar(SIDEBAR_TYPES.PREVIEW)}
 						small
 					>
-						{Liferay.Language.get('preview')}
+						Chat Preview
 					</ClayButton>
 				</ClayToolbar.Item>
 			</PageToolbar>
