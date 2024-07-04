@@ -16,7 +16,7 @@ import {useIsMounted} from '@liferay/frontend-js-react-web';
 import getCN from 'classnames';
 import {ManagementToolbar} from 'frontend-js-components-web';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import useDidUpdateEffect from '../../hooks/useDidUpdateEffect';
 import ErrorListItem from '../../shared/ErrorListItem';
@@ -28,11 +28,13 @@ import sub from '../../utils/language/sub';
 import {TEST_IDS} from '../../utils/testIds';
 import PreviewAttributesModal from './PreviewAttributesModal';
 import ResultListItem from './ResultListItem';
+import AssistantChat from './assistant_chat/AssistantChat';
 
 const DELTAS = [10, 20, 30, 50];
 
 function PreviewSidebar({
 	errors = [],
+	formikValues,
 	hits = [],
 	loading,
 	onClose,
@@ -49,6 +51,7 @@ function PreviewSidebar({
 	const [attributes, setAttributes] = useState([]);
 	const [showCancel, setShowCancel] = useState(false);
 	const [value, setValue] = useState('');
+	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(window.innerHeight - (56 + 56 + 64));
 
 	const isMounted = useIsMounted();
 
@@ -140,80 +143,6 @@ function PreviewSidebar({
 		</div>
 	);
 
-	const _renderResultsManagementBar = () => (
-		<ManagementToolbar.Container>
-			<ManagementToolbar.ItemList>
-				<ManagementToolbar.Item>
-					<span className="text-truncate-inline total-hits-label">
-						<span className="text-truncate">
-							{sub(Liferay.Language.get('x-results'), [
-								isDefined(totalHits)
-									? totalHits.toLocaleString()
-									: 0,
-							])}
-						</span>
-					</span>
-				</ManagementToolbar.Item>
-
-				<ManagementToolbar.Item>
-					<ClayButton
-						aria-label={Liferay.Language.get('refresh')}
-						disabled={loading}
-						displayType="secondary"
-						onClick={_handleFetch}
-						small
-					>
-						{Liferay.Language.get('refresh')}
-					</ClayButton>
-				</ManagementToolbar.Item>
-			</ManagementToolbar.ItemList>
-
-			<ManagementToolbar.ItemList>
-				<ManagementToolbar.Item>
-					<PreviewModalWithCopyDownload
-						fileName="raw_request.json"
-						lineWrapping={false}
-						size="lg"
-						text={parseAndPrettifyJSON(requestString)}
-						title={Liferay.Language.get('raw-request')}
-					>
-						<ClayButton
-							borderless
-							className="raw-request"
-							disabled={loading}
-							displayType="secondary"
-							small
-						>
-							{Liferay.Language.get('view-raw-request')}
-						</ClayButton>
-					</PreviewModalWithCopyDownload>
-				</ManagementToolbar.Item>
-
-				<ManagementToolbar.Item>
-					<PreviewModalWithCopyDownload
-						fileName="raw_response.json"
-						foldInitializationDelay={200}
-						folded
-						lineWrapping={false}
-						size="lg"
-						text={parseAndPrettifyJSON(responseString)}
-						title={Liferay.Language.get('raw-response')}
-					>
-						<ClayButton
-							borderless
-							className="raw-response"
-							disabled={loading}
-							displayType="secondary"
-							small
-						>
-							{Liferay.Language.get('view-raw-response')}
-						</ClayButton>
-					</PreviewModalWithCopyDownload>
-				</ManagementToolbar.Item>
-			</ManagementToolbar.ItemList>
-		</ManagementToolbar.Container>
-	);
-
 	return (
 		<div
 			className={getCN('preview-sidebar', 'sidebar', 'sidebar-light', {
@@ -231,33 +160,6 @@ function PreviewSidebar({
 				</div>
 
 				<span>
-					<PreviewAttributesModal
-						description={Liferay.Language.get(
-							'search-context-attributes-description'
-						)}
-						onSubmit={_handleAttributesSubmit}
-						title={Liferay.Language.get(
-							'search-context-attributes'
-						)}
-					>
-						<ClayTooltipProvider>
-							<ClayButton
-								aria-label={Liferay.Language.get(
-									'search-context-attributes'
-								)}
-								borderless
-								displayType="secondary"
-								monospaced
-								small
-								title={Liferay.Language.get(
-									'search-context-attributes'
-								)}
-							>
-								<ClayIcon symbol="cog" />
-							</ClayButton>
-						</ClayTooltipProvider>
-					</PreviewAttributesModal>
-
 					<ClayButton
 						aria-label={Liferay.Language.get('close')}
 						borderless
@@ -271,65 +173,13 @@ function PreviewSidebar({
 				</span>
 			</div>
 
-			<nav
-				aria-label={Liferay.Language.get('search')}
-				className="component-tbar sidebar-search tbar"
-			>
-				<div className="container-fluid">
-					<SearchInput
-						disabled={loading}
-						onChange={setValue}
-						onEnter={_handleFetch}
-					/>
-				</div>
-			</nav>
-
 			<div className="sidebar-body">
-				{!!errors.length && _renderErrors()}
-
-				{isDefined(totalHits) && _renderResultsManagementBar()}
-
-				{!loading ? (
-					totalHits > 0 ? (
-						_renderHits()
-					) : totalHits === 0 ? (
-						<div className="empty-list-message">
-							<ClayEmptyState
-								description=""
-								title={Liferay.Language.get('no-results-found')}
-							/>
-						</div>
-					) : (
-						!errors.length && (
-							<div className="search-message">
-								{Liferay.Language.get(
-									'perform-a-search-to-preview-your-blueprints-search-results'
-								)}
-							</div>
-						)
-					)
-				) : (
-					<>
-						<ClayLoadingIndicator />
-
-						{showCancel && (
-							<div className="search-message">
-								{Liferay.Language.get(
-									'it-looks-like-this-is-taking-longer-than-expected'
-								)}
-
-								<ClayButton
-									className="cancel"
-									displayType="secondary"
-									onClick={onFetchCancel}
-									small
-								>
-									{Liferay.Language.get('cancel')}
-								</ClayButton>
-							</div>
-						)}
-					</>
-				)}
+				<AssistantChat 
+					assistantName="LLM Model" 
+					isMounted={isMounted}
+					endpoints={{sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`}} 
+					greetingMessage="Try me!"
+				/>
 			</div>
 		</div>
 	);

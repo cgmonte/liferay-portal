@@ -534,6 +534,7 @@ function EditTaskDefinitionForm({
 				onFetchCancel={_handleFetchPreviewCancel}
 				onFetchResults={_handleFetchPreviewSearch}
 				onFocusSXPElement={_handleFocusSXPElement}
+				formikValues={formik.values}
 				requestString={previewInfo.results.requestString}
 				responseString={previewInfo.results.responseString}
 				totalHits={previewInfo.results.searchHits?.totalHits}
