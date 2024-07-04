@@ -55,7 +55,7 @@ function ConfigurationTab({
 	return (
 		<ClayLayout.ContainerFluid className="layout-section-main" size="xl">
 			<div className="layout-section-main-shift">
-				<div className="sheet sheet-lg">
+				<div className="configuration-sheet sheet">
 					<h2 className="sheet-title">
 						{Liferay.Language.get('configuration')}
 					</h2>

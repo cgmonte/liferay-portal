@@ -35,7 +35,8 @@ $layoutSectionMainMaxWidth: 1224px;
 $layoutSectionMainMinWidth: 600px;
 
 $navigationBarHeight: 56px;
-$pageToolbarHeight: 104px; //navigationBarHeight + tabs navigation bar height
+$pageToolbarHeight: 90px;
+$configurationSheetStart: calc($pageToolbarHeight + 56px);
 $previewSidebarWidth: 600px;
 $clauseContributorsSidebarWidth: 648px;
 $sidebarWidth: 380px;
