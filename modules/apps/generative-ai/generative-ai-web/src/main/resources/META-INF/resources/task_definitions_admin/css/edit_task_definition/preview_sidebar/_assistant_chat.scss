@@ -37,12 +37,11 @@ body {
 }
 
 #rayAssistantConversationContainer {
-	flex: 80%;
-	// flex-direction: column;
-	overflow: auto;
-	// display: flex;
 	align-content: end;
-	// justify-content: end;
+	flex: 80%;
+	overflow: auto;
+	padding-right: 15px;
+    padding-left: 2px;
 }
 
 #rayAssistantChatInputContainer {
