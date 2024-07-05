@@ -22,6 +22,7 @@ public class TaskContext {
 		_imageInputField = taskContext._imageInputField;
 		_ipAddress = taskContext._ipAddress;
 		_locale = taskContext._locale;
+		_taskContextParameters = taskContext._taskContextParameters;
 		_textInputField = taskContext._textInputField;
 		_timeZone = taskContext._timeZone;
 		_userId = taskContext._userId;
@@ -53,6 +54,14 @@ public class TaskContext {
 
 	public Locale getLocale() {
 		return _locale;
+	}
+
+	public TaskContextParameter getTaskContextParameter(String name) {
+		if (_taskContextParameters == null) {
+			return null;
+		}
+
+		return _taskContextParameters.get(name);
 	}
 
 	public String getTextInputField() {
@@ -117,6 +126,17 @@ public class TaskContext {
 			return this;
 		}
 
+		public Builder taskContextAttribute(String key, TaskContextParameter taskContextParameter) {
+			if (_taskContext._taskContextParameters == null) {
+				_taskContext._taskContextParameters = new HashMap<>();
+			}
+
+			_taskContext._taskContextParameters.put(key, taskContextParameter);
+
+			return this;
+		}
+
+
 		public Builder textInputField(String textInputField) {
 			_taskContext._textInputField = textInputField;
 
@@ -148,6 +168,7 @@ public class TaskContext {
 	private String _imageInputField;
 	private String _ipAddress;
 	private Locale _locale;
+	private Map<String, TaskContextParameter> _taskContextParameters;
 	private String _textInputField;
 	private TimeZone _timeZone;
 	private long _userId;

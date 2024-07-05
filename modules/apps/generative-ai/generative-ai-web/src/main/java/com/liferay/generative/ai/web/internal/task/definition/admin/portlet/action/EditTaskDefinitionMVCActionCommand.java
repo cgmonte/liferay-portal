@@ -17,7 +17,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -36,14 +35,14 @@ public class EditTaskDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		try {
 			if (cmd.equals(Constants.DELETE)) {
-				_deleteSXPElements(actionRequest);
+				_deleteTaskDefinitions(actionRequest);
 			}
 		}
 		catch (Exception exception) {
