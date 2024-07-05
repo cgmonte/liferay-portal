@@ -10,7 +10,7 @@ import { ClayInput } from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import { fetch } from 'frontend-js-web';
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface AssistantChatProps {
@@ -69,10 +69,18 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	const [prompt, setPrompt] = useState('');
 
+	const originalTaskExternalReferenceCode = useRef(taskExternalReferenceCode);
+
 	const clearChatHistory = () => {
 		setChatHistory([]);
 		localStorage.removeItem(taskExternalReferenceCode);
 	}
+
+	function renameLocalStorageKey(oldKey, newKey) {
+		const value: any = localStorage.getItem(oldKey);
+		localStorage.setItem(newKey, value);
+		localStorage.removeItem(oldKey);
+	  }
 
 	useImperativeHandle(ref, () => ({
 		clearChatHistory,
@@ -128,6 +136,13 @@ const AssistantChat = forwardRef(function AssistantChat({
 			); 
 		}
 	}, [chatHistory]);
+
+	useEffect(() => {
+		if (taskExternalReferenceCode !== originalTaskExternalReferenceCode.current) {
+			renameLocalStorageKey(originalTaskExternalReferenceCode.current, taskExternalReferenceCode);
+			originalTaskExternalReferenceCode.current = taskExternalReferenceCode;
+		}
+	}, [taskExternalReferenceCode])
 
 	const handleReceiveMessage = (value: any) => {
 		if (value) {
