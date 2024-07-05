@@ -7,7 +7,6 @@
 
 <%@ include file="/init.jsp" %>
 
-
 <%
 ViewTaskDefinitionsDisplayContext viewTaskDefinitionsDisplayContext = (ViewTaskDefinitionsDisplayContext)request.getAttribute(GenerativeAIWebKeys.VIEW_TASK_DEFINITIONS_DISPLAY_CONTEXT);
 %>

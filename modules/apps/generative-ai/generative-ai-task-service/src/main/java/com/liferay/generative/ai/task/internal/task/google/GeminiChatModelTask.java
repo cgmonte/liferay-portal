@@ -5,94 +5,134 @@
 
 package com.liferay.generative.ai.task.internal.task.google;
 
+import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.internal.task.BaseTask;
-import com.liferay.generative.ai.task.internal.task.TaskResponseImpl;
+import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
+import com.liferay.generative.ai.task.internal.web.cache.TaskWebCacheItem;
 import com.liferay.generative.ai.task.task.Task;
-import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.petra.string.StringBundler;
+import com.liferay.generative.ai.task.task.context.TaskContext;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
-import dev.langchain4j.data.message.SystemMessage;
+
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GeminiChatModelTask extends BaseTask implements Task {
 
-	interface Assistant {
-
-		String chat(@dev.langchain4j.service.UserMessage String userMessage);
-
-	}
-
 	public GeminiChatModelTask(
 		JSONObject definitionJSONObject,
-		GeminiChatMemoryProvider geminiChatMemoryProvider,
-		TaskContext taskContext) {
+		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
+		TaskContext taskContext, ToolsProvider toolsProvider) {
 
-		super(definitionJSONObject, "gemini_chat_model", taskContext);
+		super(
+			definitionJSONObject, generativeAIConfigurationProvider,
+			"gemini_chat_model", taskContext);
 
-		_geminiChatMemoryProvider = geminiChatMemoryProvider;
+		_toolsProvider = toolsProvider;
 	}
 
-	private GeminiChatMemoryProvider _geminiChatMemoryProvider;
-
 	@Override
-	public TaskResponse execute(
-		Map<String, Object> chainInput, Map<String, Object> input) {
-
-		// Memory ja systemmessage
-
-		SystemMessage systemMessage = _getSystemMessage();
-
-		AiServices builder = AiServices.builder(
-			Assistant.class
+	public TaskResponse execute(Map<String, Object> input) {
+		AiServices<GeminiAssistant> builder = AiServices.builder(
+			GeminiAssistant.class
 		).chatLanguageModel(
-			_getChatLanguageModel());
-		//).chatMemoryProvider(
-		//	_geminiChatMemoryProvider.get());
+			_getChatLanguageModel()
+		);
 
-		if (systemMessage != null) {
-			builder.systemMessageProvider(
-				memoryId -> systemMessage.text());
+		if (attributesJSONObject.getBoolean("use_chat_memory")) {
+			builder.chatMemoryProvider(
+				memoryId -> MessageWindowChatMemory.builder(
+				).id(
+					memoryId
+				).maxMessages(
+					attributesJSONObject.getInt("memory_max_messages", 20)
+				).chatMemoryStore(
+					new MapDBChatMemoryStore()
+				).build());
 		}
 
-		Assistant assistant = (Assistant) builder.build();
+		String systemMessage = _getSystemMessage(input);
 
-		String textInput = MapUtil.getString(
-			input, taskContext.getTextInputField());
-
-		Prompt prompt = _getPrompt(chainInput, textInput);
-
-		String output = "";
-
-		if (prompt != null) {
-			output = assistant.chat(
-				prompt.text());
-		}
-		else {
-			output = assistant.chat( textInput);
+		if (!Validator.isBlank(systemMessage)) {
+			builder.systemMessageProvider(memoryId -> systemMessage);
 		}
 
-		return new TaskResponseImpl(
-			null,
-			HashMapBuilder.<String, Object>put(
-				attributesJSONObject.getString("output_field", "text"), output
-			).build());
+		List<Object> tools = _getTools();
+
+		if (ListUtil.isNotEmpty(tools)) {
+			builder.tools(tools);
+		}
+
+		GeminiAssistant geminiAssistant = builder.build();
+
+		if (attributesJSONObject.getBoolean("use_cache", false)) {
+			return toTaskResponse(
+				_getDebugInfo(),
+				TaskWebCacheItem.get(
+					_generativeAIConfigurationProvider.getCompanyConfiguration(
+						taskContext.getCompanyId()),
+					_getUserMessage(input), geminiAssistant::chat, getName(),
+					taskContext.getUserId()));
+		}
+
+		return toTaskResponse(
+			_getDebugInfo(),
+			geminiAssistant.chat(
+				(int)taskContext.getUserId(), _getUserMessage(input)));
 	}
 
 	@Override
 	public boolean validate() {
 		return false;
+	}
+
+	@Override
+	protected String toStringValue(Object value) {
+		if (value == null) {
+			return null;
+		}
+
+		return (String)value;
+	}
+
+	private Prompt _applyPromptTemplateVariables(
+		Map<String, Object> input, PromptTemplate promptTemplate) {
+
+		Map<String, Object> promptTemplateVariables = new HashMap<>();
+
+		MapUtil.isNotEmptyForEach(
+			taskContext.getTaskContextParameters(),
+			(key, value) -> promptTemplateVariables.put(
+				key, value.getStringValue()));
+
+		MapUtil.isNotEmptyForEach(
+			input,
+			(key, value) -> {
+				if (key.equals("history") && (value != null)) {
+					promptTemplateVariables.put(key, _historyToString(value));
+				}
+				else {
+					promptTemplateVariables.put(key, value);
+				}
+			});
+
+		return promptTemplate.apply(promptTemplateVariables);
 	}
 
 	private ChatLanguageModel _getChatLanguageModel() {
@@ -133,84 +173,80 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 		).build();
 	}
 
-	private String _getChainInputString(
-		Map<String, Object> chainInput, String chainInputField) {
-
-		if (chainInput == null) {
-			return null;
-		}
-
-		Object object = chainInput.get(chainInputField);
-
-		if (object instanceof String) {
-			return (String)object;
-		}
-		else if (object instanceof List) {
-			StringBundler sb = new StringBundler();
-
-			for (String s : (List<String>)object) {
-				sb.append(s);
-				sb.append(" ");
-			}
-
-			return sb.toString();
-		}
-
+	private Map<String, Object> _getDebugInfo() {
 		return null;
 	}
 
-	private Prompt _getPrompt(Map<String, Object> chainInput, String input) {
+	private PromptTemplate _getPromptTemplate(String promptField) {
 		String promptTemplateString = attributesJSONObject.getString(
-			"prompt_template");
+			promptField);
 
 		if (Validator.isBlank(promptTemplateString)) {
 			return null;
 		}
 
-		PromptTemplate promptTemplate = PromptTemplate.from(
-			promptTemplateString);
+		return PromptTemplate.from(promptTemplateString);
+	}
 
-		Map<String, Object> variables = new HashMap<>();
+	private String _getSystemMessage(Map<String, Object> input) {
+		PromptTemplate promptTemplate = _getPromptTemplate("system_message");
 
-		String chainInputField = attributesJSONObject.getString(
-			"chain_input_field", "context");
-
-		if (promptTemplateString.contains("{{" + chainInputField + "}}")) {
-			variables.put(
-				chainInputField,
-				_getChainInputString(chainInput, chainInputField));
+		if (promptTemplate == null) {
+			return StringPool.BLANK;
 		}
 
-		String inputField = taskContext.getTextInputField();
+		Prompt prompt = _applyPromptTemplateVariables(input, promptTemplate);
 
-		if (promptTemplateString.contains("{{" + inputField + "}}")) {
-			variables.put(inputField, input);
+		return prompt.text();
+	}
+
+	private List<Object> _getTools() {
+		JSONArray toolsJSONArray = attributesJSONObject.getJSONArray("tools");
+
+		if (toolsJSONArray == null) {
+			return Collections.emptyList();
 		}
 
-		JSONObject promptTemplateVariables = attributesJSONObject.getJSONObject(
-			"prompt_template_variables");
+		List<Object> tools = new ArrayList<>();
 
-		if (promptTemplateVariables != null) {
-			for (String variable : promptTemplateVariables.keySet()) {
-				if (promptTemplateString.contains("{{" + variable + "}}")) {
-					variables.put(
-						variable, promptTemplateVariables.get(variable));
-				}
+		for (int i = 0; i < toolsJSONArray.length(); i++) {
+			Object tool = _toolsProvider.getTool(toolsJSONArray.getString(i));
+
+			if (tool != null) {
+				tools.add(tool);
 			}
 		}
 
-		return promptTemplate.apply(variables);
+		return tools;
 	}
 
-	private SystemMessage _getSystemMessage() {
-		String systemMessageString = attributesJSONObject.getString(
-			"system_message");
+	private String _getUserMessage(Map<String, Object> input) {
+		PromptTemplate promptTemplate = _getPromptTemplate("prompt_template");
 
-		if (Validator.isBlank(systemMessageString)) {
-			return null;
+		if (promptTemplate == null) {
+			return MapUtil.getString(input, "text");
 		}
 
-		return SystemMessage.from(systemMessageString);
+		Prompt prompt = _applyPromptTemplateVariables(input, promptTemplate);
+
+		return prompt.text();
 	}
+
+	private String _historyToString(Object value) {
+		List<Map<String, String>> messages = (List<Map<String, String>>)value;
+
+		StringBundler sb = new StringBundler();
+
+		for (Map<String, String> message : messages) {
+			sb.append(message.get("role"));
+			sb.append(message.get(": "));
+			sb.append(message.get("text"));
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
+
+	private final ToolsProvider _toolsProvider;
 
 }

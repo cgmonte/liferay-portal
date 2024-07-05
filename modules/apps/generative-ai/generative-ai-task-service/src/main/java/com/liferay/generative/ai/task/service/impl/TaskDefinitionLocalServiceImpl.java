@@ -44,10 +44,9 @@ public class TaskDefinitionLocalServiceImpl
 	@Override
 	public TaskDefinition addTaskDefinition(
 			String configurationJSON, Map<Locale, String> descriptionMap,
-			String externalReferenceCode,
-			boolean readOnly, String schemaVersion,
-			ServiceContext serviceContext, Map<Locale, String> titleMap,
-			long userId)
+			String externalReferenceCode, boolean readOnly,
+			String schemaVersion, ServiceContext serviceContext,
+			Map<Locale, String> titleMap, long userId)
 		throws PortalException {
 
 		_validate(titleMap, serviceContext);
@@ -120,7 +119,9 @@ public class TaskDefinitionLocalServiceImpl
 	}
 
 	@Override
-	public List<TaskDefinition> getTaskDefinitions(long companyId, boolean readOnly) {
+	public List<TaskDefinition> getTaskDefinitions(
+		long companyId, boolean readOnly) {
+
 		return taskDefinitionPersistence.findByC_R(companyId, readOnly);
 	}
 

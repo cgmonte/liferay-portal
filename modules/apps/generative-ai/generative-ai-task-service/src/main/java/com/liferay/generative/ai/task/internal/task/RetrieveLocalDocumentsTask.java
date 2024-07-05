@@ -5,9 +5,13 @@
 
 package com.liferay.generative.ai.task.internal.task;
 
+import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.task.Task;
-import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
+import com.liferay.generative.ai.task.task.context.TaskContext;
+import com.liferay.generative.ai.task.task.context.TaskContextParameter;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -27,6 +31,7 @@ import com.liferay.portal.search.searcher.Searcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * @author Petteri Karttunen
@@ -34,37 +39,29 @@ import java.util.Map;
 public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 
 	public RetrieveLocalDocumentsTask(
-		JSONObject configurationJSONObject, TaskContext taskContext,
-		Searcher searcher,
+		JSONObject configurationJSONObject,
+		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
+		TaskContext taskContext, Searcher searcher,
 		SearchRequestBuilderFactory searchRequestBuilderFactory) {
 
-		super(configurationJSONObject, "local_retrieve_documents", taskContext);
+		super(
+			configurationJSONObject, generativeAIConfigurationProvider,
+			"retrieve_local_documents", taskContext);
 
 		_searcher = searcher;
 		_searchRequestBuilderFactory = searchRequestBuilderFactory;
 	}
 
 	@Override
-	public TaskResponse execute(
-		Map<String, Object> chainInput, Map<String, Object> input) {
-
+	public TaskResponse execute(Map<String, Object> input) {
 		SearchResponse searchResponse = _searcher.search(
 			_getSearchRequest(
 				_createSearchContext(input),
 				attributesJSONObject.getInt("topK", 3)));
 
-		SearchHits searchHits = searchResponse.getSearchHits();
-
-		if (searchHits.getTotalHits() == 0) {
-			new TaskResponseImpl(null, null);
-		}
-
-		return new TaskResponseImpl(
-			_getDebugInfo(searchHits),
-			HashMapBuilder.<String, Object>put(
-				attributesJSONObject.getString("output_field", "context"),
-				_getTexts(searchHits)
-			).build());
+		return toTaskResponse(
+			_getDebugInfo(searchResponse.getSearchHits()),
+			_getTexts(searchResponse.getSearchHits()));
 	}
 
 	@Override
@@ -72,11 +69,40 @@ public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 		return false;
 	}
 
+	@Override
+	protected String toStringValue(Object value) {
+		if (value == null) {
+			return null;
+		}
+
+		List<String> list = (List<String>)value;
+
+		if (ListUtil.isEmpty(list)) {
+			return StringPool.BLANK;
+		}
+
+		StringBundler sb = new StringBundler();
+
+		for (String s : list) {
+			sb.append(s);
+			sb.append(" \n");
+		}
+
+		return sb.toString();
+	}
+
 	private SearchContext _createSearchContext(Map<String, Object> input) {
 		SearchContext searchContext = new SearchContext();
 
-		searchContext.setAttribute(
-			"search.experiences.ip.address", taskContext.getIpAddress());
+		TaskContextParameter ipAddressTaskContextParameter =
+			taskContext.getTaskContextParameter("ipAddress");
+
+		if (ipAddressTaskContextParameter != null) {
+			searchContext.setAttribute(
+				"search.experiences.ip.address",
+				ipAddressTaskContextParameter.getStringValue());
+		}
+
 		searchContext.setCompanyId(taskContext.getCompanyId());
 
 		//searchContext.setGroupIds(new long[] {groupId});
@@ -85,7 +111,15 @@ public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 			MapUtil.getString(
 				input, attributesJSONObject.getString("input_field", "text")));
 		searchContext.setLocale(locale);
-		searchContext.setTimeZone(taskContext.getTimeZone());
+
+		TaskContextParameter timeZoneTaskContextParameter =
+			taskContext.getTaskContextParameter("ipAddress");
+
+		if (timeZoneTaskContextParameter != null) {
+			searchContext.setTimeZone(
+				(TimeZone)timeZoneTaskContextParameter.getValue());
+		}
+
 		searchContext.setUserId(taskContext.getUserId());
 
 		return searchContext;
@@ -131,6 +165,10 @@ public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 	}
 
 	private List<String> _getTexts(SearchHits searchHits) {
+		if (searchHits.getTotalHits() == 0) {
+			return null;
+		}
+
 		String resultField = replaceTemplateVariables(
 			locale,
 			attributesJSONObject.getString(

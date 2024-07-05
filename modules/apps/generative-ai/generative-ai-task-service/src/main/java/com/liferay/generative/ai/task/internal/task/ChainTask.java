@@ -5,10 +5,11 @@
 
 package com.liferay.generative.ai.task.internal.task;
 
+import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
-import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
+import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -24,10 +25,13 @@ import java.util.Map;
 public class ChainTask extends BaseTask implements Task {
 
 	public ChainTask(
-		JSONObject configurationJSONObject, TaskContext taskContext,
-		TaskBuilder taskBuilder) {
+		JSONObject configurationJSONObject,
+		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
+		TaskContext taskContext, TaskBuilder taskBuilder) {
 
-		super(configurationJSONObject, "chain", taskContext);
+		super(
+			configurationJSONObject, generativeAIConfigurationProvider, "chain",
+			taskContext);
 
 		if (!configurationJSONObject.has("tasks")) {
 			throw new IllegalArgumentException("Tasks are required");
@@ -42,20 +46,13 @@ public class ChainTask extends BaseTask implements Task {
 	}
 
 	@Override
-	public TaskResponse execute(
-		Map<String, Object> chainInput, Map<String, Object> input) {
+	public TaskResponse execute(Map<String, Object> input) {
+		Map<String, Object> debugInfos = new HashMap<>();
 
 		TaskResponse taskResponse = null;
 
-		Map<String, Object> debugInfos = new HashMap<>();
-
 		for (Task task : _tasks) {
-			if (taskResponse != null) {
-				taskResponse = task.execute(taskResponse.getOutput(), input);
-			}
-			else {
-				taskResponse = task.execute(null, input);
-			}
+			taskResponse = task.execute(input);
 
 			if (task.isDebug() && (taskResponse.getDebugInfo() != null)) {
 				debugInfos.put(
@@ -65,14 +62,20 @@ public class ChainTask extends BaseTask implements Task {
 			}
 		}
 
-		// TODO: null?
+		if (taskResponse != null) {
+			return new TaskResponseImpl(debugInfos, taskResponse.getOutput());
+		}
 
-		return new TaskResponseImpl(debugInfos, taskResponse.getOutput());
+		return new TaskResponseImpl(debugInfos, null);
 	}
 
 	@Override
 	public boolean validate() {
 		return false;
+	}
+
+	protected String toStringValue(Object value) {
+		return null;
 	}
 
 	private final List<Task> _tasks = new ArrayList<>();

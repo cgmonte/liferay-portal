@@ -2,16 +2,16 @@
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserServiceUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.StringUtil;
+
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 
@@ -22,24 +22,15 @@ public class UserTools {
 		@P("The first name of the user") String firstName,
 		@P("The last name of the user") String lastName) {
 
-		long userId = PrincipalThreadLocal.getUserId();
-
 		try {
-			long creatorUserId = PrincipalThreadLocal.getUserId();
+			String emailAddress =
+				firstName + StringUtil.randomString() + "@example.com";
 
-			// Replace with your actual values
-			long companyId = CompanyThreadLocal.getCompanyId(); // Company ID
-			String emailAddress = firstName + StringUtil.randomString() + "@example.com"; // Email address
+			String password = "test";
 
-			String password = "test"; // Password
-
-			// Create a ServiceContext for the user creation
-			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-
-			// Create the user
 			User user = UserLocalServiceUtil.addUser(
-				creatorUserId,
-				companyId, // Company ID
+				PrincipalThreadLocal.getUserId(),
+				CompanyThreadLocal.getCompanyId(),
 				false, // autoPassword
 				password,
 				password,
@@ -63,30 +54,27 @@ public class UserTools {
 				new long[0], // long[] roleIds
 				new long[0], // long[] userGroupIds
 				false, //
-				serviceContext // Service context
+				ServiceContextThreadLocal.getServiceContext()
 			);
 		}
-		catch (PortalException e) {
-			throw new RuntimeException(e);
+		catch (PortalException portalException) {
+			throw new RuntimeException(portalException);
 		}
 	}
-
 
 	@Tool("Updates my first name")
 	void updateUserFirstName(
 		@P("The new first name of the user") String firstName) {
 
-		long userId = PrincipalThreadLocal.getUserId();
-
 		try {
-			User user = UserLocalServiceUtil.getUser(userId);
+			User user = UserServiceUtil.getCurrentUser();
 
 			user.setFirstName(firstName);
 
 			UserLocalServiceUtil.updateUser(user);
 		}
-		catch (PortalException e) {
-			throw new RuntimeException(e);
+		catch (PortalException portalException) {
+			throw new RuntimeException(portalException);
 		}
 	}
 
@@ -94,17 +82,15 @@ public class UserTools {
 	void updateUserLastName(
 		@P("The new last name of the user") String lastName) {
 
-		long userId = PrincipalThreadLocal.getUserId();
-
 		try {
-			User user = UserLocalServiceUtil.getUser(userId);
+			User user = UserServiceUtil.getCurrentUser();
 
 			user.setLastName(lastName);
 
 			UserLocalServiceUtil.updateUser(user);
 		}
-		catch (PortalException e) {
-			throw new RuntimeException(e);
+		catch (PortalException portalException) {
+			throw new RuntimeException(portalException);
 		}
 	}
 

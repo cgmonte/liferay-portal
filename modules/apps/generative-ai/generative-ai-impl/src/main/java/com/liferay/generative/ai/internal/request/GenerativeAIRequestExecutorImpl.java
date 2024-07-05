@@ -34,8 +34,7 @@ public class GenerativeAIRequestExecutorImpl
 
 		long currentTimeMillis = System.currentTimeMillis();
 
-		TaskResponse taskResponse = task.execute(
-			null, generativeAIRequest.getInput());
+		TaskResponse taskResponse = task.execute(generativeAIRequest.getInput());
 
 		builder.output(taskResponse.getOutput());
 

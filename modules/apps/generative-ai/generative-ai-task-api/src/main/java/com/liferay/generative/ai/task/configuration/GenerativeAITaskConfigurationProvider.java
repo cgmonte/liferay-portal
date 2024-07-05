@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.generative.ai.task.task;
-
-import com.liferay.generative.ai.task.task.context.TaskContext;
-import com.liferay.portal.kernel.json.JSONObject;
+package com.liferay.generative.ai.task.configuration;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -14,9 +11,10 @@ import org.osgi.annotation.versioning.ProviderType;
  * @author Petteri Karttunen
  */
 @ProviderType
-public interface TaskBuilder {
+public interface GenerativeAITaskConfigurationProvider {
 
-	public Task build(
-		JSONObject configurationJSONObject, TaskContext taskContext);
+	public GenerativeAITaskConfiguration getCompanyConfiguration(long companyId);
+
+	public GenerativeAITaskConfiguration getSystemConfiguration();
 
 }

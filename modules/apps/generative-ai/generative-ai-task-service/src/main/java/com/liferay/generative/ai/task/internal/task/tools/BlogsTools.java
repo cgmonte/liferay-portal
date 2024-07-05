@@ -1,0 +1,42 @@
+package com.liferay.generative.ai.task.internal.task.tools;
+
+import com.liferay.blogs.model.BlogsEntry;
+import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
+
+import dev.langchain4j.agent.tool.P;
+import dev.langchain4j.agent.tool.Tool;
+
+import java.util.Date;
+
+public class BlogsTools {
+
+	@Tool("Creates a new blogs entry")
+	BlogsEntry createBlogsEntry(
+		@P("The content of the blogs entry to be created") String content,
+		@P("The title of the blogs entry to be created") String title) {
+
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+
+		serviceContext.setScopeGroupId(20116L);
+
+		try {
+			return BlogsEntryLocalServiceUtil.addEntry(
+				PrincipalThreadLocal.getUserId(), title, content, new Date(),
+				serviceContext);
+		}
+		catch (PortalException portalException) {
+			_log.error("Failed to create blogs entry", portalException);
+		}
+
+		return null;
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(BlogsTools.class);
+
+}

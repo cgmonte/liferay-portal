@@ -5,7 +5,7 @@ import com.liferay.object.model.ObjectDefinition;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 
-public class ObjectTools {
+public class ObjectsTools {
 
 	@Tool("Creates a Liferay Object definition")
 	ObjectDefinition createObjectDefinition(

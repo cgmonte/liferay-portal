@@ -7,7 +7,7 @@ package com.liferay.generative.ai.rest.internal.dto.v1_0.converter;
 
 import com.liferay.generative.ai.rest.dto.v1_0.TaskDefinition;
 import com.liferay.generative.ai.task.service.TaskDefinitionLocalService;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
@@ -118,10 +118,10 @@ public class TaskDefinitionDTOConverter
 
 	private JSONObject _toJSONObject(String json) {
 		try {
-			return JSONFactoryUtil.createJSONObject(json);
+			return _jsonFactory.createJSONObject(json);
 		}
-		catch (Exception e) {
-			_log.error(e);
+		catch (Exception exception) {
+			_log.error(exception);
 
 			return null;
 		}
@@ -129,6 +129,9 @@ public class TaskDefinitionDTOConverter
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		TaskDefinitionDTOConverter.class);
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private Language _language;

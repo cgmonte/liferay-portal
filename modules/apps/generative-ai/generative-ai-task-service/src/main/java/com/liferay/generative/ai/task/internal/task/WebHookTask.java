@@ -5,9 +5,10 @@
 
 package com.liferay.generative.ai.task.internal.task;
 
+import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.task.Task;
-import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
+import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
 
 import java.util.Map;
@@ -18,21 +19,27 @@ import java.util.Map;
 public class WebHookTask extends BaseTask implements Task {
 
 	public WebHookTask(
-		JSONObject configurationJSONObject, TaskContext taskContext) {
+		JSONObject configurationJSONObject,
+		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
+		TaskContext taskContext) {
 
-		super(configurationJSONObject, "webhook", taskContext);
+		super(
+			configurationJSONObject, generativeAIConfigurationProvider,
+			"webhook", taskContext);
 	}
 
 	@Override
-	public TaskResponse execute(
-		Map<String, Object> chainInput, Map<String, Object> input) {
-
+	public TaskResponse execute(Map<String, Object> input) {
 		return null;
 	}
 
 	@Override
 	public boolean validate() {
 		return false;
+	}
+
+	protected String toStringValue(Object value) {
+		return null;
 	}
 
 }

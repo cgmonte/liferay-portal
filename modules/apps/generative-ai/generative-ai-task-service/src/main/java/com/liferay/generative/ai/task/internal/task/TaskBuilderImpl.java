@@ -5,12 +5,12 @@
 
 package com.liferay.generative.ai.task.internal.task;
 
-import com.liferay.generative.ai.task.internal.task.google.GeminiChatMemoryProvider;
+import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.internal.task.google.GeminiChatModelTask;
-import com.liferay.generative.ai.task.internal.task.google.GeminiChatModelToolsTask;
+import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
-import com.liferay.generative.ai.task.task.TaskContext;
+import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.searcher.SearchRequestBuilderFactory;
@@ -42,40 +42,45 @@ public class TaskBuilderImpl implements TaskBuilder {
 		}
 
 		if (name.equals("chain")) {
-			return new ChainTask(configurationJSONObject, taskContext, this);
+			return new ChainTask(
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				taskContext, this);
 		}
 		else if (name.equals("gemini_chat_model")) {
 			return new GeminiChatModelTask(
-				configurationJSONObject, _geminiChatMemoryProvider,
-				taskContext);
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				taskContext, _toolsProvider);
 		}
-		else if (name.equals("gemini_chat_model_tools")) {
-			return new GeminiChatModelToolsTask(
-				configurationJSONObject, _geminiChatMemoryProvider,
-				taskContext);
-		}
-		else if (name.equals("local_retrieve_documents")) {
+		else if (name.equals("retrieve_local_documents")) {
 			return new RetrieveLocalDocumentsTask(
-				configurationJSONObject, taskContext, _searcher,
-				_searchRequestBuilderFactory);
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				taskContext, _searcher, _searchRequestBuilderFactory);
 		}
 		else if (name.equals("simple_text_input_agent")) {
-			return new SimpleTextInputAgentTask(configurationJSONObject, taskContext);
+			return new SimpleTextInputAgentTask(
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				taskContext);
 		}
 		else if (name.equals("webhook")) {
-			return new WebHookTask(configurationJSONObject, taskContext);
+			return new WebHookTask(
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				taskContext);
 		}
 
 		throw new IllegalArgumentException("Unknown task name " + name);
 	}
 
 	@Reference
-	private GeminiChatMemoryProvider _geminiChatMemoryProvider;
+	private GenerativeAITaskConfigurationProvider
+		_generativeAIConfigurationProvider;
 
 	@Reference
 	private Searcher _searcher;
 
 	@Reference
 	private SearchRequestBuilderFactory _searchRequestBuilderFactory;
+
+	@Reference
+	private ToolsProvider _toolsProvider;
 
 }

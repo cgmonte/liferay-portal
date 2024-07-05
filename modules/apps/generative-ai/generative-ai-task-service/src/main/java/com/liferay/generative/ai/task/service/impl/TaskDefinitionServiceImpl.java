@@ -39,8 +39,9 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 	@Override
 	public TaskDefinition addTaskDefinition(
 			String configurationJSON, Map<Locale, String> descriptionMap,
-			String externalReferenceCode, boolean readOnly, String schemaVersion,
-			ServiceContext serviceContext, Map<Locale, String> titleMap)
+			String externalReferenceCode, boolean readOnly,
+			String schemaVersion, ServiceContext serviceContext,
+			Map<Locale, String> titleMap)
 		throws PortalException {
 
 		_portletResourcePermission.check(
@@ -59,14 +60,13 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 		_taskDefinitionModelResourcePermission.check(
 			getPermissionChecker(), taskDefinitionId, ActionKeys.DELETE);
 
-		TaskDefinition taskDefinition = taskDefinitionPersistence.findByPrimaryKey(
-			taskDefinitionId);
+		TaskDefinition taskDefinition =
+			taskDefinitionPersistence.findByPrimaryKey(taskDefinitionId);
 
 		if (taskDefinition.isReadOnly()) {
 			throw new TaskDefinitionReadOnlyException(
 				StringBundler.concat(
-					"Task definition  ", taskDefinitionId,
-					" is read-only"));
+					"Task definition  ", taskDefinitionId, " is read-only"));
 		}
 
 		return taskDefinitionLocalService.deleteTaskDefinition(
@@ -147,14 +147,13 @@ public class TaskDefinitionServiceImpl extends TaskDefinitionServiceBaseImpl {
 		_taskDefinitionModelResourcePermission.check(
 			getPermissionChecker(), taskDefinitionId, ActionKeys.UPDATE);
 
-		TaskDefinition taskDefinition = taskDefinitionPersistence.findByPrimaryKey(
-			taskDefinitionId);
+		TaskDefinition taskDefinition =
+			taskDefinitionPersistence.findByPrimaryKey(taskDefinitionId);
 
 		if (taskDefinition.isReadOnly()) {
 			throw new TaskDefinitionReadOnlyException(
 				StringBundler.concat(
-					"Task definition ", taskDefinitionId,
-					" is read-only"));
+					"Task definition ", taskDefinitionId, " is read-only"));
 		}
 
 		return taskDefinitionLocalService.updateTaskDefinition(
