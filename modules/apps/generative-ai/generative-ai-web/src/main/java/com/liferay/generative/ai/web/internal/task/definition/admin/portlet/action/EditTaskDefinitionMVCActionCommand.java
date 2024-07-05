@@ -43,7 +43,7 @@ public class EditTaskDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 		try {
 			if (cmd.equals(Constants.DELETE)) {
-				_deleteSXPElements(actionRequest);
+				_deleteTaskDefinitions(actionRequest);
 			}
 		}
 		catch (Exception exception) {
