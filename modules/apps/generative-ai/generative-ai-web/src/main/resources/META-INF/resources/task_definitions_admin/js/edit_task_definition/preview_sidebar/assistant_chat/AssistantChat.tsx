@@ -19,6 +19,7 @@ interface AssistantChatProps {
 	formikValues: any;
 	greetingMessage?: string;
 	sidebarBodyHeight: number;
+	taskExternalReferenceCode: string;
 }
 
 interface Endpoints {
@@ -58,6 +59,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 	assistantName = 'Assistant',
 	endpoints,
 	greetingMessage = 'Hi, I am your assistant. How can I help you?',
+	taskExternalReferenceCode,
 }: AssistantChatProps, ref) {
 	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(802);
 
@@ -98,6 +100,12 @@ const AssistantChat = forwardRef(function AssistantChat({
 		if (sidebarElement) {
 			setSidebarBodyHeight(sidebarElement.offsetHeight - 64);
 		}
+
+		const localStorageChatHistory = localStorage.getItem(taskExternalReferenceCode);
+
+		if (localStorageChatHistory) {
+			setChatHistory(JSON.parse(localStorageChatHistory));
+		};
 	}, []);
 
 	useEffect(() => {
@@ -108,6 +116,13 @@ const AssistantChat = forwardRef(function AssistantChat({
 		if (messageBody) {
 			messageBody.scrollTop =
 				messageBody.scrollHeight - messageBody.clientHeight;
+		}
+
+		if (chatHistory.length) { 
+			localStorage.setItem(
+				taskExternalReferenceCode, 
+				JSON.stringify(chatHistory)
+			); 
 		}
 	}, [chatHistory]);
 
