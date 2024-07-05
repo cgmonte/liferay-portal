@@ -1045,7 +1045,7 @@ export default function ({
 								aria-label={Liferay.Language.get(
 									'auto-truncate'
 								)}
-								checked={!!formik.values.textEmbeddingsEnabled}
+								checked={!!formik.values.textEmbeddingProviderConfigurationJSONs?.[index]?.attributes?.autoTruncate}
 								disabled={formik.isSubmitting}
 								label={Liferay.Language.get(
 									'auto-truncate'
@@ -1201,6 +1201,11 @@ export default function ({
 								.textEmbeddingProviderConfigurationJSONs[index]
 								?.attributes?.accessToken
 						}
+						autoTruncate={
+							formik.values
+								.textEmbeddingProviderConfigurationJSONs[index]
+								?.attributes?.autoTruncate
+						}
 						availableTextEmbeddingProviders={
 							availableTextEmbeddingProviders
 						}
@@ -1236,6 +1241,11 @@ export default function ({
 								.textEmbeddingProviderConfigurationJSONs[index]
 								?.languageIds
 						}
+						location={
+							formik.values
+								.textEmbeddingProviderConfigurationJSONs[index]
+								?.attributes?.location
+						}
 						maxCharacterCount={
 							formik.values
 								.textEmbeddingProviderConfigurationJSONs[index]
@@ -1255,6 +1265,11 @@ export default function ({
 							formik.values
 								.textEmbeddingProviderConfigurationJSONs[index]
 								?.attributes?.modelTimeout
+						}
+						projectId={
+							formik.values
+								.textEmbeddingProviderConfigurationJSONs[index]
+								?.attributes?.projectId
 						}
 						textEmbeddingCacheTimeout={
 							formik.values.textEmbeddingCacheTimeout
