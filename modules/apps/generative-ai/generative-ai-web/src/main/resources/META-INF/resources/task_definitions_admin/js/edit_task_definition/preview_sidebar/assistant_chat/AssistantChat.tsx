@@ -69,10 +69,13 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	const [prompt, setPrompt] = useState('');
 
+	const clearChatHistory = () => {
+		setChatHistory([]);
+		localStorage.removeItem(taskExternalReferenceCode);
+	}
+
 	useImperativeHandle(ref, () => ({
-		clearChatHistory: () => {
-			setChatHistory([]);
-		}
+		clearChatHistory,
 	}));
 
 	const isInsideIframe = window.self !== window.top;
