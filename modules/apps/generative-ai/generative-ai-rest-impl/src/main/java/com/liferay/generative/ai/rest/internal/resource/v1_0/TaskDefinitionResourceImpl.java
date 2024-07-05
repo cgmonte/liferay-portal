@@ -14,8 +14,8 @@ import com.liferay.generative.ai.task.constants.TaskDefinitionActionKeys;
 import com.liferay.generative.ai.task.constants.TaskDefinitionConstants;
 import com.liferay.generative.ai.task.exception.DuplicateTaskDefinitionExternalReferenceCodeException;
 import com.liferay.generative.ai.task.service.TaskDefinitionService;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.search.Field;
@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -231,8 +230,6 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 	public TaskDefinition postTaskDefinition(TaskDefinition taskDefinition)
 		throws Exception {
 
-		//TaskDefinitionUtil.unpack(taskDefinition);
-
 		return _taskDefinitionDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
 				contextAcceptLanguage.isAcceptAllLanguages(), new HashMap<>(),
@@ -336,18 +333,17 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 			return null;
 		}
 
-		// TODO: fixme
-
-		JSONObject j = JSONFactoryUtil.createJSONObject(
+		JSONObject configurationJSONObject = _jsonFactory.createJSONObject(
 			(Map<?, ?>)taskDefinition.getConfiguration());
 
-		JSONObject t = j.getJSONObject("taskConfiguration");
+		JSONObject taskConfigurationJSONObject =
+			configurationJSONObject.getJSONObject("taskConfiguration");
 
-		if (t == null) {
-			return String.valueOf(j);
+		if (taskConfigurationJSONObject == null) {
+			return "{}";
 		}
 
-		return String.valueOf(t);
+		return String.valueOf(taskConfigurationJSONObject);
 	}
 
 	private String _getSchemaVersion() {

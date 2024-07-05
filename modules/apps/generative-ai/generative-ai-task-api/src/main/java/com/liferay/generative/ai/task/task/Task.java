@@ -16,7 +16,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface Task {
 
 	public TaskResponse execute(
-		Map<String, Object> chainInput, Map<String, Object> input);
+		Map<String, Object> input);
 
 	public String getName();
 

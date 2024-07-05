@@ -5,9 +5,10 @@
 
 package com.liferay.generative.ai.task.internal.task;
 
+import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.task.Task;
-import com.liferay.generative.ai.task.task.TaskContext;
 import com.liferay.generative.ai.task.task.TaskResponse;
+import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.MapUtil;
 
@@ -20,18 +21,18 @@ import java.util.Map;
 public class SimpleTextInputAgentTask extends BaseTask implements Task {
 
 	public SimpleTextInputAgentTask(
-		JSONObject configurationJSONObject, TaskContext taskContext) {
+		JSONObject configurationJSONObject,
+		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
+		TaskContext taskContext) {
 
-		super(configurationJSONObject, "webhook", taskContext);
+		super(
+			configurationJSONObject, generativeAIConfigurationProvider,
+			"simple_text_input_agent", taskContext);
 	}
 
 	@Override
-	public TaskResponse execute(
-		Map<String, Object> chainInput, Map<String, Object> input) {
-
-		String textInput = MapUtil.getString(
-			input, taskContext.getTextInputField());
-
+	public TaskResponse execute(Map<String, Object> input) {
+		String textInput = MapUtil.getString(input, "text");
 
 		return null;
 	}
@@ -39,6 +40,10 @@ public class SimpleTextInputAgentTask extends BaseTask implements Task {
 	@Override
 	public boolean validate() {
 		return false;
+	}
+
+	protected String toStringValue(Object value) {
+		return null;
 	}
 
 	private Map<String, List<Task>> _taskMap;

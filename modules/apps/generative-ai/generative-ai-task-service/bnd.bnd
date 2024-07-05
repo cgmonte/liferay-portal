@@ -23,8 +23,6 @@ Import-Package:\
 	\
 	!lzma.sdk.*,\
 	\
-	!net.jpountz.*,\
-	\
 	!opennlp.tools.*,\
 	\
 	!org.apache.http.*,\

@@ -14,10 +14,13 @@ import com.liferay.generative.ai.rest.resource.v1_0.GenerativeAIResponseResource
 import com.liferay.generative.ai.task.model.TaskDefinition;
 import com.liferay.generative.ai.task.service.TaskDefinitionService;
 import com.liferay.generative.ai.task.task.TaskBuilder;
-import com.liferay.generative.ai.task.task.TaskContext;
+import com.liferay.generative.ai.task.task.context.TaskContext;
+import com.liferay.generative.ai.task.task.context.TaskContextParameter;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
@@ -46,6 +49,75 @@ public class GenerativeAIResponseResourceImpl
 					externalReferenceCode, generativeAIRequest)));
 	}
 
+	private void _contributeContextParameters(TaskContext taskContext) {
+		taskContext.addTaskContextParameter(
+			"ipAddress",
+			new TaskContextParameter(
+				contextHttpServletRequest.getRemoteAddr()));
+		taskContext.addTaskContextParameter(
+			"timeZone",
+			new TaskContextParameter(
+				contextUser.getTimeZone(
+				).getDisplayName(),
+				contextUser.getTimeZone()));
+	}
+
+	private void _contributeUserParameters(TaskContext taskContext) {
+		if (contextUser.isGuestUser()) {
+			return;
+		}
+
+		try {
+			taskContext.addTaskContextParameter(
+				"userBirthday",
+				new TaskContextParameter(
+					String.valueOf(contextUser.getBirthday()),
+					contextUser.getBirthday()));
+			taskContext.addTaskContextParameter(
+				"userFirstName",
+				new TaskContextParameter(contextUser.getFirstName()));
+			taskContext.addTaskContextParameter(
+				"userFullName",
+				new TaskContextParameter(contextUser.getFullName()));
+			taskContext.addTaskContextParameter(
+				"userIsFemale",
+				new TaskContextParameter(
+					String.valueOf(contextUser.isFemale()),
+					contextUser.isFemale()));
+
+			boolean genderX = false;
+
+			if (!contextUser.isFemale() && contextUser.isMale()) {
+				genderX = true;
+			}
+
+			taskContext.addTaskContextParameter(
+				"userIsGenderX",
+				new TaskContextParameter(String.valueOf(genderX), genderX));
+			taskContext.addTaskContextParameter(
+				"userIsMale",
+				new TaskContextParameter(
+					String.valueOf(contextUser.isMale()),
+					contextUser.isMale()));
+			taskContext.addTaskContextParameter(
+				"userJobTitle",
+				new TaskContextParameter(contextUser.getJobTitle()));
+
+			Locale locale = contextUser.getLocale();
+
+			taskContext.addTaskContextParameter(
+				"userLanguage",
+				new TaskContextParameter(locale.getDisplayLanguage()));
+
+			taskContext.addTaskContextParameter(
+				"userLastName",
+				new TaskContextParameter(contextUser.getLastName()));
+		}
+		catch (PortalException portalException) {
+			throw new RuntimeException(portalException);
+		}
+	}
+
 	private com.liferay.generative.ai.request.GenerativeAIRequest
 			_createGenerativeAIRequest(
 				String externalReferenceCode,
@@ -65,31 +137,21 @@ public class GenerativeAIResponseResourceImpl
 		generativeAIRequestBuilder.input(
 			(Map<String, Object>)generativeAIRequest.getInput());
 		generativeAIRequestBuilder.task(
-			_taskBuilder.build(
-				configurationJSONObject,
-				_createTaskContext(configurationJSONObject)));
+			_taskBuilder.build(configurationJSONObject, _createTaskContext()));
 
 		return generativeAIRequestBuilder.build();
 	}
 
-	private TaskContext _createTaskContext(JSONObject configurationJSONObject)
-		throws Exception {
+	private TaskContext _createTaskContext() throws Exception {
+		TaskContext taskContext = new TaskContext(
+			contextCompany.getCompanyId(),
+			contextAcceptLanguage.getPreferredLocale(),
+			contextUser.getUserId());
 
-		TaskContext.Builder builder = new TaskContext.Builder();
+		_contributeContextParameters(taskContext);
+		_contributeUserParameters(taskContext);
 
-		builder.audioInputField(
-			configurationJSONObject.getString("audio_input_field", "audio"));
-		builder.companyId(contextCompany.getCompanyId());
-		builder.imageInputField(
-			configurationJSONObject.getString("image_input_field", "image"));
-		builder.ipAddress(contextHttpServletRequest.getRemoteAddr());
-		builder.locale(contextAcceptLanguage.getPreferredLocale());
-		builder.textInputField(
-			configurationJSONObject.getString("text_input_field", "text"));
-		builder.timeZone(contextUser.getTimeZone());
-		builder.userId(contextUser.getUserId());
-
-		return builder.build();
+		return taskContext;
 	}
 
 	private GenerativeAIResponse _toDTO(
@@ -102,8 +164,8 @@ public class GenerativeAIResponseResourceImpl
 					debugInfo = generativeAIResponse.getDebugInfo();
 				}
 
-				output = generativeAIResponse.getOutput();
-				took = generativeAIResponse.getTook();
+				setOutput(generativeAIResponse.getOutput());
+				setTook(generativeAIResponse.getTook());
 			}
 		};
 	}

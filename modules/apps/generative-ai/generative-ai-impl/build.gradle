@@ -12,4 +12,6 @@ dependencies {
 	compileOnly project(":core:petra:petra-function")
 	compileOnly project(":core:petra:petra-lang")
 	compileOnly project(":core:petra:petra-string")
+	compileOnly project(":apps:portal-configuration:portal-configuration-module-configuration-api")
+
 }
