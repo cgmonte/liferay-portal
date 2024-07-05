@@ -10,7 +10,7 @@ import { ClayInput } from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import { fetch } from 'frontend-js-web';
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface AssistantChatProps {
@@ -54,11 +54,11 @@ function Message({ content, sender }: Message) {
 	);
 }
 
-export default function AssistantChat({
+const AssistantChat = forwardRef(function AssistantChat({
 	assistantName = 'Assistant',
 	endpoints,
 	greetingMessage = 'Hi, I am your assistant. How can I help you?',
-}: AssistantChatProps) {
+}: AssistantChatProps, ref) {
 	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(802);
 
 	const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
@@ -66,6 +66,12 @@ export default function AssistantChat({
 	const [chatHistory, setChatHistory] = useState<ChatHistoryEntry[]>([]);
 
 	const [prompt, setPrompt] = useState('');
+
+	useImperativeHandle(ref, () => ({
+		clearChatHistory: () => {
+			setChatHistory([]);
+		}
+	}));
 
 	const isInsideIframe = window.self !== window.top;
 
@@ -251,4 +257,6 @@ export default function AssistantChat({
 			</ClayCard>
 		</div>
 	);
-}
+});
+
+export default AssistantChat;

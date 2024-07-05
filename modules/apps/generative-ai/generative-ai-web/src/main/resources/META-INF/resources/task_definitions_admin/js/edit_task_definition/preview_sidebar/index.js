@@ -16,7 +16,7 @@ import {useIsMounted} from '@liferay/frontend-js-react-web';
 import getCN from 'classnames';
 import {ManagementToolbar} from 'frontend-js-components-web';
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import useDidUpdateEffect from '../../hooks/useDidUpdateEffect';
 import ErrorListItem from '../../shared/ErrorListItem';
@@ -52,6 +52,7 @@ function PreviewSidebar({
 	const [showCancel, setShowCancel] = useState(false);
 	const [value, setValue] = useState('');
 	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(window.innerHeight - (56 + 56 + 64));
+	const AssistantChatRef = useRef();
 
 	const isMounted = useIsMounted();
 
@@ -161,6 +162,16 @@ function PreviewSidebar({
 
 				<span>
 					<ClayButton
+						aria-label={Liferay.Language.get('clear-history')}
+						borderless
+						displayType="secondary"
+						monospaced
+						onClick={() => AssistantChatRef.current.clearChatHistory()}
+						small
+					>
+						<ClayIcon symbol="trash" />
+					</ClayButton>
+					<ClayButton
 						aria-label={Liferay.Language.get('close')}
 						borderless
 						displayType="secondary"
@@ -179,6 +190,7 @@ function PreviewSidebar({
 					isMounted={isMounted}
 					endpoints={{sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`}} 
 					greetingMessage="Try me!"
+					ref={AssistantChatRef}
 				/>
 			</div>
 		</div>
