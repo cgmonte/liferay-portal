@@ -21,17 +21,17 @@ import java.util.function.BiFunction;
 public class TaskWebCacheItem implements WebCacheItem {
 
 	public static Object get(
-		GenerativeAITaskConfiguration generativeAITaskConfiguration,
-		String input, BiFunction<Integer, String, Object> biFunction,
-		String taskName, long userId) {
+		String chatReference, GenerativeAITaskConfiguration generativeAITaskConfiguration,
+		String input, BiFunction<String, String, Object> biFunction,
+		String taskName) {
 
 		try {
 			return WebCachePoolUtil.get(
 				StringBundler.concat(
 					TaskWebCacheItem.class.getName(), StringPool.POUND, input,
-					StringPool.POUND, taskName, StringPool.POUND, userId),
+					StringPool.POUND, taskName, StringPool.POUND, chatReference),
 				new TaskWebCacheItem(
-					biFunction, generativeAITaskConfiguration, input, userId));
+					biFunction, chatReference, generativeAITaskConfiguration, input));
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -43,20 +43,21 @@ public class TaskWebCacheItem implements WebCacheItem {
 	}
 
 	public TaskWebCacheItem(
-		BiFunction<Integer, String, Object> biFunction,
+		BiFunction<String, String, Object> biFunction,
+		String chatReference,
 		GenerativeAITaskConfiguration generativeAITaskConfiguration,
-		String input, long userId) {
+		String input) {
 
 		_biFunction = biFunction;
+		_chatReference = chatReference;
 		_generativeAITaskConfiguration = generativeAITaskConfiguration;
 		_input = input;
-		_userId = userId;
 	}
 
 	@Override
 	public Object convert(String key) {
 		try {
-			return _biFunction.apply((int)_userId, _input);
+			return _biFunction.apply(_chatReference, _input);
 		}
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
@@ -71,9 +72,9 @@ public class TaskWebCacheItem implements WebCacheItem {
 	private static final Log _log = LogFactoryUtil.getLog(
 		TaskWebCacheItem.class);
 
-	private final BiFunction<Integer, String, Object> _biFunction;
+	private final BiFunction<String, String, Object> _biFunction;
+	private final String _chatReference;
 	private final GenerativeAITaskConfiguration _generativeAITaskConfiguration;
 	private final String _input;
-	private final long _userId;
 
 }

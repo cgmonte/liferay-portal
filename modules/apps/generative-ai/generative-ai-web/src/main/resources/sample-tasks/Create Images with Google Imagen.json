@@ -1,0 +1,22 @@
+{
+  "schemaVersion" : "1.0",
+  "title_i18n" : {
+    "en_US" : "Create Images with Google Imagen"
+  },
+  "configuration" : {
+    "debug" : true,
+    "name" : "google_imagen",
+    "attributes" : {
+      "endpoint" : "us-central1-aiplatform.googleapis.com:443",
+      "model_name" : "imagegeneration@005",
+      "publisher" : "google",
+      "project" : "liferaycloud-development",
+      "location" : "us-central1",
+      "output_parameter_name" : "image",
+      "sample_image_size" : 1536,
+      "prompt_template" : "{{text}}"
+    }
+  },
+  "description_i18n" : { },
+  "externalReferenceCode" : "d7871d07-11c4-4e80-583c-cbbfb82c2c05"
+}

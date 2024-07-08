@@ -15,9 +15,12 @@ import java.util.Map;
  */
 public class TaskContext {
 
-	public TaskContext(long companyId, Locale locale, long userId) {
+	public TaskContext(long companyId, Locale locale, String taskDefinitionExternalReferenceCode,
+					   long userId) {
 		_companyId = companyId;
 		_locale = locale;
+		_taskDefinitionExternalReferenceCode = taskDefinitionExternalReferenceCode;
+
 		_userId = userId;
 	}
 
@@ -55,6 +58,10 @@ public class TaskContext {
 		return _taskContextParameters;
 	}
 
+	public String getTaskDefinitionExternalReferenceCode() {
+		return _taskDefinitionExternalReferenceCode;
+	}
+
 	public long getUserId() {
 		return _userId;
 	}
@@ -62,6 +69,7 @@ public class TaskContext {
 	private final long _companyId;
 	private final Locale _locale;
 	private Map<String, TaskContextParameter> _taskContextParameters;
+	private final String _taskDefinitionExternalReferenceCode;
 	private final long _userId;
 
 }

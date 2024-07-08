@@ -1,0 +1,28 @@
+{
+  "schemaVersion" : "1.0",
+  "title_i18n" : {
+    "en_US" : "Simple Chatbot Using Client Side History"
+  },
+  "configuration" : {
+    "debug" : true,
+    "name" : "gemini_chat_model",
+    "attributes" : {
+      "system_message" : "",
+      "memory_max_messages" : 10,
+      "max_retries" : 2,
+      "use_chat_memory" : false,
+      "project" : "liferaycloud-development",
+      "use_cache" : false,
+      "top_p" : 1,
+      "model_name" : "gemini-1.5-flash-001",
+      "top_k" : 1,
+      "temperature" : 0.5,
+      "location" : "us-central1",
+      "output_parameter_name" : "text",
+      "max_output_tokens" : 100,
+      "prompt_template" : "History of the conversation:\n {{history}}"
+    }
+  },
+  "description_i18n" : { },
+  "externalReferenceCode" : "simple-chat"
+}

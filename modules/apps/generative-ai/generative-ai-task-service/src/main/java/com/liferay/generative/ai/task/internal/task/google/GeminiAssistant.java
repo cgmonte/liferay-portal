@@ -15,6 +15,6 @@ import dev.langchain4j.service.UserMessage;
 public interface GeminiAssistant {
 
 	public Result<String> chat(
-		@MemoryId int memoryId, @UserMessage String userMessage);
+		@MemoryId String memoryId, @UserMessage String userMessage);
 
 }

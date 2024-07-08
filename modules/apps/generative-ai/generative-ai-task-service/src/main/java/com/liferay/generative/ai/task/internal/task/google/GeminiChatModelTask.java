@@ -15,6 +15,8 @@ import com.liferay.generative.ai.task.internal.web.cache.TaskWebCacheItem;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.generative.ai.task.task.context.TaskContext;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -50,18 +52,23 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 
 		if (attributesJSONObject.getBoolean("use_cache", false)) {
 			Result<String> result = (Result<String>)TaskWebCacheItem.get(
+				_getMemoryId(),
 				generativeAIConfigurationProvider.getCompanyConfiguration(
 					taskContext.getCompanyId()),
-				getUserMessage(input), geminiAssistant::chat, getName(),
-				taskContext.getUserId());
+				getUserMessage(input), geminiAssistant::chat, getName());
 
 			return toTaskResponse(getDebugInfo(true, debug, result), result);
 		}
 
 		Result<String> result = geminiAssistant.chat(
-			(int)taskContext.getUserId(), getUserMessage(input));
+			_getMemoryId(), getUserMessage(input));
 
 		return toTaskResponse(getDebugInfo(false, debug, result), result);
+	}
+
+	private String _getMemoryId() {
+
+		return StringBundler.concat(taskContext.getUserId(), StringPool.POUND, taskContext.getTaskDefinitionExternalReferenceCode());
 	}
 
 	@Override

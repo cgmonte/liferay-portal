@@ -4,6 +4,7 @@ buildService {
 }
 
 dependencies {
+
 	api project(":apps:generative-ai:generative-ai-task-api")
 
 	compileInclude group: "com.damnhandy", name: "handy-uri-templates", version: "2.1.7"
@@ -13,14 +14,10 @@ dependencies {
 	compileInclude group: "com.google.api", name: "gax-grpc", version: "2.48.1"
 	compileInclude group: "com.google.api", name: "gax-httpjson", version: "2.48.1"
 	compileInclude group: "com.google.api-client", name: "google-api-client", version: "2.6.0"
-	compileInclude group: "com.google.api.grpc", name: "proto-google-cloud-aiplatform-v1", version: "3.47.0"
-	//ok
-	compileInclude group: "com.google.api.grpc", name: "proto-google-cloud-vertexai-v1", version: "1.6.0"
-	//ok
 	compileInclude group: "com.google.api.grpc", name: "grpc-google-cloud-vertexai-v1", version: "1.6.0"
-	//ok
+	compileInclude group: "com.google.api.grpc", name: "proto-google-cloud-aiplatform-v1", version: "3.47.0"
+	compileInclude group: "com.google.api.grpc", name: "proto-google-cloud-vertexai-v1", version: "1.6.0"
 	compileInclude group: "com.google.api.grpc", name: "proto-google-common-protos", version: "2.41.0"
-	//ok
 	compileInclude group: "com.google.api.grpc", name: "proto-google-iam-v1", version: "1.36.0"
 	compileInclude group: "com.google.auth", name: "google-auth-library-credentials", version: "1.23.0"
 	compileInclude group: "com.google.auth", name: "google-auth-library-oauth2-http", version: "1.23.0"
@@ -49,7 +46,6 @@ dependencies {
 	compileInclude group: "dev.langchain4j", name: "langchain4j-open-ai", version: "0.32.0"
 	compileInclude group: "dev.langchain4j", name: "langchain4j-vertex-ai", version: "0.32.0"
 	compileInclude group: "dev.langchain4j", name: "langchain4j-vertex-ai-gemini", version: "0.32.0"
-	//ok--
 	compileInclude group: "io.grpc", name: "grpc-alts", version: "1.62.2"
 	compileInclude group: "io.grpc", name: "grpc-api", version: "1.62.2"
 	compileInclude group: "io.grpc", name: "grpc-auth", version: "1.62.2"
@@ -60,7 +56,6 @@ dependencies {
 	compileInclude group: "io.grpc", name: "grpc-protobuf", version: "1.62.2"
 	compileInclude group: "io.grpc", name: "grpc-protobuf-lite", version: "1.62.2"
 	compileInclude group: "io.grpc", name: "grpc-stub", version: "1.62.2"
-	//--ok
 	compileInclude group: "io.opencensus", name: "opencensus-api", version: "0.31.1"
 	compileInclude group: "io.opencensus", name: "opencensus-contrib-http-util", version: "0.31.1"
 	compileInclude group: "io.opencensus", name: "opencensus-proto", version: "0.2.0"
@@ -107,7 +102,4 @@ dependencies {
 	compileOnly project(":core:petra:petra-sql-dsl-api")
 	compileOnly project(":core:petra:petra-sql-dsl-spi")
 	compileOnly project(":core:petra:petra-string")
-
-	//compileInclude group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
-
 }

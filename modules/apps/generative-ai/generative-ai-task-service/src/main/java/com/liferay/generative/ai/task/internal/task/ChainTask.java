@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
+import java.sql.DataTruncation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,10 @@ public class ChainTask extends BaseTask implements Task {
 			configurationJSONObject, generativeAIConfigurationProvider, "chain",
 			taskContext, null);
 
-		JSONArray jsonArray = configurationJSONObject.getJSONArray("tasks");
+		JSONObject attributesJSONObject = configurationJSONObject.getJSONObject(
+			"attributes");
+
+		JSONArray jsonArray = attributesJSONObject.getJSONArray("tasks");
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			_tasks.add(
