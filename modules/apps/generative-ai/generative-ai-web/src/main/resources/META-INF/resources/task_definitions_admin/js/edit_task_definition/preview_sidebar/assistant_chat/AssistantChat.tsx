@@ -220,12 +220,12 @@ const AssistantChat = forwardRef(function AssistantChat({
 				<ClayCard.Body className="ray-assistant__card-body">
 					<div id="rayAssistantContainer">
 						<div id="rayAssistantConversationContainer">
-							<Message key={0} content = {greetingMessage} sender = {assistantName} />
+							<Message content = {greetingMessage} key={0} sender = {assistantName} />
 
 							{chatHistory.map((historyEntry: ChatHistoryEntry, index) => (
 								<Message 
-									key={index + 1}
 									content={historyEntry.text}
+									key={index + 1}
 									sender= {historyEntry.role === 'AI' ?
 										assistantName
 										: Liferay.ThemeDisplay.getUserName()}

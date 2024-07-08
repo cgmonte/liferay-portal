@@ -19,21 +19,21 @@ body {
 }
 
 #rayAssistantRootElement {
-	padding: 20px;
-	width: 100%;
 	display: flex;
 	justify-content: center;
+	padding: 20px;
+	width: 100%;
 }
 
 #rayAssistantContainer {
-	height: 100%;
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 }
 
 #rayAssistantChatInput {
-	resize: none;
 	overflow: hidden;
+	resize: none;
 }
 
 #rayAssistantConversationContainer {
@@ -41,7 +41,7 @@ body {
 	flex: 80%;
 	overflow: auto;
 	padding-right: 15px;
-    padding-left: 2px;
+	padding-left: 2px;
 }
 
 #rayAssistantChatInputContainer {

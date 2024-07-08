@@ -522,13 +522,13 @@ function EditTaskDefinitionForm({
 
 			<PreviewSidebar
 				errors={previewInfo.results.errors}
+				formikValues={formik.values}
 				hits={transformToSearchPreviewHits(previewInfo.results)}
 				loading={previewInfo.loading}
 				onClose={_handleSidebarClose}
 				onFetchCancel={_handleFetchPreviewCancel}
 				onFetchResults={_handleFetchPreviewSearch}
 				onFocusSXPElement={_handleFocusSXPElement}
-				formikValues={formik.values}
 				requestString={previewInfo.results.requestString}
 				responseString={previewInfo.results.responseString}
 				totalHits={previewInfo.results.searchHits?.totalHits}

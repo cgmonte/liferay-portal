@@ -21,7 +21,8 @@ import java.util.function.BiFunction;
 public class TaskWebCacheItem implements WebCacheItem {
 
 	public static Object get(
-		String chatReference, GenerativeAITaskConfiguration generativeAITaskConfiguration,
+		String chatReference,
+		GenerativeAITaskConfiguration generativeAITaskConfiguration,
 		String input, BiFunction<String, String, Object> biFunction,
 		String taskName) {
 
@@ -29,9 +30,11 @@ public class TaskWebCacheItem implements WebCacheItem {
 			return WebCachePoolUtil.get(
 				StringBundler.concat(
 					TaskWebCacheItem.class.getName(), StringPool.POUND, input,
-					StringPool.POUND, taskName, StringPool.POUND, chatReference),
+					StringPool.POUND, taskName, StringPool.POUND,
+					chatReference),
 				new TaskWebCacheItem(
-					biFunction, chatReference, generativeAITaskConfiguration, input));
+					biFunction, chatReference, generativeAITaskConfiguration,
+					input));
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -43,8 +46,7 @@ public class TaskWebCacheItem implements WebCacheItem {
 	}
 
 	public TaskWebCacheItem(
-		BiFunction<String, String, Object> biFunction,
-		String chatReference,
+		BiFunction<String, String, Object> biFunction, String chatReference,
 		GenerativeAITaskConfiguration generativeAITaskConfiguration,
 		String input) {
 
