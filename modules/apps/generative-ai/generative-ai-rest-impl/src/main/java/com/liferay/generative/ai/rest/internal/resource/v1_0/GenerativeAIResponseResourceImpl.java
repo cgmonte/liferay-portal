@@ -134,6 +134,9 @@ public class GenerativeAIResponseResourceImpl
 		JSONObject configurationJSONObject = _jsonFactory.createJSONObject(
 			taskDefinition.getConfigurationJSON());
 
+		generativeAIRequestBuilder.debug(
+			configurationJSONObject.getBoolean("debug", false));
+
 		generativeAIRequestBuilder.input(
 			(Map<String, Object>)generativeAIRequest.getInput());
 		generativeAIRequestBuilder.task(
@@ -161,11 +164,11 @@ public class GenerativeAIResponseResourceImpl
 		return new GenerativeAIResponse() {
 			{
 				if (generativeAIResponse.getDebugInfo() != null) {
-					debugInfo = generativeAIResponse.getDebugInfo();
+					setDebugInfo(generativeAIResponse::getDebugInfo);
 				}
 
-				setOutput(generativeAIResponse.getOutput());
-				setTook(generativeAIResponse.getTook());
+				setOutput(generativeAIResponse::getOutput);
+				setTook(generativeAIResponse::getTook);
 			}
 		};
 	}

@@ -7,6 +7,8 @@ package com.liferay.generative.ai.task.internal.task;
 
 import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
 import com.liferay.generative.ai.task.internal.task.google.GeminiChatModelTask;
+import com.liferay.generative.ai.task.internal.task.google.GoogleImagenTask;
+import com.liferay.generative.ai.task.internal.task.openai.OpenAIImageModelTask;
 import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
@@ -51,15 +53,30 @@ public class TaskBuilderImpl implements TaskBuilder {
 				configurationJSONObject, _generativeAIConfigurationProvider,
 				taskContext, _toolsProvider);
 		}
-		else if (name.equals("retrieve_local_documents")) {
-			return new RetrieveLocalDocumentsTask(
+		else if (name.equals("google_imagen")) {
+			return new GoogleImagenTask(
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				taskContext);
+		}
+		else if (name.equals("local_document_retrieval")) {
+			return new LocalDocumentRetrievalTask(
 				configurationJSONObject, _generativeAIConfigurationProvider,
 				taskContext, _searcher, _searchRequestBuilderFactory);
 		}
-		else if (name.equals("simple_text_input_agent")) {
-			return new SimpleTextInputAgentTask(
+		else if (name.equals("openai_image_model")) {
+			return new OpenAIImageModelTask(
 				configurationJSONObject, _generativeAIConfigurationProvider,
-				taskContext);
+				taskContext, _toolsProvider);
+		}
+		else if (name.equals("task_context_parameter_agent")) {
+			return new TaskContextParameterAgent(
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				this, taskContext);
+		}
+		else if (name.equals("text_input_agent")) {
+			return new TextInputAgentTask(
+				configurationJSONObject, _generativeAIConfigurationProvider,
+				this, taskContext);
 		}
 		else if (name.equals("webhook")) {
 			return new WebHookTask(

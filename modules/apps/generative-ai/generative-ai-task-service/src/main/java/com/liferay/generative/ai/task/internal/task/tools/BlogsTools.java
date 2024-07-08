@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.blogs.model.BlogsEntry;
@@ -14,6 +19,11 @@ import dev.langchain4j.agent.tool.Tool;
 
 import java.util.Date;
 
+// Demo class for blogs operations
+
+/**
+ * @author Petteri Karttunen
+ */
 public class BlogsTools {
 
 	@Tool("Creates a new blogs entry")
@@ -21,7 +31,8 @@ public class BlogsTools {
 		@P("The content of the blogs entry to be created") String content,
 		@P("The title of the blogs entry to be created") String title) {
 
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 
 		serviceContext.setScopeGroupId(20116L);
 

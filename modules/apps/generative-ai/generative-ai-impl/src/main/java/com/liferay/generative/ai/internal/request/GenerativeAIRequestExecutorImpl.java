@@ -12,7 +12,12 @@ import com.liferay.generative.ai.response.GenerativeAIResponseBuilder;
 import com.liferay.generative.ai.response.GenerativeAIResponseBuilderFactory;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -34,14 +39,43 @@ public class GenerativeAIRequestExecutorImpl
 
 		long currentTimeMillis = System.currentTimeMillis();
 
-		TaskResponse taskResponse = task.execute(generativeAIRequest.getInput());
+		try {
+			TaskResponse taskResponse = task.execute(
+				generativeAIRequest.isDebug(), generativeAIRequest.getInput());
 
-		builder.output(taskResponse.getOutput());
+			builder.output(taskResponse.getOutput());
 
-		if (task.isDebug() && (taskResponse.getDebugInfo() != null)) {
+			if (generativeAIRequest.isDebug()) {
+
+				Map<String, Object> debugInfo = taskResponse.getDebugInfo();
+
+				debugInfo.put("executionTime", (System.currentTimeMillis() - currentTimeMillis) + "ms");
+
+				builder.debugInfo(
+					HashMapBuilder.put(
+						task.getName(), taskResponse.getDebugInfo()
+					).build());
+			}
+		}
+		catch (Exception exception) {
+
+			_log.error(exception);
+
 			builder.debugInfo(
-				HashMapBuilder.put(
-					task.getName(), taskResponse.getDebugInfo()
+				HashMapBuilder.<String, Map<String, Object>>put(
+					task.getName(),
+					HashMapBuilder.<String, Object>put(
+						"exception", exception.toString()
+					).build()
+				).build());
+
+			builder.output(
+				HashMapBuilder.<String, Object>put(
+					"text",
+					StringBundler.concat(
+						"Oh dear, something went wrong! Please check the task ",
+						"configuration and try again.\n\nReason:\n",
+						"```json\n", exception.getMessage(), "\n```\n")
 				).build());
 		}
 
@@ -49,6 +83,9 @@ public class GenerativeAIRequestExecutorImpl
 
 		return builder.build();
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		GenerativeAIRequestExecutorImpl.class);
 
 	@Reference
 	private GenerativeAIResponseBuilderFactory

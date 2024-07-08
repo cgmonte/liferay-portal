@@ -26,15 +26,15 @@ public class GenerativeAITaskConfigurationProviderImpl
 	public GenerativeAITaskConfiguration getCompanyConfiguration(
 		long companyId) {
 
-		return _getGenerativeAIConfiguration(companyId);
+		return _getGenerativeAITaskConfiguration(companyId);
 	}
 
 	@Override
 	public GenerativeAITaskConfiguration getSystemConfiguration() {
-		return _getGenerativeAIConfiguration(CompanyConstants.SYSTEM);
+		return _getGenerativeAITaskConfiguration(CompanyConstants.SYSTEM);
 	}
 
-	private GenerativeAITaskConfiguration _getGenerativeAIConfiguration(
+	private GenerativeAITaskConfiguration _getGenerativeAITaskConfiguration(
 		long companyId) {
 
 		try {

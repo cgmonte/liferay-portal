@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -15,6 +20,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+// Demo class for site operations
+
+/**
+ * @author Petteri Karttunen
+ */
 public class SiteTools {
 
 	@Tool("Creates a Liferay site for the given name")

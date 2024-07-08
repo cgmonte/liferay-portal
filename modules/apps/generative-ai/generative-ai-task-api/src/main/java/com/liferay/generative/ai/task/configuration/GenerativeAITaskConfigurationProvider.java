@@ -13,7 +13,8 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface GenerativeAITaskConfigurationProvider {
 
-	public GenerativeAITaskConfiguration getCompanyConfiguration(long companyId);
+	public GenerativeAITaskConfiguration getCompanyConfiguration(
+		long companyId);
 
 	public GenerativeAITaskConfiguration getSystemConfiguration();
 

@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -20,18 +20,18 @@ import java.util.function.BiFunction;
  */
 public class TaskWebCacheItem implements WebCacheItem {
 
-	public static String get(
-		GenerativeAITaskConfiguration generativeAIConfiguration, String input,
-		BiFunction<Integer, String, String> biFunction, String taskName,
-		long userId) {
+	public static Object get(
+		GenerativeAITaskConfiguration generativeAITaskConfiguration,
+		String input, BiFunction<Integer, String, Object> biFunction,
+		String taskName, long userId) {
 
 		try {
-			return (String)WebCachePoolUtil.get(
+			return WebCachePoolUtil.get(
 				StringBundler.concat(
 					TaskWebCacheItem.class.getName(), StringPool.POUND, input,
 					StringPool.POUND, taskName, StringPool.POUND, userId),
 				new TaskWebCacheItem(
-					biFunction, generativeAIConfiguration, input, userId));
+					biFunction, generativeAITaskConfiguration, input, userId));
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -43,19 +43,18 @@ public class TaskWebCacheItem implements WebCacheItem {
 	}
 
 	public TaskWebCacheItem(
-		BiFunction<Integer, String, String> biFunction,
-		GenerativeAITaskConfiguration generativeAIConfiguration, String input,
-		long userId) {
+		BiFunction<Integer, String, Object> biFunction,
+		GenerativeAITaskConfiguration generativeAITaskConfiguration,
+		String input, long userId) {
 
 		_biFunction = biFunction;
+		_generativeAITaskConfiguration = generativeAITaskConfiguration;
 		_input = input;
 		_userId = userId;
-
-		_generativeAITaskConfiguration = generativeAIConfiguration;
 	}
 
 	@Override
-	public String convert(String key) {
+	public Object convert(String key) {
 		try {
 			return _biFunction.apply((int)_userId, _input);
 		}
@@ -72,7 +71,7 @@ public class TaskWebCacheItem implements WebCacheItem {
 	private static final Log _log = LogFactoryUtil.getLog(
 		TaskWebCacheItem.class);
 
-	private final BiFunction<Integer, String, String> _biFunction;
+	private final BiFunction<Integer, String, Object> _biFunction;
 	private final GenerativeAITaskConfiguration _generativeAITaskConfiguration;
 	private final String _input;
 	private final long _userId;

@@ -13,7 +13,8 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
  * @author Petteri Karttunen
  */
 @ExtendedObjectClassDefinition(
-	category = "generative-ai", scope = ExtendedObjectClassDefinition.Scope.COMPANY
+	category = "generative-ai",
+	scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
 	description = "generative-ai-task-configuration-description",
@@ -23,10 +24,7 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 public interface GenerativeAITaskConfiguration {
 
-	@Meta.AD(
-		deflt = "604800", name = "task-cache-timeout",
-		required = false
-	)
+	@Meta.AD(deflt = "604800", name = "task-cache-timeout", required = false)
 	public int taskCacheTimeout();
 
 }
