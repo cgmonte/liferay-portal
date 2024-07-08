@@ -140,18 +140,19 @@ public class GenerativeAIResponseResourceImpl
 		generativeAIRequestBuilder.input(
 			(Map<String, Object>)generativeAIRequest.getInput());
 		generativeAIRequestBuilder.task(
-			_taskBuilder.build(configurationJSONObject, _createTaskContext(taskDefinition)));
+			_taskBuilder.build(
+				configurationJSONObject, _createTaskContext(taskDefinition)));
 
 		return generativeAIRequestBuilder.build();
 	}
 
 	private TaskContext _createTaskContext(TaskDefinition taskDefinition)
-			throws Exception {
+		throws Exception {
+
 		TaskContext taskContext = new TaskContext(
 			contextCompany.getCompanyId(),
 			contextAcceptLanguage.getPreferredLocale(),
-			taskDefinition.getExternalReferenceCode(),
-			contextUser.getUserId());
+			taskDefinition.getExternalReferenceCode(), contextUser.getUserId());
 
 		_contributeContextParameters(taskContext);
 		_contributeUserParameters(taskContext);
