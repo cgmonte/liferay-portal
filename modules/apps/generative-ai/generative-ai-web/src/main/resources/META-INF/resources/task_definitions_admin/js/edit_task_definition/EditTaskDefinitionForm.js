@@ -214,9 +214,7 @@ function EditTaskDefinitionForm({
 	 * @return {Object}
 	 */
 	const _getConfiguration = ({taskConfig}) => {
-		const configuration = {
-			taskConfiguration: taskConfig ? JSON.parse(taskConfig) : {},
-		};
+		const configuration = taskConfig ? JSON.parse(taskConfig) : {};
 
 		return configuration;
 	};
