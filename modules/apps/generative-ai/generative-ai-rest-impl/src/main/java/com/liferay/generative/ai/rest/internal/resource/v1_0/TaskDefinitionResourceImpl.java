@@ -336,11 +336,14 @@ public class TaskDefinitionResourceImpl extends BaseTaskDefinitionResourceImpl {
 		JSONObject configurationJSONObject = _jsonFactory.createJSONObject(
 			(Map<?, ?>)taskDefinition.getConfiguration());
 
-		if (configurationJSONObject == null) {
+		JSONObject taskConfigurationJSONObject =
+			configurationJSONObject.getJSONObject("taskConfiguration");
+
+		if (taskConfigurationJSONObject == null) {
 			return "{}";
 		}
 
-		return String.valueOf(configurationJSONObject);
+		return String.valueOf(taskConfigurationJSONObject);
 	}
 
 	private String _getSchemaVersion() {
