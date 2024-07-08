@@ -15,6 +15,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
@@ -371,6 +372,10 @@ public abstract class BaseTask implements Task {
 
 		String[] values = StringUtils.substringsBetween(
 			promptTemplate.template(), "{{", "}}");
+
+		if (ArrayUtil.isEmpty(values)) {
+			return;
+		}
 
 		for (String value : values) {
 			if (!promptTemplateVariables.containsKey(value)) {
