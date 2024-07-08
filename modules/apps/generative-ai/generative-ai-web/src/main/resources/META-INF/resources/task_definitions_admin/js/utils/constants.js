@@ -25,3 +25,15 @@ export const DEFAULT_INDEX_CONFIGURATION = {
 export const SXP_ELEMENT_PREFIX = {
 	QUERY: 'querySXPElement',
 };
+
+export const NAME_LABELS = {
+	chain: "Chain",
+	gemini_chat_model: "Gemini Chat Model",
+	google_imagen: "Google Imagen",
+	local_document_retrieval: "Local Document Retrieval",
+	retrieve_local_documents: "Retrieve Local Documents",
+	openai_image_model: "OpenAI Image Model",
+	task_context_agent: "Task Context Agent",
+	text_input_agent: "Text Input Agent",
+	webhook: "Webhook",
+}

@@ -3,70 +3,149 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayForm, {ClayRadio, ClayRadioGroup, ClaySelect} from '@clayui/form';
+import ClayForm, { ClayRadio, ClayRadioGroup, ClaySelect } from '@clayui/form';
+import ClayButton from '@clayui/button';
+import { ClayInput } from '@clayui/form';
+
 import ClayLayout from '@clayui/layout';
 import getCN from 'classnames';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState } from 'react';
 
 import taskConfigurationSchema from '../../../schemas/task-configuration.schema.json';
 import CodeMirrorEditor from '../../shared/CodeMirrorEditor';
 import LearnMessage from '../../shared/LearnMessage';
 import ThemeContext from '../../shared/ThemeContext';
-import {DEFAULT_INDEX_CONFIGURATION} from '../../utils/constants';
+import { DEFAULT_INDEX_CONFIGURATION } from '../../utils/constants';
+import ConfigurationForm from './ConfigurationForm';
+import BasicFlow from './ConfigurationFlow/BasicFlow';
+import { add } from 'date-fns';
 
 const CONFIGURATION_SCHEMAS = {
 	taskConfig: taskConfigurationSchema,
 };
 
+const addIdstoSerializedTaskConfig = (serializedTaskConfig) => {
+	const taskConfig = JSON.parse(serializedTaskConfig);
+
+    if (!taskConfig || !Object.keys(taskConfig).length) {
+        return taskConfig;
+    }
+
+	let idCounter = 1;
+
+	function addIdToObjectsWithNames(obj) {
+	  for (let key in obj) {
+		if (typeof obj[key] === 'object' && obj[key] !== null) {
+		  addIdToObjectsWithNames(obj[key]);
+		}
+		if (key === 'name') {
+		  obj.id = idCounter++;
+		}
+	  }
+	}
+
+	addIdToObjectsWithNames(taskConfig);
+
+	return taskConfig;
+};
+
 function ConfigurationTab({
 	errors,
 	setFieldTouched,
+	serializedTaskConfig,
 	setFieldValue,
-	taskConfig,
 	touched
 }) {
-	const {isCompanyAdmin} = useContext(ThemeContext);
-
-	const _renderEditor = (configName, configValue) => (
-		<div
-			className={getCN({
-				'has-error': touched[configName] && errors[configName],
-			})}
-			onBlur={() => setFieldTouched(configName)}
-		>
-			<CodeMirrorEditor
-				autocompleteSchema={CONFIGURATION_SCHEMAS[configName]}
-				onChange={(value) => setFieldValue(configName, value)}
-				value={configValue}
-			/>
-
-			{touched[configName] && errors[configName] && (
-				<ClayForm.FeedbackGroup>
-					<ClayForm.FeedbackItem>
-						<ClayForm.FeedbackIndicator symbol="exclamation-full" />
-
-						{errors[configName]}
-					</ClayForm.FeedbackItem>
-				</ClayForm.FeedbackGroup>
-			)}
-		</div>
+	const { isCompanyAdmin } = useContext(ThemeContext);
+	const [editingMode, setEditingMode] = useState('json');
+	const [taskConfigWithIds, setTaskConfigWithIds] = useState(
+		addIdstoSerializedTaskConfig(serializedTaskConfig)
 	);
+
+	useEffect(() => {
+		setTaskConfigWithIds(
+			addIdstoSerializedTaskConfig(
+				serializedTaskConfig
+			)
+		);
+	}, [serializedTaskConfig]);
+
+	useEffect(() => {
+		console.log("taskConfigWithIds", taskConfigWithIds);
+	}, [taskConfigWithIds]);
+
+	const _renderJSONEditor = () => (
+		<ClayForm.Group>
+			<div
+				className={getCN({
+					'has-error': touched['taskConfig'] && errors['taskConfig'],
+				})}
+				onBlur={() => setFieldTouched('taskConfig')}
+			>
+				<CodeMirrorEditor
+					autocompleteSchema={CONFIGURATION_SCHEMAS['taskConfig']}
+					onChange={(value) => setFieldValue('taskConfig', value)}
+					value={serializedTaskConfig}
+				/>
+
+				{touched['taskConfig'] && errors['taskConfig'] && (
+					<ClayForm.FeedbackGroup>
+						<ClayForm.FeedbackItem>
+							<ClayForm.FeedbackIndicator symbol="exclamation-full" />
+
+							{errors['taskConfig']}
+						</ClayForm.FeedbackItem>
+					</ClayForm.FeedbackGroup>
+				)}
+			</div>
+		</ClayForm.Group>
+	);
+
+	const _renderFlowEditor = () => { 
+		return (
+			<div className='flow-editor-container'>
+				<BasicFlow
+					editingMode={editingMode}
+					taskConfig={taskConfigWithIds}
+					setFieldTouched = {setFieldTouched}
+					setFieldValue = {setFieldValue}
+				/>
+			</div>
+		)
+	};
+
+	const _handleSwitchEditMode = () =>{
+		setEditingMode((currentMode) =>
+			currentMode === 'json' ? 'flow' : 'json'
+		)
+	};
 
 	return (
 		<ClayLayout.ContainerFluid className="layout-section-main" size="xl">
 			<div className="layout-section-main-shift">
 				<div className="configuration-sheet sheet">
-					<h2 className="sheet-title">
-						{Liferay.Language.get('configuration')}
-					</h2>
-
-					<ClayForm.Group>
-						<label>
+					<div className='sheet-header'>
+						<label className="sheet-title">
 							{Liferay.Language.get('task-configuration')}
 						</label>
 
-						{_renderEditor('taskConfig', taskConfig)}
-					</ClayForm.Group>
+						<ClayButton
+							borderless
+							displayType="secondary"
+							onClick={_handleSwitchEditMode}
+							xs
+						>
+							{editingMode === 'json'
+								? "Edit with Flow"
+								: "Edit with JSON"}
+						</ClayButton>
+					</div>
+
+					{editingMode === 'json'
+						? _renderJSONEditor()
+						: _renderFlowEditor()
+					}
+
 				</div>
 			</div>
 		</ClayLayout.ContainerFluid>

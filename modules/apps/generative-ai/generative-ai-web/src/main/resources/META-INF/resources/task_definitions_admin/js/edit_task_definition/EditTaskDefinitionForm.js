@@ -458,7 +458,6 @@ function EditTaskDefinitionForm({
 	};
 
 	const _renderTabContent = () => {
-		console.log('ASDASDASDASD' + formik.values.taskConfig);
 		switch (tab) {
 			default:
 				return (
@@ -466,7 +465,7 @@ function EditTaskDefinitionForm({
 						errors={formik.errors}
 						setFieldTouched={formik.setFieldTouched}
 						setFieldValue={formik.setFieldValue}
-						taskConfig={formik.values.taskConfig}
+						serializedTaskConfig={formik.values.taskConfig}
 						touched={formik.touched}
 					/>
 				);
@@ -513,9 +512,9 @@ function EditTaskDefinitionForm({
 						data-testid={TEST_IDS.PREVIEW_SIDEBAR_BUTTON}
 						displayType="secondary"
 						onClick={_handleToggleSidebar(SIDEBAR_TYPES.PREVIEW)}
-						small
+						sm
 					>
-						Chat Preview
+						Preview Chat
 					</ClayButton>
 				</ClayToolbar.Item>
 			</PageToolbar>
