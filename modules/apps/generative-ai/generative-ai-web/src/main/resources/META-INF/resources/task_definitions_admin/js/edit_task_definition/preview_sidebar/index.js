@@ -191,6 +191,7 @@ function PreviewSidebar({
 					endpoints={{sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`}} 
 					greetingMessage="Try me!"
 					ref={AssistantChatRef}
+					taskExternalReferenceCode={formikValues.externalReferenceCode}
 				/>
 			</div>
 		</div>

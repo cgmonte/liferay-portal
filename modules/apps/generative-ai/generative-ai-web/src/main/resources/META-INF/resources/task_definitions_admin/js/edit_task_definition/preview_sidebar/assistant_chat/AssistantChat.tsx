@@ -10,7 +10,7 @@ import { ClayInput } from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import { fetch } from 'frontend-js-web';
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface AssistantChatProps {
@@ -19,6 +19,7 @@ interface AssistantChatProps {
 	formikValues: any;
 	greetingMessage?: string;
 	sidebarBodyHeight: number;
+	taskExternalReferenceCode: string;
 }
 
 interface Endpoints {
@@ -58,6 +59,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 	assistantName = 'Assistant',
 	endpoints,
 	greetingMessage = 'Hi, I am your assistant. How can I help you?',
+	taskExternalReferenceCode,
 }: AssistantChatProps, ref) {
 	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(802);
 
@@ -67,10 +69,21 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	const [prompt, setPrompt] = useState('');
 
+	const originalTaskExternalReferenceCode = useRef(taskExternalReferenceCode);
+
+	const clearChatHistory = () => {
+		setChatHistory([]);
+		localStorage.removeItem(taskExternalReferenceCode);
+	}
+
+	function renameLocalStorageKey(oldKey, newKey) {
+		const value: any = localStorage.getItem(oldKey);
+		localStorage.setItem(newKey, value);
+		localStorage.removeItem(oldKey);
+	  }
+
 	useImperativeHandle(ref, () => ({
-		clearChatHistory: () => {
-			setChatHistory([]);
-		}
+		clearChatHistory,
 	}));
 
 	const isInsideIframe = window.self !== window.top;
@@ -98,6 +111,12 @@ const AssistantChat = forwardRef(function AssistantChat({
 		if (sidebarElement) {
 			setSidebarBodyHeight(sidebarElement.offsetHeight - 64);
 		}
+
+		const localStorageChatHistory = localStorage.getItem(taskExternalReferenceCode);
+
+		if (localStorageChatHistory) {
+			setChatHistory(JSON.parse(localStorageChatHistory));
+		};
 	}, []);
 
 	useEffect(() => {
@@ -109,7 +128,21 @@ const AssistantChat = forwardRef(function AssistantChat({
 			messageBody.scrollTop =
 				messageBody.scrollHeight - messageBody.clientHeight;
 		}
+
+		if (chatHistory.length) { 
+			localStorage.setItem(
+				taskExternalReferenceCode, 
+				JSON.stringify(chatHistory)
+			); 
+		}
 	}, [chatHistory]);
+
+	useEffect(() => {
+		if (taskExternalReferenceCode !== originalTaskExternalReferenceCode.current) {
+			renameLocalStorageKey(originalTaskExternalReferenceCode.current, taskExternalReferenceCode);
+			originalTaskExternalReferenceCode.current = taskExternalReferenceCode;
+		}
+	}, [taskExternalReferenceCode])
 
 	const handleReceiveMessage = (value: any) => {
 		if (value) {
