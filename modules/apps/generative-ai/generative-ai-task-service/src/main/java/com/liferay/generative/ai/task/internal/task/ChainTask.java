@@ -78,15 +78,17 @@ public class ChainTask extends BaseTask implements Task {
 
 	@Override
 	public void test() throws TaskTestException {
+
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void validateConfigurationJSON()
 		throws TaskDefinitionConfigurationJSONException {
 
-		if (!configurationJSONObject.has("tasks")) {
-			throw new IllegalArgumentException("Tasks are required");
-		}
+		// TODO Auto-generated method stub
+
 	}
 
 	protected String toStringValue(Object value) {

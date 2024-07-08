@@ -6,10 +6,10 @@
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.Http;
 
 import java.util.Map;
 
-import com.liferay.portal.kernel.util.Http;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

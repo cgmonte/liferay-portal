@@ -82,7 +82,7 @@ public class TaskBuilderImpl implements TaskBuilder {
 		else if (name.equals("webhook")) {
 			return new WebHookTask(
 				configurationJSONObject, _generativeAIConfigurationProvider,
-				this, taskContext, _http);
+				taskContext, _http);
 		}
 
 		throw new IllegalArgumentException("Unknown task name " + name);
