@@ -9,8 +9,10 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.Map;
 
+import com.liferay.portal.kernel.util.Http;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Petteri Karttunen
@@ -33,8 +35,13 @@ public class ToolsProviderImpl implements ToolsProvider {
 			"site", new UserTools()
 		).put(
 			"user", new UserTools()
+		).put(
+			"webhook", new WebHookTools(_http)
 		).build();
 	}
+
+	@Reference
+	private Http _http;
 
 	private Map<String, Object> _tools;
 

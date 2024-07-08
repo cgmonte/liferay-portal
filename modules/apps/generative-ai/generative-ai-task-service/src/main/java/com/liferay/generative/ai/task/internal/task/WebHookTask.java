@@ -9,10 +9,17 @@ import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfiguratio
 import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONException;
 import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.task.Task;
+import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.search.hits.SearchHits;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,16 +30,31 @@ public class WebHookTask extends BaseTask implements Task {
 	public WebHookTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext) {
+		TaskBuilder taskbuilder, TaskContext taskContext, Http http) {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
 			"webhook", taskContext, null);
+
+		_http = http;
 	}
 
 	@Override
 	public TaskResponse execute(boolean debug, Map<String, Object> input) {
-		return null;
+		String url = GetterUtil.getString(attributesJSONObject.get("url"));
+		Http.Options options = new Http.Options();
+		options.setMethod(Http.Method.GET);
+		options.setLocation(url);
+		String responseString;
+		try {
+			responseString = _http.URLtoString(options);
+		}
+		catch (IOException e) {
+			return toTaskResponse(
+				_getDebugInfo(debug, e), null);
+		}
+		return toTaskResponse(
+			_getDebugInfo(debug, null), responseString);
 	}
 
 	@Override
@@ -44,8 +66,22 @@ public class WebHookTask extends BaseTask implements Task {
 		throws TaskDefinitionConfigurationJSONException {
 	}
 
-	protected String toStringValue(Object value) {
-		return null;
+	private Map<String, Object> _getDebugInfo(
+		boolean debug, Exception exception) {
+
+		if (!debug) {
+			return null;
+		}
+
+		if(exception == null) {
+			return new HashMap<>();
+		}
+
+		return HashMapBuilder.<String, Object>put(
+			"exception", exception.getLocalizedMessage()
+		).build();
 	}
+
+	private final Http _http;
 
 }

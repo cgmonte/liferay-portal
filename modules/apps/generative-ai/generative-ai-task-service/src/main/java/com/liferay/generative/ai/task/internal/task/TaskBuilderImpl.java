@@ -14,6 +14,7 @@ import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.searcher.SearchRequestBuilderFactory;
 import com.liferay.portal.search.searcher.Searcher;
@@ -81,7 +82,7 @@ public class TaskBuilderImpl implements TaskBuilder {
 		else if (name.equals("webhook")) {
 			return new WebHookTask(
 				configurationJSONObject, _generativeAIConfigurationProvider,
-				taskContext);
+				this, taskContext, _http);
 		}
 
 		throw new IllegalArgumentException("Unknown task name " + name);
@@ -90,6 +91,9 @@ public class TaskBuilderImpl implements TaskBuilder {
 	@Reference
 	private GenerativeAITaskConfigurationProvider
 		_generativeAIConfigurationProvider;
+
+	@Reference
+	private Http _http;
 
 	@Reference
 	private Searcher _searcher;
