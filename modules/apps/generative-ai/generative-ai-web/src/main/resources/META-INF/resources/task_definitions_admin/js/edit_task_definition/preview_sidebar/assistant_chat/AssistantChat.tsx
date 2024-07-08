@@ -157,6 +157,16 @@ const AssistantChat = forwardRef(function AssistantChat({
 		setIsWaitingForResponse(false);
 	};
 
+	const handleError = (errorMessage: string) => {
+		handleReceiveMessage(
+			{
+				output: {
+					text: errorMessage,
+				},
+			}
+		)
+	};
+
 	const handleSendMessage = async (value: string) => {
 		const oldHistory = chatHistory;
 
@@ -182,12 +192,12 @@ const AssistantChat = forwardRef(function AssistantChat({
 				});
 
 				if (response.status !== 200) {
-					handleReceiveMessage(
-						`HTTP error: ${response.status}, ${response.statusText}.`
+					handleError(
+						`HTTP Error: ${response?.status}${
+							response?.statusText ? ', ' + response.statusText : ''}.`
 					);
 				}
 				else {
-					console.log("response", response);
 					const json = await response.json();
 
 					if (json.error) {
@@ -196,13 +206,12 @@ const AssistantChat = forwardRef(function AssistantChat({
 						);
 					}
 					else {
-						console.log("json.response", json);
 						handleReceiveMessage(json);
 					}
 				}
 			}
 			catch (error) {
-				handleReceiveMessage(
+				handleError(
 					'An error occurred while sending the message.'
 				);
 			}
