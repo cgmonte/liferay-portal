@@ -66,11 +66,6 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 		return toTaskResponse(getDebugInfo(false, debug, result), result);
 	}
 
-	private String _getMemoryId() {
-
-		return StringBundler.concat(taskContext.getUserId(), StringPool.POUND, taskContext.getTaskDefinitionExternalReferenceCode());
-	}
-
 	@Override
 	public void test() throws TaskTestException {
 
@@ -134,6 +129,12 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 		}
 
 		return builder.build();
+	}
+
+	private String _getMemoryId() {
+		return StringBundler.concat(
+			taskContext.getUserId(), StringPool.POUND,
+			taskContext.getTaskDefinitionExternalReferenceCode());
 	}
 
 	private void _setChatMemory(AiServices<GeminiAssistant> builder) {

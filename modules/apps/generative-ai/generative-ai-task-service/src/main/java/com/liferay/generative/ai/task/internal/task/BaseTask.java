@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author Petteri Karttunen
  */
@@ -84,6 +86,8 @@ public abstract class BaseTask implements Task {
 					promptTemplateVariables.put(key, value);
 				}
 			});
+
+		_ensurePromptTemplateVariables(promptTemplate, promptTemplateVariables);
 
 		return promptTemplate.apply(promptTemplateVariables);
 	}
@@ -360,5 +364,19 @@ public abstract class BaseTask implements Task {
 	protected final String name;
 	protected final TaskContext taskContext;
 	protected final ToolsProvider toolsProvider;
+
+	private void _ensurePromptTemplateVariables(
+		PromptTemplate promptTemplate,
+		Map<String, Object> promptTemplateVariables) {
+
+		String[] values = StringUtils.substringsBetween(
+			promptTemplate.template(), "{{", "}}");
+
+		for (String value : values) {
+			if (!promptTemplateVariables.containsKey(value)) {
+				promptTemplateVariables.put(value, StringPool.BLANK);
+			}
+		}
+	}
 
 }

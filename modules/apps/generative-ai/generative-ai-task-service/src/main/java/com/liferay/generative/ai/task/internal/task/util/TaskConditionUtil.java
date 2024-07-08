@@ -28,7 +28,7 @@ public class TaskConditionUtil {
 			}
 			else if (key.equals("endsWith")) {
 				return _validateEndsWith(
-					conditionJSONObject.getJSONObject("startsWith"), text);
+					conditionJSONObject.getJSONObject("endsWith"), text);
 			}
 			else if (key.equals("equals")) {
 				return _validateEquals(

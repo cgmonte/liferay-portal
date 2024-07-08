@@ -171,6 +171,7 @@ function PreviewSidebar({
 					>
 						<ClayIcon symbol="trash" />
 					</ClayButton>
+
 					<ClayButton
 						aria-label={Liferay.Language.get('close')}
 						borderless
@@ -187,9 +188,9 @@ function PreviewSidebar({
 			<div className="sidebar-body">
 				<AssistantChat 
 					assistantName="LLM Model" 
+					endpoints={{sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`}}
+					greetingMessage="Try me!" 
 					isMounted={isMounted}
-					endpoints={{sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`}} 
-					greetingMessage="Try me!"
 					ref={AssistantChatRef}
 					taskExternalReferenceCode={formikValues.externalReferenceCode}
 				/>
