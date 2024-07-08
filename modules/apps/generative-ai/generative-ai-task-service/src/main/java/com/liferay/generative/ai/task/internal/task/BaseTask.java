@@ -328,7 +328,7 @@ public abstract class BaseTask implements Task {
 				contextOutputVariableName,
 				new TaskContextParameter(toStringValue(value), value));
 
-			debugInfo.put("context_output_variable_value", value);
+			debugInfo.put("context_output_parameter_value", value);
 
 			return new TaskResponseImpl(debugInfo, null);
 		}

@@ -57,8 +57,8 @@ public class TextInputAgentTask extends BaseTask implements Task {
 		TaskResponse taskResponse = task.execute(debug, input);
 
 		return new TaskResponseImpl(
-			_getDebugInfo(debug, currentTimeMillis, task, taskResponse), taskResponse.getOutput());
-
+			_getDebugInfo(debug, currentTimeMillis, task, taskResponse),
+			taskResponse.getOutput());
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
-			"retrieve_local_documents", taskContext, null);
+			"local_document_retrieval", taskContext, null);
 
 		_searcher = searcher;
 		_searchRequestBuilderFactory = searchRequestBuilderFactory;
@@ -59,7 +59,7 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 		SearchResponse searchResponse = _searcher.search(
 			_getSearchRequest(
 				_createSearchContext(input),
-				attributesJSONObject.getInt("topK", 3)));
+				attributesJSONObject.getInt("top_k", 3)));
 
 		return toTaskResponse(
 			_getDebugInfo(debug, searchResponse.getSearchHits()),
@@ -68,11 +68,17 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 
 	@Override
 	public void test() throws TaskTestException {
+
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void validateConfigurationJSON()
 		throws TaskDefinitionConfigurationJSONException {
+
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -113,9 +119,7 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 
 		//searchContext.setGroupIds(new long[] {groupId});
 
-		searchContext.setKeywords(
-			MapUtil.getString(
-				input, attributesJSONObject.getString("input_field", "text")));
+		searchContext.setKeywords(MapUtil.getString(input, "text"));
 		searchContext.setLocale(locale);
 
 		TaskContextParameter timeZoneTaskContextParameter =
@@ -209,7 +213,8 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 			targetSearchContext::setAttribute);
 
 		String sxpBlueprintExternalReferenceCode =
-			attributesJSONObject.getString("sxpBlueprintExternalReferenceCode");
+			attributesJSONObject.getString(
+				"sxp_blueprint_external_reference_code");
 
 		if (!Validator.isBlank(sxpBlueprintExternalReferenceCode)) {
 			targetSearchContext.setAttribute(
