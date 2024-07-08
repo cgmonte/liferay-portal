@@ -40,9 +40,9 @@ public class WebHookTask extends BaseTask implements Task {
 	public TaskResponse execute(boolean debug, Map<String, Object> input) {
 		Http.Options options = new Http.Options();
 
-		options.setMethod(Http.Method.GET);
 		options.setLocation(
 			GetterUtil.getString(attributesJSONObject.get("url")));
+		options.setMethod(Http.Method.GET);
 
 		try {
 			return toTaskResponse(

@@ -28,21 +28,21 @@ public class GeminiMapDBChatMemoryStore implements ChatMemoryStore {
 
 	@Override
 	public void deleteMessages(Object memoryId) {
-		_map.remove((int)memoryId);
+		_map.remove((String)memoryId);
 		_db.commit();
 	}
 
 	@Override
 	public List<ChatMessage> getMessages(Object memoryId) {
 		return ChatMessageDeserializer.messagesFromJson(
-			_map.get((int)memoryId));
+			_map.get((String)memoryId));
 	}
 
 	@Override
 	public void updateMessages(Object memoryId, List<ChatMessage> messages) {
 		String json = ChatMessageSerializer.messagesToJson(messages);
 
-		_map.put((int)memoryId, json);
+		_map.put((String)memoryId, json);
 
 		_db.commit();
 	}
@@ -52,7 +52,7 @@ public class GeminiMapDBChatMemoryStore implements ChatMemoryStore {
 	}
 
 	private static final DB _db;
-	private static final Map<Integer, String> _map;
+	private static final Map<String, String> _map;
 
 	static {
 		new File(
@@ -66,7 +66,7 @@ public class GeminiMapDBChatMemoryStore implements ChatMemoryStore {
 		).make();
 
 		_map = _db.hashMap(
-			"messages", Serializer.INTEGER, Serializer.STRING
+			"messages", Serializer.STRING, Serializer.STRING
 		).createOrOpen();
 	}
 
