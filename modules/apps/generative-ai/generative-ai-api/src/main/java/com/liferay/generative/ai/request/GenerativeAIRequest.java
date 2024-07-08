@@ -21,4 +21,6 @@ public interface GenerativeAIRequest {
 
 	public Task getTask();
 
+	public boolean isDebug();
+
 }

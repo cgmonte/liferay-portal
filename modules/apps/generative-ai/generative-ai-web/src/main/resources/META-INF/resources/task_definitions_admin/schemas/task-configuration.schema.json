@@ -1,18 +1,69 @@
 {
 	"$id": "task-configuration.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"definitions": {
-	},
+	"type": "object",
 	"properties": {
 		"attributes": {
+			"description": "Attributes of the task",
 			"type": "object"
 		},
 		"debug": {
+			"default": false,
+			"description": "Include debug information in the response",
 			"type": "boolean"
 		},
 		"name": {
-			"type": "string"
+			"default": "gemini_chat_model",
+			"description": "The name of the task",
+			"type": "string",
+			"enum": [
+				"chain",
+				"gemini_chat_model",
+				"local_document_retrieval",
+				"openai_image_model",
+				"task_context_agent",
+				"text_input_agent",
+				"webhook"
+			]
 		}
 	},
-	"type": "object"
+	"allOf": [
+		{
+			"if": {
+				"properties": {
+					"name": {
+						"const": "chain"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"attributes": {
+						"type": "object",
+						"properties": {
+							"tasks": {
+								"const": "chain"
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"name": {
+						"const": "gemini_chat_model"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"asdasdasdasd": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	]
 }

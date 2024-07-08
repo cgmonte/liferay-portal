@@ -22,7 +22,14 @@ public class GenerativeAIRequestBuilderImpl
 
 	@Override
 	public GenerativeAIRequest build() {
-		return new GenerativeAIRequestImpl(_input, _task);
+		return new GenerativeAIRequestImpl(_debug, _input, _task);
+	}
+
+	@Override
+	public GenerativeAIRequestBuilder debug(boolean debug) {
+		_debug = debug;
+
+		return this;
 	}
 
 	@Override
@@ -39,6 +46,7 @@ public class GenerativeAIRequestBuilderImpl
 		return this;
 	}
 
+	private boolean _debug;
 	private Map<String, Object> _input;
 	private Task _task;
 

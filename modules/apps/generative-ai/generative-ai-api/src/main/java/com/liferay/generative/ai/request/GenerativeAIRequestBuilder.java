@@ -19,6 +19,8 @@ public interface GenerativeAIRequestBuilder {
 
 	public GenerativeAIRequest build();
 
+	public GenerativeAIRequestBuilder debug(boolean debug);
+
 	public GenerativeAIRequestBuilder input(Map<String, Object> input);
 
 	public GenerativeAIRequestBuilder task(Task task);

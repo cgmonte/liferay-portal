@@ -15,7 +15,10 @@ import java.util.Map;
  */
 public class GenerativeAIRequestImpl implements GenerativeAIRequest {
 
-	public GenerativeAIRequestImpl(Map<String, Object> input, Task task) {
+	public GenerativeAIRequestImpl(
+		boolean debug, Map<String, Object> input, Task task) {
+
+		_debug = debug;
 		_input = input;
 		_task = task;
 	}
@@ -28,9 +31,14 @@ public class GenerativeAIRequestImpl implements GenerativeAIRequest {
 		return _task;
 	}
 
+	public boolean isDebug() {
+		return _debug;
+	}
+
 	private GenerativeAIRequestImpl() {
 	}
 
+	private boolean _debug;
 	private Map<String, Object> _input;
 	private Task _task;
 

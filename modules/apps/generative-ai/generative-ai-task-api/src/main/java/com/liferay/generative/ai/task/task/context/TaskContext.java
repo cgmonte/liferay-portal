@@ -21,7 +21,8 @@ public class TaskContext {
 		_userId = userId;
 	}
 
-	public void addTaskContextParameter(String key, TaskContextParameter taskContextParameter) {
+	public void addTaskContextParameter(
+		String key, TaskContextParameter taskContextParameter) {
 
 		if (_taskContextParameters == null) {
 			_taskContextParameters = new HashMap<>();

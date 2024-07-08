@@ -2,16 +2,13 @@ Bundle-Name: Liferay Generative AI Task Service
 Bundle-SymbolicName: com.liferay.generative.ai.task.service
 Bundle-Version: 1.0.0
 Import-Package:\
+	!android.*,\
+	\
+	!com.sun.tools.javac.*,\
+	\
 	!com.aayushatharva.brotli4j.*,\
 	\
 	!com.github.luben.zstd.*,\
-	\
-	!com.google.cloud.location.*,\
-	!com.google.findbugs.*,\
-	!com.google.guava.*,\
-	!com.google.protobuf.nano.*,\
-	!com.google.rpc.*,\
-	!com.google.type.*,\
 	\
 	!com.jcraft.jzlib.*,\
 	\
@@ -19,9 +16,15 @@ Import-Package:\
 	\
 	!com.oracle.svm.*,\
 	\
+	!io.netty.channel.unix.*,\
+	\
 	!io.opentelemetry.*,\
 	\
+	!kotlinx.coroutines.*,\
+	\
 	!lzma.sdk.*,\
+	\
+	!okhttp3.sse.*,\
 	\
 	!opennlp.tools.*,\
 	\
@@ -38,7 +41,11 @@ Import-Package:\
 	\
 	!reactor.blockhound.*,\
 	\
+	!sun.net.www.*,\
+	\
 	!sun.security.*,\
+	\
+	!sun.util.*,\
 	\
 	*
 Liferay-Require-SchemaVersion: 1.0.0

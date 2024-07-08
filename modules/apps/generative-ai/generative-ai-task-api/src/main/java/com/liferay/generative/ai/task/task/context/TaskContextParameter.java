@@ -12,6 +12,7 @@ public class TaskContextParameter {
 
 	public TaskContextParameter(String stringValue) {
 		_stringValue = stringValue;
+
 		_value = stringValue;
 	}
 
@@ -30,4 +31,5 @@ public class TaskContextParameter {
 
 	private final String _stringValue;
 	private final Object _value;
+
 }

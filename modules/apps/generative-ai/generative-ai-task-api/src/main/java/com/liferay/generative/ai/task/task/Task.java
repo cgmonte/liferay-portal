@@ -5,6 +5,9 @@
 
 package com.liferay.generative.ai.task.task;
 
+import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONException;
+import com.liferay.generative.ai.task.exception.TaskTestException;
+
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -15,13 +18,13 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface Task {
 
-	public TaskResponse execute(
-		Map<String, Object> input);
+	public TaskResponse execute(boolean debug, Map<String, Object> input);
 
 	public String getName();
 
-	public boolean isDebug();
+	public void test() throws TaskTestException;
 
-	public boolean validate();
+	public void validateConfigurationJSON()
+		throws TaskDefinitionConfigurationJSONException;
 
 }

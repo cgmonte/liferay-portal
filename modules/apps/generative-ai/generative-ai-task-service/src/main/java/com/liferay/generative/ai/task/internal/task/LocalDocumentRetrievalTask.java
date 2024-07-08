@@ -6,6 +6,8 @@
 package com.liferay.generative.ai.task.internal.task;
 
 import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
+import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONException;
+import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.generative.ai.task.task.context.TaskContext;
@@ -36,9 +38,9 @@ import java.util.TimeZone;
 /**
  * @author Petteri Karttunen
  */
-public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
+public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 
-	public RetrieveLocalDocumentsTask(
+	public LocalDocumentRetrievalTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
 		TaskContext taskContext, Searcher searcher,
@@ -46,27 +48,31 @@ public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
-			"retrieve_local_documents", taskContext);
+			"retrieve_local_documents", taskContext, null);
 
 		_searcher = searcher;
 		_searchRequestBuilderFactory = searchRequestBuilderFactory;
 	}
 
 	@Override
-	public TaskResponse execute(Map<String, Object> input) {
+	public TaskResponse execute(boolean debug, Map<String, Object> input) {
 		SearchResponse searchResponse = _searcher.search(
 			_getSearchRequest(
 				_createSearchContext(input),
 				attributesJSONObject.getInt("topK", 3)));
 
 		return toTaskResponse(
-			_getDebugInfo(searchResponse.getSearchHits()),
+			_getDebugInfo(debug, searchResponse.getSearchHits()),
 			_getTexts(searchResponse.getSearchHits()));
 	}
 
 	@Override
-	public boolean validate() {
-		return false;
+	public void test() throws TaskTestException {
+	}
+
+	@Override
+	public void validateConfigurationJSON()
+		throws TaskDefinitionConfigurationJSONException {
 	}
 
 	@Override
@@ -113,7 +119,7 @@ public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 		searchContext.setLocale(locale);
 
 		TaskContextParameter timeZoneTaskContextParameter =
-			taskContext.getTaskContextParameter("ipAddress");
+			taskContext.getTaskContextParameter("timeZone");
 
 		if (timeZoneTaskContextParameter != null) {
 			searchContext.setTimeZone(
@@ -125,7 +131,13 @@ public class RetrieveLocalDocumentsTask extends BaseTask implements Task {
 		return searchContext;
 	}
 
-	private Map<String, Object> _getDebugInfo(SearchHits searchHits) {
+	private Map<String, Object> _getDebugInfo(
+		boolean debug, SearchHits searchHits) {
+
+		if (!debug) {
+			return null;
+		}
+
 		return HashMapBuilder.<String, Object>put(
 			"totalHits", searchHits.getTotalHits()
 		).build();

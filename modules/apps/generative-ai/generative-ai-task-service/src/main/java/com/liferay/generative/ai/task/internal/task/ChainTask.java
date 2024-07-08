@@ -6,6 +6,8 @@
 package com.liferay.generative.ai.task.internal.task;
 
 import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
+import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONException;
+import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.TaskResponse;
@@ -13,6 +15,7 @@ import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,11 +34,7 @@ public class ChainTask extends BaseTask implements Task {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider, "chain",
-			taskContext);
-
-		if (!configurationJSONObject.has("tasks")) {
-			throw new IllegalArgumentException("Tasks are required");
-		}
+			taskContext, null);
 
 		JSONArray jsonArray = configurationJSONObject.getJSONArray("tasks");
 
@@ -46,36 +45,66 @@ public class ChainTask extends BaseTask implements Task {
 	}
 
 	@Override
-	public TaskResponse execute(Map<String, Object> input) {
-		Map<String, Object> debugInfos = new HashMap<>();
+	public TaskResponse execute(boolean debug, Map<String, Object> input) {
+		Map<String, Object> taskDebugInfos = new HashMap<>();
 
 		TaskResponse taskResponse = null;
 
 		for (Task task : _tasks) {
-			taskResponse = task.execute(input);
+			long currentTimeMillis = System.currentTimeMillis();
 
-			if (task.isDebug() && (taskResponse.getDebugInfo() != null)) {
-				debugInfos.put(
+			taskResponse = task.execute(debug, input);
+
+			if (debug) {
+				Map<String, Object> taskDebugInfo = taskResponse.getDebugInfo();
+
+				taskDebugInfo.put(
+					"executionTime", getExecutionTime(currentTimeMillis));
+
+				taskDebugInfos.put(
 					StringBundler.concat(
 						getName(), ".", task.getName(), "#", task.hashCode()),
-					taskResponse.getDebugInfo());
+					taskDebugInfo);
 			}
 		}
 
 		if (taskResponse != null) {
-			return new TaskResponseImpl(debugInfos, taskResponse.getOutput());
+			return new TaskResponseImpl(
+				_getDebugInfo(debug, taskDebugInfos), taskResponse.getOutput());
 		}
 
-		return new TaskResponseImpl(debugInfos, null);
+		return toTaskResponse(_getDebugInfo(debug, taskDebugInfos), null);
 	}
 
 	@Override
-	public boolean validate() {
-		return false;
+	public void test() throws TaskTestException {
+	}
+
+	@Override
+	public void validateConfigurationJSON()
+		throws TaskDefinitionConfigurationJSONException {
+
+		if (!configurationJSONObject.has("tasks")) {
+			throw new IllegalArgumentException("Tasks are required");
+		}
 	}
 
 	protected String toStringValue(Object value) {
 		return null;
+	}
+
+	private Map<String, Object> _getDebugInfo(
+		boolean debug, Map<String, Object> taskDebugInfos) {
+
+		if (!debug) {
+			return null;
+		}
+
+		return HashMapBuilder.<String, Object>put(
+			"numberOfTasks", _tasks.size()
+		).put(
+			"tasks", taskDebugInfos
+		).build();
 	}
 
 	private final List<Task> _tasks = new ArrayList<>();
