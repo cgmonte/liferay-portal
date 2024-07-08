@@ -1,136 +1,6 @@
 {
 	"$id": "task-configuration.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"allOf": [
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "chain"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/chainTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "gemini_chat_model"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/geminiChatModelTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "google_imagen"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/googleImagenTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "local_document_retrieval"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/localDocumentRetrievalTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "openai_image_model"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/openAIImageModelTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "task_context_agent"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/taskContextAgentTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "text_input_agent"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/textInputAgentTaskAttributes"
-					}
-				}
-			}
-		},
-		{
-			"if": {
-				"properties": {
-					"name": {
-						"const": "webhook"
-					}
-				}
-			},
-			"then": {
-				"properties": {
-					"attributes": {
-						"$ref": "#/definitions/webhookTaskAttributes"
-					}
-				}
-			}
-		}
-	],
 	"definitions": {
 		"allOfCondition": {
 			"oneOf": [
@@ -177,7 +47,7 @@
 			},
 			"type": "object"
 		},
-		"commonAttributes": {
+		"commonTaskAttributes": {
 			"properties": {
 				"context_output_parameter_name": {
 					"description": "The name / key of the context parameter where the output value of the task should be set.",
@@ -214,9 +84,9 @@
 			"type": "object"
 		},
 		"geminiChatModelTaskAttributes": {
-			"allOf": [
+			"anyOf": [
 				{
-					"$ref": "#/definitions/commonAttributes"
+					"$ref": "#/definitions/commonTaskAttributes"
 				}
 			],
 			"properties": {
@@ -275,23 +145,28 @@
 			"type": "object"
 		},
 		"googleImagenTaskAttributes": {
-			"allOf": [
+			"anyOf": [
 				{
-					"$ref": "#/definitions/commonAttributes"
+					"$ref": "#/definitions/commonTaskAttributes"
 				}
 			],
 			"properties": {
+				"endpoint": {
+					"type": "string"
+				},
+				"guidance_scale": {
+					"type": "number"
+				},
+				"language": {
+					"type": "string"
+				},
 				"location": {
 					"description": "The Google Cloud location to use.",
 					"type": "string"
 				},
-				"max_output_tokens": {
-					"description": "The maximum number of tokens to generate in the output.",
-					"type": "integer"
-				},
 				"max_retries": {
 					"description": "The number of times to retry the request if it fails",
-					"type": "integer"
+					"type": "number"
 				},
 				"model_name": {
 					"description": "The name of the Vertex AI model to use.",
@@ -302,29 +177,26 @@
 					],
 					"type": "string"
 				},
+				"negative_prompt": {
+					"type": "string"
+				},
 				"project": {
 					"description": "The name of the Google Cloud project to use.",
 					"type": "string"
 				},
-				"temperature": {
-					"description": "The temperature is used for sampling during response generation. Values 0-1. Set a lower number for more precision and higher for more creativity.",
-					"type": "number"
+				"publisher": {
+					"type": "string"
 				},
-				"top_k": {
-					"description": "The maximum number of tokens to consider when sampling.",
-					"type": "number"
-				},
-				"top_p": {
-					"description": "The maximum cumulative probability of tokens to consider when sampling. Default is 0.95",
+				"sample_image_size": {
 					"type": "number"
 				}
 			},
 			"type": "object"
 		},
 		"localDocumentRetrievalTaskAttributes": {
-			"allOf": [
+			"anyOf": [
 				{
-					"$ref": "#/definitions/commonAttributes"
+					"$ref": "#/definitions/commonTaskAttributes"
 				}
 			],
 			"properties": {
@@ -397,9 +269,9 @@
 			"type": "object"
 		},
 		"openAIImageModelTaskAttributes": {
-			"allOf": [
+			"anyOf": [
 				{
-					"$ref": "#/definitions/commonAttributes"
+					"$ref": "#/definitions/commonTaskAttributes"
 				}
 			],
 			"properties": {
@@ -495,7 +367,7 @@
 						"google_imagen",
 						"local_document_retrieval",
 						"openai_image_model",
-						"task_context_agent",
+						"task_context_parameter_agent",
 						"text_input_agent",
 						"webhook"
 					],
@@ -506,30 +378,134 @@
 		},
 		"taskAttributes": {
 			"description": "Attributes of the task",
-			"oneOf": [
+			"allOf": [
 				{
-					"$ref": "#/definitions/chainTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "chain"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/chainTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/geminiChatModelTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "gemini_chat_model"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/geminiChatModelTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/googleImagenTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "google_imagen"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/googleImagenTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/localDocumentRetrievalTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "local_document_retrieval"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/localDocumentRetrievalTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/openAIImageModelTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "openai_image_model"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/openAIImageModelTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/taskContextAgentTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "task_context_agent"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/taskContextAgentTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/textInputAgentTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "text_input_agent"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/textInputAgentTaskAttributes"
+							}
+						}
+					}
 				},
 				{
-					"$ref": "#/definitions/webhookTaskAttributes"
+					"if": {
+						"properties": {
+							"name": {
+								"const": "webhook"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"attributes": {
+								"$ref": "#/definitions/webhookTaskAttributes"
+							}
+						}
+					}
 				}
 			],
 			"type": "object"
@@ -571,7 +547,7 @@
 		"webhookTaskAttributes": {
 			"allOf": [
 				{
-					"$ref": "#/definitions/commonAttributes"
+					"$ref": "#/definitions/commonTaskAttributes"
 				}
 			],
 			"properties": {
@@ -583,30 +559,6 @@
 			"type": "object"
 		}
 	},
-	"properties": {
-		"attributes": {
-			"$ref": "#/definitions/taskAttributes"
-		},
-		"debug": {
-			"default": false,
-			"description": "Include debug information in the response",
-			"type": "boolean"
-		},
-		"name": {
-			"default": "gemini_chat_model",
-			"description": "The name of the task",
-			"enum": [
-				"chain",
-				"gemini_chat_model",
-				"google_imagen",
-				"local_document_retrieval",
-				"openai_image_model",
-				"task_context_agent",
-				"text_input_agent",
-				"webhook"
-			],
-			"type": "string"
-		}
-	},
+	"$ref": "#/definitions/task",
 	"type": "object"
 }
