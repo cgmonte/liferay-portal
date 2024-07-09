@@ -59,7 +59,8 @@ class EventEmitter<Data> {
 		for (const listener of this._listeners.values()) {
 			try {
 				listener(data);
-			} catch (error) {
+			}
+			catch (error) {
 				if (process.env.NODE_ENV === 'development') {
 					console.error(error);
 				}
@@ -183,6 +184,7 @@ export function useSelectorCallback<Result>(
 
 	const [selectorState, setSelectorState] = useReducer(
 		(state: Result, nextState: Result) => {
+
 			// If nextState is undefined, we consider this an accidental
 			// outdated-props issue. If you need to use an empty real state,
 			// use null instead.
@@ -255,7 +257,8 @@ function useThunk([state, dispatch]: [State, Dispatch]) {
 						return stateRef.current;
 					}
 				);
-			} else {
+			}
+			else {
 				dispatch(action);
 			}
 		}

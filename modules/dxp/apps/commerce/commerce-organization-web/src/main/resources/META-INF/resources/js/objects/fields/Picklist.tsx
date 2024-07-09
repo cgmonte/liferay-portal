@@ -80,7 +80,8 @@ const Picklist = ({
 			if (selectedOption) {
 				setSelectedOption(selectedOption || DEFAULT_OPTION);
 			}
-		} else {
+		}
+		else {
 			fetchSourceItems();
 		}
 	}, [fetchSourceItems, options, key]);

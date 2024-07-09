@@ -37,6 +37,7 @@ const useFilterState = (prefixedKey, withoutRouteParams) => {
 		if (!withoutRouteParams) {
 			dispatchFilter(prefixedKey, selectedItems);
 		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [prefixedKey, selectedItems]);
 

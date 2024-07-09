@@ -123,9 +123,11 @@ function getOdataString({
 		return `${id}/any(x:${quotedSelectedItems
 			.map((value) => `(x ${exclude ? 'ne' : 'eq'} ${value})`)
 			.join(exclude ? ' and ' : ' or ')})`;
-	} else if (selectedItems.length === 1) {
+	}
+	else if (selectedItems.length === 1) {
 		return `${id} ${exclude ? 'ne' : 'eq'} ${quotedSelectedItems[0]}`;
-	} else {
+	}
+	else {
 		const expression = `${id} in (${quotedSelectedItems.join(', ')})`;
 
 		if (exclude) {
@@ -223,7 +225,8 @@ function SelectionFilter({
 
 					if (searchOptions.currentPage === 1) {
 						setItems(selectionItems);
-					} else {
+					}
+					else {
 						setItems((items) => [...items, ...selectionItems]);
 					}
 
@@ -244,7 +247,8 @@ function SelectionFilter({
 						setLoading(false);
 					}
 				});
-		} else if (localItems.length && autocompleteEnabled) {
+		}
+		else if (localItems.length && autocompleteEnabled) {
 			setItems(
 				searchOptions.search
 					? localItems.filter(({label}) =>
@@ -474,7 +478,8 @@ function SelectionFilter({
 					onClick={() => {
 						if (actionType === 'delete') {
 							setFilter({active: false});
-						} else {
+						}
+						else {
 							const newSelectedData = {
 								exclude,
 								selectedItems,
