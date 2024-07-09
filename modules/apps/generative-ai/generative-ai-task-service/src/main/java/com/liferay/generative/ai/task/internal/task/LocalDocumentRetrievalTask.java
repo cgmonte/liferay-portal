@@ -10,7 +10,6 @@ import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONE
 import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.generative.ai.task.task.context.TaskContextParameter;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -43,7 +42,7 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 	public LocalDocumentRetrievalTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		 Searcher searcher,
+		Searcher searcher,
 		SearchRequestBuilderFactory searchRequestBuilderFactory) {
 
 		super(

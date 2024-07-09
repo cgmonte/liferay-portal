@@ -10,7 +10,6 @@ import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONE
 import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
