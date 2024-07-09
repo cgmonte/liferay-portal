@@ -16,6 +16,7 @@ import com.liferay.generative.ai.task.service.TaskDefinitionService;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.generative.ai.task.task.context.TaskContextParameter;
+import com.liferay.generative.ai.task.task.context.TaskContextThreadLocal;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -137,11 +138,13 @@ public class GenerativeAIResponseResourceImpl
 		generativeAIRequestBuilder.debug(
 			configurationJSONObject.getBoolean("debug", false));
 
+		TaskContextThreadLocal.setTaskContext(_createTaskContext(taskDefinition));
+
 		generativeAIRequestBuilder.input(
 			(Map<String, Object>)generativeAIRequest.getInput());
 		generativeAIRequestBuilder.task(
 			_taskBuilder.build(
-				configurationJSONObject, _createTaskContext(taskDefinition)));
+				configurationJSONObject));
 
 		return generativeAIRequestBuilder.build();
 	}

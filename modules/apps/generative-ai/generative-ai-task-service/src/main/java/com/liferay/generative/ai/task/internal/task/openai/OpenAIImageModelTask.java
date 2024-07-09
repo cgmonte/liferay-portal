@@ -29,11 +29,11 @@ public class OpenAIImageModelTask extends BaseTask implements Task {
 	public OpenAIImageModelTask(
 		JSONObject definitionJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext, ToolsProvider toolsProvider) {
+		ToolsProvider toolsProvider) {
 
 		super(
 			definitionJSONObject, generativeAIConfigurationProvider,
-			"openai_image_model", taskContext, toolsProvider);
+			"openai_image_model", toolsProvider);
 	}
 
 	@Override

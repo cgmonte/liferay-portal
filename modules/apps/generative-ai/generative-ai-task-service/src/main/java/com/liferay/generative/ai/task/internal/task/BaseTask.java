@@ -11,6 +11,7 @@ import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.generative.ai.task.task.context.TaskContextParameter;
+import com.liferay.generative.ai.task.task.context.TaskContextThreadLocal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -47,7 +48,7 @@ public abstract class BaseTask implements Task {
 	public BaseTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		String name, TaskContext taskContext, ToolsProvider toolsProvider) {
+		String name,  ToolsProvider toolsProvider) {
 
 		attributesJSONObject = configurationJSONObject.getJSONObject(
 			"attributes");
@@ -57,7 +58,7 @@ public abstract class BaseTask implements Task {
 			generativeAIConfigurationProvider;
 		locale = (Locale)configurationJSONObject.get("locale");
 		this.name = name;
-		this.taskContext = taskContext;
+		taskContext = TaskContextThreadLocal.getTaskContext();
 		this.toolsProvider = toolsProvider;
 	}
 

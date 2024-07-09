@@ -29,11 +29,11 @@ public class TextInputAgentTask extends BaseTask implements Task {
 	public TextInputAgentTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskBuilder taskBuilder, TaskContext taskContext) {
+		TaskBuilder taskBuilder) {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
-			"text_input_agent", taskContext, null);
+			"text_input_agent", null);
 
 		_taskBuilder = taskBuilder;
 	}
@@ -107,7 +107,7 @@ public class TextInputAgentTask extends BaseTask implements Task {
 					nodeJSONObject.getJSONObject("condition"), value)) {
 
 				task = _taskBuilder.build(
-					nodeJSONObject.getJSONObject("task"), taskContext);
+					nodeJSONObject.getJSONObject("task"));
 
 				break;
 			}
@@ -118,7 +118,7 @@ public class TextInputAgentTask extends BaseTask implements Task {
 				attributesJSONObject.getJSONObject("default_task");
 
 			if (defaultTaskJSONObject != null) {
-				task = _taskBuilder.build(defaultTaskJSONObject, taskContext);
+				task = _taskBuilder.build(defaultTaskJSONObject);
 			}
 		}
 
