@@ -135,54 +135,56 @@ export function ModalImportFailed({
 						<Body items={importedObjectDefinitionsStatus}>
 							{
 
-							// @ts-ignore
+								// @ts-ignore
 
-							({errorType, label, success}) => (
-								<Row>
-									<Cell>
-										<div className="lfr-object__modal-import-failed-table-body">
-											<Text>{label}</Text>
-										</div>
-									</Cell>
+								({errorType, label, success}) => (
+									<Row>
+										<Cell>
+											<div className="lfr-object__modal-import-failed-table-body">
+												<Text>{label}</Text>
+											</div>
+										</Cell>
 
-									<Cell truncate wrap>
-										<div className="lfr-object__modal-import-failed-table-body-status">
-											<ClayIcon
-												color={
-													success
-														? '#287D3C'
-														: '#DA1414'
-												}
-												symbol={
-													success
-														? 'check'
-														: 'exclamation-full'
-												}
-											/>
+										<Cell truncate wrap>
+											<div className="lfr-object__modal-import-failed-table-body-status">
+												<ClayIcon
+													color={
+														success
+															? '#287D3C'
+															: '#DA1414'
+													}
+													symbol={
+														success
+															? 'check'
+															: 'exclamation-full'
+													}
+												/>
 
-											<Text
-												color={
-													success
-														? 'success'
-														: 'danger'
-												}
-											>
-												{success
-													? Liferay.Language.get(
-															'import-succeeded'
-														)
-													: errorType
-														? errorsUtils.ERRORS[
-																errorType
-															]
-														: Liferay.Language.get(
-																'failed-to-import'
-															)}
-											</Text>
-										</div>
-									</Cell>
-								</Row>
-							)}
+												<Text
+													color={
+														success
+															? 'success'
+															: 'danger'
+													}
+												>
+													{success
+														? Liferay.Language.get(
+																'import-succeeded'
+															)
+														: errorType
+															? errorsUtils
+																	.ERRORS[
+																	errorType
+																]
+															: Liferay.Language.get(
+																	'failed-to-import'
+																)}
+												</Text>
+											</div>
+										</Cell>
+									</Row>
+								)
+							}
 						</Body>
 					</Table>
 				)}

@@ -180,7 +180,8 @@ const SubtaskCompleteModal: React.FC<SubtaskCompleteModalProps> = ({
 			setTaskSidebarRefresh(new Date().getTime());
 
 			setForceRefetch && setForceRefetch(new Date().getTime());
-		} catch (error) {
+		}
+		catch (error) {
 			onError(error);
 		}
 	};
