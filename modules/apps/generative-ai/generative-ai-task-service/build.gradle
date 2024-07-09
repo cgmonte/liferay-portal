@@ -4,7 +4,6 @@ buildService {
 }
 
 dependencies {
-
 	api project(":apps:generative-ai:generative-ai-task-api")
 
 	compileInclude group: "com.damnhandy", name: "handy-uri-templates", version: "2.1.7"
