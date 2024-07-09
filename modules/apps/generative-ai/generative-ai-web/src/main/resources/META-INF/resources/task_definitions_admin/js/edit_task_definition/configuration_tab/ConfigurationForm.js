@@ -95,8 +95,10 @@ function ConfigurationForm({
 
 	console.log("formFields:", formFields);
 
-	const handleOnBlur = () => {
-		console.log("handleOnBlur");
+	const handleOnBlur = (fieldId, attributeKey, newValue) => {
+		console.log("fieldId", fieldId);
+		console.log("attributeKey", attributeKey);
+		console.log("newValue", newValue);
 		// setFieldValues((currentFieldValues) => {
 		// 	console.log("currentFieldValues", currentFieldValues);
 
@@ -150,29 +152,33 @@ function ConfigurationForm({
 	return (
 		<>
 			{
-				formFields.length && formFields.map((field) => (
+				formFields.length && formFields.map((field, index) => (
 					<>
 						<h3
 							className='task-configuration-label'
-							for="taskConfigSysMessage"
+							key={`${field.id}_task_label_header_${index}`}
 						>
 							{field.taskLabel ?? NAME_LABELS[field.name]}
 						</h3>
 
 						{field.attributes && Object.keys(field.attributes).length &&
-							Object.entries(field.attributes).map(([key, value]) => (
-
+							Object.entries(field.attributes).map(([key, value], index) => (
 								<>
-									<label>
+									<label
+										for={`${field.id}_${key}`}
+										key={`${field.id}_${key}_${index}_label`}
+									>
 										{ATTRIBUTES_LABELS[key] ?? key}
 									</label>
 
 									<ClayInput
 										className="task-configuration-input noscrollbars"
-										component="textarea"
-										id="taskConfigSysMessage"
-										onBlur={handleOnBlur}
-										onChange={({ target }) => handleOnChange('systemMessage', target.value)}
+										component={(key === 'system_message' || key === 'prompt_template') ? 'textarea' : 'input'}
+										// height={100}
+										id={`${field.id}_${key}`}
+										key={`${field.id}_${key}_${index}_input`}
+										onBlur={({ target }) => handleOnBlur(field.id, key, target.value)}
+										// onChange={({ target }) => handleOnChange('systemMessage', target.value)}
 										// onKeyUp={({ target }) => { autoGrow(target) }}
 										placeholder=""
 										type={getFieldType(key, value)}
