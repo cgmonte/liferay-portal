@@ -12,7 +12,6 @@ import com.liferay.generative.ai.task.internal.task.util.TaskConditionUtil;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -106,8 +105,7 @@ public class TextInputAgentTask extends BaseTask implements Task {
 			if (TaskConditionUtil.validateCondition(
 					nodeJSONObject.getJSONObject("condition"), value)) {
 
-				task = _taskBuilder.build(
-					nodeJSONObject.getJSONObject("task"));
+				task = _taskBuilder.build(nodeJSONObject.getJSONObject("task"));
 
 				break;
 			}

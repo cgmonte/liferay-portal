@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.searcher.SearchRequestBuilderFactory;
 import com.liferay.portal.search.searcher.Searcher;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -27,15 +28,11 @@ import org.osgi.service.component.annotations.Reference;
 public class TaskBuilderImpl implements TaskBuilder {
 
 	@Override
-	public Task build(
-		JSONObject configurationJSONObject) {
-
+	public Task build(JSONObject configurationJSONObject) {
 		return _createTask(configurationJSONObject);
 	}
 
-	private Task _createTask(
-		JSONObject configurationJSONObject) {
-
+	private Task _createTask(JSONObject configurationJSONObject) {
 		String name = configurationJSONObject.getString("name");
 
 		if (Validator.isBlank(name)) {

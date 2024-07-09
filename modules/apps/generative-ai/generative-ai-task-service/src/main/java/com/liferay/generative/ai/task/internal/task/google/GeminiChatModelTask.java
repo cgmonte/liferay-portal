@@ -14,14 +14,12 @@ import com.liferay.generative.ai.task.internal.util.SetterUtil;
 import com.liferay.generative.ai.task.internal.web.cache.TaskWebCacheItem;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
@@ -38,7 +36,7 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 	public GeminiChatModelTask(
 		JSONObject definitionJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		 ToolsProvider toolsProvider) {
+		ToolsProvider toolsProvider) {
 
 		super(
 			definitionJSONObject, generativeAIConfigurationProvider,
@@ -143,7 +141,7 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 		}
 
 		builder.chatMemoryProvider(
-			memoryId -> MessageWindowChatMemory.builder(
+			memoryId -> GeminiMessageWindowChatMemory.builder(
 			).id(
 				memoryId
 			).maxMessages(

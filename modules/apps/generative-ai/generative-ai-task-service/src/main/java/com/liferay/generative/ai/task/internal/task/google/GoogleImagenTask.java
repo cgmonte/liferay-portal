@@ -12,7 +12,6 @@ import com.liferay.generative.ai.task.internal.task.BaseTask;
 import com.liferay.generative.ai.task.internal.util.SetterUtil;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -27,7 +26,8 @@ public class GoogleImagenTask extends BaseTask implements Task {
 
 	public GoogleImagenTask(
 		JSONObject definitionJSONObject,
-		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider) {
+		GenerativeAITaskConfigurationProvider
+			generativeAIConfigurationProvider) {
 
 		super(
 			definitionJSONObject, generativeAIConfigurationProvider,

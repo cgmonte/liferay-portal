@@ -48,7 +48,7 @@ public abstract class BaseTask implements Task {
 	public BaseTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		String name,  ToolsProvider toolsProvider) {
+		String name, ToolsProvider toolsProvider) {
 
 		attributesJSONObject = configurationJSONObject.getJSONObject(
 			"attributes");

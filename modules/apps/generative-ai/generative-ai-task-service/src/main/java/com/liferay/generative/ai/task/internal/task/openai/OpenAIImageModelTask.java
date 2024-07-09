@@ -13,7 +13,6 @@ import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
 import com.liferay.generative.ai.task.internal.util.SetterUtil;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
-import com.liferay.generative.ai.task.task.context.TaskContext;
 import com.liferay.portal.kernel.json.JSONObject;
 
 import dev.langchain4j.model.image.ImageModel;
