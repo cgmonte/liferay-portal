@@ -29,11 +29,11 @@ public class TaskContextParameterAgent extends BaseTask implements Task {
 	public TaskContextParameterAgent(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskBuilder taskBuilder, TaskContext taskContext) {
+		TaskBuilder taskBuilder) {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
-			"task_context_parameter_agent", taskContext, null);
+			"task_context_parameter_agent", null);
 
 		_taskBuilder = taskBuilder;
 	}
@@ -111,7 +111,7 @@ public class TaskContextParameterAgent extends BaseTask implements Task {
 					nodeJSONObject.getJSONObject("condition"), value)) {
 
 				task = _taskBuilder.build(
-					nodeJSONObject.getJSONObject("task"), taskContext);
+					nodeJSONObject.getJSONObject("task"));
 
 				break;
 			}
@@ -122,7 +122,7 @@ public class TaskContextParameterAgent extends BaseTask implements Task {
 				attributesJSONObject.getJSONObject("default_task");
 
 			if (defaultTaskJSONObject != null) {
-				task = _taskBuilder.build(defaultTaskJSONObject, taskContext);
+				task = _taskBuilder.build(defaultTaskJSONObject);
 			}
 		}
 

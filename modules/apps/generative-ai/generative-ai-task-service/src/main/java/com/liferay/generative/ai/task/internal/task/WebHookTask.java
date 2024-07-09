@@ -27,11 +27,11 @@ public class WebHookTask extends BaseTask implements Task {
 	public WebHookTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext, Http http) {
+		Http http) {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
-			"webhook", taskContext, null);
+			"webhook", null);
 
 		_http = http;
 	}

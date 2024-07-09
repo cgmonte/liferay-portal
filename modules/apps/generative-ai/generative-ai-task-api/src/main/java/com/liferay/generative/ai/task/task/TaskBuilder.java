@@ -17,6 +17,6 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface TaskBuilder {
 
 	public Task build(
-		JSONObject configurationJSONObject, TaskContext taskContext);
+		JSONObject configurationJSONObject);
 
 }

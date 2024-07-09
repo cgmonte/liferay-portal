@@ -43,12 +43,12 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 	public LocalDocumentRetrievalTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext, Searcher searcher,
+		 Searcher searcher,
 		SearchRequestBuilderFactory searchRequestBuilderFactory) {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider,
-			"local_document_retrieval", taskContext, null);
+			"local_document_retrieval", null);
 
 		_searcher = searcher;
 		_searchRequestBuilderFactory = searchRequestBuilderFactory;

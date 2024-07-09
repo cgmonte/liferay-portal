@@ -12,6 +12,7 @@ import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.generative.ai.task.task.context.TaskContext;
+import com.liferay.generative.ai.task.task.context.TaskContextThreadLocal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -30,11 +31,11 @@ public class ChainTask extends BaseTask implements Task {
 	public ChainTask(
 		JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext, TaskBuilder taskBuilder) {
+		 TaskBuilder taskBuilder) {
 
 		super(
 			configurationJSONObject, generativeAIConfigurationProvider, "chain",
-			taskContext, null);
+			 null);
 
 		JSONObject attributesJSONObject = configurationJSONObject.getJSONObject(
 			"attributes");
@@ -43,7 +44,7 @@ public class ChainTask extends BaseTask implements Task {
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			_tasks.add(
-				taskBuilder.build(jsonArray.getJSONObject(i), taskContext));
+				taskBuilder.build(jsonArray.getJSONObject(i)));
 		}
 	}
 

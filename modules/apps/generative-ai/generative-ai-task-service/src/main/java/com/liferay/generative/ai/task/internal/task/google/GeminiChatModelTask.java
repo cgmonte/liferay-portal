@@ -38,11 +38,11 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 	public GeminiChatModelTask(
 		JSONObject definitionJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext, ToolsProvider toolsProvider) {
+		 ToolsProvider toolsProvider) {
 
 		super(
 			definitionJSONObject, generativeAIConfigurationProvider,
-			"gemini_chat_model", taskContext, toolsProvider);
+			"gemini_chat_model", toolsProvider);
 	}
 
 	@Override

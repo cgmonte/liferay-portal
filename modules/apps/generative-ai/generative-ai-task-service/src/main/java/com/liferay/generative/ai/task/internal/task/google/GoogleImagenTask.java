@@ -27,12 +27,11 @@ public class GoogleImagenTask extends BaseTask implements Task {
 
 	public GoogleImagenTask(
 		JSONObject definitionJSONObject,
-		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		TaskContext taskContext) {
+		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider) {
 
 		super(
 			definitionJSONObject, generativeAIConfigurationProvider,
-			"google_imagen", taskContext, null);
+			"google_imagen", null);
 	}
 
 	@Override
