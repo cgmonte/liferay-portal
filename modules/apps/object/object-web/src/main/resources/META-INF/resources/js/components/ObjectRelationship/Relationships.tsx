@@ -7,6 +7,7 @@ import {
 	FrontendDataSet,
 
 	// @ts-ignore
+
 } from '@liferay/frontend-data-set-web';
 import {API, stringUtils} from '@liferay/object-js-components-web';
 import classNames from 'classnames';
@@ -162,7 +163,8 @@ export default function Relationships({
 				if (isApproved || itemData.reverse) {
 					setObjectRelationship(itemData);
 					setShowDeleteModal(true);
-				} else {
+				}
+				else {
 					deleteRelationship(itemData.id, true);
 				}
 			}

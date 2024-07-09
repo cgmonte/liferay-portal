@@ -42,7 +42,8 @@ const ManagementToolbarResultsBar: React.FC<
 				searchParams.delete('filter');
 				searchParams.delete('filterSchema');
 				searchParams.delete('page');
-			} else {
+			}
+			else {
 				searchParams.set('filter', JSON.stringify(filterJSON));
 			}
 

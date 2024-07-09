@@ -154,6 +154,7 @@ export default function ProcessMetricsContainer({history, processId, query}) {
 
 			history.replace({pathname, search});
 		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
