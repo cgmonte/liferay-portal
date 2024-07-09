@@ -37,6 +37,8 @@ public class ToolsProviderImpl implements ToolsProvider {
 			"user", new UserTools()
 		).put(
 			"webhook", new WebHookTools(_http)
+		).put(
+			"ai_tasks", new AITaskDefinitionTools()
 		).build();
 	}
 
