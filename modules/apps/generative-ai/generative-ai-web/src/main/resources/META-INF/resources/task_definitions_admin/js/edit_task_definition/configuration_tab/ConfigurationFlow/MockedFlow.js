@@ -38,7 +38,13 @@ const initialElements = [
   },
 ];
 
-const MockedFlow = ({ editingMode, externalReferenceCode }) => {
+const MockedFlow = ({ 
+  editingMode, 
+  externalReferenceCode,
+  etFieldValue, 
+  taskConfigWithIds, 
+  setTaskConfigWithIds 
+}) => {
   const [rfInstance, setRfInstance] = useState(null);
 
   const [elements, setElements] = useState (
@@ -50,18 +56,21 @@ const MockedFlow = ({ editingMode, externalReferenceCode }) => {
   const onConnect = (params) => setElements((els) => addEdge(params, els));
   const onLoad = (reactFlowInstance) => setRfInstance(reactFlowInstance);
 
-  // const onNodeDoubleClick = (_, element) => {
-  //   openModal({
-  //     bodyComponent: () => (
-  //       <ConfigurationForm
-  //         taskConfig={taskConfig}
-  //         setFieldTouched={setFieldTouched}
-  //         setFieldValues={setFieldValue}
-  //       />),
-  //     title: 'Edit task',
-  //     size: 'lg',
-  //   })
-  // };
+  const onNodeDoubleClick = (_, element) => {
+    console.log("double click");
+
+    openModal({
+      bodyComponent: () => (
+        <ConfigurationForm
+          // setFieldTouched={setFieldTouched}
+          // setFieldValues={setFieldValue}
+          setTaskConfigWithIds={setTaskConfigWithIds}
+          taskConfigWithIds={taskConfigWithIds}
+        />),
+      title: 'Edit task',
+      size: 'lg',
+    })
+  };
 
   useEffect(() => {
     if (rfInstance) {
@@ -92,7 +101,7 @@ const MockedFlow = ({ editingMode, externalReferenceCode }) => {
     <ReactFlow
       elements={elements}
       onLoad={onLoad}
-      // onNodeDoubleClick={onNodeDoubleClick}
+      onNodeDoubleClick={onNodeDoubleClick}
       // onElementsRemove={onElementsRemove}
       // onConnect={onConnect}
       className="react-flow-basic-example"

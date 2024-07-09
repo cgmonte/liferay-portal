@@ -200,7 +200,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 						<div id="rayAssistantConversationContainer">
 							<Message content={greetingMessage} key={0} sender={assistantName} />
 
-							{chatHistory.map((historyEntry, index) => (
+							{chatHistory?.length && chatHistory.map((historyEntry, index) => (
 								<Message
 									content={historyEntry.text}
 									key={index + 1}

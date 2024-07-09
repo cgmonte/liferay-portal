@@ -17,142 +17,172 @@ import LearnMessage from '../../shared/LearnMessage';
 import ThemeContext from '../../shared/ThemeContext';
 import { DEFAULT_INDEX_CONFIGURATION } from '../../utils/constants';
 import { set } from 'date-fns';
-import {NAME_LABELS} from '../../utils/constants';
+import { ATTRIBUTES_LABELS, NAME_LABELS } from '../../utils/constants';
+import { id } from 'date-fns/locale';
 
 const CONFIGURATION_SCHEMAS = {
 	taskConfig: taskConfigurationSchema,
 };
 
-function ConfigurationForm({
-	taskConfig,
-	setFieldTouched,
-	setFieldValues
-}) {
-	taskConfig = JSON.parse(taskConfig);
+const updateTaskConfigWithIds = (taskConfigWithIds, id, updatedAttributes) => {
+	if (!taskConfigWithIds || !Object.keys(taskConfigWithIds).length) {
+		return taskConfigWithIds;
+	}
 
-	const [localFieldValues, setLocalFieldValues] = useState(
-		{
-			maxOutputTokens: taskConfig.tasks[1].attributes.max_output_tokens,
-			promptTemplate: taskConfig.tasks[1].attributes.prompt_template,
-			systemMessage: taskConfig.tasks[1].attributes.system_message,
-			temperature: taskConfig.tasks[1].attributes.temperature,
+	function traverseTaskConfigWithIds(obj) {
+		for (let key in obj) {
+			if (key === 'id' && obj[key] === id) {
+				if (obj.attributes) {
+					obj.attributes = updatedAttributes;
+				}
+
+				break;
+			}
+			else if (typeof obj[key] === 'object' && obj[key] !== null) {
+				traverseTaskConfigWithIds(obj[key]);
+			}
 		}
-	);
+	}
 
+	traverseTaskConfigWithIds(taskConfigWithIds);
+
+	console.log("taskConfigWithIds after update:", taskConfigWithIds);
+
+	return taskConfigWithIds;
+};
+
+const getFormFields = (serializedTaskConfig) => {
+	const formFields = [];
+
+	function traverseTaskConfigWithIds(obj) {
+		for (let key in obj) {
+			if (typeof obj[key] === 'object' && obj[key] !== null) {
+				traverseTaskConfigWithIds(obj[key]);
+			}
+			if (key === 'name'
+				&& !obj[key].endsWith('agent')
+				&& obj[key] !== "chain") {
+				formFields.push({
+					attributes: obj.attributes,
+					id: obj.id,
+					name: obj.name,
+					...(obj.label && { taskLabel: obj.label })
+				});
+			}
+		}
+	}
+
+	traverseTaskConfigWithIds(serializedTaskConfig);
+
+	console.log(formFields);
+
+	return formFields;
+};
+
+function ConfigurationForm({
+	setFieldTouched,
+	setFieldValues,
+	taskConfigWithIds,
+	setTaskConfigWithIds,
+}) {
 	function autoGrow(field) {
 		if (field.scrollHeight > field.clientHeight && field.clientHeight < 1001) {
 			field.style.height = `${field.scrollHeight}px`;
 		}
 	}
 
+	const formFields = getFormFields(taskConfigWithIds);
 
+	console.log("formFields:", formFields);
 
 	const handleOnBlur = () => {
-		console.log("oi");
-		setFieldValues((currentFieldValues) => {
-			console.log("currentFieldValues", currentFieldValues);
+		console.log("handleOnBlur");
+		// setFieldValues((currentFieldValues) => {
+		// 	console.log("currentFieldValues", currentFieldValues);
 
-			// return {
-			// 	...currentFieldValues,
-			// 	temperature: parseInt(currentFieldValues.temperature),
-			// 	maxOutputTokens: parseInt(currentFieldValues.maxOutputTokens),
-			// };
+		// 	// return {
+		// 	// 	...currentFieldValues,
+		// 	// 	temperature: parseInt(currentFieldValues.temperature),
+		// 	// 	maxOutputTokens: parseInt(currentFieldValues.maxOutputTokens),
+		// 	// };
 
-			return currentFieldValues;
+		// 	return currentFieldValues;
 
-		})	
+		// })	
 	};
 
 	const handleOnChange = (propertyName, value) => {
-		setLocalFieldValues((currentLocalFieldValues) => {
-			const newState = {
-				...currentLocalFieldValues,
-				[propertyName]: value,
-			};
+		// setLocalFieldValues((currentLocalFieldValues) => {
+		// 	const newState = {
+		// 		...currentLocalFieldValues,
+		// 		[propertyName]: value,
+		// 	};
 
-			console.log(newState);
-			
-			return newState;
-		});
+		// 	console.log(newState);
+
+		// 	return newState;
+		// });
+
+		console.log("handleOnChange propertyName:", propertyName);
+		console.log("handleOnChange value:", value);
 	};
+
+	const getFieldType = (key, value) => {
+		if (key === 'system_message' || key === 'prompt_template') {
+			return 'textarea';
+		}
+
+		if (typeof value === 'string') {
+			return 'input';
+		}
+
+		if (typeof value === 'number') {
+			return 'number';
+		}
+
+		if (typeof value === 'boolean') {
+			return 'checkbox';
+		}
+
+		return 'input';
+	}
 
 	return (
 		<>
-			<h3>{NAME_LABELS[taskConfig.tasks[1].name]}</h3>
+			{
+				formFields.length && formFields.map((field) => (
+					<>
+						<h3
+							className='task-configuration-label'
+							for="taskConfigSysMessage"
+						>
+							{field.taskLabel ?? NAME_LABELS[field.name]}
+						</h3>
 
-			<label
-				className='task-configuration-label'
-				for="taskConfigSysMessage"
-			>
-				{Liferay.Language.get('system-message')}
-			</label>
+						{field.attributes && Object.keys(field.attributes).length &&
+							Object.entries(field.attributes).map(([key, value]) => (
 
-			<ClayInput
-				className="task-configuration-input noscrollbars"
-				component="textarea"
-				id="taskConfigSysMessage"
-				onBlur={handleOnBlur}
-				onChange={({ target }) => handleOnChange('systemMessage', target.value)}
-				onKeyUp={({ target }) => { autoGrow(target) }}
-				placeholder=""
-				type="text"
-				value={localFieldValues.systemMessage}
-			/>
+								<>
+									<label>
+										{ATTRIBUTES_LABELS[key] ?? key}
+									</label>
 
-			<label
-				className='task-configuration-label'
-				for="taskConfigTemperature"
-			>
-				{Liferay.Language.get('max-entries')}
-			</label>
-
-			<ClayInput
-				className="task-configuration-input"
-				component="input"
-				id="taskConfigTemperature"
-				onBlur={handleOnBlur}
-				onChange={({ target }) => handleOnChange('temperature', target.value)}
-				placeholder=""
-				type="number"
-				value={localFieldValues.temperature}
-			/>
-
-			<label
-				className='task-configuration-label'
-				for="taskConfigMaxOutputTokens"
-			>
-				{Liferay.Language.get('max-output-tokens')}
-			</label>
-
-			<ClayInput
-				className="task-configuration-input"
-				component="input"
-				id="taskConfigMaxOutputTokens"
-				onBlur={handleOnBlur}
-				onChange={({ target }) => handleOnChange('maxOutputTokens', target.value)}
-				placeholder=""
-				type="number"
-				value={localFieldValues.maxOutputTokens}
-			/>
-
-			<label
-				className='task-configuration-label'
-				for="taskConfigPromptTemplate"
-			>
-				{Liferay.Language.get('prompt-template')}
-			</label>
-
-			<ClayInput
-				className="task-configuration-input noscrollbars"
-				component="textarea"
-				id="taskConfigPromptTemplate"
-				onBlur={handleOnBlur}
-				onChange={({ target }) => handleOnChange('promptTemplate', target.value)}
-				onKeyUp={({ target }) => { autoGrow(target) }}
-				placeholder=""
-				type="text"
-				value={localFieldValues.promptTemplate}
-			/>
+									<ClayInput
+										className="task-configuration-input noscrollbars"
+										component="textarea"
+										id="taskConfigSysMessage"
+										onBlur={handleOnBlur}
+										onChange={({ target }) => handleOnChange('systemMessage', target.value)}
+										// onKeyUp={({ target }) => { autoGrow(target) }}
+										placeholder=""
+										type={getFieldType(key, value)}
+										value={value}
+									/>
+								</>
+							))}
+					</>
+				))
+			}
 		</>
 	);
 }

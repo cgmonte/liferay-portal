@@ -72,7 +72,7 @@ function ConfigurationTab({
 	}, [serializedTaskConfig]);
 
 	useEffect(() => {
-		console.log("taskConfigWithIds", taskConfigWithIds);
+		console.log("taskConfigWithIds:", taskConfigWithIds);
 	}, [taskConfigWithIds]);
 
 	const _renderJSONEditor = () => (
@@ -108,9 +108,10 @@ function ConfigurationTab({
 				<MockedFlow
 					editingMode={editingMode}
 					externalReferenceCode={externalReferenceCode}
-					taskConfig={taskConfigWithIds}
-					setFieldTouched = {setFieldTouched}
-					setFieldValue = {setFieldValue}
+					taskConfigWithIds={taskConfigWithIds}
+					setTaskConfigWithIds={setTaskConfigWithIds}
+					setFieldTouched={setFieldTouched}
+					setFieldValue={setFieldValue}
 				/>
 			</div>
 		)

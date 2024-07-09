@@ -38,3 +38,17 @@ export const NAME_LABELS = {
 	text_input_agent: "Text Input Agent",
 	webhook: "Webhook",
 }
+
+export const ATTRIBUTES_LABELS = {
+	context_output_parameter_name: "Context Output Parameter Name",
+	location: "Location",
+	max_output_tokens: "Max Output Tokens",
+	memory_max_messages: "Memory Max Messages",
+	model_name: "Model Name",
+	project: "Project",
+	prompt_template: "Prompt Template",
+	system_message: "System Message",
+	top_k: "Top K",
+	webhook: "Webhook",
+	use_chat_memory: "Use Chat Memory",
+}
