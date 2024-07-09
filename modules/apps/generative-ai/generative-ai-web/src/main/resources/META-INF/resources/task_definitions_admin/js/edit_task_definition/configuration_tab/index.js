@@ -17,7 +17,7 @@ import LearnMessage from '../../shared/LearnMessage';
 import ThemeContext from '../../shared/ThemeContext';
 import { DEFAULT_INDEX_CONFIGURATION } from '../../utils/constants';
 import ConfigurationForm from './ConfigurationForm';
-import BasicFlow from './ConfigurationFlow/BasicFlow';
+import MockedFlow from './ConfigurationFlow/MockedFlow';
 import { add } from 'date-fns';
 
 const CONFIGURATION_SCHEMAS = {
@@ -51,6 +51,7 @@ const addIdstoSerializedTaskConfig = (serializedTaskConfig) => {
 
 function ConfigurationTab({
 	errors,
+	externalReferenceCode,
 	setFieldTouched,
 	serializedTaskConfig,
 	setFieldValue,
@@ -104,8 +105,9 @@ function ConfigurationTab({
 	const _renderFlowEditor = () => { 
 		return (
 			<div className='flow-editor-container'>
-				<BasicFlow
+				<MockedFlow
 					editingMode={editingMode}
+					externalReferenceCode={externalReferenceCode}
 					taskConfig={taskConfigWithIds}
 					setFieldTouched = {setFieldTouched}
 					setFieldValue = {setFieldValue}

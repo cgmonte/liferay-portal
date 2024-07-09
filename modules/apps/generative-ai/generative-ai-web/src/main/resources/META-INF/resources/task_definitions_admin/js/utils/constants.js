@@ -34,6 +34,7 @@ export const NAME_LABELS = {
 	retrieve_local_documents: "Retrieve Local Documents",
 	openai_image_model: "OpenAI Image Model",
 	task_context_agent: "Task Context Agent",
+	task_context_parameter_agent: "Task Context Parameter Agent",
 	text_input_agent: "Text Input Agent",
 	webhook: "Webhook",
 }
