@@ -42,7 +42,8 @@ export default function ({
 	if (!resource) {
 		return null;
 	}
-	console.log(resource);
+
+	// console.log(resource);
 
 	return (
 		<ThemeContext.Provider
