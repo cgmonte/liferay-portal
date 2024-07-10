@@ -123,6 +123,12 @@
 					"description": "The temperature is used for sampling during response generation. Values 0-1. Set a lower number for more precision and higher for more creativity.",
 					"type": "number"
 				},
+				"tools": {
+					"type": [
+						"string",
+						"object"
+					]
+				},
 				"top_k": {
 					"description": "The maximum number of tokens to consider when sampling.",
 					"type": "number"
@@ -357,6 +363,9 @@
 					"default": false,
 					"description": "Include debug information in the response",
 					"type": "boolean"
+				},
+				"label": {
+					"type": "string"
 				},
 				"name": {
 					"default": "gemini_chat_model",
