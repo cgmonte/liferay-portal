@@ -262,7 +262,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 												cleanupChatInput();
 											}
 										}}
-										placeholder={isWaitingForResponse ? `${assistantName} is thinking...` : "Type a message..."}
+										placeholder={isWaitingForResponse ? `${assistantName} is generating a response...` : "Type a message..."}
 										type="text"
 									/>
 
