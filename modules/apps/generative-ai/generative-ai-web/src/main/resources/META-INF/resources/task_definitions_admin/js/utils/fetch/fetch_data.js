@@ -25,7 +25,7 @@ export const DEFAULT_HEADERS = new Headers(DEFAULT_HEADERS_OBJECT);
  * @return {Promise} A Promise that resolves to a Response object.
  */
 export default function fetchData(resource = '', {headers, ...init} = {}) {
-console.log('resource', resource)
+// console.log('resource', resource)
 
 	return fetch(resource, {
 		headers: new Headers({...DEFAULT_HEADERS_OBJECT, ...headers}),
