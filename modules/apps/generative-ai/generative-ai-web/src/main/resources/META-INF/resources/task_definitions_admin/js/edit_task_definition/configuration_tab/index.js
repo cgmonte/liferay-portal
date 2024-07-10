@@ -64,7 +64,7 @@ function ConfigurationTab({
 	touched
 }) {
 	const { isCompanyAdmin } = useContext(ThemeContext);
-	const [editingMode, setEditingMode] = useState('json');
+	const [editingMode, setEditingMode] = useState('flow');
 	const [taskConfigWithIds, setTaskConfigWithIds] = useState(
 		addIdstoSerializedTaskConfig(serializedTaskConfig)
 	);
@@ -78,7 +78,7 @@ function ConfigurationTab({
 	// }, [serializedTaskConfig]);
 
 	useEffect(() => {
-		console.log("taskConfigWithIds", taskConfigWithIds);
+		// console.log("taskConfigWithIds", taskConfigWithIds);
 
 		setFieldValue('taskConfig', JSON.stringify(taskConfigWithIds, null, 2));
 	}, [taskConfigWithIds]);
