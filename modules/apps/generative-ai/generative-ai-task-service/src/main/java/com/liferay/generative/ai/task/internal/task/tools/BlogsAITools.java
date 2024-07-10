@@ -8,6 +8,7 @@ package com.liferay.generative.ai.task.internal.task.tools;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
@@ -24,7 +25,18 @@ import java.util.Date;
 /**
  * @author Petteri Karttunen
  */
-public class BlogsTools {
+public class BlogsAITools implements AITools {
+
+	public BlogsAITools(JSONObject configurationJSONObject) {
+		_configurationJSONObject = configurationJSONObject;
+	}
+
+	@Override
+	public JSONObject getConfigurationJSONObject() {
+		return _configurationJSONObject;
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(BlogsAITools.class);
 
 	@Tool("Creates a new blogs entry")
 	BlogsEntry createBlogsEntry(
@@ -48,6 +60,6 @@ public class BlogsTools {
 		return null;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(BlogsTools.class);
+	private final JSONObject _configurationJSONObject;
 
 }

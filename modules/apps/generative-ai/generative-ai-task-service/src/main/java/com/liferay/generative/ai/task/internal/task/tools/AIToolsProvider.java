@@ -5,11 +5,13 @@
 
 package com.liferay.generative.ai.task.internal.task.tools;
 
+import com.liferay.portal.kernel.json.JSONObject;
+
 /**
  * @author Petteri Karttunen
  */
-public interface ToolsProvider {
+public interface AIToolsProvider {
 
-	public Object getTool(String key);
+	public Object getTool(JSONObject configurationJSONObject, String key);
 
 }

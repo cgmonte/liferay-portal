@@ -9,7 +9,7 @@ import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfiguratio
 import com.liferay.generative.ai.task.internal.task.google.GeminiChatModelTask;
 import com.liferay.generative.ai.task.internal.task.google.GoogleImagenTask;
 import com.liferay.generative.ai.task.internal.task.openai.OpenAIImageModelTask;
-import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
+import com.liferay.generative.ai.task.internal.task.tools.AIToolsProvider;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskBuilder;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -96,6 +96,6 @@ public class TaskBuilderImpl implements TaskBuilder {
 	private SearchRequestBuilderFactory _searchRequestBuilderFactory;
 
 	@Reference
-	private ToolsProvider _toolsProvider;
+	private AIToolsProvider _toolsProvider;
 
 }

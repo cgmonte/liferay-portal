@@ -29,8 +29,8 @@ public class WebHookTask extends BaseTask implements Task {
 		Http http) {
 
 		super(
-			configurationJSONObject, generativeAIConfigurationProvider,
-			"webhook", null);
+			null, configurationJSONObject, generativeAIConfigurationProvider,
+			"webhook");
 
 		_http = http;
 	}

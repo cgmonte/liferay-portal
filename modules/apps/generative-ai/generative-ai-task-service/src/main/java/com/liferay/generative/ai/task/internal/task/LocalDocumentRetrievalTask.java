@@ -46,8 +46,8 @@ public class LocalDocumentRetrievalTask extends BaseTask implements Task {
 		SearchRequestBuilderFactory searchRequestBuilderFactory) {
 
 		super(
-			configurationJSONObject, generativeAIConfigurationProvider,
-			"local_document_retrieval", null);
+			null, configurationJSONObject, generativeAIConfigurationProvider,
+			"local_document_retrieval");
 
 		_searcher = searcher;
 		_searchRequestBuilderFactory = searchRequestBuilderFactory;

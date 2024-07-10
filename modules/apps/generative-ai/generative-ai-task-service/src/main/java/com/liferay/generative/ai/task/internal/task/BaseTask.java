@@ -6,7 +6,7 @@
 package com.liferay.generative.ai.task.internal.task;
 
 import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfigurationProvider;
-import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
+import com.liferay.generative.ai.task.internal.task.tools.AIToolsProvider;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
 import com.liferay.generative.ai.task.task.context.TaskContext;
@@ -46,20 +46,21 @@ import org.apache.commons.lang.StringUtils;
 public abstract class BaseTask implements Task {
 
 	public BaseTask(
-		JSONObject configurationJSONObject,
+		AIToolsProvider aiToolsProvider, JSONObject configurationJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		String name, ToolsProvider toolsProvider) {
+		String name) {
+
+		this.aiToolsProvider = aiToolsProvider;
+		this.configurationJSONObject = configurationJSONObject;
+		this.generativeAIConfigurationProvider =
+			generativeAIConfigurationProvider;
+		this.name = name;
 
 		attributesJSONObject = configurationJSONObject.getJSONObject(
 			"attributes");
-		this.configurationJSONObject = configurationJSONObject;
 		debug = configurationJSONObject.getBoolean("debug");
-		this.generativeAIConfigurationProvider =
-			generativeAIConfigurationProvider;
 		locale = (Locale)configurationJSONObject.get("locale");
-		this.name = name;
 		taskContext = TaskContextThreadLocal.getTaskContext();
-		this.toolsProvider = toolsProvider;
 	}
 
 	@Override
@@ -217,7 +218,20 @@ public abstract class BaseTask implements Task {
 		List<Object> tools = new ArrayList<>();
 
 		for (int i = 0; i < toolsJSONArray.length(); i++) {
-			Object tool = toolsProvider.getTool(toolsJSONArray.getString(i));
+			Object object = toolsJSONArray.get(i);
+
+			Object tool = null;
+
+			if (object instanceof JSONObject) {
+				JSONObject toolsJSONObject = (JSONObject)object;
+
+				tool = aiToolsProvider.getTool(
+					toolsJSONObject.getJSONObject("configuration"),
+					(String)object);
+			}
+			else if (object instanceof String) {
+				tool = aiToolsProvider.getTool(null, (String)object);
+			}
 
 			if (tool != null) {
 				tools.add(tool);
@@ -357,6 +371,7 @@ public abstract class BaseTask implements Task {
 		return toTaskResponse(debugInfo, result.content());
 	}
 
+	protected final AIToolsProvider aiToolsProvider;
 	protected final JSONObject attributesJSONObject;
 	protected final JSONObject configurationJSONObject;
 	protected final boolean debug;
@@ -365,7 +380,6 @@ public abstract class BaseTask implements Task {
 	protected final Locale locale;
 	protected final String name;
 	protected final TaskContext taskContext;
-	protected final ToolsProvider toolsProvider;
 
 	private void _ensurePromptTemplateVariables(
 		PromptTemplate promptTemplate,

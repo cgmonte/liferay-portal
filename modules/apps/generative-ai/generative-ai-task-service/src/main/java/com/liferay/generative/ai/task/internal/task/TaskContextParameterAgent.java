@@ -31,8 +31,8 @@ public class TaskContextParameterAgent extends BaseTask implements Task {
 		TaskBuilder taskBuilder) {
 
 		super(
-			configurationJSONObject, generativeAIConfigurationProvider,
-			"task_context_parameter_agent", null);
+			null, configurationJSONObject, generativeAIConfigurationProvider,
+			"task_context_parameter_agent");
 
 		_taskBuilder = taskBuilder;
 	}

@@ -9,7 +9,7 @@ import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfiguratio
 import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONException;
 import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.internal.task.BaseTask;
-import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
+import com.liferay.generative.ai.task.internal.task.tools.AIToolsProvider;
 import com.liferay.generative.ai.task.internal.util.SetterUtil;
 import com.liferay.generative.ai.task.internal.web.cache.TaskWebCacheItem;
 import com.liferay.generative.ai.task.task.Task;
@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import dev.langchain4j.agent.tool.ToolExecutor;
+import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
@@ -36,11 +38,11 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 	public GeminiChatModelTask(
 		JSONObject definitionJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		ToolsProvider toolsProvider) {
+		AIToolsProvider toolsProvider) {
 
 		super(
-			definitionJSONObject, generativeAIConfigurationProvider,
-			"gemini_chat_model", toolsProvider);
+			toolsProvider, definitionJSONObject,
+			generativeAIConfigurationProvider, "gemini_chat_model");
 	}
 
 	@Override
@@ -122,9 +124,16 @@ public class GeminiChatModelTask extends BaseTask implements Task {
 
 		List<Object> tools = getTools();
 
-		if (ListUtil.isNotEmpty(tools)) {
-			builder.tools(tools);
-		}
+		ListUtil.isNotEmptyForEach(
+			tools,
+			tool -> {
+				if (tool instanceof Map) {
+					builder.tools((Map<ToolSpecification, ToolExecutor>)tool);
+				}
+				else {
+					builder.tools(tool);
+				}
+			});
 
 		return builder.build();
 	}

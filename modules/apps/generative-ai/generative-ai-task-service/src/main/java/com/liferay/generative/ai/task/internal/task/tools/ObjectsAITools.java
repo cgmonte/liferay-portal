@@ -6,6 +6,7 @@
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.object.model.ObjectDefinition;
+import com.liferay.portal.kernel.json.JSONObject;
 
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
@@ -15,7 +16,18 @@ import dev.langchain4j.agent.tool.Tool;
 /**
  * @author Petteri Karttunen
  */
-public class ObjectsTools {
+public class ObjectsAITools implements AITools {
+
+	public ObjectsAITools(JSONObject configurationJSONObject) {
+		_configurationJSONObject = configurationJSONObject;
+	}
+
+	@Override
+	public JSONObject getConfigurationJSONObject() {
+		return _configurationJSONObject;
+	}
+
+	private final JSONObject _configurationJSONObject;
 
 	@Tool("Creates a Liferay Object definition")
 	ObjectDefinition createObjectDefinition(
