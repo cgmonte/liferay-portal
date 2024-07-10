@@ -14,6 +14,20 @@ import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } f
 import ReactMarkdown from 'react-markdown';
 
 function Message({ content, sender }) {
+	const [imageURL, setImageURL] = useState(null);
+
+	if (content.image) {
+		if (content.image.base64Data) {
+			const base64DataString = "data:image/png;base64, " + content.image.base64Data;
+
+			fetch(base64DataString)
+				.then(response => response.blob())
+				.then(blob => {
+					setImageURL(URL.createObjectURL(blob));
+				});
+		}
+	}
+
 	return (
 		<div className="ray-assistant__message">
 			<Text truncate weight="semi-bold">
@@ -24,8 +38,12 @@ function Message({ content, sender }) {
 				&& <ReactMarkdown>{content.text}</ReactMarkdown> 
 			}
 
-			{content.image 
-				&& <img alt='AI-generated Image' className='ai-generated-image' src={"data:image/png;base64, " + content.image.base64Data} />
+			{imageURL
+				&& <div className='ai-generated-image-container'>
+					<a href={imageURL} target='_blank'>
+						<img alt='AI-generated Image' className='ai-generated-image' src={imageURL} />
+					</a>
+				</div>
 			}
 		</div>
 	);
@@ -119,7 +137,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 			const localStorageChatHistory = chatHistory.map((message) => {
 				const localStorageMessage = {...message};
 
-				console.log("localStorageMessage", localStorageMessage);
+				// console.log("localStorageMessage", localStorageMessage);
 
 				if (localStorageMessage?.image) {
 					localStorageMessage.text = "AI-generated Image";
@@ -147,7 +165,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 	const handleReceiveMessage = ({output}) => {
 		const {image, text} = output;
 		
-		console.log('value', output);
+		// console.log('value', output);
 
 		if (output) {
 			setChatHistory((currentHistory) => [

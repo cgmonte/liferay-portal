@@ -43,10 +43,19 @@ body {
 	padding-right: 15px;
 	padding-left: 2px;
 
-	.ai-generated-image {
+	.ai-generated-image-container{
+		overflow: hidden;
+		max-height: 200px;
+		padding: 1rem;
+		display: flex;
+		justify-content: center; /* Add this line */
+		align-items: center; /* Add this line */
+
+		.ai-generated-image {
 		width: 100%;
 		margin-bottom: 1rem;
 	}
+}
 }
 
 #rayAssistantChatInputContainer {
