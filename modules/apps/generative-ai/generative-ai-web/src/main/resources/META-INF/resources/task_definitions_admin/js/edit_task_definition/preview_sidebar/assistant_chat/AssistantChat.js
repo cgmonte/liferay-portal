@@ -140,7 +140,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 				// console.log("localStorageMessage", localStorageMessage);
 
 				if (localStorageMessage?.image) {
-					localStorageMessage.text = "AI-generated Image";
+					localStorageMessage.text = "Generated images are not stored in preview chat history.";
 
 					delete localStorageMessage.image;
 				}
