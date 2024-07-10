@@ -456,7 +456,6 @@ function EditTaskDefinitionForm({
 	};
 
 	const _renderTabContent = () => {
-		console.log('ASDASDASDASD' + formik.values.taskConfig);
 		switch (tab) {
 			default:
 				return (
