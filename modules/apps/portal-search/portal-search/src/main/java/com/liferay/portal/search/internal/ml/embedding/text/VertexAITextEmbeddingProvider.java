@@ -137,6 +137,26 @@ public class VertexAITextEmbeddingProvider
 			JSONObject responseJSONObject = JSONFactoryUtil.createJSONObject(
 				HttpUtil.URLtoString(options));
 
+			JSONObject errorJSONObject = responseJSONObject.getJSONObject("error");
+
+			if(Validator.isNotNull(errorJSONObject)) {
+				if(_log.isErrorEnabled()) {
+					JSONArray detailsJSONArray = errorJSONObject.getJSONArray("details");
+					int errorCode = errorJSONObject.getInt("code");
+					String errorStatus = errorJSONObject.getString("status");
+					String errorMessage = errorJSONObject.getString("message");
+					StringBundler errorTraceStringBundler = new StringBundler();
+					errorTraceStringBundler.append(errorCode);
+					errorTraceStringBundler.append(": ");
+					errorTraceStringBundler.append(errorStatus);
+					errorTraceStringBundler.append(" - ");
+					errorTraceStringBundler.append(errorMessage);
+					errorTraceStringBundler.append("\n");
+					errorTraceStringBundler.append(detailsJSONArray.toString(2));
+					_log.error(errorTraceStringBundler.toString());
+				}
+			}
+
 			JSONArray predictionsJSONArray = responseJSONObject.getJSONArray(
 				"predictions");
 
