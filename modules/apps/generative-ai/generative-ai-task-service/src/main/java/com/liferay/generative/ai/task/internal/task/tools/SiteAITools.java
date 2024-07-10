@@ -6,6 +6,7 @@
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
@@ -25,7 +26,18 @@ import java.util.Map;
 /**
  * @author Petteri Karttunen
  */
-public class SiteTools {
+public class SiteAITools implements AITools {
+
+	public SiteAITools(JSONObject configurationJSONObject) {
+		_configurationJSONObject = configurationJSONObject;
+	}
+
+	@Override
+	public JSONObject getConfigurationJSONObject() {
+		return _configurationJSONObject;
+	}
+
+	private final JSONObject _configurationJSONObject;
 
 	@Tool("Creates a Liferay site for the given name")
 	Group createSite(

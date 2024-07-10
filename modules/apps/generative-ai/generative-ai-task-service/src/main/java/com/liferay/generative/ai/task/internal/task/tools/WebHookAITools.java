@@ -5,6 +5,7 @@
 
 package com.liferay.generative.ai.task.internal.task.tools;
 
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Http;
 
@@ -16,10 +17,16 @@ import java.io.IOException;
 /**
  * @author Louis-Guillaume Durand
  */
-public class WebHookTools {
+public class WebHookAITools implements AITools {
 
-	public WebHookTools(Http http) {
+	public WebHookAITools(JSONObject configurationJSONObject, Http http) {
+		_configurationJSONObject = configurationJSONObject;
 		_http = http;
+	}
+
+	@Override
+	public JSONObject getConfigurationJSONObject() {
+		return _configurationJSONObject;
 	}
 
 	@Tool("Send JSON data to external tool using webhook URL")
@@ -42,6 +49,7 @@ public class WebHookTools {
 		_http.URLtoString(options);
 	}
 
+	private final JSONObject _configurationJSONObject;
 	private final Http _http;
 
 }

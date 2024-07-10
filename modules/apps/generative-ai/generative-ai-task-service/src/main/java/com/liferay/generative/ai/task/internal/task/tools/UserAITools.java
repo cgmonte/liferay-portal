@@ -6,6 +6,7 @@
 package com.liferay.generative.ai.task.internal.task.tools;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
@@ -19,12 +20,16 @@ import com.liferay.portal.kernel.util.StringUtil;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 
-// Demo class for user operations
+// Demo tool for user operations
 
 /**
  * @author Petteri Karttunen
  */
-public class UserTools {
+public class UserAITools implements AITools {
+
+	public UserAITools(JSONObject configurationJSONObject) {
+		_configurationJSONObject = configurationJSONObject;
+	}
 
 	@Tool("Creates a new user")
 	void createUser(
@@ -102,5 +107,12 @@ public class UserTools {
 			throw new RuntimeException(portalException);
 		}
 	}
+
+	@Override
+	public JSONObject getConfigurationJSONObject() {
+		return _configurationJSONObject;
+	}
+
+	private final JSONObject _configurationJSONObject;
 
 }

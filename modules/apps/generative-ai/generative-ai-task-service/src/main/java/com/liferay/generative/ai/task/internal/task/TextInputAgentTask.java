@@ -31,8 +31,8 @@ public class TextInputAgentTask extends BaseTask implements Task {
 		TaskBuilder taskBuilder) {
 
 		super(
-			configurationJSONObject, generativeAIConfigurationProvider,
-			"text_input_agent", null);
+			null, configurationJSONObject, generativeAIConfigurationProvider,
+			"text_input_agent");
 
 		_taskBuilder = taskBuilder;
 	}

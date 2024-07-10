@@ -32,8 +32,8 @@ public class ChainTask extends BaseTask implements Task {
 		TaskBuilder taskBuilder) {
 
 		super(
-			configurationJSONObject, generativeAIConfigurationProvider, "chain",
-			null);
+			null, configurationJSONObject, generativeAIConfigurationProvider,
+			"chain");
 
 		JSONObject attributesJSONObject = configurationJSONObject.getJSONObject(
 			"attributes");

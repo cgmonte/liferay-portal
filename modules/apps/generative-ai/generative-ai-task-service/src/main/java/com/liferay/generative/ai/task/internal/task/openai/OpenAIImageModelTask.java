@@ -9,7 +9,7 @@ import com.liferay.generative.ai.task.configuration.GenerativeAITaskConfiguratio
 import com.liferay.generative.ai.task.exception.TaskDefinitionConfigurationJSONException;
 import com.liferay.generative.ai.task.exception.TaskTestException;
 import com.liferay.generative.ai.task.internal.task.BaseTask;
-import com.liferay.generative.ai.task.internal.task.tools.ToolsProvider;
+import com.liferay.generative.ai.task.internal.task.tools.AIToolsProvider;
 import com.liferay.generative.ai.task.internal.util.SetterUtil;
 import com.liferay.generative.ai.task.task.Task;
 import com.liferay.generative.ai.task.task.TaskResponse;
@@ -28,11 +28,11 @@ public class OpenAIImageModelTask extends BaseTask implements Task {
 	public OpenAIImageModelTask(
 		JSONObject definitionJSONObject,
 		GenerativeAITaskConfigurationProvider generativeAIConfigurationProvider,
-		ToolsProvider toolsProvider) {
+		AIToolsProvider toolsProvider) {
 
 		super(
-			definitionJSONObject, generativeAIConfigurationProvider,
-			"openai_image_model", toolsProvider);
+			toolsProvider, definitionJSONObject,
+			generativeAIConfigurationProvider, "openai_image_model");
 	}
 
 	@Override
