@@ -41,7 +41,6 @@ const initialElements = [
 const MockedFlow = ({ 
   editingMode, 
   externalReferenceCode,
-  etFieldValue, 
   taskConfigWithIds, 
   setTaskConfigWithIds 
 }) => {
@@ -52,18 +51,15 @@ const MockedFlow = ({
     initialElements
   );
 
-  const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
-  const onConnect = (params) => setElements((els) => addEdge(params, els));
+  // const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
+  // const onConnect = (params) => setElements((els) => addEdge(params, els));
+
   const onLoad = (reactFlowInstance) => setRfInstance(reactFlowInstance);
 
   const onNodeDoubleClick = (_, element) => {
-    // console.log("double click");
-
     openModal({
       bodyComponent: () => (
         <ConfigurationForm
-          // setFieldTouched={setFieldTouched}
-          // setFieldValues={setFieldValue}
           setTaskConfigWithIds={setTaskConfigWithIds}
           taskConfigWithIds={taskConfigWithIds}
         />),
@@ -74,7 +70,6 @@ const MockedFlow = ({
 
   useEffect(() => {
     if (rfInstance) {
-      // console.log("oi");
       // rfInstance.setTransform({ x: (1174 / 2) - (260 / 2), y: (708 / 2) - (60 / 2), zoom: 1.5 });
       rfInstance.project({ x: 100, y: 100 });
       rfInstance.fitView();
@@ -85,17 +80,17 @@ const MockedFlow = ({
   // const logToObject = () => console.log(rfInstance?.toObject());
   // const resetTransform = () => rfInstance?.setTransform({ x: 0, y: 0, zoom: 1 });
 
-  const toggleClassnames = () => {
-    setElements((elms) => {
-      return elms.map((el) => {
-        if (isNode(el)) {
-          el.className = el.className === 'light' ? 'dark' : 'light';
-        }
+  // const toggleClassnames = () => {
+  //   setElements((elms) => {
+  //     return elms.map((el) => {
+  //       if (isNode(el)) {
+  //         el.className = el.className === 'light' ? 'dark' : 'light';
+  //       }
 
-        return el;
-      });
-    });
-  };
+  //       return el;
+  //     });
+  //   });
+  // };
 
   return (
     <ReactFlow

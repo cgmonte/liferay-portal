@@ -79,8 +79,6 @@ function processValue(value) {
 }
 
 function ConfigurationForm({
-	setFieldTouched,
-	setFieldValues,
 	taskConfigWithIds,
 	setTaskConfigWithIds,
 }) {
