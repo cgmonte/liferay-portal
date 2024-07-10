@@ -510,9 +510,9 @@ function EditTaskDefinitionForm({
 						data-testid={TEST_IDS.PREVIEW_SIDEBAR_BUTTON}
 						displayType="secondary"
 						onClick={_handleToggleSidebar(SIDEBAR_TYPES.PREVIEW)}
-						small
+						sm
 					>
-						Chat Preview
+						Preview Chat
 					</ClayButton>
 				</ClayToolbar.Item>
 			</PageToolbar>
