@@ -83,6 +83,7 @@ dependencies {
 	compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
 	compileOnly project(":apps:blogs:blogs-api")
 	compileOnly project(":apps:generative-ai:generative-ai-rest-api")
+	compileOnly project(":apps:list-type:list-type-api")	
 	compileOnly project(":apps:object:object-api")
 	compileOnly project(":apps:portal-configuration:portal-configuration-module-configuration-api")
 	compileOnly project(":apps:portal-search:portal-search-api")
