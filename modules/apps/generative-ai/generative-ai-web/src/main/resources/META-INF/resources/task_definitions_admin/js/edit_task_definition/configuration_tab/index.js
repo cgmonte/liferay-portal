@@ -25,7 +25,13 @@ const CONFIGURATION_SCHEMAS = {
 };
 
 const addIdstoSerializedTaskConfig = (serializedTaskConfig) => {
-	const taskConfig = JSON.parse(serializedTaskConfig);
+	let taskConfig;
+	
+	try {
+		taskConfig = JSON.parse(serializedTaskConfig);
+	} catch (error) {
+		console.error('Error parsing serialized task config:', error);
+	}
 
     if (!taskConfig || !Object.keys(taskConfig).length) {
         return taskConfig;
