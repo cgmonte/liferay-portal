@@ -205,7 +205,7 @@ function EditTaskDefinitionForm({
 		validate: _handleFormikValidate,
 	});
 
-	useShouldConfirmBeforeNavigate(formik.dirty && !formik.isSubmitting);
+	// useShouldConfirmBeforeNavigate(formik.dirty && !formik.isSubmitting);
 
 	/**
 	 * Formats the form values for the "configuration" parameter to send to
@@ -456,15 +456,15 @@ function EditTaskDefinitionForm({
 	};
 
 	const _renderTabContent = () => {
-		console.log('ASDASDASDASD' + formik.values.taskConfig);
 		switch (tab) {
 			default:
 				return (
 					<ConfigurationTab
 						errors={formik.errors}
+						externalReferenceCode={formik.values.externalReferenceCode}
 						setFieldTouched={formik.setFieldTouched}
 						setFieldValue={formik.setFieldValue}
-						taskConfig={formik.values.taskConfig}
+						serializedTaskConfig={formik.values.taskConfig}
 						touched={formik.touched}
 					/>
 				);
@@ -511,9 +511,9 @@ function EditTaskDefinitionForm({
 						data-testid={TEST_IDS.PREVIEW_SIDEBAR_BUTTON}
 						displayType="secondary"
 						onClick={_handleToggleSidebar(SIDEBAR_TYPES.PREVIEW)}
-						small
+						sm
 					>
-						Chat Preview
+						Preview Chat
 					</ClayButton>
 				</ClayToolbar.Item>
 			</PageToolbar>
