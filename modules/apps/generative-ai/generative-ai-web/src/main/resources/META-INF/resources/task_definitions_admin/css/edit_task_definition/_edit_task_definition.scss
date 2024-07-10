@@ -1,6 +1,6 @@
 .edit-task-definition-root {
 	.layout-section-main {
-		padding-bottom: 40px;
+		padding-bottom: 32px;
 		padding-top: $pageToolbarHeight;
 
 		.layout-section-main-shift {
@@ -9,7 +9,41 @@
 			transition: margin-right ease 0.2s;
 
 			.configuration-sheet {
-				height: calc(100vh - $configurationSheetStart - 40px);
+				min-height: calc(100vh - $configurationSheetStart - 40px);
+
+				.sheet-header {
+					align-items: baseline;
+					display: flex;
+					justify-content: space-between;
+					margin-bottom: 1rem;
+
+					.sheet-title {
+						margin-bottom: 0;
+						margin-right: 1rem;
+					}
+
+					.tbar-divider {
+						align-self: center;
+						background-color: $secondary;
+						height: 16px;
+						margin-right: 1rem;
+						width: 1px;
+
+					}
+				}
+
+				.flow-editor-container{
+					width: 1174px;
+					height: 708px;
+				}
+
+				.sheet-header::after {
+					content: none;
+				}
+
+				.task-configuration-label {
+					padding-bottom: 0.5rem;
+				}
 			}
 		}
 
@@ -79,7 +113,7 @@
 		margin-right: calc(
 			max(
 				50% - (#{$layoutSectionMainMaxWidth} / 2),
-				#{$width} - (50vw - 50%) + 24px
+				#{$width} - (50vw - 50%) + 32px
 			)
 		);
 	}
