@@ -13,37 +13,7 @@ import { fetch } from 'frontend-js-web';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-interface AssistantChatProps {
-	assistantName: string;
-	endpoints: Endpoints;
-	formikValues: any;
-	greetingMessage?: string;
-	sidebarBodyHeight: number;
-	taskExternalReferenceCode: string;
-}
-
-interface Endpoints {
-	sendMessageEndpoint: string;
-}
-
-interface GenerativeAiRequestBody {
-	input: {
-		text: string;
-		history: ChatHistoryEntry[];
-	};
-}
-
-interface Message {
-	content: string;
-	sender: string;
-}
-
-interface ChatHistoryEntry {
-	role: 'AI' | 'USER';
-	text: string;
-}
-
-function Message({ content, sender }: Message) {
+function Message({ content, sender }) {
 	return (
 		<div className="ray-assistant__message">
 			<Text truncate weight="semi-bold">
@@ -60,12 +30,12 @@ const AssistantChat = forwardRef(function AssistantChat({
 	endpoints,
 	greetingMessage = 'Hi, I am your assistant. How can I help you?',
 	taskExternalReferenceCode,
-}: AssistantChatProps, ref) {
+}, ref) {
 	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(802);
 
 	const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
 
-	const [chatHistory, setChatHistory] = useState<ChatHistoryEntry[]>([]);
+	const [chatHistory, setChatHistory] = useState([]);
 
 	const [prompt, setPrompt] = useState('');
 
@@ -77,10 +47,10 @@ const AssistantChat = forwardRef(function AssistantChat({
 	}
 
 	function renameLocalStorageKey(oldKey, newKey) {
-		const value: any = localStorage.getItem(oldKey);
+		const value = localStorage.getItem(oldKey);
 		localStorage.setItem(newKey, value);
 		localStorage.removeItem(oldKey);
-	  }
+	}
 
 	useImperativeHandle(ref, () => ({
 		clearChatHistory,
@@ -97,7 +67,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 	}
 
 	const cleanupChatInput = () => {
-		const chatInput = document.querySelector('#rayAssistantChatInput') as HTMLInputElement;
+		const chatInput = document.querySelector('#rayAssistantChatInput');
 
 		if (chatInput) {
 			chatInput.value = '';
@@ -106,7 +76,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 	};
 
 	useEffect(() => {
-		const sidebarElement = document.querySelector('.preview-sidebar.sidebar.sidebar-light') as HTMLElement;
+		const sidebarElement = document.querySelector('.preview-sidebar.sidebar.sidebar-light');
 
 		if (sidebarElement) {
 			setSidebarBodyHeight(sidebarElement.offsetHeight - 64);
@@ -129,11 +99,11 @@ const AssistantChat = forwardRef(function AssistantChat({
 				messageBody.scrollHeight - messageBody.clientHeight;
 		}
 
-		if (chatHistory.length) { 
+		if (chatHistory.length) {
 			localStorage.setItem(
-				taskExternalReferenceCode, 
+				taskExternalReferenceCode,
 				JSON.stringify(chatHistory)
-			); 
+			);
 		}
 	}, [chatHistory]);
 
@@ -144,7 +114,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 		}
 	}, [taskExternalReferenceCode])
 
-	const handleReceiveMessage = (value: any) => {
+	const handleReceiveMessage = (value) => {
 		if (value) {
 			setChatHistory((currentHistory) => [
 				...currentHistory,
@@ -157,7 +127,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 		setIsWaitingForResponse(false);
 	};
 
-	const handleError = (errorMessage: string) => {
+	const handleError = (errorMessage) => {
 		handleReceiveMessage(
 			{
 				output: {
@@ -167,7 +137,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 		)
 	};
 
-	const handleSendMessage = async (value: string) => {
+	const handleSendMessage = async (value) => {
 		const oldHistory = chatHistory;
 
 		if (value) {
@@ -184,7 +154,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 			try {
 				const response = await fetch(endpoints.sendMessageEndpoint, {
-					body: JSON.stringify({ input: { text: value, ...(oldHistory.length && { history: oldHistory }) } } as GenerativeAiRequestBody),
+					body: JSON.stringify({ input: { text: value, ...(oldHistory.length && { history: oldHistory }) } }),
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -193,8 +163,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 				if (response.status !== 200) {
 					handleError(
-						`HTTP Error: ${response?.status}${
-							response?.statusText ? ', ' + response.statusText : ''}.`
+						`HTTP Error: ${response?.status}${response?.statusText ? ', ' + response.statusText : ''}.`
 					);
 				}
 				else {
@@ -229,16 +198,16 @@ const AssistantChat = forwardRef(function AssistantChat({
 				<ClayCard.Body className="ray-assistant__card-body">
 					<div id="rayAssistantContainer">
 						<div id="rayAssistantConversationContainer">
-							<Message content = {greetingMessage} key={0} sender = {assistantName} />
+							<Message content={greetingMessage} key={0} sender={assistantName} />
 
-							{chatHistory.map((historyEntry: ChatHistoryEntry, index) => (
-								<Message 
+							{chatHistory && chatHistory.length !== 0 && chatHistory.map((historyEntry, index) => (
+								<Message
 									content={historyEntry.text}
 									key={index + 1}
-									sender= {historyEntry.role === 'AI' ?
+									sender={historyEntry.role === 'AI' ?
 										assistantName
 										: Liferay.ThemeDisplay.getUserName()}
-								 />
+								/>
 							))}
 						</div>
 
@@ -254,10 +223,10 @@ const AssistantChat = forwardRef(function AssistantChat({
 											setPrompt(target.value);
 										}}
 										onKeyDown={(
-											event: React.KeyboardEvent<HTMLInputElement>
+											event
 										) => {
 											const inputTarget =
-												event.target as HTMLInputElement;
+												event.target;
 											if (
 												event.key === 'Enter' &&
 												event.ctrlKey
