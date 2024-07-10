@@ -20,7 +20,13 @@ function Message({ content, sender }) {
 				{sender}:
 			</Text>
 
-			<ReactMarkdown>{content}</ReactMarkdown>
+			{content.text 
+				&& <ReactMarkdown>{content.text}</ReactMarkdown> 
+			}
+
+			{content.image 
+				&& <img alt='AI-generated Image' className='ai-generated-image' src={"data:image/png;base64, " + content.image.base64Data} />
+			}
 		</div>
 	);
 }
@@ -100,9 +106,23 @@ const AssistantChat = forwardRef(function AssistantChat({
 		}
 
 		if (chatHistory.length) {
+			const localStorageChatHistory = chatHistory.map((message) => {
+				const localStorageMessage = {...message};
+
+				console.log("localStorageMessage", localStorageMessage);
+
+				if (localStorageMessage?.image) {
+					localStorageMessage.text = "AI-generated Image";
+
+					delete localStorageMessage.image;
+				}
+
+				return localStorageMessage;
+			});
+
 			localStorage.setItem(
 				taskExternalReferenceCode,
-				JSON.stringify(chatHistory)
+				JSON.stringify(localStorageChatHistory)
 			);
 		}
 	}, [chatHistory]);
@@ -114,12 +134,17 @@ const AssistantChat = forwardRef(function AssistantChat({
 		}
 	}, [taskExternalReferenceCode])
 
-	const handleReceiveMessage = (value) => {
-		if (value) {
+	const handleReceiveMessage = ({output}) => {
+		const {image, text} = output;
+		
+		console.log('value', output);
+
+		if (output) {
 			setChatHistory((currentHistory) => [
 				...currentHistory,
 				{
-					text: value.output.text,
+					...(text && {text}),
+					...(image && {image}),
 					role: 'AI',
 				},
 			]);
@@ -198,11 +223,11 @@ const AssistantChat = forwardRef(function AssistantChat({
 				<ClayCard.Body className="ray-assistant__card-body">
 					<div id="rayAssistantContainer">
 						<div id="rayAssistantConversationContainer">
-							<Message content={greetingMessage} key={0} sender={assistantName} />
+							<Message content={{text: greetingMessage}} key={0} sender={assistantName} />
 
 							{chatHistory && chatHistory.length !== 0 && chatHistory.map((historyEntry, index) => (
 								<Message
-									content={historyEntry.text}
+									content={historyEntry}
 									key={index + 1}
 									sender={historyEntry.role === 'AI' ?
 										assistantName
