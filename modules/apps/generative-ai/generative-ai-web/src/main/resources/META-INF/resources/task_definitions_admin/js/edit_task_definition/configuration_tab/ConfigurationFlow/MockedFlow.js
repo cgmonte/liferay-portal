@@ -57,7 +57,7 @@ const MockedFlow = ({
   const onLoad = (reactFlowInstance) => setRfInstance(reactFlowInstance);
 
   const onNodeDoubleClick = (_, element) => {
-    console.log("double click");
+    // console.log("double click");
 
     openModal({
       bodyComponent: () => (
@@ -74,7 +74,7 @@ const MockedFlow = ({
 
   useEffect(() => {
     if (rfInstance) {
-      console.log("oi");
+      // console.log("oi");
       // rfInstance.setTransform({ x: (1174 / 2) - (260 / 2), y: (708 / 2) - (60 / 2), zoom: 1.5 });
       rfInstance.project({ x: 100, y: 100 });
       rfInstance.fitView();

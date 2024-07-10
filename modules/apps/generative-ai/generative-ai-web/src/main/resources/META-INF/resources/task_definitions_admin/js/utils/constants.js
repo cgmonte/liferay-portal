@@ -52,3 +52,17 @@ export const ATTRIBUTES_LABELS = {
 	webhook: "Webhook",
 	use_chat_memory: "Use Chat Memory",
 }
+
+export const ATTRIBUTES_INPUT_TYPES = {
+	context_output_parameter_name: "text",
+	location: "text",
+	max_output_tokens: "number",
+	memory_max_messages: "number",
+	model_name: "text",
+	project: "text",
+	prompt_template: "text",
+	system_message: "text",
+	top_k: "number",
+	webhook: "text",
+	use_chat_memory: "checkbox",
+}

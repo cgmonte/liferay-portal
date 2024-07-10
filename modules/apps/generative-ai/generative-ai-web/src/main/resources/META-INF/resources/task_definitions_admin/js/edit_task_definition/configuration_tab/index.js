@@ -63,16 +63,16 @@ function ConfigurationTab({
 		addIdstoSerializedTaskConfig(serializedTaskConfig)
 	);
 
-	useEffect(() => {
-		setTaskConfigWithIds(
-			addIdstoSerializedTaskConfig(
-				serializedTaskConfig
-			)
-		);
-	}, [serializedTaskConfig]);
+	// useEffect(() => {
+	// 	setTaskConfigWithIds(
+	// 		addIdstoSerializedTaskConfig(
+	// 			serializedTaskConfig
+	// 		)
+	// 	);
+	// }, [serializedTaskConfig]);
 
 	useEffect(() => {
-		console.log("taskConfigWithIds:", taskConfigWithIds);
+		console.log("taskConfigWithIds", taskConfigWithIds);
 	}, [taskConfigWithIds]);
 
 	const _renderJSONEditor = () => (

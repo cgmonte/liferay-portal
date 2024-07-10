@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayForm, { ClayRadio, ClayRadioGroup, ClaySelect } from '@clayui/form';
 import ClayButton from '@clayui/button';
-import { ClayInput } from '@clayui/form';
+import ClayForm, { ClayCheckbox, ClayInput } from '@clayui/form';
 
 import ClayLayout from '@clayui/layout';
 import getCN from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import taskConfigurationSchema from '../../../schemas/task-configuration.schema.json';
 import CodeMirrorEditor from '../../shared/CodeMirrorEditor';
@@ -17,7 +16,7 @@ import LearnMessage from '../../shared/LearnMessage';
 import ThemeContext from '../../shared/ThemeContext';
 import { DEFAULT_INDEX_CONFIGURATION } from '../../utils/constants';
 import { set } from 'date-fns';
-import { ATTRIBUTES_LABELS, NAME_LABELS } from '../../utils/constants';
+import { ATTRIBUTES_INPUT_TYPES, ATTRIBUTES_LABELS, NAME_LABELS } from '../../utils/constants';
 import { id } from 'date-fns/locale';
 
 const CONFIGURATION_SCHEMAS = {
@@ -25,11 +24,9 @@ const CONFIGURATION_SCHEMAS = {
 };
 
 const updateTaskConfigWithIds = (taskConfigWithIds, id, updatedAttributes) => {
-	if (!taskConfigWithIds || !Object.keys(taskConfigWithIds).length) {
-		return taskConfigWithIds;
-	}
+	const taskConfigToUpdate = { ...taskConfigWithIds };
 
-	function traverseTaskConfigWithIds(obj) {
+	function traverseTaskConfig(obj) {
 		for (let key in obj) {
 			if (key === 'id' && obj[key] === id) {
 				if (obj.attributes) {
@@ -38,17 +35,15 @@ const updateTaskConfigWithIds = (taskConfigWithIds, id, updatedAttributes) => {
 
 				break;
 			}
-			else if (typeof obj[key] === 'object' && obj[key] !== null) {
-				traverseTaskConfigWithIds(obj[key]);
+			if (typeof obj[key] === 'object' && obj[key] !== null) {
+				traverseTaskConfig(obj[key]);
 			}
 		}
 	}
 
-	traverseTaskConfigWithIds(taskConfigWithIds);
+	traverseTaskConfig(taskConfigToUpdate);
 
-	console.log("taskConfigWithIds after update:", taskConfigWithIds);
-
-	return taskConfigWithIds;
+	return taskConfigToUpdate;
 };
 
 const getFormFields = (serializedTaskConfig) => {
@@ -74,10 +69,22 @@ const getFormFields = (serializedTaskConfig) => {
 
 	traverseTaskConfigWithIds(serializedTaskConfig);
 
-	console.log(formFields);
-
 	return formFields;
 };
+
+function processValue(value) {
+	if (typeof value === 'string') {
+		// Check if the string is a boolean
+		if (value.toLowerCase() === 'true') return true;
+		if (value.toLowerCase() === 'false') return false;
+
+		// Check if the string is a number
+		if (/^\d+$/.test(value)) {
+			return Number(value);
+		}
+	}
+	return value;
+}
 
 function ConfigurationForm({
 	setFieldTouched,
@@ -85,88 +92,91 @@ function ConfigurationForm({
 	taskConfigWithIds,
 	setTaskConfigWithIds,
 }) {
+	const [inputValues, setInputValues] = useState({});
+	const [formFields, setFormFields] = useState(getFormFields(taskConfigWithIds));
+
+	const formRef = useRef();
+
+	// useEffect(() => {
+	// 	const newFormFields = getFormFields(taskConfigWithIds);
+	// 	console.log(newFormFields);
+
+	// 	setFormFields(getFormFields(newFormFields));
+	// }, [taskConfigWithIds]);
+
+	useEffect(() => {
+		return () => {
+			console.log("oxe"); 
+			// const formData = new FormData(formRef.current);
+			// // console.log("formData.entries()", formData.entries());
+
+			// for(var pair of formData.entries()) {
+			// 	console.log(pair[0]+ ', '+ pair[1]);
+			//  }
+		};
+	}, []);
+
 	function autoGrow(field) {
 		if (field.scrollHeight > field.clientHeight && field.clientHeight < 1001) {
 			field.style.height = `${field.scrollHeight}px`;
 		}
 	}
 
-	const formFields = getFormFields(taskConfigWithIds);
+	useEffect(() => {
+		console.log("pqp formFields", formFields)
+	}, [formFields]);
 
-	console.log("formFields:", formFields);
-
-	const handleOnBlur = (fieldId, attributeKey, newValue) => {
-		console.log("fieldId", fieldId);
-		console.log("attributeKey", attributeKey);
-		console.log("newValue", newValue);
-		// setFieldValues((currentFieldValues) => {
-		// 	console.log("currentFieldValues", currentFieldValues);
-
-		// 	// return {
-		// 	// 	...currentFieldValues,
-		// 	// 	temperature: parseInt(currentFieldValues.temperature),
-		// 	// 	maxOutputTokens: parseInt(currentFieldValues.maxOutputTokens),
-		// 	// };
-
-		// 	return currentFieldValues;
-
-		// })	
+	const handleOnChange = (key, value) => {
+		setInputValues(prevState => ({
+			...prevState,
+			[key]: processValue(value)
+		}));
 	};
 
-	const handleOnChange = (propertyName, value) => {
-		// setLocalFieldValues((currentLocalFieldValues) => {
-		// 	const newState = {
-		// 		...currentLocalFieldValues,
-		// 		[propertyName]: value,
-		// 	};
+	useEffect(() => {
+		setFormFields((currentFormFields) => {
+			const newFormFields = [...currentFormFields];
 
-		// 	console.log(newState);
+			Object.entries(inputValues).forEach(([key, value]) => {
+				const [id, attributeKey] = key.split('-');
 
-		// 	return newState;
-		// });
+				newFormFields.find((field) => field.id == id).attributes[attributeKey] = processValue(value);
+			});
 
-		console.log("handleOnChange propertyName:", propertyName);
-		console.log("handleOnChange value:", value);
-	};
+			return newFormFields;
+		});
+	}, [inputValues]);
 
-	const getFieldType = (key, value) => {
-		if (key === 'system_message' || key === 'prompt_template') {
-			return 'textarea';
-		}
+	const submitForm = (event) => {
+		const form = event.currentTarget;
+		const formData = new FormData(form);
 
-		if (typeof value === 'string') {
-			return 'input';
-		}
-
-		if (typeof value === 'number') {
-			return 'number';
-		}
-
-		if (typeof value === 'boolean') {
-			return 'checkbox';
-		}
-
-		return 'input';
+		console.log("formData", formData);
 	}
 
 	return (
-		<>
-			{
-				formFields.length && formFields.map((field, index) => (
-					<>
-						<h3
-							className='task-configuration-label'
-							key={`${field.id}_task_label_header_${index}`}
-						>
-							{field.taskLabel ?? NAME_LABELS[field.name]}
-						</h3>
+		<ClayForm
+			ref={formRef}
+		>
+			{formFields.length && formFields.map((field, index) => (
+				<div className='mb-5'>
+					<h4
+						className='task-configuration-label'
+						key={`${field.id}-task_label_header_${index}`}
+					>
+						{field.taskLabel ?? NAME_LABELS[field.name]}
+					</h4>
 
-						{field.attributes && Object.keys(field.attributes).length &&
-							Object.entries(field.attributes).map(([key, value], index) => (
-								<>
+					{field.attributes && Object.keys(field.attributes).length &&
+						Object.entries(field.attributes).map(([key, value], attributeIndex) => (
+							(key === 'system_message' || key === 'prompt_template')
+								? <ClayForm.Group
+									className="form-group-sm"
+									key={`${field.id}-${key}_${attributeIndex}_group`}
+								>
 									<label
-										for={`${field.id}_${key}`}
-										key={`${field.id}_${key}_${index}_label`}
+										htmlFor={`${field.id}-${key}`}
+										key={`${field.id}-${key}_${attributeIndex}_label`}
 									>
 										{ATTRIBUTES_LABELS[key] ?? key}
 									</label>
@@ -174,22 +184,20 @@ function ConfigurationForm({
 									<ClayInput
 										className="task-configuration-input noscrollbars"
 										component={(key === 'system_message' || key === 'prompt_template') ? 'textarea' : 'input'}
-										// height={100}
-										id={`${field.id}_${key}`}
-										key={`${field.id}_${key}_${index}_input`}
-										onBlur={({ target }) => handleOnBlur(field.id, key, target.value)}
-										// onChange={({ target }) => handleOnChange('systemMessage', target.value)}
-										// onKeyUp={({ target }) => { autoGrow(target) }}
+										id={`${field.id}-${key}`}
+										key={`${field.id}-${key}_${attributeIndex}_input`}
+										name={`${field.id}-${key}`}
+										onChange={({ target }) => handleOnChange(`${field.id}-${key}`, target.value)}
 										placeholder=""
-										type={getFieldType(key, value)}
-										value={value}
+										type={ATTRIBUTES_INPUT_TYPES[key] ?? 'text'}
+										value={inputValues[`${field.id}-${key}`] ?? value}
 									/>
-								</>
-							))}
-					</>
-				))
-			}
-		</>
+								</ClayForm.Group>
+								: null
+						))}
+				</div>
+			))}
+		</ClayForm>
 	);
 }
 
