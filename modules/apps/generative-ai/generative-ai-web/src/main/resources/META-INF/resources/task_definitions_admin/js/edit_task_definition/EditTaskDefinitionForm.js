@@ -205,7 +205,7 @@ function EditTaskDefinitionForm({
 		validate: _handleFormikValidate,
 	});
 
-	useShouldConfirmBeforeNavigate(formik.dirty && !formik.isSubmitting);
+	// useShouldConfirmBeforeNavigate(formik.dirty && !formik.isSubmitting);
 
 	/**
 	 * Formats the form values for the "configuration" parameter to send to
