@@ -3,32 +3,20 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayButton from '@clayui/button';
 import ClayForm, { ClayCheckbox, ClayInput } from '@clayui/form';
 
-import ClayLayout from '@clayui/layout';
 import getCN from 'classnames';
 import React, { useRef, useEffect, useState } from 'react';
 
 import taskConfigurationSchema from '../../../schemas/task-configuration.schema.json';
-import CodeMirrorEditor from '../../shared/CodeMirrorEditor';
-import LearnMessage from '../../shared/LearnMessage';
-import ThemeContext from '../../shared/ThemeContext';
-import { DEFAULT_INDEX_CONFIGURATION } from '../../utils/constants';
-import { set } from 'date-fns';
 import { ATTRIBUTES_INPUT_TYPES, ATTRIBUTES_LABELS, NAME_LABELS } from '../../utils/constants';
-import { id } from 'date-fns/locale';
 
-const CONFIGURATION_SCHEMAS = {
-	taskConfig: taskConfigurationSchema,
-};
-
-const updateTaskConfigWithIds = (taskConfigWithIds, id, updatedAttributes) => {
+const updateTaskConfigWithIds = (taskConfigWithIds, formFields) => {
 	const taskConfigToUpdate = { ...taskConfigWithIds };
 
-	function traverseTaskConfig(obj) {
+	function traverseTaskConfig(obj, fieldId, updatedAttributes) {
 		for (let key in obj) {
-			if (key === 'id' && obj[key] === id) {
+			if (key === 'id' && obj[key] === fieldId) {
 				if (obj.attributes) {
 					obj.attributes = updatedAttributes;
 				}
@@ -41,7 +29,11 @@ const updateTaskConfigWithIds = (taskConfigWithIds, id, updatedAttributes) => {
 		}
 	}
 
-	traverseTaskConfig(taskConfigToUpdate);
+	formFields.forEach((field) => {
+		const updatedAttributes = { ...field.attributes };
+
+		traverseTaskConfig(taskConfigToUpdate, field.id, updatedAttributes);
+	});
 
 	return taskConfigToUpdate;
 };
@@ -95,36 +87,17 @@ function ConfigurationForm({
 	const [inputValues, setInputValues] = useState({});
 	const [formFields, setFormFields] = useState(getFormFields(taskConfigWithIds));
 
-	const formRef = useRef();
-
-	// useEffect(() => {
-	// 	const newFormFields = getFormFields(taskConfigWithIds);
-	// 	console.log(newFormFields);
-
-	// 	setFormFields(getFormFields(newFormFields));
-	// }, [taskConfigWithIds]);
-
 	useEffect(() => {
 		return () => {
-			console.log("oxe"); 
-			// const formData = new FormData(formRef.current);
-			// // console.log("formData.entries()", formData.entries());
-
-			// for(var pair of formData.entries()) {
-			// 	console.log(pair[0]+ ', '+ pair[1]);
-			//  }
+			setTaskConfigWithIds((prevTaskConfigWithIds) => updateTaskConfigWithIds(prevTaskConfigWithIds, formFields));
 		};
 	}, []);
 
-	function autoGrow(field) {
-		if (field.scrollHeight > field.clientHeight && field.clientHeight < 1001) {
-			field.style.height = `${field.scrollHeight}px`;
-		}
-	}
-
-	useEffect(() => {
-		console.log("pqp formFields", formFields)
-	}, [formFields]);
+	// function autoGrow(field) {
+	// 	if (field.scrollHeight > field.clientHeight && field.clientHeight < 1001) {
+	// 		field.style.height = `${field.scrollHeight}px`;
+	// 	}
+	// }
 
 	const handleOnChange = (key, value) => {
 		setInputValues(prevState => ({
@@ -147,22 +120,15 @@ function ConfigurationForm({
 		});
 	}, [inputValues]);
 
-	const submitForm = (event) => {
-		const form = event.currentTarget;
-		const formData = new FormData(form);
-
-		console.log("formData", formData);
-	}
-
 	return (
-		<ClayForm
-			ref={formRef}
-		>
+		<ClayForm>
 			{formFields.length && formFields.map((field, index) => (
-				<div className='mb-5'>
+				<div 
+					className='mb-5'
+					key={`${field.id}-task_label_header_${index}`}
+				>
 					<h4
 						className='task-configuration-label'
-						key={`${field.id}-task_label_header_${index}`}
 					>
 						{field.taskLabel ?? NAME_LABELS[field.name]}
 					</h4>
