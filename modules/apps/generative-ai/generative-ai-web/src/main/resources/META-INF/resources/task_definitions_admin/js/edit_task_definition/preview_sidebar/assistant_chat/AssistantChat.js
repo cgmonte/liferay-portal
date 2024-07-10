@@ -47,10 +47,19 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	const originalTaskExternalReferenceCode = useRef(taskExternalReferenceCode);
 
+	const chatInputRef = useRef();
+
 	const clearChatHistory = () => {
 		setChatHistory([]);
 		localStorage.removeItem(taskExternalReferenceCode);
+		focusChatInput();
 	}
+
+	const focusChatInput = () => {
+		if (chatInputRef.current) {
+			chatInputRef.current.focus();
+		}
+	};
 
 	function renameLocalStorageKey(oldKey, newKey) {
 		const value = localStorage.getItem(oldKey);
@@ -60,6 +69,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	useImperativeHandle(ref, () => ({
 		clearChatHistory,
+		focusChatInput,
 	}));
 
 	const isInsideIframe = window.self !== window.top;
@@ -150,6 +160,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 			]);
 		}
 		setIsWaitingForResponse(false);
+		focusChatInput();
 	};
 
 	const handleError = (errorMessage) => {
@@ -263,6 +274,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 											}
 										}}
 										placeholder={isWaitingForResponse ? `${assistantName} is generating a response...` : "Type a message..."}
+										ref={chatInputRef}
 										type="text"
 									/>
 
