@@ -73,6 +73,8 @@ function ConfigurationTab({
 
 	useEffect(() => {
 		console.log("taskConfigWithIds", taskConfigWithIds);
+
+		setFieldValue('taskConfig', JSON.stringify(taskConfigWithIds, null, 2));
 	}, [taskConfigWithIds]);
 
 	const _renderJSONEditor = () => (
