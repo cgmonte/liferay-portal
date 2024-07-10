@@ -42,6 +42,11 @@ body {
 	overflow: auto;
 	padding-right: 15px;
 	padding-left: 2px;
+
+	.ai-generated-image {
+		width: 100%;
+		margin-bottom: 1rem;
+	}
 }
 
 #rayAssistantChatInputContainer {
