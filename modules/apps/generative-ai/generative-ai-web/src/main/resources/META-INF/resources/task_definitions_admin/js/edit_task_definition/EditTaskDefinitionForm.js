@@ -461,9 +461,10 @@ function EditTaskDefinitionForm({
 				return (
 					<ConfigurationTab
 						errors={formik.errors}
+						externalReferenceCode={formik.values.externalReferenceCode}
 						setFieldTouched={formik.setFieldTouched}
 						setFieldValue={formik.setFieldValue}
-						taskConfig={formik.values.taskConfig}
+						serializedTaskConfig={formik.values.taskConfig}
 						touched={formik.touched}
 					/>
 				);
