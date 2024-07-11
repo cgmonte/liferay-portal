@@ -863,6 +863,35 @@ public abstract class BaseTaskDefinitionResourceTestCase {
 	}
 
 	@Test
+	public void testPostTaskDefinitionByExternalReferenceCodeClear()
+		throws Exception {
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		TaskDefinition taskDefinition =
+			testPostTaskDefinitionByExternalReferenceCodeClear_addTaskDefinition();
+
+		assertHttpResponseStatusCode(
+			204,
+			taskDefinitionResource.
+				postTaskDefinitionByExternalReferenceCodeClearHttpResponse(
+					taskDefinition.getExternalReferenceCode()));
+
+		assertHttpResponseStatusCode(
+			404,
+			taskDefinitionResource.
+				postTaskDefinitionByExternalReferenceCodeClearHttpResponse(
+					taskDefinition.getExternalReferenceCode()));
+	}
+
+	protected TaskDefinition
+			testPostTaskDefinitionByExternalReferenceCodeClear_addTaskDefinition()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
 	public void testPostTaskDefinitionValidate() throws Exception {
 		TaskDefinition randomTaskDefinition = randomTaskDefinition();
 

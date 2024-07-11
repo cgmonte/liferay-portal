@@ -71,6 +71,10 @@ public interface TaskDefinitionResource {
 			String externalReferenceCode, TaskDefinition taskDefinition)
 		throws Exception;
 
+	public void postTaskDefinitionByExternalReferenceCodeClear(
+			String externalReferenceCode)
+		throws Exception;
+
 	public TaskDefinition postTaskDefinitionValidate(String string)
 		throws Exception;
 

@@ -105,6 +105,11 @@ public class ServletDataImpl implements ServletData {
 							TaskDefinitionResourceImpl.class,
 							"putTaskDefinitionByExternalReferenceCode"));
 					put(
+						"mutation#createTaskDefinitionByExternalReferenceCodeClear",
+						new ObjectValuePair<>(
+							TaskDefinitionResourceImpl.class,
+							"postTaskDefinitionByExternalReferenceCodeClear"));
+					put(
 						"mutation#createTaskDefinitionValidate",
 						new ObjectValuePair<>(
 							TaskDefinitionResourceImpl.class,
