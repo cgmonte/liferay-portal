@@ -15,6 +15,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.MapUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class ChainTask extends BaseTask implements Task {
 	@Override
 	public TaskResponse execute(boolean debug, Map<String, Object> input) {
 		Map<String, Object> taskDebugInfos = new HashMap<>();
+		Map<String, Object> taskOutputs = new HashMap<>();
 
 		TaskResponse taskResponse = null;
 
@@ -67,11 +69,15 @@ public class ChainTask extends BaseTask implements Task {
 						getName(), ".", task.getName(), "#", task.hashCode()),
 					taskDebugInfo);
 			}
+
+			MapUtil.isNotEmptyForEach(
+				taskResponse.getOutput(),
+				(key, value) -> taskOutputs.put(key, value));
 		}
 
 		if (taskResponse != null) {
 			return new TaskResponseImpl(
-				_getDebugInfo(debug, taskDebugInfos), taskResponse.getOutput());
+				_getDebugInfo(debug, taskDebugInfos), taskOutputs);
 		}
 
 		return toTaskResponse(_getDebugInfo(debug, taskDebugInfos), null);
