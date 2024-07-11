@@ -14,13 +14,37 @@ import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } f
 import ReactMarkdown from 'react-markdown';
 
 function Message({ content, sender }) {
+	const [imageURL, setImageURL] = useState(null);
+
+	if (content.image) {
+		if (content.image.base64Data) {
+			const base64DataString = "data:image/png;base64, " + content.image.base64Data;
+
+			fetch(base64DataString)
+				.then(response => response.blob())
+				.then(blob => {
+					setImageURL(URL.createObjectURL(blob));
+				});
+		}
+	}
+
 	return (
 		<div className="ray-assistant__message">
 			<Text truncate weight="semi-bold">
 				{sender}:
 			</Text>
 
-			<ReactMarkdown>{content}</ReactMarkdown>
+			{content.text 
+				&& <ReactMarkdown>{content.text}</ReactMarkdown> 
+			}
+
+			{imageURL
+				&& <div className='ai-generated-image-container'>
+					<a href={imageURL} target='_blank'>
+						<img alt='AI-generated Image' className='ai-generated-image' src={imageURL} />
+					</a>
+				</div>
+			}
 		</div>
 	);
 }
@@ -41,10 +65,11 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	const originalTaskExternalReferenceCode = useRef(taskExternalReferenceCode);
 
+	const chatInputRef = useRef();
+
 	const clearChatHistory = async () => {
 		setChatHistory([]);
 		localStorage.removeItem(taskExternalReferenceCode);
-
 		try {
 			const response = await fetch(endpoints.sendClearMessagesEndpoint, {
 				method: 'POST',
@@ -65,8 +90,15 @@ const AssistantChat = forwardRef(function AssistantChat({
 			handleError(
 				'An error occurred while sending the message.'
 			);
-		}
+		}		
+		focusChatInput();
 	}
+
+	const focusChatInput = () => {
+		if (chatInputRef.current) {
+			chatInputRef.current.focus();
+		}
+	};
 
 	function renameLocalStorageKey(oldKey, newKey) {
 		const value = localStorage.getItem(oldKey);
@@ -76,6 +108,7 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	useImperativeHandle(ref, () => ({
 		clearChatHistory,
+		focusChatInput,
 	}));
 
 	const isInsideIframe = window.self !== window.top;
@@ -122,9 +155,23 @@ const AssistantChat = forwardRef(function AssistantChat({
 		}
 
 		if (chatHistory.length) {
+			const localStorageChatHistory = chatHistory.map((message) => {
+				const localStorageMessage = {...message};
+
+				// console.log("localStorageMessage", localStorageMessage);
+
+				if (localStorageMessage?.image) {
+					localStorageMessage.text = "Generated images are not stored in preview chat history.";
+
+					delete localStorageMessage.image;
+				}
+
+				return localStorageMessage;
+			});
+
 			localStorage.setItem(
 				taskExternalReferenceCode,
-				JSON.stringify(chatHistory)
+				JSON.stringify(localStorageChatHistory)
 			);
 		}
 	}, [chatHistory]);
@@ -136,17 +183,23 @@ const AssistantChat = forwardRef(function AssistantChat({
 		}
 	}, [taskExternalReferenceCode])
 
-	const handleReceiveMessage = (value) => {
-		if (value) {
+	const handleReceiveMessage = ({output}) => {
+		const {image, text} = output;
+		
+		// console.log('value', output);
+
+		if (output) {
 			setChatHistory((currentHistory) => [
 				...currentHistory,
 				{
-					text: value.output.text,
+					...(text && {text}),
+					...(image && {image}),
 					role: 'AI',
 				},
 			]);
 		}
 		setIsWaitingForResponse(false);
+		focusChatInput();
 	};
 
 	const handleError = (errorMessage) => {
@@ -220,11 +273,11 @@ const AssistantChat = forwardRef(function AssistantChat({
 				<ClayCard.Body className="ray-assistant__card-body">
 					<div id="rayAssistantContainer">
 						<div id="rayAssistantConversationContainer">
-							<Message content={greetingMessage} key={0} sender={assistantName} />
+							<Message content={{text: greetingMessage}} key={0} sender={assistantName} />
 
 							{chatHistory && chatHistory.length !== 0 && chatHistory.map((historyEntry, index) => (
 								<Message
-									content={historyEntry.text}
+									content={historyEntry}
 									key={index + 1}
 									sender={historyEntry.role === 'AI' ?
 										assistantName
@@ -259,7 +312,8 @@ const AssistantChat = forwardRef(function AssistantChat({
 												cleanupChatInput();
 											}
 										}}
-										placeholder={isWaitingForResponse ? `${assistantName} is thinking...` : "Type a message..."}
+										placeholder={isWaitingForResponse ? `${assistantName} is generating a response...` : "Type a message..."}
+										ref={chatInputRef}
 										type="text"
 									/>
 

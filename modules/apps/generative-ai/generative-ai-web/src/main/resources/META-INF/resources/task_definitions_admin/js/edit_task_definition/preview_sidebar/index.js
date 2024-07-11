@@ -36,11 +36,13 @@ function PreviewSidebar({
 	errors = [],
 	formikValues,
 	hits = [],
+	isSubmitting,
 	loading,
 	onClose,
 	onFetchCancel,
 	onFetchResults,
 	onFocusSXPElement,
+	openSidebar,
 	requestString = '',
 	responseString = '',
 	totalHits,
@@ -49,16 +51,12 @@ function PreviewSidebar({
 	const [activeDelta, setActiveDelta] = useState(10);
 	const [activePage, setActivePage] = useState(1);
 	const [attributes, setAttributes] = useState([]);
-	const [showCancel, setShowCancel] = useState(false);
+	// const [showCancel, setShowCancel] = useState(false);
 	const [value, setValue] = useState('');
-	const [sidebarBodyHeight, setSidebarBodyHeight] = useState(window.innerHeight - (56 + 56 + 64));
-	const AssistantChatRef = useRef();
+	// const [sidebarBodyHeight, setSidebarBodyHeight] = useState(window.innerHeight - (56 + 56 + 64));
+	const assistantChatRef = useRef();
 
 	const isMounted = useIsMounted();
-
-	const _handleAttributesSubmit = (attributes) => {
-		setAttributes(attributes);
-	};
 
 	const _handleFetch = () => {
 		setShowCancel(false);
@@ -74,75 +72,13 @@ function PreviewSidebar({
 		_handleFetch();
 	}, [activeDelta, activePage]);
 
-	const _handleDeltaChange = (delta) => () => {
-		setActiveDelta(delta);
-		setActivePage(1);
-	};
 
-	const _renderErrors = () => (
-		<ClayList className="preview-error-list">
-			{errors.map((error, index) => (
-				<ErrorListItem
-					error={error}
-					key={index}
-					onFocusSXPElement={onFocusSXPElement}
-				/>
-			))}
-		</ClayList>
-	);
+	useEffect(() => {
+		if(openSidebar === 'preview') {
+			setTimeout(assistantChatRef.current.focusChatInput, 500);
+		}
+	}, [openSidebar, isSubmitting]);
 
-	const _renderHits = () => (
-		<div className="preview-results-list">
-			<ClayList>
-				{hits.map((result) => (
-					<ResultListItem
-						explanation={result.explanation}
-						fields={result.documentFields}
-						id={result.id}
-						key={result.id}
-						score={result.score}
-					/>
-				))}
-			</ClayList>
-
-			<ClayPaginationBar>
-				<ClayPaginationBar.DropDown
-					alignmentPosition={Align.TopLeft}
-					items={DELTAS.map((delta) => ({
-						label: delta,
-						onClick: _handleDeltaChange(delta),
-					}))}
-					trigger={
-						<ClayButton displayType="unstyled">
-							{sub(Liferay.Language.get('x-entries'), [
-								activeDelta,
-							])}
-
-							<ClayIcon symbol="caret-double-l" />
-						</ClayButton>
-					}
-				/>
-
-				<ClayPaginationBar.Results>
-					{sub(Liferay.Language.get('showing-x-to-x-of-x-entries'), [
-						(activePage - 1) * activeDelta + 1,
-						activePage * activeDelta < totalHits
-							? activePage * activeDelta
-							: totalHits,
-						totalHits,
-					])}
-				</ClayPaginationBar.Results>
-
-				<ClayPaginationWithBasicItems
-					active={activePage}
-					alignmentPosition={Align.TopCenter}
-					ellipsisBuffer={1}
-					onActiveChange={setActivePage}
-					totalPages={Math.ceil(totalHits / activeDelta)}
-				/>
-			</ClayPaginationBar>
-		</div>
-	);
 
 	return (
 		<div
@@ -166,7 +102,7 @@ function PreviewSidebar({
 						borderless
 						displayType="secondary"
 						monospaced
-						onClick={() => AssistantChatRef.current.clearChatHistory()}
+						onClick={() => assistantChatRef.current.clearChatHistory()}
 						small
 					>
 						<ClayIcon symbol="trash" />
@@ -194,7 +130,7 @@ function PreviewSidebar({
 					}}
 					greetingMessage="Try me!" 
 					isMounted={isMounted}
-					ref={AssistantChatRef}
+					ref={assistantChatRef}
 					taskExternalReferenceCode={formikValues.externalReferenceCode}
 				/>
 			</div>
