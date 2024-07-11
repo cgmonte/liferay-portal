@@ -227,7 +227,7 @@ public abstract class BaseTask implements Task {
 
 				tool = aiToolsProvider.getTool(
 					toolsJSONObject.getJSONObject("configuration"),
-					(String)object);
+					toolsJSONObject.getString("name"));
 			}
 			else if (object instanceof String) {
 				tool = aiToolsProvider.getTool(null, (String)object);
