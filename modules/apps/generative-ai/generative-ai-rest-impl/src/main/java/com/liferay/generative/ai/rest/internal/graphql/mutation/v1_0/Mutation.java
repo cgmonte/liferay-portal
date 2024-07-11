@@ -135,6 +135,22 @@ public class Mutation {
 	}
 
 	@GraphQLField
+	public boolean createTaskDefinitionByExternalReferenceCodeClear(
+			@GraphQLName("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_taskDefinitionResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			taskDefinitionResource ->
+				taskDefinitionResource.
+					postTaskDefinitionByExternalReferenceCodeClear(
+						externalReferenceCode));
+
+		return true;
+	}
+
+	@GraphQLField
 	public TaskDefinition createTaskDefinitionValidate(
 			@GraphQLName("string") String string)
 		throws Exception {
