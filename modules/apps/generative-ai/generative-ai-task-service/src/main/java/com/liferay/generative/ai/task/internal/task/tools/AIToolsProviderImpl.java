@@ -34,7 +34,7 @@ public class AIToolsProviderImpl implements AIToolsProvider {
 		}
 		else if (key.equals("picklists")) {
 			return new PickListsAITools(configurationJSONObject);
-		}		
+		}
 		else if (key.equals("site")) {
 			return new SiteAITools(configurationJSONObject);
 		}
