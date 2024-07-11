@@ -188,7 +188,10 @@ function PreviewSidebar({
 			<div className="sidebar-body">
 				<AssistantChat 
 					assistantName="LLM Model" 
-					endpoints={{sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`}}
+					endpoints={{
+						sendMessageEndpoint: `/o/generative-ai/v1.0/generate/${formikValues.externalReferenceCode}`,
+						sendClearMessagesEndpoint: `/o/generative-ai/v1.0/task-definitions/by-external-reference-code/${formikValues.externalReferenceCode}/clear`	
+					}}
 					greetingMessage="Try me!" 
 					isMounted={isMounted}
 					ref={AssistantChatRef}

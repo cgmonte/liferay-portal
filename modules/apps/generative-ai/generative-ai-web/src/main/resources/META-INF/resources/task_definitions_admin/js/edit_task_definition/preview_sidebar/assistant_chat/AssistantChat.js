@@ -41,9 +41,31 @@ const AssistantChat = forwardRef(function AssistantChat({
 
 	const originalTaskExternalReferenceCode = useRef(taskExternalReferenceCode);
 
-	const clearChatHistory = () => {
+	const clearChatHistory = async () => {
 		setChatHistory([]);
 		localStorage.removeItem(taskExternalReferenceCode);
+
+		try {
+			const response = await fetch(endpoints.sendClearMessagesEndpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (response.status >= 400) {
+				handleError(
+					`HTTP Error: ${response?.status}${
+						response?.statusText ? ', ' + response.statusText : ''}.`
+				);
+			}
+
+		}
+		catch (error) {
+			handleError(
+				'An error occurred while sending the message.'
+			);
+		}
 	}
 
 	function renameLocalStorageKey(oldKey, newKey) {
