@@ -272,6 +272,7 @@ function FragmentContentInteractionsFilter({
 			return;
 		}
 
+		event.preventDefault();
 		event.stopPropagation();
 
 		if (!isActive(editable.itemId)) {
@@ -303,6 +304,7 @@ function FragmentContentInteractionsFilter({
 
 	if (siblingIds.some(isActive) || !canUpdatePageStructure) {
 		props.onClickCapture = onClickCapture;
+		props.onFocus = hoverEditable;
 		props.onMouseLeave = () => hoverItem(null);
 		props.onMouseOverCapture = hoverEditable;
 	}
