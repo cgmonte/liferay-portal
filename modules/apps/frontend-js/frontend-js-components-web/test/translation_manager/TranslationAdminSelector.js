@@ -370,7 +370,7 @@ describe('TranslationAdminSelector', () => {
 			'.form-control-select'
 		);
 
-		expect(horizontalSelector).toBeInTheDocument();
+		expect(horizontalSelector).toBeTruthy();
 
 		Liferay.FeatureFlags['LPS-114700'] = false;
 	});
