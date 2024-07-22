@@ -4,17 +4,21 @@
 		"node-scripts": "./bin.js"
 	},
 	"com.liferay": {
-		"sha256": "463341664929167f5099dcca2720e6666a84518f83d95bd1d425a28ea6aace1e"
+		"sha256": "9806f015826a58bbc631095b9a815f09e42ce0097aa86adc113969841e486979"
 	},
 	"dependencies": {
 		"@babel/preset-env": "7.24.7",
 		"@babel/preset-react": "7.24.7",
 		"@liferay/jest-junit-reporter": "^1.2.0",
-		"@testing-library/dom": "8.11.1",
-		"@testing-library/jest-dom": "4.2.4",
-		"@testing-library/react": "12.1.2",
-		"@testing-library/react-hooks": "3.4.2",
-		"@testing-library/user-event": "4.2.4",
+		"@testing-library/dom": "^9.3.3",
+		"@testing-library/dom-8.11.1": "npm:@testing-library/dom@8.11.1",
+		"@testing-library/jest-dom": "^6.1.4",
+		"@testing-library/jest-dom-4.2.4": "npm:@testing-library/jest-dom@4.2.4",
+		"@testing-library/react": "^14.0.0",
+		"@testing-library/react-12.1.2": "npm:@testing-library/react@12.1.2",
+		"@testing-library/react-hooks-3.4.2": "npm:@testing-library/react-hooks@3.4.2",
+		"@testing-library/user-event": "^14.5.1",
+		"@testing-library/user-event-4.2.4": "npm:@testing-library/user-event@4.2.4",
 		"@types/jest": "26.0.14",
 		"@types/react-dom": "17.0.3",
 		"@types/vfile-message": "2.0.0",
@@ -37,7 +41,8 @@
 		"micromatch": "4.0.2",
 		"minimist": "^1.2.8",
 		"prettier": "^3.2.5",
-		"react-test-renderer": "16.13.1",
+		"react-test-renderer": "18.3.1",
+		"react-test-renderer-16": "npm:react-test-renderer@16.13.1",
 		"regenerator-runtime": "0.11.1",
 		"resolve": "^1.19.0",
 		"sass": "1.77.5",
