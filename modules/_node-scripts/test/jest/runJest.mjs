@@ -62,7 +62,7 @@ export default async function runJest({
 
 		const childProcess = $(
 			config
-		)`jest --projects ${projectDir} --config ${CONFIG_PATH} --silent ${cliFlags.join(' ')}`;
+		)`jest ${projectDir} --config ${CONFIG_PATH} --silent ${cliFlags.join(' ')}`;
 
 		result = await childProcess;
 	}

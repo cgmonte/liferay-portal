@@ -22,7 +22,11 @@ export default async function () {
 
 	process.env.NODE_ENV = 'test';
 
-	const args = process.argv.slice(3);
+	/**
+	 * Remove the `--sync` flag from the arguments so that it is not
+	 * passed to Jest.
+	 */
+	const args = process.argv.slice(3).filter((arg) => arg !== '--sync');
 
 	/**
 	 * When using 'yarn run ...' it sets the cwd to the nearest package.json
@@ -99,7 +103,9 @@ export default async function () {
 				});
 
 				console.log(
-					`${!failed ? '✅ PASSED' : '❌ FAILED'} ${path.basename(projectPath)}`
+					`${!failed ? '✅ PASSED' : '❌ FAILED'} ${path.basename(projectPath)}`,
+					' ',
+					envObj
 				);
 
 				return all;
