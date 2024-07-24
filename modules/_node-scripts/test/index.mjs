@@ -99,7 +99,9 @@ export default async function () {
 				});
 
 				console.log(
-					`${!failed ? '✅ PASSED' : '❌ FAILED'} ${path.basename(projectPath)}`
+					`${!failed ? '✅ PASSED' : '❌ FAILED'} ${path.basename(projectPath)}`,
+					' ',
+					envObj
 				);
 
 				return all;
