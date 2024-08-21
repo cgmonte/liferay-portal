@@ -11,9 +11,16 @@ import {
 } from '@liferay/accessibility-settings-state-web';
 import {useLiferayState} from '@liferay/frontend-js-state-web';
 import React, {useMemo} from 'react';
+import * as ReactDOM from 'react-dom';
 import {createRoot} from 'react-dom/client';
 
 let counter = 0;
+
+/**
+ * This flag is a temporary workaround for unit tests that still use React 16.
+ * It will be removed once the tests are converted to React 18
+ */
+const USE_REACT_16 = process.env.USE_REACT_16 === 'true';
 
 /**
  * Wrapper for ReactDOM render that automatically:
@@ -84,7 +91,11 @@ export default function render(
 
 		delete renderData.hasBodyContent;
 
-		const root = createRoot(container);
+		let root: any;
+
+		if (!USE_REACT_16) {
+			root = createRoot(container);
+		}
 
 		(window.Liferay as any).component(
 			componentId,
@@ -110,7 +121,12 @@ export default function render(
 					 * can be found.
 					 */
 					try {
-						root.unmount();
+						if (USE_REACT_16) {
+							ReactDOM.unmountComponentAtNode(container);
+						}
+						else {
+							root.unmount();
+						}
 					}
 					catch (error) {
 						if (process.env.NODE_ENV === 'development') {
@@ -125,17 +141,35 @@ export default function render(
 			}
 		);
 
-		root.render(
-			<LiferayProvider spritemap={spritemap}>
-				{
-					(Component ? (
-						<Component {...renderData} />
-					) : (
-						renderable
-					)) as React.ReactNode
-				}
-			</LiferayProvider>
-		);
+		if (USE_REACT_16) {
+
+			// eslint-disable-next-line @liferay/portal/no-react-dom-render
+			ReactDOM.render(
+				<LiferayProvider spritemap={spritemap}>
+					{
+						(Component ? (
+							<Component {...renderData} />
+						) : (
+							renderable
+						)) as React.ReactNode
+					}
+				</LiferayProvider>,
+				container
+			);
+		}
+		else {
+			root.render(
+				<LiferayProvider spritemap={spritemap}>
+					{
+						(Component ? (
+							<Component {...renderData} />
+						) : (
+							renderable
+						)) as React.ReactNode
+					}
+				</LiferayProvider>
+			);
+		}
 	}
 	else {
 		(window.Liferay as any).once('SPAReady', () => {
