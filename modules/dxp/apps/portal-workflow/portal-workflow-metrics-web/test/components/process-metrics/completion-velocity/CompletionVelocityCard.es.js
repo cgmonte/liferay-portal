@@ -103,6 +103,7 @@ describe('The completion velocity card component should', () => {
 		);
 
 		getAllByText = renderResult.getAllByText;
+		getByRole = renderResult.getByRole;
 		getByText = renderResult.getByText;
 
 		await act(async () => {
@@ -117,11 +118,11 @@ describe('The completion velocity card component should', () => {
 	});
 
 	it('Be rendered with time range filter', () => {
-		const timeRangeFilter = getByText('Last 30 Days');
-		const activeItem = document.querySelector('.active');
+		const timeRangeFilter = getByRole('button', {name: 'Last 30 Days'});
+		const activeItem = document.querySelector('span.active div');
 
 		expect(timeRangeFilter).not.toBeNull();
-		expect(activeItem).toHaveTextContent('Last 7 Days');
+		expect(activeItem).toHaveTextContent('Last 30 Days');
 	});
 
 	it('Be rendered with velocity unit filter', () => {

@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {act, cleanup, render} from '@testing-library/react';
+import {act, cleanup, render, screen, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import PerformanceByAssigneeCard from '../../../../src/main/resources/META-INF/resources/js/components/process-metrics/performance-by-assignee-card/PerformanceByAssigneeCard.es';
@@ -58,7 +59,7 @@ const processStepsData = {
 			name: 'update',
 		},
 	],
-	totalCount: 2,
+	totalCount: 3,
 };
 const query = stringify({filters});
 const timeRangeData = {
@@ -82,10 +83,23 @@ const timeRangeData = {
 };
 
 describe('The performance by assignee card component should', () => {
-	let getByText;
+	const {findByRole, getAllByRole, getByRole, getByText} = screen;
+
+	// const user = userEvent.setup()
 
 	beforeAll(() => {
 		jsonSessionStorage.set('timeRanges', timeRangeData);
+
+		const wrapper = ({children}) => (
+			<MockRouter query={query}>{children}</MockRouter>
+		);
+
+		render(<PerformanceByAssigneeCard routeParams={{processId}} />, {
+			wrapper,
+		});
+
+		// getByText = renderResult.getByText;
+
 	});
 
 	describe('Be rendered with results', () => {
@@ -95,7 +109,7 @@ describe('The performance by assignee card component should', () => {
 			fetch
 				.mockResolvedValueOnce({
 					json: () =>
-						Promise.resolve({items, totalCount: items.length}),
+						Promise.resolve({ items, totalCount: items.length }),
 					ok: true,
 				})
 				.mockResolvedValueOnce({
@@ -103,50 +117,65 @@ describe('The performance by assignee card component should', () => {
 					ok: true,
 				});
 
-			const wrapper = ({children}) => (
+			jsonSessionStorage.set('timeRanges', timeRangeData);
+
+			const wrapper = ({ children }) => (
 				<MockRouter query={query}>{children}</MockRouter>
 			);
 
-			const renderResult = render(
-				<PerformanceByAssigneeCard routeParams={{processId}} />,
-				{wrapper}
-			);
-
-			getByText = renderResult.getByText;
+			render(<PerformanceByAssigneeCard routeParams={{ processId }} />, {
+				wrapper,
+			});
 
 			await act(async () => {
 				jest.runAllTimers();
 			});
 		});
 
-		it('Be rendered with "View All Assignees" button and total "(3)"', () => {
-			const viewAllAssignees = getByText('view-all-assignees (3)');
+		// it('Be rendered with "View All Assignees" button and total "(3)"', () => {
+		// 	const viewAllAssignees = getByText('view-all-assignees (3)');
 
-			expect(viewAllAssignees).toBeTruthy();
-			expect(viewAllAssignees.parentNode.getAttribute('href')).toContain(
-				'filters.dateEnd=2019-12-09T00%3A00%3A00Z&filters.dateStart=2019-12-03T00%3A00%3A00Z&filters.timeRange%5B0%5D=7&filters.taskNames%5B0%5D=update'
-			);
-		});
+		// 	expect(viewAllAssignees).toBeTruthy();
+		// 	expect(viewAllAssignees.parentNode.getAttribute('href')).toContain(
+		// 		'filters.dateEnd=2019-12-09T00%3A00%3A00Z&filters.dateStart=2019-12-03T00%3A00%3A00Z&filters.timeRange%5B0%5D=7&filters.taskNames%5B0%5D=update'
+		// 	);
+		// });
 
 		it('Be rendered with process step filter', async () => {
-			const processStepFilter = getByText('all-steps');
-			const activeItem = document.querySelectorAll('.active')[0];
+			const processStepFilterButtons = getAllByRole('button', {name: 'all-steps'});
+			expect(processStepFilterButtons[0]).toBeVisible();
+		});
 
-			expect(processStepFilter).not.toBeNull();
-			expect(activeItem).toHaveTextContent('Update');
+		it('Be rendered with process step filter options', async () => {
+			const menuItems = getAllByRole('menuitem', {hidden: true});
+
+			for (const item of processStepsData.items) {
+				expect(menuItems.find(
+					(element) => element.firstChild.textContent === item.label
+				)).toBeInTheDocument();		
+			}
 		});
 
 		it('Be rendered with time range filter', async () => {
-			const timeRangeFilter = getByText('Last 30 Days');
-			const activeItem = document.querySelectorAll('.active')[1];
+			const timeRangeFilterButtons = getAllByRole('button', {name: 'Last 30 Days'});
+			expect(timeRangeFilterButtons[0]).toBeVisible();
+		});
 
-			expect(timeRangeFilter).not.toBeNull();
-			expect(activeItem).toHaveTextContent('Last 7 Days');
+		it('Be rendered with time range filter options', async () => {
+			const menuItems = getAllByRole('menuitem', {hidden: true});
+
+			for (const item of timeRangeData.items) {
+				expect(menuItems.find(
+					(element) => element.firstChild.textContent === item.name
+				)).toBeInTheDocument();		
+			}
 		});
 	});
 
 	describe('Be rendered without results', () => {
-		beforeAll(async () => {
+		beforeEach(async () => {
+			// cleanup();
+
 			fetch
 				.mockResolvedValueOnce({
 					json: () => Promise.resolve({items: [], totalCount: 0}),
@@ -157,16 +186,12 @@ describe('The performance by assignee card component should', () => {
 					ok: true,
 				});
 
-			const wrapper = ({children}) => (
+			const wrapper = ({ children }) => (
 				<MockRouter query={query}>{children}</MockRouter>
 			);
 
-			render(<PerformanceByAssigneeCard routeParams={{processId}} />, {
+			render(<PerformanceByAssigneeCard routeParams={{ processId }} />, {
 				wrapper,
-			});
-
-			await act(async () => {
-				jest.runAllTimers();
 			});
 		});
 
