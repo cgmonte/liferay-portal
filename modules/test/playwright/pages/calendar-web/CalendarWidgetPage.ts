@@ -5,6 +5,9 @@
 
 import {Locator, Page} from '@playwright/test';
 
+import {waitForSuccessAlert} from '../../utils/waitForSuccessAlert';
+import {ModalRecurrencePage} from './ModalRecurrencePage';
+
 export class CalendarWidgetPage {
 	readonly addEventButton: Locator;
 	readonly allDayCheckbox: Locator;
@@ -12,7 +15,10 @@ export class CalendarWidgetPage {
 	readonly closeConfigurationButton: Locator;
 	readonly configurationMenuItem: Locator;
 	readonly endTime: Locator;
+	modalRecurrencePage: ModalRecurrencePage;
+	page: Page;
 	readonly publishEventButton: Locator;
+	readonly repeatCheckbox: Locator;
 	readonly saveConfigurationButton: Locator;
 	readonly startTime: Locator;
 	readonly timeZoneDropdown: Locator;
@@ -40,9 +46,16 @@ export class CalendarWidgetPage {
 		this.endTime = page
 			.frameLocator('iframe')
 			.getByLabel('Ends', {exact: true});
+		this.page = page;
 		this.publishEventButton = page
 			.frameLocator('iframe')
 			.getByRole('button', {exact: true, name: 'Publish'});
+		this.repeatCheckbox = page
+			.frameLocator('iframe')
+			.getByRole('checkbox', {
+				exact: true,
+				name: 'Repeat',
+			});
 		this.saveConfigurationButton = page
 			.frameLocator('iframe')
 			.getByRole('button', {exact: true, name: 'Save'});
@@ -66,7 +79,28 @@ export class CalendarWidgetPage {
 		await this.allDayCheckbox.hover();
 		await this.allDayCheckbox.setChecked(allDay);
 
+		await this.publishEvent();
+	}
+
+	async publishEvent() {
 		await this.publishEventButton.click();
+		await waitForSuccessAlert(
+			this.page.frameLocator('iframe'),
+			`Success:Your request completed successfully.`
+		);
+	}
+
+	async fillEventWithRecurrence(allDay: boolean, recurrence: Recurrence) {
+		await this.addEventButton.click();
+
+		await this.allDayCheckbox.hover();
+		await this.allDayCheckbox.setChecked(allDay);
+
+		await this.repeatCheckbox.setChecked(true);
+
+		this.modalRecurrencePage = new ModalRecurrencePage(this.page);
+
+		this.modalRecurrencePage.addRecurrence(recurrence);
 	}
 
 	async setCalendarWidgetConfiguration(
