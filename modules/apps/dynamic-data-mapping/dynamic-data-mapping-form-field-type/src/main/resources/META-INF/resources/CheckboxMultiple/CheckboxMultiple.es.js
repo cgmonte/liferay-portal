@@ -96,6 +96,7 @@ const CheckboxMultiple = ({
 				<Toggle
 					{...accessibleProps}
 					checked={displayValues.includes(option.value)}
+					data-option-reference={option.reference}
 					disabled={disabled}
 					inline={inline}
 					key={option.value}
