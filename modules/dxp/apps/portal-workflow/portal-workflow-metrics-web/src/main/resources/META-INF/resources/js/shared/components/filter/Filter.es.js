@@ -117,7 +117,7 @@ const Filter = ({
 		[applyFilterChanges, items]
 	);
 
-	const selectDefaultItem = useCallback(() => {
+	const selectDefaultItem = () => {
 		if (defaultItem && !multiple) {
 			if (!selectedItems.length) {
 				const index = items.findIndex(
@@ -145,19 +145,23 @@ const Filter = ({
 				}
 			}
 		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [applyFilterChanges, defaultItem, items, selectedItems]);
+	}
 
 	useEffect(() => {
-		setSelectedItems(getSelectedItems(items));
+		const selected = getSelectedItems(items);
+		
+		if (selected.length) {
+			setSelectedItems(selected)
+		} else {
+			selectDefaultItem();
+		}
 	}, [items]);
 
-	useEffect(() => {
-		selectDefaultItem();
+	// useEffect(() => {
+	// 	selectDefaultItem();
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [defaultItem, selectDefaultItem, selectedItems]);
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [defaultItem, selectDefaultItem, selectedItems]);
 
 	useEffect(() => {
 		setFilteredItems(
