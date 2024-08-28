@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import Filter from '../../shared/components/filter/Filter.es';
 import {useFilterFetch} from '../../shared/components/filter/hooks/useFilterFetch.es';
@@ -53,6 +53,14 @@ export default function ProcessStepFilter({
 		withSelectionTitle: options.withSelectionTitle,
 		...options,
 	});
+
+	useEffect(()=>{
+		console.log('items', items);
+	},[items])
+
+	useEffect(()=>{
+		console.log('selectedItems', selectedItems);
+	},[selectedItems])
 
 	return (
 		<Filter
