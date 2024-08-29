@@ -15,8 +15,8 @@ export class CalendarWidgetPage {
 	readonly closeConfigurationButton: Locator;
 	readonly configurationMenuItem: Locator;
 	readonly endTime: Locator;
-	modalRecurrencePage: ModalRecurrencePage;
-	page: Page;
+	readonly modalRecurrencePage: ModalRecurrencePage;
+	readonly page: Page;
 	readonly publishEventButton: Locator;
 	readonly repeatCheckbox: Locator;
 	readonly saveConfigurationButton: Locator;
@@ -43,6 +43,7 @@ export class CalendarWidgetPage {
 			exact: true,
 			name: 'Configuration',
 		});
+		this.modalRecurrencePage = new ModalRecurrencePage(page);
 		this.endTime = page
 			.frameLocator('iframe')
 			.getByLabel('Ends', {exact: true});
@@ -90,6 +91,10 @@ export class CalendarWidgetPage {
 		);
 	}
 
+	async clickRecurrenceButton(name: string = 'Daily') {
+		await this.page.frameLocator('iframe').getByRole('link', { name }).click();
+	}
+
 	async fillEventWithRecurrence(allDay: boolean, recurrence: Recurrence) {
 		await this.addEventButton.click();
 
@@ -98,9 +103,9 @@ export class CalendarWidgetPage {
 
 		await this.repeatCheckbox.setChecked(true);
 
-		this.modalRecurrencePage = new ModalRecurrencePage(this.page);
+		await this.clickRecurrenceButton();
 
-		this.modalRecurrencePage.addRecurrence(recurrence);
+		await this.modalRecurrencePage.addRecurrence(recurrence);
 	}
 
 	async setCalendarWidgetConfiguration(

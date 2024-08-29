@@ -9,9 +9,8 @@ export class ModalRecurrencePage {
 	readonly afterRadio: Locator;
 	readonly countTextbox: Locator;
 	readonly doneButton: Locator;
-	page: Page;
+	readonly page: Page;
 	readonly repeatSelect: Locator;
-	readonly wednesdayCheckbox: Locator;
 
 	constructor(page: Page) {
 		this.afterRadio = page
@@ -27,12 +26,6 @@ export class ModalRecurrencePage {
 		this.repeatSelect = page
 			.frameLocator('iframe')
 			.locator('select[title="frequency"]');
-		this.wednesdayCheckbox = page
-			.frameLocator('iframe')
-			.getByRole('checkbox', {
-				exact: true,
-				name: 'Wednesday',
-			});
 	}
 
 	async addRecurrence(recurrence: Recurrence) {
@@ -40,9 +33,7 @@ export class ModalRecurrencePage {
 
 		await this.repeatSelect.selectOption(frequency);
 
-		if (repeatDays.includes('Wednesday')) {
-			await this.wednesdayCheckbox.setChecked(true);
-		}
+		await this.selectRepeatDays(repeatDays);
 
 		await this.afterRadio.check();
 
@@ -50,4 +41,22 @@ export class ModalRecurrencePage {
 
 		await this.doneButton.click();
 	}
+
+	async handleDayCheckboxesSelection(repeatDays: daysOfTheWeek[], checked: boolean) {
+		for (const day of repeatDays) {
+			await this.page.frameLocator('iframe')
+				.getByRole('checkbox', {
+					exact: true,
+					name: day,
+				}).setChecked(checked);;
+		}
+	}
+
+	async selectRepeatDays(repeatDays: daysOfTheWeek[]) {
+		await this.handleDayCheckboxesSelection(repeatDays, true);
+	}
+
+	async unselectRepeatDays(repeatDays: daysOfTheWeek[]) {
+		await this.handleDayCheckboxesSelection(repeatDays, false);
+	} 
 }
