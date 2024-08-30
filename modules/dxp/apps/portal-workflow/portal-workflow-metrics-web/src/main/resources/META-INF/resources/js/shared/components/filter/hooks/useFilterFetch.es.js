@@ -36,6 +36,8 @@ const useFilterFetch = ({
 	);
 
 	const parseResponse = (data = {}) => {
+		console.log("data no use filter fetch", data);
+
 		data?.items.sort((current, next) =>
 			current[labelPropertyName]?.localeCompare(next[labelPropertyName])
 		);

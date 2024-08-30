@@ -11,6 +11,7 @@ import {getTimeRangeParams} from '../../filter/util/timeRangeUtil.es';
 import ProcessItemsCard from './ProcessItemsCard.es';
 
 const CompletedItemsCard = ({routeParams}) => {
+	console.log("href CompletedItemsCard", window.location.href);
 	const filterKeys = ['timeRange'];
 	const prefixKey = 'completed';
 	const prefixKeys = [prefixKey];

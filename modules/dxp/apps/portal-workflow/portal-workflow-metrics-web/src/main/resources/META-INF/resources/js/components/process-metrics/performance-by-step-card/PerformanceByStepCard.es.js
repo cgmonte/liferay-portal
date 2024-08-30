@@ -51,6 +51,8 @@ function Header({disableFilters, prefixKey, processId}) {
 }
 
 function PerformanceByStepCard({routeParams}) {
+	console.log("href PerformanceByStepCard", window.location.href);
+
 	const {processId} = routeParams;
 	const filterKeys = ['processVersion', 'timeRange'];
 	const prefixKey = 'step';

@@ -10,6 +10,7 @@ import {sub} from '../../util/lang.es';
 import moment from '../../util/moment.es';
 
 export default function MetricsCalculatedInfo({dateModified}) {
+	console.log("href MetricsCalculatedInfo", window.location.href);
 	const date = dateModified
 		? moment(dateModified).format(Liferay.Language.get('mmm-dd-lt'))
 		: null;

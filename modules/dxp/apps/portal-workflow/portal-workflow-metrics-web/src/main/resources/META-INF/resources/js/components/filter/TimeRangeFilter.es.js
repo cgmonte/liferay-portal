@@ -119,7 +119,12 @@ export default function TimeRangeFilter({
 				...filterValue,
 			};
 
-			replaceHistory(stringify(query), routerProps);
+			var variable = stringify(query);
+
+			console.log("query no TimeRangeFilter", variable);
+			console.log("routerProps  no TimeRangeFilter", routerProps);
+
+			replaceHistory(variable, routerProps);
 		}
 		else {
 			dispatch(filterValue);

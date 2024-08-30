@@ -18,6 +18,7 @@ import {getVelocityUnits} from '../../filter/util/velocityUnitUtil.es';
 import Body from './CompletionVelocityCardBody.es';
 
 function CompletionVelocityCard({routeParams}) {
+	console.log("href no CompletionVelocityCard", window.location.href);
 	const {processId} = routeParams;
 	const filterKeys = ['timeRange', 'velocityUnit'];
 	const prefixKey = 'completion';

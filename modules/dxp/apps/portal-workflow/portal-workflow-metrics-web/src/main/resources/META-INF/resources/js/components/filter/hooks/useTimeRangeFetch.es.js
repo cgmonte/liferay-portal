@@ -23,7 +23,7 @@ const useTimeRangeFetch = () => {
 	useBeforeUnload(clean);
 
 	const {fetchData} = useFetch({
-		callback: (data) => update({items: data.items}),
+		callback: (data) => { console.log("data no useTimeRangeFetch", data); update({ items: data.items }) },
 		url: '/time-ranges',
 	});
 

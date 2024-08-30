@@ -54,6 +54,9 @@ const Filter = ({
 				routerProps.location.search
 			);
 
+			console.log("query no Filter.es", query);
+			console.log("routerProps no Filter.es", routerProps);
+
 			replaceHistory(query, routerProps);
 		}
 		else {

@@ -38,8 +38,13 @@ const useFetch = ({
 		if (response.ok) {
 			setData(data);
 
+			console.log("data:", data);
+
 			return callback(data);
 		}
+
+		console.log("falhou:", data);
+
 
 		throw data;
 	}, [callback, fetchURL, plainText]);

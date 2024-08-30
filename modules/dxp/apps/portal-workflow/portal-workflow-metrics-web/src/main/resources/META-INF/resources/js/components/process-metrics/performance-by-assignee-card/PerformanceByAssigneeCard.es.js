@@ -51,6 +51,8 @@ function Header({disableFilters, prefixKey, processId}) {
 }
 
 function PerformanceByAssigneeCard({routeParams}) {
+	console.log("href no PerformanceByAssigneeCard", window.location.href);
+
 	const {processId} = routeParams;
 	const filterKeys = ['processStep', 'timeRange'];
 	const prefixKey = 'assignee';
