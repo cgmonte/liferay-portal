@@ -4,14 +4,14 @@
  */
 
 import ClayButton from '@clayui/button';
-import ClayDropDown, {Align} from '@clayui/drop-down';
+import ClayDropDown, { Align } from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import {useFilter} from '../../hooks/useFilter.es';
-import {useRouter} from '../../hooks/useRouter.es';
-import {FilterItem} from './FilterItem.es';
-import {FilterSearch} from './FilterSearch.es';
+import { useFilter } from '../../hooks/useFilter.es';
+import { useRouter } from '../../hooks/useRouter.es';
+import { FilterItem } from './FilterItem.es';
+import { FilterSearch } from './FilterSearch.es';
 import {
 	getCapitalizedFilterKey,
 	getSelectedItemsQuery,
@@ -36,7 +36,7 @@ const Filter = ({
 	show = true,
 	withoutRouteParams,
 }) => {
-	const {dispatchFilter} = useFilter({withoutRouteParams});
+	const { dispatchFilter } = useFilter({ withoutRouteParams });
 	const [expanded, setExpanded] = useState(false);
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
@@ -77,18 +77,20 @@ const Filter = ({
 		(item) => {
 			if (setItems) {
 				setItems(
-					items.map((arrayItem) => {
-						if (arrayItem.key === item.key) {
-							item.active = !arrayItem.active;
+					(previousItems) => {
+						return previousItems.map((arrayItem) => {
+							if (arrayItem.key === item.key) {
+								item.active = !arrayItem.active;
 
-							return item;
-						}
-						if (!multiple) {
-							arrayItem.active = false;
-						}
+								return item;
+							}
+							if (!multiple) {
+								arrayItem.active = false;
+							}
 
-						return arrayItem;
-					})
+							return arrayItem;
+						})
+					}
 				);
 			}
 			else {
@@ -129,11 +131,13 @@ const Filter = ({
 
 				if (setItems) {
 					setItems(
-						items.map((item, itemIndex) => {
-							item.active = itemIndex === index;
+						(previousItems) => {
+							return previousItems.map((item, itemIndex) => {
+								item.active = itemIndex === index;
 
-							return item;
-						})
+								return item;
+							})
+						}
 					);
 				}
 				else {
@@ -166,10 +170,10 @@ const Filter = ({
 		setFilteredItems(
 			searchTerm
 				? items.filter((item) =>
-						item[labelPropertyName]
-							.toLowerCase()
-							.includes(searchTerm.toLowerCase())
-					)
+					item[labelPropertyName]
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase())
+				)
 				: items
 		);
 	}, [items, labelPropertyName, searchTerm]);
@@ -214,7 +218,7 @@ const Filter = ({
 				) : (
 					<FilterSearch
 						filteredItems={filteredItems}
-						onChange={({target}) => {
+						onChange={({ target }) => {
 							setSearchTerm(target.value);
 						}}
 						searchTerm={searchTerm}
