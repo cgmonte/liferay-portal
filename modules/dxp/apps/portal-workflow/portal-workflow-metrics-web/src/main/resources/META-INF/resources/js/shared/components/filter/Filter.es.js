@@ -32,6 +32,7 @@ const Filter = ({
 	name,
 	onClickFilter,
 	prefixKey = '',
+	setItems,
 	show = true,
 	withoutRouteParams,
 }) => {
@@ -40,6 +41,7 @@ const Filter = ({
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [changed, setChanged] = useState(false);
+	const [selectedItems, setSelectedItems] = useState([]);
 
 	const prefixedFilterKey = getCapitalizedFilterKey(prefixKey, filterKey);
 	const routerProps = useRouter();
@@ -73,13 +75,31 @@ const Filter = ({
 
 	const onSelect = useCallback(
 		(item) => {
-			if (!multiple) {
-				items.forEach((item) => {
-					item.active = false;
-				});
-			}
+			if (setItems) {
+				setItems(
+					items.map((arrayItem) => {
+						if (arrayItem.key === item.key) {
+							item.active = !arrayItem.active;
 
-			item.active = !item.active;
+							return item;
+						}
+						if (!multiple) {
+							arrayItem.active = false;
+						}
+
+						return arrayItem;
+					})
+				);
+			}
+			else {
+				if (!multiple) {
+					items.forEach((item) => {
+						item.active = false;
+					});
+				}
+
+				item.active = !item.active;
+			}
 
 			if (onClickFilter) {
 				onClickFilter(item);
@@ -102,14 +122,23 @@ const Filter = ({
 
 	const selectDefaultItem = useCallback(() => {
 		if (defaultItem && !multiple) {
-			const selectedItems = getSelectedItems(items);
-
 			if (!selectedItems.length) {
 				const index = items.findIndex(
 					(item) => item.key === defaultItem.key
 				);
 
-				items[index].active = true;
+				if (setItems) {
+					setItems(
+						items.map((item, itemIndex) => {
+							item.active = itemIndex === index;
+
+							return item;
+						})
+					);
+				}
+				else {
+					items[index].active = true;
+				}
 
 				if (!onClickFilter) {
 					applyFilterChanges();
@@ -121,13 +150,17 @@ const Filter = ({
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [applyFilterChanges, defaultItem, items]);
+	}, [applyFilterChanges, defaultItem, items, selectedItems]);
+
+	useEffect(() => {
+		setSelectedItems(getSelectedItems(items));
+	}, [items]);
 
 	useEffect(() => {
 		selectDefaultItem();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [defaultItem, getSelectedItems(items).length]);
+	}, [defaultItem, selectDefaultItem, selectedItems]);
 
 	useEffect(() => {
 		setFilteredItems(

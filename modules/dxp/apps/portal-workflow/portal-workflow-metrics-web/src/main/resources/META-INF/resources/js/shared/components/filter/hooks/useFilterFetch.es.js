@@ -81,7 +81,7 @@ const useFilterFetch = ({
 		[]
 	);
 
-	return {items, selectedItems};
+	return {items, selectedItems, setItems};
 };
 
 export {useFilterFetch};
