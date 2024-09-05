@@ -33,6 +33,8 @@ interface DataObject {
 	[K: string]: unknown;
 }
 
+type Direction = 'bottom' | 'left' | 'right' | 'top';
+
 type ExcludesFilterOperator = {
 	not: {
 		in: string[] | number[];
