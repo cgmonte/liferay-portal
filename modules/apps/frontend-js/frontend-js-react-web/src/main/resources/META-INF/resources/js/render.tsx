@@ -45,6 +45,7 @@ export default function render(
 		| NonNullable<React.ForwardRefExoticComponent<any>>
 		| (() => NonNullable<React.ReactNode>),
 	renderData: {
+		__reactDOMFlushSync?: boolean;
 		componentId?: string;
 		portletId?: string;
 		[key: string]: unknown;
@@ -141,34 +142,39 @@ export default function render(
 			}
 		);
 
+		const {__reactDOMFlushSync, ...componentProps} = renderData;
+
+		const App = (
+			<LiferayProvider spritemap={spritemap}>
+				{
+					(Component ? (
+						<Component {...componentProps} />
+					) : (
+						renderable
+					)) as React.ReactNode
+				}
+			</LiferayProvider>
+		);
+
 		if (USE_REACT_16) {
 
 			// eslint-disable-next-line @liferay/portal/no-react-dom-render
-			ReactDOM.render(
-				<LiferayProvider spritemap={spritemap}>
-					{
-						(Component ? (
-							<Component {...renderData} />
-						) : (
-							renderable
-						)) as React.ReactNode
-					}
-				</LiferayProvider>,
-				container
-			);
+			ReactDOM.render(App, container);
 		}
 		else {
-			root.render(
-				<LiferayProvider spritemap={spritemap}>
-					{
-						(Component ? (
-							<Component {...renderData} />
-						) : (
-							renderable
-						)) as React.ReactNode
-					}
-				</LiferayProvider>
-			);
+			const renderApp = () => {
+				root.render(App);
+			};
+
+			// `__reactDOMFlushSync` is an escape hatch to avoid async rendering in React 18
+			// This is only intended to be used for incremental upgrading.
+
+			if (__reactDOMFlushSync) {
+				ReactDOM.flushSync(renderApp);
+			}
+			else {
+				renderApp();
+			}
 		}
 	}
 	else {
