@@ -46,10 +46,10 @@ const Filter = ({
 
 	const getSelectedItems = useCallback((items) => items.filter((item) => item.active), []);
 
-	const applyFilterChanges = useCallback(() => {
+	const applyFilterChanges = useCallback((updatedItems) => {
 		if (!withoutRouteParams) {
 			const query = getSelectedItemsQuery(
-				items,
+				updatedItems ?? items,
 				prefixedFilterKey,
 				routerProps.location.search
 			);
@@ -57,7 +57,7 @@ const Filter = ({
 			replaceHistory(query, routerProps);
 		}
 		else {
-			dispatchFilter(prefixedFilterKey, getSelectedItems(items));
+			dispatchFilter(prefixedFilterKey, getSelectedItems(updatedItems ?? items));
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,7 +85,7 @@ const Filter = ({
 			}
 			else {
 				if (!multiple) {
-					applyFilterChanges();
+					applyFilterChanges(updatedItems);
 					closeDropdown();
 				}
 				else {
@@ -112,7 +112,7 @@ const Filter = ({
 					}));
 
 					if (!onClickFilter) {
-						applyFilterChanges();
+						applyFilterChanges(updatedItems);
 					}
 					else {
 						onClickFilter(updatedItems[index]);
