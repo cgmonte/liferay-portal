@@ -1,0 +1,41 @@
+{
+	"@generated": "91181439f14b6883112cea1a423063f236b21018",
+	"@readonly": "** AUTO-GENERATED: DO NOT EDIT **",
+	"compilerOptions": {
+		"allowJs": false,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"checkJs": false,
+		"composite": true,
+		"declarationDir": "../../../../../.tsc/types",
+		"emitDeclarationOnly": true,
+		"jsx": "react",
+		"module": "es6",
+		"moduleResolution": "node",
+		"paths": {
+			"data-engine-js-components-web": [
+				"../../../../data-engine/data-engine-js-components-web/src/main/resources/META-INF/resources/js/index.js"
+			]
+		},
+		"rootDir": "../../../../../../../..",
+		"skipLibCheck": true,
+		"sourceMap": false,
+		"strict": true,
+		"target": "esnext",
+		"tsBuildInfoFile": "../../../../../.tsc/buildinfo/dynamic-data-mapping-form-field-type.tsbuildinfo",
+		"typeRoots": [
+			"../../../../../node_modules/@types",
+			"../../../../data-engine/data-engine-js-components-web/src/main/resources/META-INF/resources/js/index.d.ts"
+		]
+	},
+	"include": [
+		"../../**/*.ts",
+		"../../**/*.tsx",
+		"../../../../../global.d.ts"
+	],
+	"references": [
+		{
+			"data-engine-js-components-web": "../../../../data-engine/data-engine-js-components-web/src/main/resources/META-INF/resources/tsconfig.json"
+		}
+	]
+}
