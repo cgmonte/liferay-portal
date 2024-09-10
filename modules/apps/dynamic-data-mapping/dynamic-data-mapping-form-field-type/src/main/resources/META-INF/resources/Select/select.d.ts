@@ -57,6 +57,7 @@ interface SelectProps
 }
 
 type MultiSelectItem = {
+	reference: any;
 	label: string;
 	value: string;
 };
