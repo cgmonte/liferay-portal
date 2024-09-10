@@ -57,6 +57,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 												"internalClassNameKeyLabel", LanguageUtil.get(request, "entity-type")
 											).put(
 												"internalClassNameKeyName", liferayPortletResponse.getNamespace() + "internalClassNameKey"
+											).put(
+												"__reactDOMFlushSync", true
 											).build()
 										%>'
 									/>
@@ -66,6 +68,11 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 							<clay:row>
 								<clay:col>
 									<react:component
+										props='<%=
+											HashMapBuilder.<String, Object>put(
+												"__reactDOMFlushSync", true
+											).build()
+										%>'
 										module="{Scope} from batch-planner-web"
 									/>
 								</clay:col>
@@ -76,12 +83,14 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 								displayType="info"
 								id='<%= liferayPortletResponse.getNamespace() + "downloadTemplateAlert" %>'
 								title="download-a-sample-file-for-this-entity"
+								__reactDOMFlushSync="<%= true %>"
 							>
 								<clay:link
 									cssClass="link-primary single-link"
 									href="#"
 									id='<%= liferayPortletResponse.getNamespace() + "downloadBatchPlannerPlanTemplate" %>'
 									label="download"
+									__reactDOMFlushSync="<%= true %>"
 								/>
 
 								<liferay-frontend:component
@@ -103,6 +112,7 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 									id='<%= liferayPortletResponse.getNamespace() + "detectCategoryNames" %>'
 									label='<%= LanguageUtil.get(request, "detect-category-names-from-CSV-file") %>'
 									name='<%= liferayPortletResponse.getNamespace() + "detectCategoryNames" %>'
+									__reactDOMFlushSync="<%= true %>"
 								/>
 							</div>
 
@@ -112,6 +122,7 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 									id='<%= liferayPortletResponse.getNamespace() + "onErrorFail" %>'
 									label='<%= LanguageUtil.get(request, "stop-the-import-on-error") %>'
 									name='<%= liferayPortletResponse.getNamespace() + "onErrorFail" %>'
+									__reactDOMFlushSync="<%= true %>"
 								/>
 							</div>
 
@@ -119,6 +130,11 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 								<clay:col>
 									<react:component
 										module="{Strategies} from batch-planner-web"
+										props='<%=
+											HashMapBuilder.<String, Object>put(
+												"__reactDOMFlushSync", true
+											).build()
+										%>'
 									/>
 								</clay:col>
 							</clay:row>
@@ -154,6 +170,11 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 							<div id="<portlet:namespace />fileUpload">
 								<react:component
 									module="{FileUpload} from batch-planner-web"
+									props='<%=
+										HashMapBuilder.<String, Object>put(
+											"__reactDOMFlushSync", true
+										).build()
+									%>'
 								/>
 							</div>
 						</liferay-frontend:edit-form-body>
@@ -190,6 +211,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 						).buildString()
 					).put(
 						"mappedFields", editBatchPlannerPlanDisplayContext.getSelectedBatchPlannerPlanMappings()
+					).put(
+						"__reactDOMFlushSync", true
 					).build()
 				%>'
 			/>

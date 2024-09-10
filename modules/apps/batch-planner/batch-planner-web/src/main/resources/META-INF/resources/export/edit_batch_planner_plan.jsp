@@ -53,6 +53,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 									"internalClassNameKeyLabel", LanguageUtil.get(request, "entity-type")
 								).put(
 									"internalClassNameKeyName", liferayPortletResponse.getNamespace() + "internalClassNameKey"
+								).put(
+									"__reactDOMFlushSync", true
 								).build()
 							%>'
 						/>
@@ -64,6 +66,11 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 						>
 							<react:component
 								module="{Scope} from batch-planner-web"
+								props='<%=
+									HashMapBuilder.<String, Object>put(
+										"__reactDOMFlushSync", true
+									).build()
+								%>'
 							/>
 						</clay:col>
 					</clay:row>
@@ -75,6 +82,11 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 			<div>
 				<react:component
 					module="{FieldsTable} from batch-planner-web"
+					props='<%=
+						HashMapBuilder.<String, Object>put(
+							"__reactDOMFlushSync", true
+						).build()
+					%>'
 				/>
 			</div>
 
@@ -125,6 +137,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 								"namespace", liferayPortletResponse.getNamespace()
 							).put(
 								"type", "export"
+							).put(
+								"__reactDOMFlushSync", true
 							).build()
 						%>'
 					/>
@@ -144,6 +158,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 								).setResourceID(
 									"/batch_planner/submit_batch_planner_plan"
 								).buildString()
+							).put(
+								"__reactDOMFlushSync", true
 							).build()
 						%>'
 					/>
