@@ -10,10 +10,23 @@ import React from 'react';
 
 import Select from '../../../src/main/resources/META-INF/resources/Select/Select';
 
-const SelectWithProvider = (props) => (
+interface Props {
+	multiple: boolean;
+	name: string;
+	options: Option[];
+}
+
+const SelectWithProvider = (props: Props) => (
 	<FormProvider initialState={{viewMode: true}}>
 		<PageProvider value={{editingLanguageId: 'en_US'}}>
-			<Select {...props} />
+			<Select
+				label=""
+				onChange={null}
+				readOnly={false}
+				selectedKey=""
+				showEmptyOption={false}
+				{...props}
+			/>
 		</PageProvider>
 	</FormProvider>
 );
@@ -58,7 +71,7 @@ describe('Select', () => {
 
 			expect(
 				checkboxElement.attributes.getNamedItem('data-option-reference')
-					.value
+					?.value
 			).toEqual(option.reference);
 		});
 	});
