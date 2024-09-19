@@ -71,7 +71,7 @@ const Filter = ({
 		(item) => {
 			const updatedItems = items.map(currentItem => {
 				if (currentItem.key === item.key) {
-					return {...currentItem, active: !currentItem.active};
+					return {...currentItem, active: true};
 				}
 				if (!multiple) {
 					return {...currentItem, active: false};
@@ -110,6 +110,8 @@ const Filter = ({
 						...item,
 						active: i === index
 					}));
+
+					items = updatedItems;
 
 					if (!onClickFilter) {
 						applyFilterChanges(updatedItems);
