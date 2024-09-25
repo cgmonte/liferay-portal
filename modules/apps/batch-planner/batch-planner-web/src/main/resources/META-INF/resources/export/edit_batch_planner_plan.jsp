@@ -38,6 +38,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 							module="{ExportSettings} from batch-planner-web"
 							props='<%=
 								HashMapBuilder.<String, Object>put(
+									"__reactDOMFlushSync", true
+								).put(
 									"externalTypeId", liferayPortletResponse.getNamespace() + "externalType"
 								).put(
 									"externalTypeInitialOptions", editBatchPlannerPlanDisplayContext.getExternalTypeSelectOptions()
@@ -53,8 +55,6 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 									"internalClassNameKeyLabel", LanguageUtil.get(request, "entity-type")
 								).put(
 									"internalClassNameKeyName", liferayPortletResponse.getNamespace() + "internalClassNameKey"
-								).put(
-									"__reactDOMFlushSync", true
 								).build()
 							%>'
 						/>
@@ -121,6 +121,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 						module="{SaveTemplate} from batch-planner-web"
 						props='<%=
 							HashMapBuilder.<String, Object>put(
+								"__reactDOMFlushSync", true
+							).put(
 								"formSaveAsTemplateDataQuerySelector", "#" + liferayPortletResponse.getNamespace() + "fm"
 							).put(
 								"formSaveAsTemplateURL",
@@ -137,8 +139,6 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 								"namespace", liferayPortletResponse.getNamespace()
 							).put(
 								"type", "export"
-							).put(
-								"__reactDOMFlushSync", true
 							).build()
 						%>'
 					/>
@@ -148,6 +148,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 						module="{Export} from batch-planner-web"
 						props='<%=
 							HashMapBuilder.<String, Object>put(
+								"__reactDOMFlushSync", true
+							).put(
 								"formExportDataQuerySelector", "#" + liferayPortletResponse.getNamespace() + "fm"
 							).put(
 								"formExportURL",
@@ -158,8 +160,6 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 								).setResourceID(
 									"/batch_planner/submit_batch_planner_plan"
 								).buildString()
-							).put(
-								"__reactDOMFlushSync", true
 							).build()
 						%>'
 					/>

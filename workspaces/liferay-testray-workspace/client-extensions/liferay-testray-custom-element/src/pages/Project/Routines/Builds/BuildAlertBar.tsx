@@ -23,10 +23,7 @@ type BuildAlertBarProps = {
 	testrayTask: TestrayTask;
 };
 
-const BuildAlertBar = ({
-	testrayBuild,
-	testrayTask,
-}:BuildAlertBarProps) => {
+const BuildAlertBar = ({testrayBuild, testrayTask}: BuildAlertBarProps) => {
 	const navigate = useNavigate();
 
 	const taskPermission = useObjectPermission('/tasks');

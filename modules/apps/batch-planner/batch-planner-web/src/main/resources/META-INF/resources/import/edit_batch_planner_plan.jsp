@@ -50,6 +50,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 										module="{ImportEntityType} from batch-planner-web"
 										props='<%=
 											HashMapBuilder.<String, Object>put(
+												"__reactDOMFlushSync", true
+											).put(
 												"internalClassNameKeyId", liferayPortletResponse.getNamespace() + "internalClassNameKey"
 											).put(
 												"internalClassNameKeyInitialOptions", editBatchPlannerPlanDisplayContext.getInternalClassNameKeySelectOptions()
@@ -57,8 +59,6 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 												"internalClassNameKeyLabel", LanguageUtil.get(request, "entity-type")
 											).put(
 												"internalClassNameKeyName", liferayPortletResponse.getNamespace() + "internalClassNameKey"
-											).put(
-												"__reactDOMFlushSync", true
 											).build()
 										%>'
 									/>
@@ -68,12 +68,12 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 							<clay:row>
 								<clay:col>
 									<react:component
+										module="{Scope} from batch-planner-web"
 										props='<%=
 											HashMapBuilder.<String, Object>put(
 												"__reactDOMFlushSync", true
 											).build()
 										%>'
-										module="{Scope} from batch-planner-web"
 									/>
 								</clay:col>
 							</clay:row>
@@ -188,6 +188,8 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 				module="{ImportForm} from batch-planner-web"
 				props='<%=
 					HashMapBuilder.<String, Object>put(
+						"__reactDOMFlushSync", true
+					).put(
 						"formDataQuerySelector", "#" + liferayPortletResponse.getNamespace() + "fm"
 					).put(
 						"formImportURL",
@@ -211,8 +213,6 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 						).buildString()
 					).put(
 						"mappedFields", editBatchPlannerPlanDisplayContext.getSelectedBatchPlannerPlanMappings()
-					).put(
-						"__reactDOMFlushSync", true
 					).build()
 				%>'
 			/>
