@@ -116,6 +116,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>LOADING_ANIMATION</td>
+	<td>xpath=(//div | //span)[contains(@class,'loading-animation')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>METRICS_ALL_ITEMS_TABLE_CREATION_DATE</td>
 	<td>//span[contains(@data-title,'Creation Date')]</td>
 	<td></td>
