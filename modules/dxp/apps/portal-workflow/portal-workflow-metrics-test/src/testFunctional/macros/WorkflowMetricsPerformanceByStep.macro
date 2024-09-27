@@ -77,6 +77,8 @@ definition {
 	macro viewPerformanceByStepValues(avgCompletionTimeValue = null,stepName = null,isNotPresent = null,slaBreachedValue = null) {
 		var key_stepName = ${stepName};
 
+		AssertNotVisible(locator1 = "Home#LOADING_ANIMATION");
+
 		AssertElementPresent(locator1 = "WorkflowMetricsPerformanceByStep#METRICS_PERFORMANCE_BY_STEP_PAGE_TABLE_STEP_NAME");
 
 		AssertTextEquals(
