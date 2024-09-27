@@ -11,18 +11,6 @@ function getJestConfig({rootDir = '<rootDir>'}) {
 	if (process.env.USE_REACT_16 === 'true') {
 		moduleNameMapper = {
 
-			// Testing dependencies
-
-			'^@testing-library/dom((\\/.*)?)$': '@testing-library/dom-8.11.1$1',
-			'^@testing-library/jest-dom((\\/.*)?)$':
-				'@testing-library/jest-dom-4.2.4$1',
-			'^@testing-library/react((\\/.*)?)$':
-				'@testing-library/react-12.1.2$1',
-			'^@testing-library/react-hooks((\\/.*)?)$':
-				'@testing-library/react-hooks-3.4.2$1',
-			'^@testing-library/user-event((\\/.*)?)$':
-				'@testing-library/user-event-4.2.4$1',
-
 			// React Dependencies
 
 			'^react$': 'react-16',
