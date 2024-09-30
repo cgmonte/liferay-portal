@@ -77,6 +77,12 @@ definition {
 	macro viewPerformanceByStepValues(avgCompletionTimeValue = null,stepName = null,isNotPresent = null,slaBreachedValue = null) {
 		var key_stepName = ${stepName};
 
+		// We need this pause to wait for the performance tab to fully load after upgrading to React 18. See LPD-28140
+
+		Pause(value1 = 3000);
+
+		AssertNotVisible(locator1 = "Home#LOADING_ANIMATION");
+
 		AssertElementPresent(locator1 = "WorkflowMetricsPerformanceByStep#METRICS_PERFORMANCE_BY_STEP_PAGE_TABLE_STEP_NAME");
 
 		AssertTextEquals(
