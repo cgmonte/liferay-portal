@@ -1334,7 +1334,7 @@ definition {
 	test FiltersDisplayedWhenReachingPageThroughPerformanceTab {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(locator1 = "WorkflowMetrics#PERFORMANCE_TOTAL_COMPLETED_ITEMS_VALUE");
 
@@ -2654,7 +2654,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(locator1 = "WorkflowMetrics#DASHBOARD_TOTAL_COMPLETED_ITEMS_TITLE");
 

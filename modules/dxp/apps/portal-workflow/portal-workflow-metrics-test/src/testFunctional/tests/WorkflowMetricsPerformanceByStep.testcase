@@ -157,7 +157,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetricsPerformanceByStep.clickViewAllSteps(
 			stepsNumber = 1,
@@ -367,7 +367,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "11 Transitions Definition");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementNotPresent(
 			key_rowNumber = 11,
@@ -379,7 +379,7 @@ definition {
 	test CardWorksAsDesignedWhenPortalIsSetToNonEnUsLocale {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.assertChartTotalValuePerformanceByStep(
 			avgCompletionTime = "0min",
@@ -742,7 +742,7 @@ definition {
 	test FilterPerformanceByStepPagePerTimeRange {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 2,
@@ -1011,7 +1011,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 3,
@@ -1059,7 +1059,7 @@ definition {
 	test SearchIsAnApproximateMatch {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 2,
@@ -1254,7 +1254,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementPresent(
 			key_stepName = "Review",
@@ -1302,7 +1302,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "11 Transitions Update");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 11,

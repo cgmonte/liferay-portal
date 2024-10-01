@@ -848,7 +848,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 2,
@@ -905,7 +905,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		//Assert default chart ranges and units();
 
@@ -1343,7 +1343,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 2,
@@ -1401,7 +1401,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectDateRangePerformanceByStep(
 			completionVelocityDateRange = "Custom Range",
@@ -1455,7 +1455,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_assigneesNumber = 3,
@@ -1650,7 +1650,7 @@ definition {
 
 		Navigator.gotoBack();
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
 
@@ -1804,7 +1804,7 @@ definition {
 
 		Navigator.gotoBack();
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
 
@@ -2247,7 +2247,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.assertChartTotalValue(
 			velocityUnitTotal = "inst / day",
@@ -2339,7 +2339,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.waitForCompletedSLA(
 			key_expectedValue = 0,
@@ -2575,7 +2575,7 @@ definition {
 			key_pending = 0,
 			key_untracked = 0);
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.waitForCompletedSLA(
 			key_expectedValue = 0,
@@ -2736,7 +2736,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.waitForCompletedSLA(
 			key_expectedValue = 0,
@@ -2858,7 +2858,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		ScrollWebElementIntoView(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_BY_ASSIGNEE_CARD_EMPTY_STATE");
 
@@ -2866,7 +2866,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		ScrollWebElementIntoView(
 			key_assigneesNumber = 3,
@@ -3064,7 +3064,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.viewPerformanceByAssignee(
 			assignee = "Test Test",
@@ -3080,7 +3080,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementPresent(
 			key_rowNumber = 10,
@@ -3103,7 +3103,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectStepFilterPerformaceByAssignee(velocityUnit = "REVIEW");
 

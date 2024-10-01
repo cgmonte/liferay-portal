@@ -63,7 +63,7 @@ definition {
 
 	@summary = "Default summary"
 	macro viewPerformanceByStepTooltip() {
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementPresent(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_BY_STEP_TOOLTIP");
 	}

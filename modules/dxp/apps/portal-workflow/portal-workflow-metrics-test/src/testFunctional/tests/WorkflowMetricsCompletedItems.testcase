@@ -31,7 +31,7 @@ definition {
 	test CanNotSelectMoreThanOneFilter {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			locator1 = "WorkflowMetrics#METRICS_COMPLETED_ITEMS_DATE_RANGE_DROPDOWN",
@@ -141,7 +141,7 @@ definition {
 	test DefaultDateFormatIsMMDDYYYY {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(locator1 = "WorkflowMetrics#METRICS_COMPLETED_ITEMS_DATE_RANGE_DROPDOWN");
 
@@ -244,7 +244,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.checkCompletedWorkflowValues(
 			key_completed = 1,
@@ -267,7 +267,7 @@ definition {
 	test LabelFromYesterdayFilter {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(locator1 = "WorkflowMetricsCompletedItems#DATE_RANGE_DROPDOWN_COMPLETED_ITEMS");
 

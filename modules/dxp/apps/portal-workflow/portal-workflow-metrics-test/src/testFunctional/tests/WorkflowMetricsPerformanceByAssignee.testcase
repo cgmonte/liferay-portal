@@ -379,7 +379,7 @@ definition {
 	test PageDisplaysSpecificEmptyStateWhenThereAreNoCompletedItems {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.checkCompletedWorkflowValues(
 			key_completed = 0,
@@ -433,7 +433,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementPresent(locator1 = "WorkflowMetricsPerformanceByAssignee#WORKFLOW_PERFORMANCE_BT_STEP_ALL_STEPS_FILTER");
 	}
