@@ -107,7 +107,7 @@ definition {
 	test CanFilterTopStepsByWorkflowVersion {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementPresent(
 			key_title = "All Versions",
@@ -216,7 +216,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetricsPerformanceByStep.viewPerformanceByStepValues(
 			avgCompletionTimeValue = "1min",
@@ -278,7 +278,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetricsPerformanceByStep.viewPerformanceByStepValues(
 			avgCompletionTimeValue = "1min",
@@ -304,7 +304,7 @@ definition {
 	test CanSeeAllVersionsTogetherOnPage {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 2,
@@ -324,7 +324,7 @@ definition {
 	test CardConsidersClosedInstancesInChosenVersion {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetricsPerformanceByStep.viewPerformanceByStepValues(
 			avgCompletionTimeValue = "0min",
@@ -427,7 +427,7 @@ definition {
 	test DefalutFilterValueIsAllVersions {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementPresent(
 			key_title = "All Versions",
@@ -496,7 +496,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetricsPerformanceByStep.viewPerformanceByStepValues(
 			avgCompletionTimeValue = "1min",
@@ -536,7 +536,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+		WorkflowMetrics.goToPerformanceTab();
 
 		AssertElementNotPresent(
 			key_stepName = "Update",
@@ -637,7 +637,7 @@ definition {
 		task ("Assert that the step Update is not displayed on Performance by Step page") {
 			WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-			WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+			WorkflowMetrics.goToPerformanceTab();
 
 			Click(
 				key_stepsNumber = 3,
@@ -655,7 +655,7 @@ definition {
 		task ("Go to Performance by Step Page") {
 			WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-			WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+			WorkflowMetrics.goToPerformanceTab();
 
 			Click(
 				key_stepsNumber = 2,
@@ -1126,7 +1126,7 @@ definition {
 		task ("Assert that the steps displayed on Performance by Step card are Review and Update") {
 			WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-			WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+			WorkflowMetrics.goToPerformanceTab();
 
 			WorkflowMetricsPerformanceByStep.viewPerformanceByStepValues(
 				avgCompletionTimeValue = "1min",
@@ -1164,7 +1164,7 @@ definition {
 		task ("On Performance by Step card, select Version 1.0") {
 			WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-			WorkflowMetricsPerformanceByStep.goToPerformanceTab();
+			WorkflowMetrics.goToPerformanceTab();
 
 			Click(
 				key_dateRange = "All Version",

@@ -716,6 +716,11 @@ definition {
 	}
 
 	@summary = "Default summary"
+	macro goToPerformanceTab() {
+		Click(locator1 = "WorkflowMetrics#METRICS_PERFORMANCE_TAB");
+	}
+
+	@summary = "Default summary"
 	macro goToReassignTask(itemSubject = null) {
 		if (isSet(itemSubject)) {
 			Click(
