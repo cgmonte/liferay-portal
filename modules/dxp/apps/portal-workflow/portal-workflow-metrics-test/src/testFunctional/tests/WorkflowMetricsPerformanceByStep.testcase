@@ -119,7 +119,7 @@ definition {
 	test CannotInsertFutureDate {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var displayDateYear = DateUtil.getCurrentYear();
 
@@ -439,7 +439,7 @@ definition {
 	test DefaultDateFormatIsMMDDYYYY {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_dateRange = "Last 30 Days",
@@ -672,7 +672,7 @@ definition {
 	test FilterItemsFromLast7Days {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var key_dateRange = "Last 7 Days";
 
@@ -686,7 +686,7 @@ definition {
 	test FilterItemsFromLast90Days {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var key_dateRange = "Last 90 Days";
 
@@ -700,7 +700,7 @@ definition {
 	test FilterItemsFromLast180Days {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var key_dateRange = "Last 180 Days";
 
@@ -714,7 +714,7 @@ definition {
 	test FilterItemsFromLastYear {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var key_dateRange = "Last Year";
 
@@ -728,7 +728,7 @@ definition {
 	test FilterItemsFromToday {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var key_dateRange = "Today";
 
@@ -818,7 +818,7 @@ definition {
 	test InfoIconDisplaysMessageOnHover {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetricsProcessListView.assertTooltipMessage(
 			sectionName = "Performance by Step",
@@ -830,7 +830,7 @@ definition {
 	test OldestDataAcceptedIs1970 {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectDateRange(
 			completionVelocityDateRange = "Custom Range",
@@ -946,7 +946,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_stepsNumber = 3,
@@ -1267,7 +1267,7 @@ definition {
 	test ToDateMustBeGreaterThanFromDate {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectDateRange(
 			completionVelocityDateRange = "Custom Range",
@@ -1358,7 +1358,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.assertChartTotalValuePerformanceByStep(
 			avgCompletionTime = "1min",
@@ -1371,7 +1371,7 @@ definition {
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.assertChartTotalValuePerformanceByStep(
 			avgCompletionTime = "1min",

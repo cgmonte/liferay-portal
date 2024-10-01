@@ -51,7 +51,7 @@ definition {
 	test FromAndToAreRequiredFields {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectDateRange(
 			completionVelocityDateRange = "Custom Range",
@@ -79,7 +79,7 @@ definition {
 	test FutureDatesAreNotAllowed {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		var displayDateYear = DateUtil.getCurrentYear();
 
@@ -165,7 +165,7 @@ definition {
 	test LabelFromYesterdayFilter {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_dateRange = "Last 30 Days",
@@ -180,7 +180,7 @@ definition {
 	test OldestDataAcceptedIs1970 {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectDateRangePerformanceByStep(
 			completionVelocityDateRange = "Custom Range",
@@ -206,7 +206,7 @@ definition {
 	test PageProvidesEmptyStateWhenThereAreNoResultForFilterSelection {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		Click(
 			key_dateRange = "Last 30 Days",
@@ -227,7 +227,7 @@ definition {
 	test ToDateMustBeGreaterThanFromDate {
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
-		Navigator.gotoNavItem(navItem = "Performance");
+		WorkflowMetrics.goToPerformanceTab();
 
 		WorkflowMetrics.selectDateRange(
 			completionVelocityDateRange = "Custom Range",
