@@ -721,7 +721,7 @@ definition {
 
 		// We need this pause to wait for the performance tab to fully load after upgrading to React 18. See LPD-28140
 
-		Pause(value1 = 3000);
+		Pause(value1 = 5000);
 
 		AssertNotVisible(locator1 = "Home#LOADING_ANIMATION");
 	}
