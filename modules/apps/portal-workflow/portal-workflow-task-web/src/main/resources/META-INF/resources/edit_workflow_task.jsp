@@ -195,6 +195,7 @@ renderResponse.setTitle(workflowTaskDisplayContext.getHeaderTitle(workflowTask))
 										<c:if test="<%= workflowTaskDisplayContext.hasViewDiffsPortletURL(workflowTask) %>">
 											<span class="lfr-portal-tooltip" title="<%= LanguageUtil.get(request, "diffs") %>">
 												<clay:link
+													aria-label='<%= LanguageUtil.get(request, "diffs") %>'
 													cssClass="btn btn-monospaced btn-outline-secondary lfr-icon-item taglib-icon"
 													href="<%= workflowTaskDisplayContext.getTaglibViewDiffsURL(workflowTask) %>"
 													icon="paste"
@@ -213,6 +214,7 @@ renderResponse.setTitle(workflowTaskDisplayContext.getHeaderTitle(workflowTask))
 
 											<span class="lfr-portal-tooltip" title="<%= LanguageUtil.get(request, "view-usages") %>">
 												<clay:link
+													aria-label='<%= LanguageUtil.get(request, "view-usages") %>'
 													cssClass="btn btn-monospaced btn-outline-secondary lfr-icon-item taglib-icon"
 													href="<%= viewLayoutClassedModelUsagesURL %>"
 													icon="list"
@@ -227,6 +229,7 @@ renderResponse.setTitle(workflowTaskDisplayContext.getHeaderTitle(workflowTask))
 										<c:when test="<%= assetRenderer.hasEditPermission(permissionChecker) && workflowTaskDisplayContext.isShowEditURL(workflowTask) %>">
 											<span class="lfr-portal-tooltip" title="<%= LanguageUtil.get(request, "edit") %>">
 												<clay:link
+													aria-label='<%= LanguageUtil.get(request, "edit") %>'
 													cssClass="btn btn-monospaced btn-outline-secondary lfr-icon-item taglib-icon"
 													href="<%= workflowTaskDisplayContext.getTaglibEditURL(workflowTask) %>"
 													icon="pencil"
