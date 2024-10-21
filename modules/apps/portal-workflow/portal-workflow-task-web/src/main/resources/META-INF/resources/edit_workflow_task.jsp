@@ -183,12 +183,12 @@ renderResponse.setTitle(workflowTaskDisplayContext.getHeaderTitle(workflowTask))
 									<c:if test="<%= !workflowTaskDisplayContext.isReadOnly() %>">
 										<span class="lfr-portal-tooltip" title="<%= LanguageUtil.get(request, "view[action]") %>">
 											<clay:link
+												aria-label='<%= LanguageUtil.get(request, "view") %>'
 												cssClass="btn btn-monospaced btn-outline-secondary lfr-icon-item taglib-icon"
 												href="<%= assetRenderer.isPreviewInContext() ? workflowHandler.getURLViewInContext(assetRenderer.getClassPK(), liferayPortletRequest, liferayPortletResponse, null) : viewFullContentURL.toString() %>"
 												icon="view"
 												id='<%= liferayPortletResponse.getNamespace() + "view" %>'
 												target="_blank"
-												title='<%= LanguageUtil.get(request, "view") %>'
 											/>
 										</span>
 
