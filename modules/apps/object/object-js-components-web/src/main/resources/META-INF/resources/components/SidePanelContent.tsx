@@ -100,7 +100,7 @@ export function SidePanelForm({
 	title,
 }: ISidePanelFormProps) {
 	return (
-		<ClayForm onSubmit={onSubmit}>
+		<ClayForm className="lfr-objects__side-panel-form" onSubmit={onSubmit}>
 			<SidePanelContent
 				customLabel={customLabel}
 				readOnly={readOnly}
