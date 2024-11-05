@@ -7,7 +7,11 @@ import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayLabel from '@clayui/label';
 import classNames from 'classnames';
-import React from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useRef,
+} from 'react';
 
 import './SidePanelContent.scss';
 
@@ -34,63 +38,68 @@ export function openToast(options: {
 	parentWindow.Liferay.Util.openToast(options);
 }
 
-export function SidePanelContent({
-	children,
-	className,
-	customLabel,
-	onSave,
-	readOnly,
-	title,
-}: IProps) {
-	const saveProps: {
-		onClick?: () => void;
-		type?: 'submit';
-	} = onSave ? {onClick: onSave} : {type: 'submit'};
+export const SidePanelContent = forwardRef<HTMLDivElement, ISidePanelContent>(
+	function SidePanelContent(
+		{children, className, customLabel, onSave, readOnly, title},
+		ref
+	) {
+		const saveProps: {
+			onClick?: () => void;
+			type?: 'submit';
+		} = onSave ? {onClick: onSave} : {type: 'submit'};
 
-	return (
-		<div
-			className={classNames('lfr-objects__side-panel-content', className)}
-		>
-			<div className="lfr-objects__side-panel-content-header">
-				<div className="lfr-objects__side-panel-content-header-title">
-					<h3 className="mb-0">{title}</h3>
+		return (
+			<div
+				className={classNames(
+					'lfr-objects__side-panel-content',
+					className
+				)}
+				ref={ref}
+			>
+				<div className="lfr-objects__side-panel-content-header">
+					<div className="lfr-objects__side-panel-content-header-title">
+						<h3 className="mb-0">{title}</h3>
 
-					{customLabel && (
-						<ClayLabel
-							className="lfr-objects__side-panel-content-header-title-label"
-							displayType={customLabel?.displayType}
-						>
-							{customLabel?.message}
-						</ClayLabel>
-					)}
+						{customLabel && (
+							<ClayLabel
+								className="lfr-objects__side-panel-content-header-title-label"
+								displayType={customLabel?.displayType}
+							>
+								{customLabel?.message}
+							</ClayLabel>
+						)}
+					</div>
+
+					<ClayButtonWithIcon
+						aria-label={Liferay.Language.get('cancel')}
+						displayType="unstyled"
+						monospaced={false}
+						onClick={closeSidePanel}
+						symbol="times"
+					/>
 				</div>
 
-				<ClayButtonWithIcon
-					aria-label={Liferay.Language.get('cancel')}
-					displayType="unstyled"
-					monospaced={false}
-					onClick={closeSidePanel}
-					symbol="times"
-				/>
+				{children}
+
+				<ClayButton.Group
+					className="lfr-objects__side-panel-content-container"
+					spaced
+				>
+					<ClayButton
+						displayType="secondary"
+						onClick={closeSidePanel}
+					>
+						{Liferay.Language.get('cancel')}
+					</ClayButton>
+
+					<ClayButton disabled={readOnly} {...saveProps}>
+						{Liferay.Language.get('save')}
+					</ClayButton>
+				</ClayButton.Group>
 			</div>
-
-			{children}
-
-			<ClayButton.Group
-				className="lfr-objects__side-panel-content-container"
-				spaced
-			>
-				<ClayButton displayType="secondary" onClick={closeSidePanel}>
-					{Liferay.Language.get('cancel')}
-				</ClayButton>
-
-				<ClayButton disabled={readOnly} {...saveProps}>
-					{Liferay.Language.get('save')}
-				</ClayButton>
-			</ClayButton.Group>
-		</div>
-	);
-}
+		);
+	}
+);
 
 export function SidePanelForm({
 	children,
@@ -99,11 +108,109 @@ export function SidePanelForm({
 	readOnly,
 	title,
 }: ISidePanelFormProps) {
+
+	const sidePanelFormRef = useRef<HTMLFormElement>(null);
+	const sidePanelContentRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const {current: sidePanelContentElement} = sidePanelContentRef;
+		const {current: sidePanelFormElement} = sidePanelFormRef;
+
+		const resizeObserver = new ResizeObserver(() => {
+			if (
+				sidePanelContentElement &&
+				sidePanelFormElement
+			) {
+				const sidePanelIsOverflowing =
+					sidePanelFormElement.scrollHeight >
+					sidePanelFormElement.clientHeight;
+
+				if (sidePanelIsOverflowing) {
+					const scrollbarWidth =
+						sidePanelFormElement.offsetWidth -
+						sidePanelFormElement.clientWidth;
+
+					console.log(
+						'sidebar is overflowing. sidebar scrollbar width is: ',
+						scrollbarWidth
+					);
+
+					const fdsSidePanelElement =
+						window.parent.document.querySelector(
+							'.fds-side-panel.fds-side-panel-lg:not(.is-hidden):not(.is-loading)'
+						) as HTMLElement | null;
+
+					if (fdsSidePanelElement) {
+						console.log(
+							'fdsSidePanelElement style',
+							fdsSidePanelElement.getAttribute('style')
+						);
+						console.log(
+							'fdsSidePanelElement offsetWidth',
+							fdsSidePanelElement.offsetWidth
+						);
+						console.log(
+							'fdsSidePanelElement clientWidth',
+							fdsSidePanelElement.clientWidth
+						);
+
+						const fdsContainerElement = document.querySelector(
+							'#p_p_id_com_liferay_object_web_internal_list_type_portlet_portlet_ListTypeDefinitionsPortlet_ .lfr-objects__side-panel-content .dnd-table'
+						);
+
+						if (fdsContainerElement) {
+							const fdsIsOverflowing =
+								fdsContainerElement.scrollWidth >
+								fdsContainerElement.clientWidth;
+
+							console.log("fdsIsOverflowing", fdsIsOverflowing);
+
+							const currentStyleAttribute =
+								fdsSidePanelElement.getAttribute('style');
+
+							if (!currentStyleAttribute?.includes('width')) {
+								const currentElementWidth =
+								fdsSidePanelElement.offsetWidth;
+
+								const newElementStyle =
+									currentStyleAttribute +
+									` width: ${currentElementWidth + scrollbarWidth}px`;
+
+								fdsSidePanelElement.setAttribute(
+									'style',
+									newElementStyle
+								);
+							}
+						}
+					}
+				}
+				else {
+					console.log('sidebar is not overflowing');
+				}
+			}
+		});
+
+		if (sidePanelContentElement) {
+			resizeObserver.observe(sidePanelContentElement);
+		}
+
+		return () => {
+			if (sidePanelContentElement) {
+				resizeObserver.unobserve(sidePanelContentElement);
+			}
+		};
+	}, []);
+
 	return (
-		<ClayForm className="lfr-objects__side-panel-form" onSubmit={onSubmit}>
+		<ClayForm
+			className="lfr-objects__side-panel-form"
+			onSubmit={onSubmit}
+			ref={sidePanelFormRef}
+		>
 			<SidePanelContent
 				customLabel={customLabel}
 				readOnly={readOnly}
+				ref={sidePanelContentRef}
 				title={title}
 			>
 				{children}
@@ -126,7 +233,8 @@ interface CommonProps extends IContainerProps {
 	title: string;
 }
 
-interface IProps extends CommonProps {
+interface ISidePanelContent extends CommonProps {
+	ref: React.RefObject<HTMLDivElement>;
 	onSave?: () => void;
 }
 

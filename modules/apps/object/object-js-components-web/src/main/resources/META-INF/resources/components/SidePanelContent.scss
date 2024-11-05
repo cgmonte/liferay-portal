@@ -6,11 +6,9 @@
 
 .lfr-objects__side-panel-form {
 	height: 100%;
+	overflow: auto;
 
 	.lfr-objects__side-panel-content {
-		height: 100%;
-		overflow: auto;
-
 		&-container {
 			margin: 1.5rem;
 		}
