@@ -6,11 +6,12 @@
 import {ClayCheckbox} from '@clayui/form';
 import ClayMultiSelect from '@clayui/multi-select';
 import {useFormState} from 'data-engine-js-components-web';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {MultiSelectItem, MultiSelectProps} from './select.d';
 
 const MultipleSelection = ({
+	dataSourceType,
 	errorMessage,
 	id,
 	label,
@@ -64,10 +65,41 @@ const MultipleSelection = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [options]);
 
+	/**
+	 * create an onLoadMore call to be passed to ClayMultiSelect if
+	 * dataSourceType equals 'from-autofill'. onLoadMore only returns
+	 * a promise that resolves to something we already have (options),
+	 * but ClayMultiSelect will then treat the items updates as async,
+	 * fixiging the behavior.
+	 */
+	const onLoadMore = useCallback(() => {
+		return new Promise((resolve) => {
+			resolve(options);
+		});
+	}, [options]);
+
+	// debug: check when new options arrive from the data-provider
+	useEffect(() => {
+		console.log('options', options);
+	}, [options]);
+
+	/**
+	 * debug: check that dataSourceType does not change to manual.
+	 * because I want to isolate the fix to just work with 'from-autofill',
+	 * if dataSourceType changes to manual, it won't work.
+	 */
+	useEffect(() => {
+		console.log('dataSourceType', dataSourceType);
+	}, [dataSourceType]);
+
 	return (
 		<>
 			{!loading && (
 				<ClayMultiSelect
+
+					// fix: pass onLoadMore only if data source is autofill
+					{...(dataSourceType === 'from-autofill' && {onLoadMore})}
+
 					{...accessibleProps}
 					disabled={readOnly}
 					items={items}

@@ -16,6 +16,7 @@ interface Item {
 }
 
 interface MainProps {
+	dataSourceType?: string;
 	defaultSearch?: boolean;
 	editingLanguageId?: Locale;
 	errorMessage?: string;

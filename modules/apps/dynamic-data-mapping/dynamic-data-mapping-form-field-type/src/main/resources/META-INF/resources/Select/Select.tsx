@@ -177,6 +177,7 @@ function Select({
 }
 
 const Main = ({
+	dataSourceType,
 	fixedOptions = [],
 	label,
 	localizedValue = {},
@@ -266,6 +267,7 @@ const Main = ({
 		>
 			{multiple ? (
 				<MultipleSelection
+					dataSourceType={dataSourceType}
 					fixedOptions={[]}
 					label={label}
 					name={name}
