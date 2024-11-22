@@ -10,7 +10,7 @@ import {
 	openToast,
 	saveAndReload,
 } from '@liferay/object-js-components-web';
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useCallback, useState} from 'react';
 
 import {EditObjectRelationshipContent} from './EditObjectRelationshipContent';
 import {Alert} from './ObjectRelationshipFormBase';
@@ -49,30 +49,31 @@ export default function EditObjectRelationship({
 			parameterRequired,
 		});
 
-	const onSubmit = async (
-		objectRelationship: Partial<ObjectRelationship> = values
-	) => {
-		try {
-			await API.putObjectRelationship(objectRelationship);
-			saveAndReload();
+	const onSubmit = useCallback(
+		async (objectRelationship: Partial<ObjectRelationship> = values) => {
+			try {
+				await API.putObjectRelationship(objectRelationship);
+				saveAndReload();
 
-			openToast({
-				message: Liferay.Language.get(
-					'the-object-relationship-was-updated-successfully'
-				),
-			});
-		}
-		catch (error: unknown) {
-			const {message} = error as Error;
+				openToast({
+					message: Liferay.Language.get(
+						'the-object-relationship-was-updated-successfully'
+					),
+				});
+			}
+			catch (error: unknown) {
+				const {message} = error as Error;
 
-			if (!Liferay.FeatureFlags['LPS-187142']) {
-				openToast({message, type: 'danger'});
+				if (!Liferay.FeatureFlags['LPS-187142']) {
+					openToast({message, type: 'danger'});
+				}
+				else {
+					setAlert({displayType: 'warning', message});
+				}
 			}
-			else {
-				setAlert({displayType: 'warning', message});
-			}
-		}
-	};
+		},
+		[values]
+	);
 
 	const handleSubmit = (event: FormEvent) => {
 		event.preventDefault();
@@ -88,6 +89,30 @@ export default function EditObjectRelationship({
 		!hasUpdateObjectDefinitionPermission ||
 		values.reverse ||
 		initialValues.system;
+
+	const handleInheritanceCheckboxChange = useCallback(
+		({target}: React.ChangeEvent<HTMLInputElement>) => {
+			if (target.checked) {
+				setValues({
+					...values,
+					edge: true,
+				});
+			}
+			else {
+				const parentWindow = Liferay.Util.getOpener();
+
+				parentWindow.Liferay.fire('openModalDisableInheritance', {
+					handleDisable: async () => {
+						await onSubmit({
+							...values,
+							edge: false,
+						});
+					},
+				});
+			}
+		},
+		[onSubmit, setValues, values]
+	);
 
 	return (
 		<SidePanelForm
@@ -113,6 +138,7 @@ export default function EditObjectRelationship({
 				objectRelationshipDeletionTypes={
 					objectRelationshipDeletionTypes
 				}
+				onChangeInheritanceCheckbox={handleInheritanceCheckboxChange}
 				onSubmit={onSubmit}
 				parameterRequired={parameterRequired}
 				readOnly={readOnly}

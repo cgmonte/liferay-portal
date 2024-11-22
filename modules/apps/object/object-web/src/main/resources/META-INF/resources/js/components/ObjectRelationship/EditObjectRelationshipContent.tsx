@@ -23,6 +23,9 @@ interface EditObjectRelationshipContentProps {
 	handleChange: ChangeEventHandler<HTMLInputElement>;
 	objectDefinitionExternalReferenceCode: string;
 	objectRelationshipDeletionTypes: LabelValueObject[];
+	onChangeInheritanceCheckbox: (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => void;
 	onSubmit: (values?: Partial<ObjectRelationship>) => Promise<void>;
 	parameterRequired: boolean;
 	readOnly?: boolean;
@@ -40,6 +43,7 @@ export function EditObjectRelationshipContent({
 	handleChange,
 	objectDefinitionExternalReferenceCode,
 	objectRelationshipDeletionTypes,
+	onChangeInheritanceCheckbox,
 	onSubmit,
 	parameterRequired,
 	readOnly,
@@ -86,6 +90,7 @@ export function EditObjectRelationshipContent({
 					objectDefinitionExternalReferenceCode1={
 						objectDefinitionExternalReferenceCode
 					}
+					onChangeInheritanceCheckbox={onChangeInheritanceCheckbox}
 					onSubmit={onSubmit}
 					readonly
 					setValues={setValues}
