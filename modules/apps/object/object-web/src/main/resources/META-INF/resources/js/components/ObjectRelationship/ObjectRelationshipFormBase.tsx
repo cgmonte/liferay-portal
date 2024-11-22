@@ -24,7 +24,7 @@ export type Alert = {
 };
 
 interface ObjectRelationshipFormBaseProps {
-	alert?: Alert;
+	alert?: Alert | null;
 	baseResourceURL: string;
 	children?: JSX.Element;
 	className?: string;

@@ -8,11 +8,11 @@ import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
 import {API, Input} from '@liferay/object-js-components-web';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
 import {toCamelCase} from '../../utils/string';
-import {ObjectRelationshipFormBase} from './ObjectRelationshipFormBase';
+import {Alert, ObjectRelationshipFormBase} from './ObjectRelationshipFormBase';
 import {SelectObjectRelationship} from './SelectObjectRelationship';
 import {useObjectRelationshipForm} from './useObjectRelationshipForm';
 
@@ -41,6 +41,8 @@ export function ModalAddObjectRelationship({
 	onAfterAddObjectRelationship,
 	reload = true,
 }: ModalAddObjectRelationshipProps) {
+	const [alert, setAlert] = useState<Alert | null>(null);
+
 	const {observer, onClose} = useModal({
 		onClose: () => {
 			handleOnClose();
@@ -100,6 +102,31 @@ export function ModalAddObjectRelationship({
 			parameterRequired: objectRelationshipParameterRequired,
 		});
 
+	const handleInheritanceCheckboxChange = useCallback(
+		({target}: React.ChangeEvent<HTMLInputElement>) => {
+			if (target.checked) {
+				setAlert({
+					displayType: 'info',
+					message: Liferay.Language.get(
+						'when-enabled,-permissions-are-inherited,-all-api-endpoints-are-grouped-under-the-parent,-and-the-relationship-field-is-always-mandatory'
+					),
+				});
+				setValues({
+					...values,
+					edge: true,
+				});
+			}
+			else {
+				setAlert(null);
+				setValues({
+					...values,
+					edge: false,
+				});
+			}
+		},
+		[setValues, values]
+	);
+
 	return (
 		<ClayModalProvider>
 			<ClayModal center observer={observer}>
@@ -124,6 +151,7 @@ export function ModalAddObjectRelationship({
 						/>
 
 						<ObjectRelationshipFormBase
+							alert={alert}
 							baseResourceURL={baseResourceURL}
 							className="lfr-objects__modal-add-object-relationship-form-base"
 							errors={errors}
@@ -136,6 +164,9 @@ export function ModalAddObjectRelationship({
 							}
 							objectDefinitionExternalReferenceCode2={
 								objectDefinitionExternalReferenceCode2
+							}
+							onChangeInheritanceCheckbox={
+								handleInheritanceCheckboxChange
 							}
 							setValues={setValues}
 							values={{
