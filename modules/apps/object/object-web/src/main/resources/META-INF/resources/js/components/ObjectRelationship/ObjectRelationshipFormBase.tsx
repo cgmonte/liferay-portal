@@ -448,24 +448,23 @@ export function ObjectRelationshipFormBase({
 
 			{children}
 
-			{alert &&
-				onChangeInheritanceCheckbox &&
+			{onChangeInheritanceCheckbox &&
 				values.type === 'oneToMany' &&
 				Liferay.FeatureFlags['LPS-187142'] && (
-					<>
-						<ObjectRelationshipInheritanceCheckbox
-							onChange={onChangeInheritanceCheckbox}
-							values={values}
-						/>
-
-						<ClayAlert
-							displayType={alert.displayType}
-							title={`${alert.displayType === 'info' ? Liferay.Language.get('info') : Liferay.Language.get('warning')}:`}
-						>
-							{alert.message}
-						</ClayAlert>
-					</>
+					<ObjectRelationshipInheritanceCheckbox
+						onChange={onChangeInheritanceCheckbox}
+						values={values}
+					/>
 				)}
+
+			{alert && Liferay.FeatureFlags['LPS-187142'] && (
+				<ClayAlert
+					displayType={alert.displayType}
+					title={`${alert.displayType === 'info' ? Liferay.Language.get('info') : Liferay.Language.get('warning')}:`}
+				>
+					{alert.message}
+				</ClayAlert>
+			)}
 		</>
 	);
 }
