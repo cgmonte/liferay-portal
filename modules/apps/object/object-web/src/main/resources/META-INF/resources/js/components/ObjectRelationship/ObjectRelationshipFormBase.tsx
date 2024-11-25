@@ -14,6 +14,7 @@ import {
 import {createResourceURL} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
+import {compareObjectDefinitionsScope} from '../../utils/scope';
 import CurrentObjectDefinition from './CurrentObjectDefinition';
 import {ObjectRelationshipInheritanceCheckbox} from './ObjectRelationshipInheritanceCheckbox';
 import SelectObjectDefinition from './SelectObjectDefinition';
@@ -274,6 +275,12 @@ export function ObjectRelationshipFormBase({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [objectDefinitionExternalReferenceCode1, readonly]);
 
+	const isSameScope = compareObjectDefinitionsScope(
+		objectDefinition1,
+		objectDefinition2,
+		currentObjectDefinition
+	);
+
 	return (
 		<>
 			<Input
@@ -448,7 +455,8 @@ export function ObjectRelationshipFormBase({
 
 			{children}
 
-			{onChangeInheritanceCheckbox &&
+			{isSameScope &&
+				onChangeInheritanceCheckbox &&
 				values.type === 'oneToMany' &&
 				Liferay.FeatureFlags['LPS-187142'] && (
 					<ObjectRelationshipInheritanceCheckbox
