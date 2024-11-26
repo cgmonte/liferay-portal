@@ -49,8 +49,6 @@ export function ModalAddObjectRelationship({
 		},
 	});
 
-	const [error, setError] = useState<string>('');
-
 	const initialValues: Partial<ObjectRelationship> = {
 		objectDefinitionExternalReferenceCode1,
 		objectDefinitionExternalReferenceCode2,
@@ -91,7 +89,10 @@ export function ModalAddObjectRelationship({
 		catch (error: unknown) {
 			const {message} = error as Error;
 
-			setError(message);
+			setAlert({
+				displayType: 'danger',
+				message,
+			});
 		}
 	};
 
@@ -136,10 +137,6 @@ export function ModalAddObjectRelationship({
 					</ClayModal.Header>
 
 					<ClayModal.Body>
-						{error && (
-							<ClayAlert displayType="danger">{error}</ClayAlert>
-						)}
-
 						<Input
 							error={errors.label}
 							label={Liferay.Language.get('label')}

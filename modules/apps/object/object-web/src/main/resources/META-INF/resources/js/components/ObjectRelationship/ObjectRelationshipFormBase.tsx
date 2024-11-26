@@ -20,7 +20,7 @@ import {ObjectRelationshipInheritanceCheckbox} from './ObjectRelationshipInherit
 import SelectObjectDefinition from './SelectObjectDefinition';
 
 export type Alert = {
-	displayType: 'info' | 'warning';
+	displayType: 'danger' | 'info' | 'warning';
 	message: string;
 };
 
