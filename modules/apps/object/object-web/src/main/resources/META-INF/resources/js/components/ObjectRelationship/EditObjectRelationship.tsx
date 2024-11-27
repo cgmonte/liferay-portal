@@ -13,7 +13,6 @@ import {
 import React, {FormEvent, useCallback, useState} from 'react';
 
 import {EditObjectRelationshipContent} from './EditObjectRelationshipContent';
-import {Alert} from './ObjectRelationshipFormBase';
 import {useObjectRelationshipForm} from './useObjectRelationshipForm';
 
 interface EditObjectRelationshipProps {
@@ -35,12 +34,7 @@ export default function EditObjectRelationship({
 	parameterRequired,
 	restContextPath,
 }: EditObjectRelationshipProps) {
-	const [alert, setAlert] = useState<Alert>({
-		displayType: 'info',
-		message: Liferay.Language.get(
-			'when-enabled,-permissions-are-inherited,-all-api-endpoints-are-grouped-under-the-parent,-and-the-relationship-field-is-always-mandatory'
-		),
-	});
+	const [submitError, setSubmitError] = useState<SubmitError>(null);
 
 	const {errors, handleChange, handleValidate, setValues, values} =
 		useObjectRelationshipForm({
@@ -68,7 +62,7 @@ export default function EditObjectRelationship({
 					openToast({message, type: 'danger'});
 				}
 				else {
-					setAlert({displayType: 'warning', message});
+					setSubmitError(message);
 				}
 			}
 		},
@@ -127,7 +121,6 @@ export default function EditObjectRelationship({
 			title={Liferay.Language.get('relationship')}
 		>
 			<EditObjectRelationshipContent
-				alert={alert}
 				baseResourceURL={baseResourceURL}
 				containerWrapper={Card}
 				errors={errors}
@@ -144,6 +137,7 @@ export default function EditObjectRelationship({
 				readOnly={readOnly}
 				restContextPath={restContextPath}
 				setValues={setValues}
+				submitError={submitError}
 				values={values}
 			/>
 		</SidePanelForm>

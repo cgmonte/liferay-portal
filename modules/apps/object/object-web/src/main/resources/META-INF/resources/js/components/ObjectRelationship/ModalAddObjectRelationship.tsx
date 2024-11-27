@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
@@ -12,7 +11,7 @@ import React, {useCallback, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
 import {toCamelCase} from '../../utils/string';
-import {Alert, ObjectRelationshipFormBase} from './ObjectRelationshipFormBase';
+import {ObjectRelationshipFormBase} from './ObjectRelationshipFormBase';
 import {SelectObjectRelationship} from './SelectObjectRelationship';
 import {useObjectRelationshipForm} from './useObjectRelationshipForm';
 
@@ -41,7 +40,7 @@ export function ModalAddObjectRelationship({
 	onAfterAddObjectRelationship,
 	reload = true,
 }: ModalAddObjectRelationshipProps) {
-	const [alert, setAlert] = useState<Alert | null>(null);
+	const [submitError, setSubmitError] = useState<SubmitError>(null);
 
 	const {observer, onClose} = useModal({
 		onClose: () => {
@@ -89,10 +88,7 @@ export function ModalAddObjectRelationship({
 		catch (error: unknown) {
 			const {message} = error as Error;
 
-			setAlert({
-				displayType: 'danger',
-				message,
-			});
+			setSubmitError(message);
 		}
 	};
 
@@ -105,25 +101,10 @@ export function ModalAddObjectRelationship({
 
 	const handleInheritanceCheckboxChange = useCallback(
 		({target}: React.ChangeEvent<HTMLInputElement>) => {
-			if (target.checked) {
-				setAlert({
-					displayType: 'info',
-					message: Liferay.Language.get(
-						'when-enabled,-permissions-are-inherited,-all-api-endpoints-are-grouped-under-the-parent,-and-the-relationship-field-is-always-mandatory'
-					),
-				});
-				setValues({
-					...values,
-					edge: true,
-				});
-			}
-			else {
-				setAlert(null);
-				setValues({
-					...values,
-					edge: false,
-				});
-			}
+			setValues({
+				...values,
+				edge: target.checked,
+			});
 		},
 		[setValues, values]
 	);
@@ -136,7 +117,10 @@ export function ModalAddObjectRelationship({
 						{Liferay.Language.get('new-relationship')}
 					</ClayModal.Header>
 
-					<ClayModal.Body>
+					<ClayModal.Body
+						className="lfr-objects__modal-add-object-relationship-body"
+						scrollable
+					>
 						<Input
 							error={errors.label}
 							label={Liferay.Language.get('label')}
@@ -148,7 +132,6 @@ export function ModalAddObjectRelationship({
 						/>
 
 						<ObjectRelationshipFormBase
-							alert={alert}
 							baseResourceURL={baseResourceURL}
 							className="lfr-objects__modal-add-object-relationship-form-base"
 							errors={errors}
@@ -166,6 +149,7 @@ export function ModalAddObjectRelationship({
 								handleInheritanceCheckboxChange
 							}
 							setValues={setValues}
+							submitError={submitError}
 							values={{
 								...values,
 								name:

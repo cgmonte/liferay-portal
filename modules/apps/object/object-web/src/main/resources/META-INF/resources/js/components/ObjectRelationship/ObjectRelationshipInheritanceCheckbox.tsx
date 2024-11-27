@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayAlert from '@clayui/alert';
 import {ClayCheckbox} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayPopover from '@clayui/popover';
@@ -49,6 +50,17 @@ export function ObjectRelationshipInheritanceCheckbox({
 					)}
 				</ClayPopover>
 			</div>
+
+			{!!values.edge && (
+				<ClayAlert
+					displayType="info"
+					title={`${Liferay.Language.get('info')}:`}
+				>
+					{Liferay.Language.get(
+						'when-enabled,-permissions-are-inherited,-all-api-endpoints-are-grouped-under-the-parent,-and-the-relationship-field-is-always-mandatory'
+					)}
+				</ClayAlert>
+			)}
 		</>
 	);
 }

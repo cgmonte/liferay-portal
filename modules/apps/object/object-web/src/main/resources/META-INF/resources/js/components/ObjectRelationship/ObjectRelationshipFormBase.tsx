@@ -14,18 +14,11 @@ import {
 import {createResourceURL} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
-import {compareObjectDefinitionsScope} from '../../utils/scope';
 import CurrentObjectDefinition from './CurrentObjectDefinition';
 import {ObjectRelationshipInheritanceCheckbox} from './ObjectRelationshipInheritanceCheckbox';
 import SelectObjectDefinition from './SelectObjectDefinition';
 
-export type Alert = {
-	displayType: 'danger' | 'info' | 'warning';
-	message: string;
-};
-
 interface ObjectRelationshipFormBaseProps {
-	alert?: Alert | null;
 	baseResourceURL: string;
 	children?: JSX.Element;
 	className?: string;
@@ -40,6 +33,7 @@ interface ObjectRelationshipFormBaseProps {
 	onSubmit?: (values?: Partial<ObjectRelationship>) => Promise<void>;
 	readonly?: boolean;
 	setValues: (values: Partial<ObjectRelationship>) => void;
+	submitError?: SubmitError;
 	values: Partial<ObjectRelationship>;
 }
 
@@ -90,7 +84,6 @@ export const OBJECT_RELATIONSHIP_TYPES = [
 ];
 
 export function ObjectRelationshipFormBase({
-	alert,
 	baseResourceURL,
 	children,
 	className,
@@ -102,6 +95,7 @@ export function ObjectRelationshipFormBase({
 	onChangeInheritanceCheckbox,
 	readonly,
 	setValues,
+	submitError,
 	values,
 }: ObjectRelationshipFormBaseProps) {
 	const [creationLanguageId, setCreationLanguageId] =
@@ -274,12 +268,6 @@ export function ObjectRelationshipFormBase({
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [objectDefinitionExternalReferenceCode1, readonly]);
-
-	const isSameScope = compareObjectDefinitionsScope(
-		objectDefinition1,
-		objectDefinition2,
-		currentObjectDefinition
-	);
 
 	return (
 		<>
@@ -455,8 +443,7 @@ export function ObjectRelationshipFormBase({
 
 			{children}
 
-			{isSameScope &&
-				onChangeInheritanceCheckbox &&
+			{onChangeInheritanceCheckbox &&
 				values.type === 'oneToMany' &&
 				Liferay.FeatureFlags['LPS-187142'] && (
 					<ObjectRelationshipInheritanceCheckbox
@@ -465,12 +452,12 @@ export function ObjectRelationshipFormBase({
 					/>
 				)}
 
-			{alert && Liferay.FeatureFlags['LPS-187142'] && (
+			{submitError && Liferay.FeatureFlags['LPS-187142'] && (
 				<ClayAlert
-					displayType={alert.displayType}
-					title={`${alert.displayType === 'info' ? Liferay.Language.get('info') : Liferay.Language.get('warning')}:`}
+					displayType="danger"
+					title={`${Liferay.Language.get('error')}:`}
 				>
-					{alert.message}
+					{submitError}
 				</ClayAlert>
 			)}
 		</>
