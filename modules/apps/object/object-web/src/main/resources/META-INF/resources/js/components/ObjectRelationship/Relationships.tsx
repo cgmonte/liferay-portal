@@ -21,6 +21,7 @@ import {ModalAddObjectRelationship} from './ModalAddObjectRelationship';
 import {ModalDeleteObjectRelationship} from './ModalDeleteObjectRelationship';
 
 import type {FDSItem, IFDSTableProps} from '../../utils/fds';
+import { openToast } from 'frontend-js-web';
 
 interface ItemData {
 	edge?: boolean;
@@ -243,6 +244,16 @@ export default function Relationships({
 	useEffect(() => {
 		Liferay.on('addObjectRelationship', () => setShowAddModal(true));
 
+		const addObjectRelationshipSuccessToast = sessionStorage.getItem('addObjectRelationshipSuccessToast');
+
+		if (addObjectRelationshipSuccessToast) {
+			const {message, type} = JSON.parse(addObjectRelationshipSuccessToast);
+
+			openToast({message, type});
+
+			sessionStorage.removeItem('addObjectRelationshipSuccessToast');
+		}
+
 		return () => {
 			Liferay.detach('addObjectRelationship');
 		};
@@ -260,6 +271,15 @@ export default function Relationships({
 						objectDefinitionExternalReferenceCode
 					}
 					objectRelationshipParameterRequired={parameterRequired}
+					onAfterAddObjectRelationship={(que)=>{
+						console.log('oi?', que);
+						sessionStorage.setItem('addObjectRelationshipSuccessToast', JSON.stringify({
+							message: Liferay.Language.get(
+								'relationship-was-created-successfully'
+							),
+							type: 'success',
+						}));
+					}}
 				/>
 			)}
 
