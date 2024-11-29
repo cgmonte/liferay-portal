@@ -9,6 +9,7 @@ import {
 	ObjectField,
 	ObjectFolder,
 	ObjectFolderApi,
+	ObjectRelationship,
 } from '@liferay/object-admin-rest-client-js';
 
 import {getRandomInt} from '../utils/getRandomInt';
@@ -48,6 +49,7 @@ export class ObjectAdminApiHelper {
 		status: {code: number},
 		objectFields?: Partial<ObjectField>[],
 		objectFolderExternalReferenceCode?: string,
+		scope: 'site' | 'company' = 'company',
 		titleObjectFieldName?: string
 	): Promise<ObjectDefinition> {
 		const objectDefinitionExternalReferenceCode =
@@ -80,7 +82,7 @@ export class ObjectAdminApiHelper {
 			pluralLabel: {
 				en_US: objectDefinitionExternalReferenceCode,
 			},
-			scope: 'company',
+			scope,
 			status,
 			titleObjectFieldName: titleObjectFieldName ?? 'id',
 		};
@@ -114,5 +116,14 @@ export class ObjectAdminApiHelper {
 				name: objectFolderExternalReferenceCode,
 			})
 		).body;
+	}
+
+	async putObjectRelationship(
+		objectRelationship: Partial<ObjectRelationship>
+	): Promise<ObjectField> {
+		return this.apiHelpers.put(
+			`${this.apiHelpers.baseUrl}${this.basePath}/object-relationships/${objectRelationship.id}`,
+			{data: objectRelationship}
+		);
 	}
 }
