@@ -5,11 +5,16 @@
 
 import {ClayCheckbox, ClayInput, ClayToggle} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import React from 'react';
+import React, {useState} from 'react';
 
 import FieldBase from '../FieldBase/ReactFieldBase.es';
+import LocalesDropdown from '../util/localizable/LocalesDropdown';
+import {
+	AvailableLocale,
+	getAvailableLocales,
+} from '../util/localizable/getAvailableLocales';
 
-import type {FieldChangeEventHandler} from '../types';
+import type {FieldChangeEventHandler, LocalizedValue} from '../types';
 
 const Switcher: React.FC<
 	{children?: React.ReactNode | undefined} & ISwitcherProps
@@ -92,7 +97,10 @@ const Checkbox: React.FC<
 };
 
 const Main: React.FC<{children?: React.ReactNode | undefined} & IProps> = ({
+	fieldName,
 	label,
+	localizable,
+	localizedValue,
 	name,
 	onChange,
 	predefinedValue,
@@ -106,14 +114,70 @@ const Main: React.FC<{children?: React.ReactNode | undefined} & IProps> = ({
 	visible,
 	...otherProps
 }) => {
+	console.log('value', value);
+	console.log('localizedValue', localizedValue);
 	const Toggle = showAsSwitcher ? Switcher : Checkbox;
 
+	const availableLocales = getAvailableLocales();
+	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
+	const getLocale = (id: string) => {
+		return availableLocales.find(
+			({localeId}) => localeId === id
+		) as AvailableLocale;
+	};
+
+	const [currentEditingLocale, setCurrentEditingLocale] = useState(
+		getLocale(defaultLanguageId)
+	);
+
 	const checked = !!(
-		value ??
+		(!localizable || typeof value !== 'object'
+			? value
+			: value[currentEditingLocale.localeId]) ??
 		(Array.isArray(predefinedValue)
 			? predefinedValue[0] === 'true'
 			: predefinedValue)
 	);
+
+	const handleCheckboxToggle: FieldChangeEventHandler<boolean> = (event) => {
+		if (!localizable) {
+			onChange(event);
+		}
+		else {
+			const eventValue = event.target.value;
+			let newValue;
+
+			if (typeof value !== 'object') {
+				newValue = {[currentEditingLocale.localeId]: eventValue};
+			}
+			else {
+				newValue = {
+					...value,
+					[currentEditingLocale.localeId]: eventValue,
+				};
+			}
+
+			onChange({target: {value: newValue}});
+		}
+	};
+
+	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
+		let newValue;
+
+		if (typeof value !== 'object') {
+			newValue = {[defaultLanguageId]: value, [localeId]: value};
+			onChange({target: {value: newValue}});
+		}
+		else {
+			if (!Object.hasOwn(value, localeId)) {
+				newValue = {...value, [localeId]: value[defaultLanguageId]};
+				onChange({target: {value: newValue}});
+			}
+		}
+
+		setCurrentEditingLocale(getLocale(localeId));
+	};
 
 	return (
 		<FieldBase
@@ -127,7 +191,7 @@ const Main: React.FC<{children?: React.ReactNode | undefined} & IProps> = ({
 				disabled={readOnly}
 				label={label}
 				name={name}
-				onChange={onChange}
+				onChange={handleCheckboxToggle}
 				required={required}
 				showLabel={showLabel}
 				showMaximumRepetitionsInfo={showMaximumRepetitionsInfo}
@@ -135,17 +199,36 @@ const Main: React.FC<{children?: React.ReactNode | undefined} & IProps> = ({
 			/>
 
 			<ClayInput name={name} type="hidden" value={`${checked}`} />
+
+			{localizable && (
+				<ClayInput.GroupItem
+					className="liferay-ddm-form-field-localizable-text"
+					shrink
+				>
+					<LocalesDropdown
+						availableLocales={availableLocales}
+						editingLocale={currentEditingLocale}
+						fieldName={fieldName}
+						onLanguageClicked={handleTranslationChange}
+					/>
+				</ClayInput.GroupItem>
+			)}
 		</FieldBase>
 	);
 };
 
 interface IProps extends ICheckboxProps {
+	fieldName: string;
+	localizable: boolean;
+	localizedValue: {
+		[key in Liferay.Language.Locale]: boolean;
+	};
 	predefinedValue?: boolean | String[];
 	readOnly?: boolean;
 	showAsSwitcher?: boolean;
 	showMaximumRepetitionsInfo?: boolean;
 	systemSettingsURL: string;
-	value?: boolean;
+	value: boolean | LocalizedValue<boolean>;
 	visible?: boolean;
 }
 interface ISwitcherProps extends ICheckboxProps {
@@ -158,7 +241,7 @@ interface ICheckboxProps {
 	disabled?: boolean;
 	label?: string;
 	name: string;
-	onChange: FieldChangeEventHandler<boolean>;
+	onChange: any;
 	required?: boolean;
 	showLabel?: boolean;
 }
