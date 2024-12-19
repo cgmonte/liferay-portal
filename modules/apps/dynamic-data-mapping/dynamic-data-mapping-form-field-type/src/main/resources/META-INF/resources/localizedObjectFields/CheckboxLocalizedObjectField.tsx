@@ -19,7 +19,7 @@ import type {FieldChangeEventHandler, LocalizedValue} from '../types';
 const CheckboxLocalizedObjectField: React.FC<
 	{children?: React.ReactNode | undefined} & LocalizedObjectCheckboxField
 > = ({
-	availableLocales,
+	// availableLocales, format is different than Liferay.Language.available
 	defaultLanguageId,
 	fieldName,
 	label,
@@ -36,7 +36,8 @@ const CheckboxLocalizedObjectField: React.FC<
 	visible,
 	...otherProps
 }) => {
-	const normalizedAvailableLocales = normalizeAvailableLocales(availableLocales);
+	const normalizedAvailableLocales =
+		normalizeAvailableLocales();
 
 	value = Object.keys(value).length ? value : {[defaultLanguageId]: false};
 
@@ -58,35 +59,26 @@ const CheckboxLocalizedObjectField: React.FC<
 	// );
 
 	// TODO still need to handle predefinedValue, like above
+
 	const checked = !!value[currentEditingLocale.localeId];
 
 	const handleCheckboxToggle: FieldChangeEventHandler<boolean> = (event) => {
 		const eventValue = event.target.value;
-		let newValue;
-		if (typeof value !== 'object') {
-			newValue = {[currentEditingLocale.localeId]: eventValue};
-		}
-		else {
-			newValue = {
-				...value,
-				[currentEditingLocale.localeId]: eventValue,
-			};
-		}
+
+		const newValue = {
+			...value,
+			[currentEditingLocale.localeId]: eventValue,
+		};
+
 		onChange({target: {value: newValue}});
 	};
-	
+
 	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
-		let newValue;
-		if (typeof value !== 'object') {
-			newValue = {[defaultLanguageId]: value, [localeId]: value};
+		if (!Object.hasOwn(value, localeId)) {
+			const newValue = {...value, [localeId]: value[defaultLanguageId]};
 			onChange({target: {value: newValue}});
 		}
-		else {
-			if (!Object.hasOwn(value, localeId)) {
-				newValue = {...value, [localeId]: value[defaultLanguageId]};
-				onChange({target: {value: newValue}});
-			}
-		}
+
 		setCurrentEditingLocale(getLocale(localeId));
 	};
 
