@@ -6,18 +6,18 @@
 import {ClayInput} from '@clayui/form';
 import React, {useState} from 'react';
 
+import Toggle from '../Checkbox/ToggleComponent';
 import FieldBase from '../FieldBase/ReactFieldBase.es';
 import LocalesDropdown from '../util/localizable/LocalesDropdown';
 import {
 	AvailableLocale,
 	getAvailableLocales,
 } from '../util/localizable/getAvailableLocales';
-import {Checkbox, Switcher} from './baseCheckboxComponents';
 
 import type {FieldChangeEventHandler, LocalizedValue} from '../types';
 
-const LocalizedCheckbox: React.FC<
-	{children?: React.ReactNode | undefined} & LocalizedCheckbox
+const CheckboxLocalizedObjectField: React.FC<
+	{children?: React.ReactNode | undefined} & LocalizedObjectCheckboxField
 > = ({
 	fieldName,
 	label,
@@ -39,9 +39,7 @@ const LocalizedCheckbox: React.FC<
 
 	value = typeof value === 'object' ? value : {[defaultLanguageId]: value};
 
-	const Toggle = showAsSwitcher ? Switcher : Checkbox;
-
-	const getLocale = (id: string) => {
+	const getLocale: (id: string) => AvailableLocale = (id: string) => {
 		return availableLocales.find(
 			({localeId}) => localeId === id
 		) as AvailableLocale;
@@ -103,6 +101,7 @@ const LocalizedCheckbox: React.FC<
 				name={name}
 				onChange={handleCheckboxToggle}
 				required={required}
+				showAsSwitcher={showAsSwitcher}
 				showLabel={showLabel}
 				showMaximumRepetitionsInfo={showMaximumRepetitionsInfo}
 				systemSettingsURL={systemSettingsURL}
@@ -125,7 +124,7 @@ const LocalizedCheckbox: React.FC<
 	);
 };
 
-interface LocalizedCheckbox {
+interface LocalizedObjectCheckboxField {
 	checked: boolean;
 	disabled?: boolean;
 	fieldName: string;
@@ -143,4 +142,4 @@ interface LocalizedCheckbox {
 	value?: LocalizedValue<boolean>;
 	visible?: boolean;
 }
-export default LocalizedCheckbox;
+export default CheckboxLocalizedObjectField;

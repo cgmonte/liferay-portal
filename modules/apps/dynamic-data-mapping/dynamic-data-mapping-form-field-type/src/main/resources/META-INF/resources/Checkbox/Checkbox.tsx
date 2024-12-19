@@ -7,8 +7,8 @@ import {ClayInput} from '@clayui/form';
 import React from 'react';
 
 import FieldBase from '../FieldBase/ReactFieldBase.es';
-import LocalizedCheckbox from './LocalizedCheckbox';
-import {Checkbox, Switcher} from './baseCheckboxComponents';
+import CheckboxLocalizedObjectField from '../localizedObjectFields/CheckboxLocalizedObjectField';
+import Toggle from './ToggleComponent';
 
 import type {FieldChangeEventHandler} from '../types';
 
@@ -29,8 +29,6 @@ const DefaultCheckbox: React.FC<
 	visible,
 	...otherProps
 }) => {
-	const Toggle = showAsSwitcher ? Switcher : Checkbox;
-
 	const checked = !!(
 		value ??
 		(Array.isArray(predefinedValue)
@@ -52,6 +50,7 @@ const DefaultCheckbox: React.FC<
 				name={name}
 				onChange={onChange}
 				required={required}
+				showAsSwitcher={showAsSwitcher}
 				showLabel={showLabel}
 				showMaximumRepetitionsInfo={showMaximumRepetitionsInfo}
 				systemSettingsURL={systemSettingsURL}
@@ -66,9 +65,9 @@ const Main: React.FC<{children?: React.ReactNode | undefined} & any> = ({
 	localizedObjectField,
 	...otherProps
 }) => {
-	const Component = !localizedObjectField
-		? DefaultCheckbox
-		: LocalizedCheckbox;
+	const Component = localizedObjectField
+		? CheckboxLocalizedObjectField
+		: DefaultCheckbox;
 
 	return <Component {...otherProps} />;
 };

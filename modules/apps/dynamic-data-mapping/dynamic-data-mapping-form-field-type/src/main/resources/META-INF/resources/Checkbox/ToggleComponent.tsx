@@ -66,10 +66,33 @@ const Switcher: React.FC<
 	);
 };
 
-const Checkbox: React.FC<
-	{children?: React.ReactNode | undefined} & ICheckboxProps
-> = ({checked, disabled, label, name, onChange, required, showLabel}) => {
-	return (
+const Toggle: React.FC<
+	{children?: React.ReactNode | undefined} & ISwitcherProps
+> = ({
+	checked,
+	disabled,
+	label,
+	name,
+	onChange,
+	required,
+	showAsSwitcher = true,
+	showLabel,
+	showMaximumRepetitionsInfo,
+	systemSettingsURL,
+}) => {
+	return showAsSwitcher ? (
+		<Switcher
+			checked={checked}
+			disabled={disabled}
+			label={label}
+			name={name}
+			onChange={onChange}
+			required={required}
+			showLabel={showLabel}
+			showMaximumRepetitionsInfo={showMaximumRepetitionsInfo}
+			systemSettingsURL={systemSettingsURL}
+		/>
+	) : (
 		<ClayCheckbox
 			aria-required={required}
 			checked={checked}
@@ -101,7 +124,8 @@ interface ICheckboxProps {
 	name: string;
 	onChange: FieldChangeEventHandler<boolean>;
 	required?: boolean;
+	showAsSwitcher?: boolean;
 	showLabel?: boolean;
 }
 
-export {Checkbox, Switcher};
+export default Toggle;
