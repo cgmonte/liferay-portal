@@ -7,7 +7,8 @@ export type AvailableLocale = {
 	icon: string;
 	localeId: Liferay.Language.Locale;
 };
-export function getAvailableLocales() {
+
+export function normalizeAvailableLocales(availableLocales: Liferay.Language.Locale[]) {
 	return Object.entries(Liferay.Language.available).map(
 		([localeId, displayName]) => ({
 			displayName,
