@@ -1,0 +1,18 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+export type AvailableLocale = {
+	displayName: string;
+	icon: string;
+	localeId: Liferay.Language.Locale;
+};
+export function getAvailableLocales() {
+	return Object.entries(Liferay.Language.available).map(
+		([localeId, displayName]) => ({
+			displayName,
+			icon: localeId.toLowerCase().replace('_', '-'),
+			localeId,
+		})
+	) as AvailableLocale[];
+}
