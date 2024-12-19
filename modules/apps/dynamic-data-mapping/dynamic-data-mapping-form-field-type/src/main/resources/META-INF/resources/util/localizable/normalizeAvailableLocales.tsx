@@ -5,6 +5,8 @@
 export type AvailableLocale = {
 	displayName: string;
 	icon: string;
+	isDefault?: boolean;
+	isTranslated?: boolean;
 	localeId: Liferay.Language.Locale;
 };
 

@@ -48,7 +48,7 @@ const CheckboxLocalizedObjectField: React.FC<
 	};
 
 	const [currentEditingLocale, setCurrentEditingLocale] = useState(
-		getLocale(defaultLanguageId)
+		{...getLocale(defaultLanguageId), isDefault: true}
 	);
 
 	// const checked = !!(
@@ -76,10 +76,11 @@ const CheckboxLocalizedObjectField: React.FC<
 	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
 		if (!Object.hasOwn(value, localeId)) {
 			const newValue = {...value, [localeId]: value[defaultLanguageId]};
+
 			onChange({target: {value: newValue}});
 		}
 
-		setCurrentEditingLocale(getLocale(localeId));
+		setCurrentEditingLocale({...getLocale(localeId), isDefault: localeId === defaultLanguageId, isTranslated: true});
 	};
 
 	return (
@@ -109,7 +110,7 @@ const CheckboxLocalizedObjectField: React.FC<
 				shrink
 			>
 				<LocalesDropdown
-					availableLocales={normalizedAvailableLocales}
+					availableLocales={normalizedAvailableLocales.map(locale => value[locale.localeId] ? {...locale, isTranslated: true} : locale)}
 					editingLocale={currentEditingLocale}
 					fieldName={fieldName}
 					onLanguageClicked={handleTranslationChange}
