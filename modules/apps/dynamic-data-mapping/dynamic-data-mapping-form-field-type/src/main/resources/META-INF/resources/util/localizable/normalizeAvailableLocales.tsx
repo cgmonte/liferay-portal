@@ -12,14 +12,23 @@ export type AvailableLocale = {
 	localeId: Liferay.Language.Locale;
 };
 
-export function normalizeAvailableLocales(value: LocalizedValue<unknown>) {
-	return Object.entries(Liferay.Language.available).map(
-		([localeId, displayName]) => ({
-			displayName,
-			icon: localeId.toLowerCase().replace('_', '-'),
-			isDefault: localeId === Liferay.ThemeDisplay.getDefaultLanguageId(),
-			isTranslated: Object.hasOwn(value, localeId),
-			localeId,
-		})
-	) as AvailableLocale[];
+export interface EditingLocale {
+	displayName: string;
+	icon: string;
+	isDefault?: boolean;
+	isTranslated?: boolean;
+	localeId: Liferay.Language.Locale;
+}
+
+export function normalizeAvailableLocales(
+	availableLocales: EditingLocale[], 
+	defaultLocale: EditingLocale, 
+	value: LocalizedValue<unknown>) {
+		return availableLocales.map(
+			(locale) => ({
+				...locale,
+				isDefault: locale.localeId === defaultLocale.localeId,
+				isTranslated: Object.hasOwn(value, locale.localeId),
+			})
+		) as AvailableLocale[];
 }

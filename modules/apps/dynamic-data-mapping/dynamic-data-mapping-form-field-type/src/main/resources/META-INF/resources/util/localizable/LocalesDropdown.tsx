@@ -12,7 +12,7 @@ import React, {useRef, useState} from 'react';
 
 import AvailableLocaleLabel from './AvailableLocaleLabel';
 
-interface Locale {
+export interface EditingLocale {
 	displayName: string;
 	icon: string;
 	isDefault?: boolean;
@@ -20,8 +20,8 @@ interface Locale {
 	localeId: Liferay.Language.Locale;
 }
 interface LocalesDropdownProps {
-	availableLocales: Locale[];
-	editingLocale: Locale;
+	availableLocales: EditingLocale[];
+	editingLocale: EditingLocale;
 	fieldName: string;
 	onLanguageClicked: (localeId: Liferay.Language.Locale) => void;
 }
