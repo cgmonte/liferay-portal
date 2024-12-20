@@ -15,6 +15,7 @@ export function normalizeAvailableLocales() {
 		([localeId, displayName]) => ({
 			displayName,
 			icon: localeId.toLowerCase().replace('_', '-'),
+			isDefault: localeId === Liferay.ThemeDisplay.getDefaultLanguageId(),
 			localeId,
 		})
 	) as AvailableLocale[];

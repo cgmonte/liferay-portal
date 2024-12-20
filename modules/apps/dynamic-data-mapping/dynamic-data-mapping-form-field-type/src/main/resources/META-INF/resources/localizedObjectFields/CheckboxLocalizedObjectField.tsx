@@ -36,19 +36,22 @@ const CheckboxLocalizedObjectField: React.FC<
 	visible,
 	...otherProps
 }) => {
-	const normalizedAvailableLocales =
-		normalizeAvailableLocales();
-
 	value = Object.keys(value).length ? value : {[defaultLanguageId]: false};
 
-	const getLocale: (id: string) => AvailableLocale = (id: string) => {
-		return normalizedAvailableLocales.find(
+	const normalizedAvailableLocales: AvailableLocale[] = normalizeAvailableLocales();
+
+	const [editingLocales, setEditingLocales] = useState(
+		normalizedAvailableLocales
+	);
+
+	const getLocale = (editingLocales: AvailableLocale[], id: string) => {
+		return editingLocales.find(
 			({localeId}) => localeId === id
 		) as AvailableLocale;
 	};
 
 	const [currentEditingLocale, setCurrentEditingLocale] = useState(
-		{...getLocale(defaultLanguageId), isDefault: true}
+		{...getLocale(normalizedAvailableLocales, defaultLanguageId)}
 	);
 
 	// const checked = !!(
@@ -80,7 +83,13 @@ const CheckboxLocalizedObjectField: React.FC<
 			onChange({target: {value: newValue}});
 		}
 
-		setCurrentEditingLocale({...getLocale(localeId), isDefault: localeId === defaultLanguageId, isTranslated: true});
+		const currentLocale = getLocale(editingLocales, localeId);
+
+		const newLocale = {...currentLocale, isDefault: localeId === defaultLanguageId, isTranslated: true};
+
+		setEditingLocales((previous) => previous.map((locale) => locale.localeId === localeId ? newLocale : locale))
+		
+		setCurrentEditingLocale(newLocale);
 	};
 
 	return (
@@ -110,7 +119,7 @@ const CheckboxLocalizedObjectField: React.FC<
 				shrink
 			>
 				<LocalesDropdown
-					availableLocales={normalizedAvailableLocales.map(locale => value[locale.localeId] ? {...locale, isTranslated: true} : locale)}
+					availableLocales={editingLocales.map(locale => value[locale.localeId] ? {...locale, isTranslated: true} : locale)}
 					editingLocale={currentEditingLocale}
 					fieldName={fieldName}
 					onLanguageClicked={handleTranslationChange}
