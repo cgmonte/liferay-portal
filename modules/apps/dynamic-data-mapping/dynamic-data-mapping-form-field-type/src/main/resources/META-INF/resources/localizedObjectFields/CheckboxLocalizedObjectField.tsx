@@ -54,15 +54,6 @@ const CheckboxLocalizedObjectField: React.FC<
 		{...getLocale(normalizedAvailableLocales, defaultLocale.localeId)}
 	);
 
-	// const checked = !!(
-	// 	value ??
-	// 	(Array.isArray(predefinedValue)
-	// 		? predefinedValue[0] === 'true'
-	// 		: predefinedValue)
-	// );
-
-	// TODO still need to handle predefinedValue, like above
-
 	const checked = !!value[currentEditingLocale.localeId];
 
 	const handleCheckboxToggle: FieldChangeEventHandler<boolean> = (event) => {
