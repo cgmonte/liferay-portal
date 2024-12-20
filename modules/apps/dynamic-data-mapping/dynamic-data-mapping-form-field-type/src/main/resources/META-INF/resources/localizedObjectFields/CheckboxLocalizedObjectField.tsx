@@ -76,11 +76,11 @@ const CheckboxLocalizedObjectField: React.FC<
 
 		const currentLocale = getLocale(editingLocales, localeId);
 
-		const newLocale = {...currentLocale, isDefault: localeId === defaultLocale.localeId, isTranslated: true};
+		const updatedLocale = {...currentLocale, isTranslated: true};
 
-		setEditingLocales((previous) => previous.map((locale) => locale.localeId === localeId ? newLocale : locale))
+		setEditingLocales((previous) => previous.map((locale) => locale.localeId === localeId ? updatedLocale : locale))
 		
-		setCurrentEditingLocale(newLocale);
+		setCurrentEditingLocale(updatedLocale);
 	};
 
 	return (
