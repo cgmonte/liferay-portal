@@ -1,0 +1,25 @@
+import { LocalizedValue } from "types";
+
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+export type AvailableLocale = {
+	displayName: string;
+	icon: string;
+	isDefault?: boolean;
+	isTranslated?: boolean;
+	localeId: Liferay.Language.Locale;
+};
+
+export function normalizeAvailableLocales(value: LocalizedValue<unknown>) {
+	return Object.entries(Liferay.Language.available).map(
+		([localeId, displayName]) => ({
+			displayName,
+			icon: localeId.toLowerCase().replace('_', '-'),
+			isDefault: localeId === Liferay.ThemeDisplay.getDefaultLanguageId(),
+			isTranslated: Object.hasOwn(value, localeId),
+			localeId,
+		})
+	) as AvailableLocale[];
+}
