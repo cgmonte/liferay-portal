@@ -38,7 +38,7 @@ const CheckboxLocalizedObjectField: React.FC<
 }) => {
 	value = Object.keys(value).length ? value : {[defaultLanguageId]: false};
 
-	const normalizedAvailableLocales: AvailableLocale[] = normalizeAvailableLocales();
+	const normalizedAvailableLocales: AvailableLocale[] = normalizeAvailableLocales(value);
 
 	const [editingLocales, setEditingLocales] = useState(
 		normalizedAvailableLocales
@@ -119,7 +119,7 @@ const CheckboxLocalizedObjectField: React.FC<
 				shrink
 			>
 				<LocalesDropdown
-					availableLocales={editingLocales.map(locale => value[locale.localeId] ? {...locale, isTranslated: true} : locale)}
+					availableLocales={editingLocales}
 					editingLocale={currentEditingLocale}
 					fieldName={fieldName}
 					onLanguageClicked={handleTranslationChange}
