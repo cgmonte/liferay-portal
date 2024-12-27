@@ -31,7 +31,7 @@ export default function Main({localizedObjectField, ...otherProps}: IProps) {
 			: Checkbox;
 
 	return (
-		<FieldBase {...otherProps} showLabel={false}>
+		<FieldBase showLabel={false} {...otherProps}>
 			<Component {...otherProps} />
 		</FieldBase>
 	);
