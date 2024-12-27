@@ -12,16 +12,19 @@ import React, {useRef, useState} from 'react';
 
 import AvailableLocaleLabel from './AvailableLocaleLabel';
 
-interface Locale {
+export interface AvailableLocale {
 	displayName: string;
 	icon: string;
-	isDefault?: boolean;
-	isTranslated?: boolean;
 	localeId: Liferay.Language.Locale;
 }
-interface LocalesDropdownProps {
-	availableLocales: Locale[];
-	editingLocale: Locale;
+
+export interface EditingLocale extends AvailableLocale {
+	isDefault: boolean;
+	isTranslated: boolean;
+}
+interface IProps {
+	availableLocales: EditingLocale[];
+	editingLocale: EditingLocale;
 	fieldName: string;
 	onLanguageClicked: (localeId: Liferay.Language.Locale) => void;
 }
@@ -31,7 +34,7 @@ const LocalesDropdown = ({
 	editingLocale,
 	fieldName,
 	onLanguageClicked,
-}: LocalesDropdownProps) => {
+}: IProps) => {
 	const {pages} = useFormState();
 
 	const alignElementRef = useRef(null);
@@ -63,7 +66,7 @@ const LocalesDropdown = ({
 			<ClayDropDown.Menu
 				active={dropdownActive}
 				alignElementRef={alignElementRef}
-				onSetActive={setDropdownActive}
+				onActiveChange={setDropdownActive}
 				ref={dropdownMenuRef}
 			>
 				<ClayDropDown.ItemList>
@@ -93,7 +96,8 @@ const LocalesDropdown = ({
 										visitor.mapFields(
 											(field) => {
 												if (
-													field.localizable &&
+													(field.localizedObjectField ||
+														field.localizable) &&
 													fieldName !==
 														field.fieldName
 												) {

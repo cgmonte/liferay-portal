@@ -340,6 +340,125 @@ test.describe('Manage object entries through Page Templates', () => {
 
 		await displayPageTemplatesPage.deleteTemplate(objectDefinitionLabel);
 	});
+
+	test('verify if object entries with localized boolean field are correctly persisted', async ({
+		apiHelpers,
+		page,
+		viewObjectEntriesPage,
+	}) => {
+		const objectDefinitionLabel = 'ObjectDefinitionLabel' + getRandomInt();
+		const objectDefinitionName = 'ObjectDefinitionName' + getRandomInt();
+
+		const {objectFields, titleObjectFieldName} = await mockObjectFields({
+			apiHelpers,
+			localizeAllLocalizable: true,
+			objectEntryReturn: {format: 'API'},
+			objectFieldBusinessTypes: ['boolean'],
+			titleObjectFieldName: 'boolean',
+		});
+
+		const objectDefinitionAPIClient =
+			await apiHelpers.buildRestClient(ObjectDefinitionApi);
+
+		const {body: objectDefinition} =
+			await objectDefinitionAPIClient.postObjectDefinition({
+				active: true,
+				enableLocalization: true,
+				label: {
+					en_US: objectDefinitionLabel,
+				},
+				name: objectDefinitionName,
+				objectFields,
+				pluralLabel: {
+					en_US: objectDefinitionLabel,
+				},
+				portlet: true,
+				scope: 'company',
+				status: {
+					code: 0,
+				},
+				titleObjectFieldName,
+			});
+
+		apiHelpers.data.push({
+			id: objectDefinition.id,
+			type: 'objectDefinition',
+		});
+
+		await viewObjectEntriesPage.goto(objectDefinition.className);
+
+		await viewObjectEntriesPage.addObjectEntryButton.click();
+
+		const checkBox = page.getByRole('checkbox', {
+			name: objectFields[0].label['en_US'],
+		});
+
+		await checkBox.check();
+
+		const translationsDropdownTriggerButton = page
+			.getByTestId('triggerButton')
+			.first();
+
+		await translationsDropdownTriggerButton.click();
+
+		const catalaOption = page.getByTestId('availableLocalesDropdownca_ES');
+
+		await catalaOption.click();
+
+		await expect(checkBox).toBeChecked();
+
+		await checkBox.uncheck();
+
+		await translationsDropdownTriggerButton.click();
+
+		await expect(catalaOption.locator('.label-item-expand')).toHaveText(
+			'Translated'
+		);
+
+		const englishOption = page.getByTestId('availableLocalesDropdownen_US');
+
+		await expect(englishOption.locator('.label-item-expand')).toHaveText(
+			'Default'
+		);
+
+		await englishOption.click();
+
+		await expect(checkBox).toBeChecked();
+
+		await translationsDropdownTriggerButton.click();
+
+		await catalaOption.click();
+
+		await expect(checkBox).not.toBeChecked();
+
+		const responsePromise = page.waitForResponse(
+			`**${objectDefinition.restContextPath}`
+		);
+
+		await viewObjectEntriesPage.saveObjectEntryButton.click();
+
+		const response = await responsePromise;
+
+		await expect(
+			page.getByText('Success:Your request completed successfully.')
+		).toBeVisible();
+
+		await page.getByRole('link', {name: 'Back'}).click();
+
+		const responseBody = await response.json();
+
+		const entryLink = page.getByRole('link', {name: responseBody.id});
+
+		await entryLink.click();
+
+		await expect(checkBox).toBeChecked();
+
+		await translationsDropdownTriggerButton.click();
+
+		await catalaOption.click();
+
+		await expect(checkBox).not.toBeChecked();
+	});
 });
 
 test.describe('Manage object entries through View Object Entries', () => {
