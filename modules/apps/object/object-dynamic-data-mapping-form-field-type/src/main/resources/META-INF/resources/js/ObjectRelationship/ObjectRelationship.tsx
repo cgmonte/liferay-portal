@@ -39,35 +39,32 @@ export function getLabel<T extends ObjectMap<any>>(
 	objectFieldBusinessType: string
 ) {
 	const value = item[key];
+	let localizedLabel;
 
-	if (typeof value !== 'object') {
-		if (objectFieldBusinessType === 'Date') {
-			return DateTimeRenderer({
-				options: {
-					format: {
-						day: 'numeric',
-						month: 'short',
-						timeZone: 'UTC',
-						year: 'numeric',
-					},
-				},
-				value: String(value),
-			});
-		}
-
-		if (objectFieldBusinessType === 'Boolean') {
-			return String(value);
-		}
-
-		return value ? String(value) : '';
+	if (typeof value === 'object') {
+		localizedLabel = stringUtils.getLocalizableLabel(
+			objectDefinitionDefaultLanguageId,
+			value as LocalizedValue<unknown>,
+			(value as {[key: string]: string})['name'] ??
+				(value as {[key: string]: string})['label_i18n']
+		);
 	}
 
-	return stringUtils.getLocalizableLabel(
-		objectDefinitionDefaultLanguageId,
-		value as LocalizedValue<string>,
-		(value as {[key: string]: string})['name'] ??
-			(value as {[key: string]: string})['label_i18n']
-	);
+	if (objectFieldBusinessType === 'Date') {
+		return DateTimeRenderer({
+			options: {
+				format: {
+					day: 'numeric',
+					month: 'short',
+					timeZone: 'UTC',
+					year: 'numeric',
+				},
+			},
+			value: localizedLabel ?? String(value),
+		});
+	}
+
+	return localizedLabel ? localizedLabel : value ? String(value) : '';
 }
 
 function LoadingWithDebounce({
