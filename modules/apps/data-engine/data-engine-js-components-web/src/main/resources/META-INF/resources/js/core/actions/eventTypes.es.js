@@ -44,6 +44,7 @@ const LANGUAGE = {
 	ADD: 'language_add',
 	CHANGE: 'language_change',
 	DELETE: 'language_delete',
+	OBJECT_ENTRY_CHANGE: 'language_object_entry_change',
 	UPDATE: 'language_update',
 };
 

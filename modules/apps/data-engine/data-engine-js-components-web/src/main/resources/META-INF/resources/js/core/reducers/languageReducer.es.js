@@ -312,6 +312,13 @@ export default function languageReducer(state, action) {
 				availableLanguageIds: [...availableLanguageIds, languageId],
 			};
 		}
+		case EVENT_TYPES.LANGUAGE.OBJECT_ENTRY_CHANGE: {
+			const {objectEntryEditingLanguageId} = action.payload;
+			
+			return {
+				objectEntryEditingLanguageId
+			};
+		}
 		case EVENT_TYPES.LANGUAGE.UPDATE: {
 			const {availableLanguageIds, focusedField, pages} = state;
 

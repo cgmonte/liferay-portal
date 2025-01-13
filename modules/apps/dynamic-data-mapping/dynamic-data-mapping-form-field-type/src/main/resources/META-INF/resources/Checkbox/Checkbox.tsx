@@ -35,9 +35,9 @@ export default function Main({
 			: Checkbox;
 
 	return (
-		<FieldBase showLabel={false} {...otherProps}>
+		// <FieldBase showLabel={false} {...otherProps}>
 			<Component label={label} {...otherProps} />
-		</FieldBase>
+		// </FieldBase>
 	);
 }
 

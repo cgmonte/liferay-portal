@@ -12,10 +12,13 @@ import LocalesDropdown, {
 } from '../util/localizable/LocalesDropdown';
 import {getEditingLocales, getLocale} from './util/locales';
 
+import {useFormState} from 'data-engine-js-components-web';
+
 import type {FieldChangeEventHandler, LocalizedValue} from '../types';
 
 export default function CheckboxLocalizedObjectField(props: IProps) {
 	const {availableLocales, defaultLocale, fieldName, onChange, value} = props;
+	const {objectEntryEditingLanguageId} = useFormState();
 
 	const initialEditingLocales = getEditingLocales(
 		availableLocales,
@@ -27,11 +30,11 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 		initialEditingLocales
 	);
 
-	const [currentEditingLocale, setCurrentEditingLocale] = useState({
-		...getLocale(editingLocales, defaultLocale, defaultLocale.localeId),
-	});
+	// const [currentEditingLocale, setCurrentEditingLocale] = useState({
+	// 	...getLocale(editingLocales, defaultLocale, defaultLocale.localeId),
+	// });
 
-	const checked = !!value[currentEditingLocale.localeId];
+	const checked = !!value[objectEntryEditingLanguageId as Liferay.Language.Locale ?? defaultLocale.localeId];
 
 	const handleCheckboxToggle: FieldChangeEventHandler<
 		LocalizedValue<boolean>
@@ -40,7 +43,7 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 
 		const newValue = {
 			...value,
-			[currentEditingLocale.localeId]: eventValue,
+			[objectEntryEditingLanguageId as Liferay.Language.Locale]: eventValue,
 		};
 
 		onChange({target: {value: newValue}});
@@ -48,7 +51,7 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 
 	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
 		if (!Object.hasOwn(value, localeId)) {
-			const newValue = {
+			const newValue = {	
 				...value,
 				[localeId]: value[defaultLocale.localeId],
 			};
@@ -70,7 +73,7 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 			)
 		);
 
-		setCurrentEditingLocale(updatedLocale);
+		// setCurrentEditingLocale(updatedLocale);
 	};
 
 	return (
@@ -86,7 +89,13 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 			<ClayInput.GroupItem shrink>
 				<LocalesDropdown
 					availableLocales={editingLocales}
-					editingLocale={currentEditingLocale}
+					editingLocale={editingLocales.find(
+						(locale) => {
+							const localeToMatch = objectEntryEditingLanguageId ?? defaultLocale.localeId;
+							
+							return locale.localeId === localeToMatch
+						}
+					) as EditingLocale}
 					fieldName={fieldName}
 					onLanguageClicked={handleTranslationChange}
 				/>

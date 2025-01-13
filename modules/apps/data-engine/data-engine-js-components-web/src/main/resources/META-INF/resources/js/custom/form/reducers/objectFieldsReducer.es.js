@@ -14,6 +14,13 @@ export default function objectFieldsReducer(state, action) {
 				objectFields,
 			};
 		}
+		// case EVENT_TYPES.OBJECT.FIELD_LANGUAGE_CHANGE: {
+		// 	const {objectEntryEditingLanguageId} = action.payload;
+			
+		// 	return {
+		// 		objectEntryEditingLanguageId
+		// 	};
+		// }
 		default:
 			return state;
 	}

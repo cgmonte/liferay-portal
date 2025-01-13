@@ -6,6 +6,7 @@
 import {ClayCheckbox, ClayInput, ClayToggle} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import React from 'react';
+import FieldBase from '../FieldBase/ReactFieldBase.es';
 
 import type {FieldChangeEventHandler, LocalizedValue} from '../types';
 
@@ -121,7 +122,7 @@ export default function CheckboxBase({
 	...otherProps
 }: IProps) {
 	return (
-		<>
+		<FieldBase showLabel={false} {...otherProps}>
 			<Toggle
 				checked={checked}
 				disabled={readOnly}
@@ -133,7 +134,7 @@ export default function CheckboxBase({
 			/>
 
 			<ClayInput name={name} type="hidden" value={`${checked}`} />
-		</>
+		</FieldBase>
 	);
 }
 

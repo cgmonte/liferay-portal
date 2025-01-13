@@ -7,8 +7,8 @@ import ClayButton from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import ClayLayout from '@clayui/layout';
-import {PagesVisitor, useFormState} from 'data-engine-js-components-web';
-import React, {useRef, useState} from 'react';
+import {EVENT_TYPES as CORE_EVENT_TYPES, PagesVisitor, useForm, useFormState} from 'data-engine-js-components-web';
+import React, {useEffect, useRef, useState} from 'react';
 
 import AvailableLocaleLabel from './AvailableLocaleLabel';
 
@@ -35,7 +35,17 @@ const LocalesDropdown = ({
 	fieldName,
 	onLanguageClicked,
 }: LocalesDropdownProps) => {
-	const {pages} = useFormState();
+	const dispatch = useForm();
+	// const {pages, objectEntryEditingLanguageId} = useFormState();
+
+	const changeObjectEntryEditingLanguageId = (objectEntryEditingLanguageId: Liferay.Language.Locale) => {
+		dispatch({
+			payload: {objectEntryEditingLanguageId},
+			type: CORE_EVENT_TYPES.LANGUAGE.OBJECT_ENTRY_CHANGE,
+		});
+	};
+
+	// useEffect(()=>{console.log("objectEntryEditingLanguageId: ", objectEntryEditingLanguageId)}, [objectEntryEditingLanguageId])
 
 	const alignElementRef = useRef(null);
 	const dropdownMenuRef = useRef(null);
@@ -89,30 +99,32 @@ const LocalesDropdown = ({
 								onClick={(event) => {
 									onLanguageClicked(localeId);
 									setDropdownActive(false);
+									
+									changeObjectEntryEditingLanguageId(localeId);
 
-									if (event.isTrusted) {
-										const visitor = new PagesVisitor(pages);
+									// if (event.isTrusted) {
+									// 	const visitor = new PagesVisitor(pages);
 
-										visitor.mapFields(
-											(field) => {
-												if (
-													(field.localizedObjectField ||
-														field.localizable) &&
-													fieldName !==
-														field.fieldName
-												) {
-													document
-														.getElementsByName(
-															field.fieldName +
-																localeId
-														)[0]
-														.click();
-												}
-											},
-											true,
-											true
-										);
-									}
+									// 	visitor.mapFields(
+									// 		(field) => {
+									// 			if (
+									// 				(field.localizedObjectField ||
+									// 					field.localizable) &&
+									// 				fieldName !==
+									// 					field.fieldName
+									// 			) {
+									// 				document
+									// 					.getElementsByName(
+									// 						field.fieldName +
+									// 							localeId
+									// 					)[0]
+									// 					.click();
+									// 			}
+									// 		},
+									// 		true,
+									// 		true
+									// 	);
+									// }
 								}}
 							>
 								<ClayLayout.ContentRow containerElement="span">

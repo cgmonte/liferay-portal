@@ -28,6 +28,7 @@ const HISTORY = {
 };
 
 const OBJECT = {
+	FIELD_LANGUAGE_CHANGE: 'object_field_language_change',
 	FIELDS_CHANGE: 'object_fields_change',
 	RELATIONSHIPS_CHANGE: 'object_relationships_change',
 };
