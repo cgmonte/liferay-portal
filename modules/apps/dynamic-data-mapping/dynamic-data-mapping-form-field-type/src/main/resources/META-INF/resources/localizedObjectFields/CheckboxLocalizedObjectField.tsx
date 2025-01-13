@@ -4,7 +4,7 @@
  */
 
 import {ClayInput} from '@clayui/form';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import CheckboxBase, {ICheckboxBaseProps} from '../Checkbox/CheckboxBase';
 import LocalesDropdown, {
@@ -30,6 +30,23 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 		initialEditingLocales
 	);
 
+	useEffect(()=>{
+		if (objectEntryEditingLanguageId as Liferay.Language.Locale) {
+			// handleTranslationChange(objectEntryEditingLanguageId as Liferay.Language.Locale);
+
+
+			if (!Object.hasOwn(value, objectEntryEditingLanguageId as Liferay.Language.Locale)) {
+				const newValue = {	
+					...value,
+					[objectEntryEditingLanguageId as Liferay.Language.Locale]: value[defaultLocale.localeId],
+				};
+	
+				onChange({target: {value: newValue}});
+			}
+		}
+
+	},[objectEntryEditingLanguageId])
+
 	// const [currentEditingLocale, setCurrentEditingLocale] = useState({
 	// 	...getLocale(editingLocales, defaultLocale, defaultLocale.localeId),
 	// });
@@ -50,14 +67,14 @@ export default function CheckboxLocalizedObjectField(props: IProps) {
 	};
 
 	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
-		if (!Object.hasOwn(value, localeId)) {
-			const newValue = {	
-				...value,
-				[localeId]: value[defaultLocale.localeId],
-			};
+		// if (!Object.hasOwn(value, localeId)) {
+		// 	const newValue = {	
+		// 		...value,
+		// 		[localeId]: value[defaultLocale.localeId],
+		// 	};
 
-			onChange({target: {value: newValue}});
-		}
+		// 	onChange({target: {value: newValue}});
+		// }
 
 		const currentLocale = getLocale(
 			editingLocales,
