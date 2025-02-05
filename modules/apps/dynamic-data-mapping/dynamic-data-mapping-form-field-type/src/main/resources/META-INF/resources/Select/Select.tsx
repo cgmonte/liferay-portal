@@ -15,10 +15,15 @@ import FieldBase from '../FieldBase/ReactFieldBase.es';
 import {normalizeOptions, normalizeValue} from '../util/options';
 import {getTooltipTitle} from '../util/tooltip';
 import MultipleSelection from './MultipleSelect';
-import {MainProps, SelectProps} from './select.d';
+import {SelectMainProps} from './select.d';
 import {toArray} from './selectOperations';
 
 import type {Locale} from '../types';
+
+interface SelectProps extends Omit<SelectMainProps, 'selectedKey'> {
+	selectedKey?: string;
+	viewMode: unknown;
+}
 
 function Select({
 	errorMessage,
@@ -194,7 +199,7 @@ const Main = ({
 	value,
 	selectedKey,
 	...otherProps
-}: MainProps) => {
+}: SelectMainProps) => {
 	const {editingLanguageId}: {editingLanguageId: Locale} = useFormState();
 	const predefinedValueArray = toArray(predefinedValue);
 	const valueArray = toArray(value as string | string[]);

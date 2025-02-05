@@ -15,33 +15,6 @@ interface Item {
 	value: string;
 }
 
-interface MainProps {
-	defaultSearch?: boolean;
-	editingLanguageId?: Locale;
-	errorMessage?: string;
-	fixedOptions?: Option<string>[];
-	id?: string;
-	label: string;
-	localizedValue?: any;
-	localizedValueEdited?: any;
-	multiple?: boolean;
-	name: string;
-	onBlur?: any;
-	onChange: any;
-	onFocus?: any;
-	onSelectionChange?: (value: React.Key) => void;
-	options: any[];
-	placeholder?: string;
-	predefinedValue?: string[] | string;
-	readOnly: boolean;
-	required?: boolean;
-	selectedKey: string;
-	showEmptyOption: boolean;
-	tip?: string;
-	value?: string[] | string;
-	visible?: boolean;
-}
-
 interface MultiSelectProps
 	extends Omit<
 		MainProps,
@@ -50,20 +23,9 @@ interface MultiSelectProps
 	value: string[];
 }
 
-interface MultiSelectBaseProps extends MultiSelectProps {
-	loading?: boolean;
-	onLoadMore: () => Promise<Option>;
-}
-
 interface Option<T> {
 	label: LocalizedValue<string>;
 	value: T;
-}
-
-interface SelectProps
-	extends Omit<MainProps, 'editingLanguageId' | 'value' | 'selectedKey'> {
-	selectedKey?: string;
-	viewMode: unknown;
 }
 
 type MultiSelectItem = {
@@ -71,3 +33,36 @@ type MultiSelectItem = {
 	reference: string | null;
 	value: string;
 };
+
+interface MultipleSelectBaseProps {
+	errorMessage: string;
+	fixedOptions?: Option<string>[];
+	id?: string;
+	label: string;
+	loading?: boolean;
+	name: string;
+	onBlur?: any;
+	onChange: any;
+	onFocus?: any;
+	onLoadMore?: () => Promise<Option>;
+	options: any[];
+	predefinedValue?: string[] | string;
+	readOnly: boolean;
+	required: boolean;
+	tip?: string;
+	value?: string[] | string;
+}
+
+interface SelectMainProps extends MultipleSelectBaseProps {
+	defaultSearch?: boolean;
+	editingLanguageId?: Locale;
+	fixedOptions?: Option<string>[];
+	localizedValue?: any;
+	localizedValueEdited?: any;
+	multiple?: boolean;
+	onSelectionChange?: (value: React.Key) => void;
+	placeholder?: string;
+	selectedKey: string;
+	showEmptyOption: boolean;
+	visible?: boolean;
+}

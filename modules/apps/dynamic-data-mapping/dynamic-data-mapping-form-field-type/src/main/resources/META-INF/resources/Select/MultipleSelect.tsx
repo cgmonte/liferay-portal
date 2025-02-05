@@ -7,7 +7,7 @@ import {useFormState} from 'data-engine-js-components-web';
 import React, {useCallback, useEffect, useState} from 'react';
 
 import {MultipleSelectBase} from './MultipleSelectBase';
-import {MultiSelectProps} from './select.d';
+import {MultipleSelectBaseProps} from './select.d';
 
 const MultipleSelection = ({
 	errorMessage,
@@ -20,7 +20,7 @@ const MultipleSelection = ({
 	required,
 	tip,
 	value: values,
-}: MultiSelectProps) => {
+}: MultipleSelectBaseProps) => {
 	const [loading, setLoading] = useState<boolean>();
 	const {activeTabTitle, viewMode} = useFormState();
 
@@ -61,7 +61,7 @@ const MultipleSelection = ({
 	);
 };
 
-const Main = (props: MultiSelectProps) => {
+const Main = (props: MultipleSelectBaseProps) => {
 	return <MultipleSelection {...props} />;
 };
 
