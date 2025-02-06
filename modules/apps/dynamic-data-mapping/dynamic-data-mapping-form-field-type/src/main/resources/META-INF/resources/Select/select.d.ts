@@ -5,6 +5,8 @@
 
 import {Locale, LocalizedValue} from '../types';
 
+type DDMInterface = MultipleSelectBaseProps<string[] | string>;
+
 interface Item {
 	_key?: string;
 	active: boolean;
@@ -13,14 +15,6 @@ interface Item {
 	reference: string;
 	type: string;
 	value: string;
-}
-
-interface MultiSelectProps
-	extends Omit<
-		MainProps,
-		'editingLanguageId' | 'selectedKey' | 'showEmptyOption' | 'value'
-	> {
-	value: string[];
 }
 
 interface Option<T> {
@@ -34,23 +28,27 @@ type MultiSelectItem = {
 	value: string;
 };
 
-interface MultipleSelectBaseProps {
+interface MultipleSelectBaseProps<TValue> {
+	defaultLanguageId: Locale;
 	errorMessage: string;
+	fieldName: string;
 	fixedOptions?: Option<string>[];
 	id?: string;
 	label: string;
 	loading?: boolean;
+	localizedObjectField?: boolean;
 	name: string;
 	onBlur?: any;
 	onChange: any;
 	onFocus?: any;
 	onLoadMore?: () => Promise<Option>;
 	options: any[];
+	placeholder?: string;
 	predefinedValue?: string[] | string;
 	readOnly: boolean;
 	required: boolean;
 	tip?: string;
-	value?: string[] | string;
+	value: TValue;
 }
 
 interface SelectMainProps extends MultipleSelectBaseProps {
@@ -61,7 +59,6 @@ interface SelectMainProps extends MultipleSelectBaseProps {
 	localizedValueEdited?: any;
 	multiple?: boolean;
 	onSelectionChange?: (value: React.Key) => void;
-	placeholder?: string;
 	selectedKey: string;
 	showEmptyOption: boolean;
 	visible?: boolean;

@@ -9,6 +9,17 @@ import {
 } from 'dynamic-data-mapping-form-field-type';
 import React from 'react';
 
+interface AvailableLocale {
+	displayName: string;
+	icon: string;
+	localeId: Liferay.Language.Locale;
+}
+
+interface EditingLocale extends AvailableLocale {
+	isDefault: boolean;
+	isTranslated: boolean;
+}
+
 interface MultiSelectOption {
 	label: string;
 	reference: string | null;
@@ -16,9 +27,14 @@ interface MultiSelectOption {
 }
 
 interface MultiSelectPicklistProps {
-	errorMessage?: string;
+	availableLocales?: EditingLocale[];
+	defaultLanguageId: Liferay.Language.Locale;
+	defaultLocale?: EditingLocale;
+	errorMessage: string;
+	fieldName: string;
 	id: string;
 	label: string;
+	localizedObjectField?: boolean;
 	localizedValue?: Liferay.Language.FullyLocalizedValue<string> | {};
 	name: string;
 	onChange: Function;
@@ -34,6 +50,7 @@ export default function MultiSelectPicklist({
 	errorMessage,
 	label,
 	localizedValue = {},
+	localizedObjectField,
 	name,
 	onChange,
 	id,
@@ -57,9 +74,11 @@ export default function MultiSelectPicklist({
 			{...otherProps}
 		>
 			<MultipleSelection
+				{...otherProps}
 				errorMessage={errorMessage}
 				id={id}
 				label={label}
+				localizedObjectField={localizedObjectField}
 				name={name}
 				onChange={onChange}
 				options={options}

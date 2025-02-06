@@ -13,11 +13,14 @@ import {
 export function getEditingLocales(
 	availableLocales: AvailableLocale[],
 	defaultLocale: AvailableLocale,
-	value: {} | LocalizedValue<unknown>
+	value: {} | string | LocalizedValue<unknown>
 ): EditingLocale[] {
 	let initializedValue: undefined | LocalizedValue<unknown>;
 
-	if (!Object.keys(value).length) {
+	if (typeof value === 'string') {
+		initializedValue = {[defaultLocale.localeId]: value};
+	}
+	else if (!Object.keys(value).length) {
 		initializedValue = {[defaultLocale.localeId]: false};
 	}
 
