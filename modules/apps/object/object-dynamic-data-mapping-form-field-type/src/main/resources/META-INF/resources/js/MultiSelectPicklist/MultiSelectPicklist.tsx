@@ -7,7 +7,7 @@ import {
 	MultipleSelection,
 	ReactFieldBase as FieldBase,
 } from 'dynamic-data-mapping-form-field-type';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface MultiSelectOption {
 	label: string;
@@ -27,8 +27,22 @@ interface MultiSelectPicklistProps {
 	readOnly: boolean;
 	required: boolean;
 	tip?: string;
-	value: string[];
+	value: string[] | string;
 }
+
+const convertStringToObject = (str: string) =>
+	JSON.parse(str.replace(/(\b\w+\b)/g, '"$1"'));
+
+const normalizeValues = (value: string | string[]) => {
+	if (value === '') {
+		return [];
+	}
+	else if (typeof value === 'string') {
+		return convertStringToObject(value);
+	}
+
+	return value;
+};
 
 export default function MultiSelectPicklist({
 	errorMessage,
@@ -45,6 +59,19 @@ export default function MultiSelectPicklist({
 	value,
 	...otherProps
 }: MultiSelectPicklistProps) {
+	const normalizedValue = normalizeValues(value);
+
+	const [localValues, setLocalValues] = useState(normalizedValue);
+
+	const handleChange = (_: object, value: string) => {
+		setLocalValues([...value]);
+		onChange({target: {value}});
+	};
+
+	useEffect(() => {
+		onChange({target: {value: normalizedValue}});
+	}, [normalizedValue]);
+
 	return (
 		<FieldBase
 			errorMessage={errorMessage}
@@ -61,16 +88,16 @@ export default function MultiSelectPicklist({
 				id={id}
 				label={label}
 				name={name}
-				onChange={onChange}
+				onChange={handleChange}
 				options={options}
 				placeholder={placeholder}
 				readOnly={readOnly}
 				required={required}
 				tip={tip}
-				value={value}
+				value={localValues}
 			/>
 
-			<input name={name} type="hidden" value={value} />
+			<input name={name} type="hidden" value={localValues} />
 		</FieldBase>
 	);
 }
