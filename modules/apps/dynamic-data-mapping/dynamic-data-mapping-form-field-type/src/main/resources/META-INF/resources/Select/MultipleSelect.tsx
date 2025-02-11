@@ -12,7 +12,7 @@ import MultipleSelectLocalizedObjectField, {
 import {MultipleSelectBase} from './MultipleSelectBase';
 import {MultipleSelectBaseProps} from './select.d';
 
-type MultipleSelectionProps = MultipleSelectBaseProps<string[] | string>;
+export type MultipleSelectionProps = MultipleSelectBaseProps<string[] | string>;
 
 const MultipleSelection = ({
 	errorMessage,

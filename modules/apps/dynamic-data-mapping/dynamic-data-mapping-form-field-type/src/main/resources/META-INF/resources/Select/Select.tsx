@@ -14,7 +14,7 @@ import FieldBase from '../FieldBase/ReactFieldBase.es';
 
 import {normalizeOptions, normalizeValue} from '../util/options';
 import {getTooltipTitle} from '../util/tooltip';
-import MultipleSelection from './MultipleSelect';
+import MultipleSelection, {MultipleSelectionProps} from './MultipleSelect';
 import {SelectMainProps} from './select.d';
 import {toArray} from './selectOperations';
 
@@ -182,6 +182,7 @@ function Select({
 }
 
 const Main = ({
+	defaultLanguageId,
 	fixedOptions = [],
 	label,
 	localizedValue = {},
@@ -261,6 +262,9 @@ const Main = ({
 		}
 	}
 
+	const MultipleSelectionComponent =
+		MultipleSelection as React.FC<MultipleSelectionProps>;
+
 	return (
 		<FieldBase
 			label={label}
@@ -270,7 +274,8 @@ const Main = ({
 			{...otherProps}
 		>
 			{multiple ? (
-				<MultipleSelection
+				<MultipleSelectionComponent
+					defaultLanguageId={defaultLanguageId}
 					fixedOptions={[]}
 					label={label}
 					name={name}
@@ -287,6 +292,7 @@ const Main = ({
 				/>
 			) : (
 				<Select
+					defaultLanguageId={defaultLanguageId}
 					fixedOptions={fixedOptions}
 					id={id}
 					label={label}
