@@ -110,6 +110,7 @@ export function ModalAddObjectField({
 				values.businessType === 'Integer' ||
 				values.businessType === 'LongInteger' ||
 				values.businessType === 'MultiselectPicklist' ||
+				values.businessType === 'Picklist' ||
 				values.businessType === 'PrecisionDecimal'));
 
 	useEffect(() => {
