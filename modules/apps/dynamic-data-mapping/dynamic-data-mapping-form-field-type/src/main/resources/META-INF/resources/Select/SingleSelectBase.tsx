@@ -11,9 +11,10 @@ import React, {useEffect, useState} from 'react';
 import {getTooltipTitle} from '../util/tooltip';
 import {SelectMainProps} from './select';
 
-interface SelectProps extends Omit<SelectMainProps, 'selectedKey' | 'value'> {
+interface SingleSelectBaseProps
+	extends Omit<SelectMainProps, 'selectedKey' | 'value'> {
 	selectedKey?: string;
-	viewMode: unknown;
+	viewMode?: unknown;
 }
 
 export default function SingleSelectBase({
@@ -32,7 +33,7 @@ export default function SingleSelectBase({
 	showEmptyOption,
 	tip,
 	viewMode,
-}: SelectProps) {
+}: SingleSelectBaseProps) {
 	const {activeTabTitle} = useFormState();
 	const [loading, setLoading] = useState<boolean>();
 	const [selectedLabel, setSelectedLabel] = useState('');

@@ -7,6 +7,9 @@ import {useFormState} from 'data-engine-js-components-web';
 import React, {useMemo} from 'react';
 
 import FieldBase from '../FieldBase/ReactFieldBase.es';
+import SelectLocalizedObjectField, {
+	SelectLocalizedObjectFieldProps,
+} from '../localizedObjectFields/SelectLocalizedObjectField';
 import {normalizeOptions, normalizeValue} from '../util/options';
 import MultipleSelection, {MultipleSelectionProps} from './MultipleSelect';
 import SingleSelectBase from './SingleSelectBase';
@@ -15,7 +18,7 @@ import {toArray} from './selectOperations';
 
 import type {Locale} from '../types';
 
-const Main = ({
+const Select = ({
 	defaultLanguageId,
 	fixedOptions = [],
 	label,
@@ -157,6 +160,19 @@ const Main = ({
 				}
 			/>
 		</FieldBase>
+	);
+};
+
+const Main = (props: SelectMainProps | SelectLocalizedObjectFieldProps) => {
+	const isLocalizedObjectField: boolean =
+		Liferay.FeatureFlags['LPD-32050'] && !!props.localizedObjectField;
+
+	return !isLocalizedObjectField ? (
+		<Select {...(props as SelectMainProps)} />
+	) : (
+		<SelectLocalizedObjectField
+			{...(props as SelectLocalizedObjectFieldProps)}
+		/>
 	);
 };
 
