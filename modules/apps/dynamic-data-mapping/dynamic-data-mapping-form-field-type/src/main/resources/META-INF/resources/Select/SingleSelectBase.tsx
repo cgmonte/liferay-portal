@@ -43,7 +43,7 @@ export default function SingleSelectBase({
 		newSelectedKey = 'chooseAnOption';
 	}
 
-	if (typeof selectedKey !== 'string' && selectedKey?.[0] === '') {
+	if (Array.isArray(selectedKey) && selectedKey?.[0] === '') {
 		newSelectedKey = undefined;
 	}
 

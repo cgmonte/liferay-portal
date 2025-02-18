@@ -10,9 +10,10 @@ import FieldBase from '../FieldBase/ReactFieldBase.es';
 import SelectLocalizedObjectField, {
 	SelectLocalizedObjectFieldProps,
 } from '../localizedObjectFields/SelectLocalizedObjectField';
-import {normalizeOptions, normalizeValue} from '../util/options';
+import {normalizeValue} from '../util/options';
 import MultipleSelection, {MultipleSelectionProps} from './MultipleSelect';
 import SingleSelectBase from './SingleSelectBase';
+import {useNormalizedOptionsMemo} from './hooks';
 import {SelectMainProps} from './select.d';
 import {toArray} from './selectOperations';
 
@@ -43,20 +44,14 @@ const Select = ({
 	const valueArray = toArray(value as string | string[]);
 	const {viewMode} = useFormState();
 
-	const normalizedOptions = useMemo(
-		() =>
-			normalizeOptions({
-				editingLanguageId,
-				fixedOptions,
-				multiple,
-				options,
-				showEmptyOption,
-				valueArray,
-			}),
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[fixedOptions, multiple, options, showEmptyOption, valueArray]
-	);
+	const normalizedOptions = useNormalizedOptionsMemo({
+		editingLanguageId,
+		fixedOptions,
+		multiple,
+		options,
+		showEmptyOption,
+		valueArray,
+	});
 
 	const multipleSelectValues = useMemo(
 		() =>

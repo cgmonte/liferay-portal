@@ -15,7 +15,7 @@ interface Item {
 	value: string;
 }
 
-interface Option<T> {
+export interface Option<T> {
 	label: LocalizedValue<string>;
 	value: T;
 }

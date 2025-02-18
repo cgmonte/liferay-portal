@@ -4,10 +4,12 @@
  */
 
 import {ClayInput} from '@clayui/form';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 
 import SingleSelectBase from '../Select/SingleSelectBase';
+import {useNormalizedOptionsMemo} from '../Select/hooks';
 import {SelectMainProps} from '../Select/select.d';
+import {toArray} from '../Select/selectOperations';
 import {LocalizedValue} from '../types';
 import LocalesDropdown, {
 	AvailableLocale,
@@ -22,36 +24,39 @@ type valueTypes = {} | LocalizedValue<string[]>;
 export interface SelectLocalizedObjectFieldProps
 	extends Omit<SelectMainProps, 'value'> {
 	availableLocales: AvailableLocale[];
-	defaultLocale: EditingLocale;
+	defaultLocale: AvailableLocale;
 	value: valueTypes;
 }
 
-function getDefaultValue(locale: Locale, values: valueTypes) {
-	return Array.isArray(values) ? {[locale]: values} : values;
+function getDefaultValue(locale: Locale, value: valueTypes) {
+	return !Object.keys(value).length ? {[locale]: []} : value;
 }
 
 export default function SelectLocalizedObjectField({
 	availableLocales,
 	defaultLanguageId,
 	defaultLocale,
-	errorMessage,
 	fieldName,
+	fixedOptions = [],
 	id,
 	label,
 	name,
 	onChange,
 	options,
+	placeholder = Liferay.Language.get('choose-an-option'),
+	predefinedValue,
 	readOnly,
-	required,
 	showEmptyOption = true,
-	tip,
-	value: values,
+	value,
+	...otherProps
 }: SelectLocalizedObjectFieldProps) {
+	const predefinedValueArray = toArray(predefinedValue);
+
 	const [editingLocales, setEditingLocales] = useState<EditingLocale[]>(
 		getEditingLocales(
 			availableLocales,
 			defaultLocale,
-			getDefaultValue(defaultLanguageId, values)
+			getDefaultValue(defaultLanguageId, value)
 		)
 	);
 
@@ -60,37 +65,40 @@ export default function SelectLocalizedObjectField({
 			...getLocale(editingLocales, defaultLocale, defaultLocale.localeId),
 		});
 
-	const currentEditingLocaleIdRef = useRef<Locale>(
-		currentEditingLocale.localeId
-	);
-
 	const [localizedValues, setLocalizedValues] = useState<
 		LocalizedValue<string[]>
-	>(getDefaultValue(currentEditingLocale.localeId, values));
+	>(getDefaultValue(currentEditingLocale.localeId, value));
 
-	useEffect(() => {
-		currentEditingLocaleIdRef.current = currentEditingLocale.localeId;
-	}, [currentEditingLocale]);
+	const normalizedOptions = useNormalizedOptionsMemo({
+		editingLanguageId: currentEditingLocale.localeId,
+		fixedOptions,
+		multiple: false,
+		options,
+		showEmptyOption,
+		valueArray: toArray(
+			localizedValues[currentEditingLocale.localeId] ?? ['']
+		),
+	});
 
-	const updateLocalizedValues = (localeId: Locale, items: string[]) => {
+	const updateLocalizedValues = (localeId: Locale, newValue: React.Key) => {
 		const newLocalizedValues = {
 			...localizedValues,
-			[localeId]: items,
+			[localeId]: newValue,
 		};
 		setLocalizedValues(newLocalizedValues);
 
 		onChange({}, newLocalizedValues);
 	};
 
-	const handleChange = (_: object, uniqueItems: string[]) => {
-		updateLocalizedValues(currentEditingLocaleIdRef.current, uniqueItems);
+	const handleChange = (value: React.Key) => {
+		updateLocalizedValues(currentEditingLocale.localeId, value);
 	};
 
 	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
 		if (!Object.hasOwn(localizedValues, localeId)) {
 			updateLocalizedValues(
 				localeId,
-				localizedValues[defaultLanguageId]!
+				localizedValues[defaultLanguageId]?.[0] ?? ''
 			);
 		}
 
@@ -114,18 +122,20 @@ export default function SelectLocalizedObjectField({
 	return (
 		<ClayInput.Group>
 			<SingleSelectBase
+				{...otherProps}
 				defaultLanguageId={defaultLanguageId}
-				errorMessage={errorMessage}
 				fieldName={fieldName}
 				id={id}
 				label={label}
 				name={name}
-				onChange={handleChange}
-				options={options}
+				onChange={onChange}
+				onSelectionChange={handleChange}
+				options={normalizedOptions}
+				placeholder={placeholder}
+				predefinedValue={predefinedValueArray}
 				readOnly={readOnly}
-				required={required}
+				selectedKey={localizedValues[currentEditingLocale.localeId]![0]}
 				showEmptyOption={showEmptyOption}
-				tip={tip}
 			/>
 
 			<ClayInput.GroupItem shrink>
