@@ -50,6 +50,7 @@ interface MultipleSelectBaseProps<TValue> {
 }
 
 interface SelectMainProps extends MultipleSelectBaseProps<string | string[]> {
+	className?: string;
 	defaultSearch?: boolean;
 	editingLanguageId?: Locale;
 	fixedOptions?: Option<string>[];

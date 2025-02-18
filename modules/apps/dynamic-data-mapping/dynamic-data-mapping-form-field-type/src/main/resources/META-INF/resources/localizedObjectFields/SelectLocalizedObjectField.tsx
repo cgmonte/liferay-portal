@@ -17,6 +17,8 @@ import LocalesDropdown, {
 } from '../util/localizable/LocalesDropdown';
 import {getEditingLocales, getLocale} from './util/locales';
 
+import './SelectLocalizedObjectField.scss';
+
 import type {Locale} from '../types';
 
 type valueTypes = {} | LocalizedValue<string[]>;
@@ -123,6 +125,7 @@ export default function SelectLocalizedObjectField({
 		<ClayInput.Group>
 			<SingleSelectBase
 				{...otherProps}
+				className="ddm-object-field-single-select-localized"
 				defaultLanguageId={defaultLanguageId}
 				fieldName={fieldName}
 				id={id}

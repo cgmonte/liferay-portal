@@ -18,6 +18,7 @@ interface SingleSelectBaseProps
 }
 
 export default function SingleSelectBase({
+	className,
 	errorMessage,
 	id,
 	label,
@@ -115,6 +116,7 @@ export default function SingleSelectBase({
 				placeholder: Liferay.Language.get('choose-an-option'),
 				value: selectedLabel,
 			})}
+			{...(className && {className})}
 		>
 			{!loading && (
 				<Picker
