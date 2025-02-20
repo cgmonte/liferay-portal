@@ -130,8 +130,24 @@ const Select = ({
 					label={label}
 					multiple={multiple}
 					name={name}
-					onChange={onChange}
-					onSelectionChange={onSelectionChange}
+					onSelectionChange={(itemKey: React.Key) => {
+						let newItemKey: React.Key | null = itemKey;
+
+						if ((itemKey as string)?.includes('$.')) {
+							newItemKey = '.';
+						}
+
+						const field = options.find(
+							({value}) => value === newItemKey
+						);
+
+						if (field.value === 'chooseAnOption') {
+							onChange({}, []);
+						}
+						else {
+							onChange({}, [field.value]);
+						}
+					}}
 					options={normalizedOptions}
 					placeholder={placeholder}
 					predefinedValue={newPredefinedValue}

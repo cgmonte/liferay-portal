@@ -9,7 +9,6 @@ import React, {useState} from 'react';
 import SingleSelectBase from '../Select/SingleSelectBase';
 import {useNormalizedOptionsMemo} from '../Select/hooks';
 import {SelectMainProps} from '../Select/select.d';
-import {toArray} from '../Select/selectOperations';
 import {LocalizedValue} from '../types';
 import LocalesDropdown, {
 	AvailableLocale,
@@ -21,17 +20,31 @@ import './SelectLocalizedObjectField.scss';
 
 import type {Locale} from '../types';
 
-type valueTypes = {} | LocalizedValue<string[]>;
+type valueTypes = {} | LocalizedValue<string>;
 
 export interface SelectLocalizedObjectFieldProps
 	extends Omit<SelectMainProps, 'value'> {
 	availableLocales: AvailableLocale[];
 	defaultLocale: AvailableLocale;
-	value: valueTypes;
+	value: string;
 }
 
-function getDefaultValue(locale: Locale, value: valueTypes) {
-	return !Object.keys(value).length ? {[locale]: []} : value;
+// function parseValue(value: string): valueTypes | undefined {
+// 	try {
+// 		const parsedValue = JSON.parse(value);
+
+// 		return parsedValue;
+// 	}
+// 	catch (error) {
+// 		console.error(error);
+// 	}
+// }
+
+function getDefaultValue(
+	locale: Locale,
+	value: valueTypes
+): LocalizedValue<string> {
+	return !Object.keys(value).length ? {[locale]: ''} : value;
 }
 
 export default function SelectLocalizedObjectField({
@@ -52,7 +65,7 @@ export default function SelectLocalizedObjectField({
 	value,
 	...otherProps
 }: SelectLocalizedObjectFieldProps) {
-	const predefinedValueArray = toArray(predefinedValue);
+	// const value = parseValue(stringfiedValue) as valueTypes;
 
 	const [editingLocales, setEditingLocales] = useState<EditingLocale[]>(
 		getEditingLocales(
@@ -64,11 +77,11 @@ export default function SelectLocalizedObjectField({
 
 	const [currentEditingLocale, setCurrentEditingLocale] =
 		useState<EditingLocale>({
-			...getLocale(editingLocales, defaultLocale, defaultLocale.localeId),
+			...getLocale(editingLocales, defaultLocale, defaultLanguageId),
 		});
 
 	const [localizedValues, setLocalizedValues] = useState<
-		LocalizedValue<string[]>
+		LocalizedValue<string>
 	>(getDefaultValue(currentEditingLocale.localeId, value));
 
 	const normalizedOptions = useNormalizedOptionsMemo({
@@ -77,19 +90,24 @@ export default function SelectLocalizedObjectField({
 		multiple: false,
 		options,
 		showEmptyOption,
-		valueArray: toArray(
-			localizedValues[currentEditingLocale.localeId] ?? ['']
-		),
+		valueArray: [localizedValues[currentEditingLocale.localeId]!],
 	});
 
 	const updateLocalizedValues = (localeId: Locale, newValue: React.Key) => {
-		const newLocalizedValues = {
-			...localizedValues,
-			[localeId]: newValue,
-		};
-		setLocalizedValues(newLocalizedValues);
+		// const newLocalizedValues = {
+		// 	...localizedValues,
+		// 	[localeId]: newValue,
+		// };
 
-		onChange({}, newLocalizedValues);
+		setLocalizedValues((previous)=>({
+			...previous,
+			[localeId]: newValue,
+		}));
+
+		onChange({}, {
+			...localizedValues,
+			[localeId]: [newValue],
+		});
 	};
 
 	const handleChange = (value: React.Key) => {
@@ -131,13 +149,12 @@ export default function SelectLocalizedObjectField({
 				id={id}
 				label={label}
 				name={name}
-				onChange={onChange}
 				onSelectionChange={handleChange}
 				options={normalizedOptions}
 				placeholder={placeholder}
-				predefinedValue={predefinedValueArray}
+				// predefinedValue={[]}
 				readOnly={readOnly}
-				selectedKey={localizedValues[currentEditingLocale.localeId]![0]}
+				selectedKey={localizedValues[currentEditingLocale.localeId]}
 				showEmptyOption={showEmptyOption}
 			/>
 

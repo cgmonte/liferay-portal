@@ -12,7 +12,7 @@ import {getTooltipTitle} from '../util/tooltip';
 import {SelectMainProps} from './select';
 
 interface SingleSelectBaseProps
-	extends Omit<SelectMainProps, 'selectedKey' | 'value'> {
+	extends Omit<SelectMainProps, 'onChange' | 'selectedKey' | 'value'> {
 	selectedKey?: string;
 	viewMode?: unknown;
 }
@@ -23,7 +23,6 @@ export default function SingleSelectBase({
 	id,
 	label,
 	name,
-	onChange,
 	onSelectionChange,
 	options,
 	placeholder,
@@ -124,28 +123,7 @@ export default function SingleSelectBase({
 					data-testid={id}
 					disabled={readOnly}
 					items={[{items: options, label}]}
-					onSelectionChange={(itemKey: React.Key) => {
-						let newItemKey: React.Key | null = itemKey;
-
-						if ((itemKey as string)?.includes('$.')) {
-							newItemKey = '.';
-						}
-
-						const field = options.find(
-							({value}) => value === newItemKey
-						);
-
-						if (field.value === 'chooseAnOption') {
-							onChange({}, []);
-						}
-						else {
-							onChange({}, [field.value]);
-						}
-
-						if (onSelectionChange) {
-							onSelectionChange(itemKey);
-						}
-					}}
+					onSelectionChange={onSelectionChange}
 					placeholder={placeholder}
 					selectedKey={selectedItem ?? 'chooseAnOption'}
 				>
