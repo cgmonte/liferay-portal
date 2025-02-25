@@ -29,7 +29,6 @@ const Select = ({
 	name,
 	onChange,
 	id,
-	onSelectionChange,
 	options = [],
 	placeholder = Liferay.Language.get('choose-an-option'),
 	predefinedValue = [],

@@ -17,7 +17,7 @@ import LocalesDropdown, {
 } from '../util/localizable/LocalesDropdown';
 import {getEditingLocales, getLocale} from './util/locales';
 
-// import './SelectLocalizedObjectField.scss';
+import './SelectLocalizedObjectField.scss';
 
 import type {Locale} from '../types';
 
@@ -27,25 +27,29 @@ export interface SelectLocalizedObjectFieldProps
 	extends Omit<SelectMainProps, 'value'> {
 	availableLocales: AvailableLocale[];
 	defaultLocale: AvailableLocale;
-	value: string;
+	value: valueTypes;
 }
 
-// function parseValue(value: string): valueTypes | undefined {
-// 	try {
-// 		const parsedValue = JSON.parse(value);
-
-// 		return parsedValue;
-// 	}
-// 	catch (error) {
-// 		console.error(error);
-// 	}
-// }
-
-function getDefaultValue(
-	locale: Locale,
-	value: valueTypes
+function normalizeValues(
+	defaultLocaleId: Locale,
+	values: LocalizedValue<string[] | string>
 ): LocalizedValue<string> {
-	return !Object.keys(value).length ? {[locale]: ''} : value;
+	if (!Object.keys(values).length) {
+		return {[defaultLocaleId]: ''};
+	}
+
+	const normalizedValues: LocalizedValue<string> = {};
+
+	for (const key in values) {
+		const localeKey = key as Locale;
+		const localeValue = values[localeKey] as string[] | string;
+
+		normalizedValues[localeKey] = Array.isArray(localeValue)
+			? localeValue[0]
+			: localeValue;
+	}
+
+	return normalizedValues;
 }
 
 export default function SelectLocalizedObjectField({
@@ -60,20 +64,18 @@ export default function SelectLocalizedObjectField({
 	onChange,
 	options,
 	placeholder = Liferay.Language.get('choose-an-option'),
-	predefinedValue,
+
+	// predefinedValue,
+
 	readOnly,
 	showEmptyOption = true,
 	value,
 	...otherProps
 }: SelectLocalizedObjectFieldProps) {
-	// const value = parseValue(stringfiedValue) as valueTypes;
+	const values = normalizeValues(defaultLanguageId, value);
 
 	const [editingLocales, setEditingLocales] = useState<EditingLocale[]>(
-		getEditingLocales(
-			availableLocales,
-			defaultLocale,
-			getDefaultValue(defaultLanguageId, value)
-		)
+		getEditingLocales(availableLocales, defaultLocale, values)
 	);
 
 	const [currentEditingLocale, setCurrentEditingLocale] =
@@ -81,9 +83,8 @@ export default function SelectLocalizedObjectField({
 			...getLocale(editingLocales, defaultLocale, defaultLanguageId),
 		});
 
-	const [localizedValues, setLocalizedValues] = useState<
-		LocalizedValue<string>
-	>(getDefaultValue(currentEditingLocale.localeId, value));
+	const [localizedValues, setLocalizedValues] =
+		useState<LocalizedValue<string>>(values);
 
 	const normalizedOptions = useNormalizedOptionsMemo({
 		editingLanguageId: currentEditingLocale.localeId,
@@ -94,10 +95,10 @@ export default function SelectLocalizedObjectField({
 		valueArray: [localizedValues[currentEditingLocale.localeId]!],
 	});
 
-	const updateLocalizedValues = (localeId: Locale, newValue: React.Key) => {
+	const updateLocalizedValues = (localeId: Locale, newValues: React.Key) => {
 		const newLocalizedValues = {
 			...localizedValues,
-			[localeId]: newValue,
+			[localeId]: newValues,
 		};
 
 		setLocalizedValues(newLocalizedValues);
@@ -105,15 +106,15 @@ export default function SelectLocalizedObjectField({
 		onChange({}, newLocalizedValues);
 	};
 
-	const handleChange = (value: React.Key) => {
-		updateLocalizedValues(currentEditingLocale.localeId, value);
+	const handleChange = (newValues: React.Key) => {
+		updateLocalizedValues(currentEditingLocale.localeId, newValues);
 	};
 
 	const handleTranslationChange = (localeId: Liferay.Language.Locale) => {
 		if (!Object.hasOwn(localizedValues, localeId)) {
 			updateLocalizedValues(
 				localeId,
-				localizedValues[defaultLanguageId]?.[0] ?? ''
+				localizedValues[defaultLanguageId]!
 			);
 		}
 
@@ -154,7 +155,9 @@ export default function SelectLocalizedObjectField({
 					onSelectionChange={handleChange}
 					options={normalizedOptions}
 					placeholder={placeholder}
+
 					// predefinedValue={[]}
+
 					readOnly={readOnly}
 					selectedKey={localizedValues[currentEditingLocale.localeId]}
 					showEmptyOption={showEmptyOption}
@@ -169,12 +172,6 @@ export default function SelectLocalizedObjectField({
 					/>
 				</ClayInput.GroupItem>
 			</ClayInput.Group>
-
-			<input
-				name={name}
-				type="hidden"
-				value={JSON.stringify(localizedValues)}
-			/>
 		</FieldBase>
 	);
 }
