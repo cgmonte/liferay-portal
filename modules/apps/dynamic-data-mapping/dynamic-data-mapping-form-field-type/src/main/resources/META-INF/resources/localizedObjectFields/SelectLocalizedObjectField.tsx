@@ -4,7 +4,8 @@
  */
 
 import {ClayInput} from '@clayui/form';
-import React, {useState} from 'react';
+import {stringUtils} from '@liferay/object-js-components-web';
+import React, {useMemo, useState} from 'react';
 
 import FieldBase from '../FieldBase/ReactFieldBase.es';
 import SingleSelectBase from '../Select/SingleSelectBase';
@@ -95,6 +96,16 @@ export default function SelectLocalizedObjectField({
 		valueArray: [localizedValues[currentEditingLocale.localeId]!],
 	});
 
+	const localizedOptions = useMemo(() => {
+		return normalizedOptions.map((option) => ({
+			...option,
+			label: stringUtils.getLocalizableLabel({
+				labels: option.labelMap,
+				preferredLanguageId: currentEditingLocale.localeId,
+			}),
+		}));
+	}, [normalizedOptions, currentEditingLocale.localeId]);
+
 	const updateLocalizedValues = (localeId: Locale, newValues: React.Key) => {
 		const newLocalizedValues = {
 			...localizedValues,
@@ -153,7 +164,7 @@ export default function SelectLocalizedObjectField({
 					label={label}
 					name={name}
 					onSelectionChange={handleChange}
-					options={normalizedOptions}
+					options={localizedOptions}
 					placeholder={placeholder}
 
 					// predefinedValue={[]}
