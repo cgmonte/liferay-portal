@@ -102,6 +102,10 @@ export default function SelectLocalizedObjectField({
 			label: stringUtils.getLocalizableLabel({
 				labels: option.labelMap,
 				preferredLanguageId: currentEditingLocale.localeId,
+				...(Object.keys(option).length === 2 &&
+					option.value === 'chooseAnOption' && {
+						fallbackLabel: option.label,
+					}),
 			}),
 		}));
 	}, [normalizedOptions, currentEditingLocale.localeId]);
@@ -109,7 +113,7 @@ export default function SelectLocalizedObjectField({
 	const updateLocalizedValues = (localeId: Locale, newValues: React.Key) => {
 		const newLocalizedValues = {
 			...localizedValues,
-			[localeId]: newValues,
+			[localeId]: newValues === 'chooseAnOption' ? '' : newValues,
 		};
 
 		setLocalizedValues(newLocalizedValues);
