@@ -10,6 +10,7 @@ import ClayLayout from '@clayui/layout';
 import {
 	PagesVisitor,
 	useConfig,
+	useForm,
 	useFormState,
 } from 'data-engine-js-components-web';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -39,8 +40,15 @@ const LocalesDropdown = ({
 	fieldName,
 	onLanguageClicked,
 }: LocalesDropdownProps) => {
-	const {pages} = useFormState();
+	const dispatch = useForm();
+	const {pages, editingLanguageId} = useFormState();
 	const {portletNamespace} = useConfig();
+
+	useEffect(() => {
+		console.log(editingLanguageId)
+	}, [
+		editingLanguageId
+	])
 
 	const alignElementRef = useRef(null);
 	const dropdownMenuRef = useRef(null);
@@ -109,6 +117,11 @@ const LocalesDropdown = ({
 
 								name={fieldName + localeId}
 								onClick={(event) => {
+									dispatch({
+										payload: {editingLanguageId: localeId},
+										type: 'language_change', // data-engine-js-components-web/src/main/resources/META-INF/resources/js/core/actions/eventTypes.es.js
+									});
+
 									onLanguageClicked(localeId);
 									setDropdownActive(false);
 
