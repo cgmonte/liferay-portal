@@ -51,14 +51,20 @@ export function removeValue({
  * Wraps the given argument into an array.
  * @param value {Array|String}
  */
-export function toArray(value: string[] | string) {
-	let newValue: string[] | string = value;
+export function toArray(value: string[] | string | undefined) {
+	let newValue = value;
 
-	if (newValue && typeof newValue === 'string') {
+	if (typeof newValue === 'string' && newValue !== '') {
 		try {
 			newValue = JSON.parse(newValue);
 		}
-		catch (error) {}
+		catch (error) {
+			console.error(error);
+		}
+	}
+
+	if (newValue === '' || newValue === undefined) {
+		return [];
 	}
 
 	if (!Array.isArray(newValue)) {
