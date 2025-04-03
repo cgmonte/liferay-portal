@@ -83,6 +83,42 @@ export function updateNestedFieldNameIndex(name, repeatedIndex) {
 	].join('');
 }
 
+export function updateURLObjectSearchParam(
+	newSearchParamValue,
+	subStringsToMatch,
+	urlObject
+) {
+	for (const searchParam of urlObject.searchParams.keys()) {
+		const searchParamMatch = subStringsToMatch.every((subString) =>
+			searchParam.includes(subString)
+		);
+
+		if (searchParamMatch) {
+			urlObject.searchParams.set(searchParam, newSearchParamValue);
+
+			break;
+		}
+	}
+}
+
+export function replaceURLObjectPathnameSegment(
+	newPathSegment,
+	subStringsToMatch,
+	urlObject
+) {
+	const pathSegments = urlObject.pathname.split('/');
+
+	const updatedPathSegments = pathSegments.map((path) => {
+		const pathSegmentMatch = subStringsToMatch.every((subString) =>
+			path.includes(subString)
+		);
+
+		return pathSegmentMatch ? encodeURIComponent(newPathSegment) : path;
+	});
+
+	urlObject.pathname = updatedPathSegments.join('/');
+}
+
 export function generateNestedFieldName(name, parentFieldName) {
 	const parsedParentFieldName = parseName(parentFieldName);
 	let parsedName = parseNestedFieldName(name);
