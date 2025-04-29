@@ -34,9 +34,6 @@ AUI.add(
 			'<tpl for="pallete">',
 			'<button aria-label="{.}" class="',
 			CSS_SIMPLE_COLOR_PICKER_ITEM,
-			'" style="background-color: {.}',
-			'; border-color:',
-			'{.};',
 			'" role="radio"></button>',
 			'</tpl>'
 		);
@@ -190,11 +187,18 @@ AUI.add(
 				_renderPallete() {
 					const instance = this;
 
+					const corlorPallet = instance.get('pallete');
+
 					instance.items = A.NodeList.create(
 						TPL_SIMPLE_COLOR_PICKER_ITEM.parse({
-							pallete: instance.get('pallete'),
+							pallete: corlorPallet,
 						})
 					);
+
+					instance.items._nodes.forEach((node, index) => {
+						node.style.backgroundColor = corlorPallet[index];
+						node.style.borderColor = corlorPallet[index];
+					});
 
 					const contentBox = instance.get('contentBox');
 
