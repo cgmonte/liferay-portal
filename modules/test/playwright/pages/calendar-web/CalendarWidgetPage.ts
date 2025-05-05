@@ -13,6 +13,7 @@ type RecurrenceOption = 'Entire Series' | 'Following Events' | 'Single Event';
 export class CalendarWidgetPage {
 	readonly addCalendarMenuItem: Locator;
 	readonly addEventButton: Locator;
+	readonly addEventMenuItem: Locator;
 	readonly allDayCheckbox: Locator;
 	readonly calendarWidget: Locator;
 	readonly calendarColumns: Locator;
@@ -50,6 +51,7 @@ export class CalendarWidgetPage {
 			name: 'Add Calendar',
 		});
 		this.addEventButton = page.getByRole('button', {name: 'Add Event'});
+		this.addEventMenuItem = page.getByRole('menuitem', {name: 'Add Event'});
 		this.allDayCheckbox = page
 			.frameLocator('iframe')
 			.getByRole('checkbox', {
@@ -152,14 +154,21 @@ export class CalendarWidgetPage {
 		allDay,
 		dateEnd,
 		publishEvent,
+		throughMenuItem,
 		title,
 	}: {
 		allDay: boolean;
 		dateEnd?: string;
 		publishEvent?: boolean;
+		throughMenuItem?: boolean;
 		title?: string;
 	}) {
-		await this.clickAddEventButton();
+		if (throughMenuItem) {
+			await this.clickAddEventMenuitem();
+		}
+		else {
+			await this.clickAddEventButton();
+		}
 
 		await this.allDayCheckbox.hover();
 		await this.allDayCheckbox.setChecked(allDay);
@@ -233,6 +242,12 @@ export class CalendarWidgetPage {
 
 	async clickAddEventButton() {
 		await this.addEventButton.click();
+
+		await this.page.waitForLoadState('networkidle');
+	}
+
+	async clickAddEventMenuitem() {
+		await this.addEventMenuItem.click();
 
 		await this.page.waitForLoadState('networkidle');
 	}
