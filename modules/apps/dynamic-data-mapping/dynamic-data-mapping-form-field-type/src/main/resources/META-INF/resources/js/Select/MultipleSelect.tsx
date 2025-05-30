@@ -30,19 +30,6 @@ const MultipleSelection = ({
 	const [loading, setLoading] = useState<boolean>();
 	const {activeTabTitle, viewMode} = useFormState();
 
-	useEffect(() => {
-		if (
-			!readOnly &&
-			activeTabTitle !== Liferay.Language.get('advanced') &&
-			!viewMode
-		) {
-			setLoading(true);
-			setTimeout(() => setLoading(false), 200);
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [options]);
-
 	const handleAsyncOptions = useCallback(() => {
 		return new Promise((resolve) => {
 			resolve(options);

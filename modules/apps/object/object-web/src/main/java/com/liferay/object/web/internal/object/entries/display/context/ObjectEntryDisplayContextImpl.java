@@ -709,8 +709,6 @@ public class ObjectEntryDisplayContextImpl
 
 		ddmFormRenderingContext.setShowRequiredFieldsWarning(true);
 
-		ddmFormRenderingContext.setViewMode(true);
-
 		ObjectDefinition objectDefinition = getObjectDefinition1();
 
 		if ((objectLayoutTab == null) &&
