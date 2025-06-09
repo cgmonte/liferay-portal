@@ -150,7 +150,9 @@ export default function EdgeInformation({errors, setErrors}) {
 							setSelectedItemNewId(target.value);
 						}}
 						type="text"
-						value={(selectedItemNewId ?? selectedItem?.id) || ''}
+						value={
+							(selectedItemNewId ?? selectedItem?.data.name) || ''
+						}
 					/>
 
 					<ClayForm.FeedbackItem>

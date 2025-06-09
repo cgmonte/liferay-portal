@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {v4 as uuidv4} from 'uuid';
+
 import {defaultLanguageId} from '../constants';
 import {removeNewLine, replaceTabSpaces} from '../util/utils';
 import {DEFAULT_LANGUAGE} from './constants';
@@ -13,7 +15,6 @@ import {
 	parseTimers,
 } from './utils';
 import XMLDefinition from './xmlDefinition';
-
 export default function DeserializeUtil(content) {
 	const instance = this;
 
@@ -27,8 +28,6 @@ DeserializeUtil.prototype = {
 		const instance = this;
 
 		const elements = [];
-
-		const transitionsNames = [];
 
 		const nodesNames = [];
 
@@ -145,6 +144,8 @@ DeserializeUtil.prototype = {
 						(transition) => transition?.default === 'true'
 					);
 
+					const transitionsNames = [];
+
 					transitions.forEach((transition) => {
 						let label = {};
 
@@ -194,8 +195,9 @@ DeserializeUtil.prototype = {
 							data: {
 								defaultEdge,
 								label,
+								name: transitionName,
 							},
-							id: transitionName,
+							id: uuidv4(),
 							source: nodeName,
 							target: transition.target,
 							type: 'transition',

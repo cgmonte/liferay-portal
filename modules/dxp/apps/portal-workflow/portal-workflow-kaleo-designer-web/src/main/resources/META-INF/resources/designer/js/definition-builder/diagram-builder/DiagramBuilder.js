@@ -102,6 +102,8 @@ export default function DiagramBuilder() {
 				element.data.defaultEdge
 		).length;
 
+		const newEdgeName = uuidv4();
+
 		const newEdge = {
 			...params,
 			arrowHeadType: 'arrowclosed',
@@ -111,8 +113,9 @@ export default function DiagramBuilder() {
 					[defaultLanguageId]:
 						Liferay.Language.get('transition-label'),
 				},
+				name: newEdgeName,
 			},
-			id: uuidv4(),
+			id: newEdgeName,
 			type: 'transition',
 		};
 
@@ -332,7 +335,24 @@ export default function DiagramBuilder() {
 		) {
 			setElements((elements) =>
 				elements.map((element) => {
-					if (element.id === selectedItem.id) {
+					if (isEdge(element)) {
+						element = {
+							...element,
+							...(element.id === selectedItem.id && {
+								data: {
+									...element.data,
+									name: selectedItemNewId,
+								},
+							}),
+							...(selectedItem.id === element.source && {
+								source: selectedItemNewId,
+							}),
+							...(selectedItem.id === element.target && {
+								target: selectedItemNewId,
+							}),
+						};
+					}
+					else if (element.id === selectedItem.id) {
 						element = {
 							...element,
 							id: selectedItemNewId,
@@ -341,17 +361,6 @@ export default function DiagramBuilder() {
 						setSelectedItemNewId(null);
 
 						setSelectedItem(element);
-					}
-					else if (isEdge(element)) {
-						element = {
-							...element,
-							...(selectedItem.id === element.source && {
-								source: selectedItemNewId,
-							}),
-							...(selectedItem.id === element.target && {
-								target: selectedItemNewId,
-							}),
-						};
 					}
 
 					return element;
