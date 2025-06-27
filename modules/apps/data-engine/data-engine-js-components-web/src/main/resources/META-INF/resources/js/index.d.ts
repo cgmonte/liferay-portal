@@ -75,8 +75,47 @@ export const PartialResults: React.FC<{
 	reportDataURL: string;
 }>;
 
+export interface Column {
+	fields: WebContentField[];
+	size: number;
+}
+
+export type WebContentFieldType =
+	| 'checkbox_multiple'
+	| 'captcha'
+	| 'checkbox'
+	| 'color'
+	| 'date'
+	| 'document_library'
+	| 'fieldset'
+	| 'grid'
+	| 'image'
+	| 'localizable_text'
+	| 'numeric'
+	| 'options'
+	| 'paragraph'
+	| 'radio'
+	| 'rich_text'
+	| 'separator'
+	| 'select'
+	| 'text';
+
+export interface WebContentField<T = unknown> {
+	disabled?: boolean;
+	fieldName: string;
+	hidden?: boolean;
+	localizable?: boolean;
+	localizedValueEdited?: Liferay.Language.LocalizedValue<any>;
+	name: string;
+	nestedFields?: WebContentField[];
+	settingsContext: {pages: unknown[]};
+	type: WebContentFieldType;
+	value?: T;
+	visible?: boolean;
+}
 export class PagesVisitor {
 	constructor(pages: unknown);
+	mapColumns: (mapper: (column: Column) => void) => void;
 	mapFields: (
 		mapper: (field: Field) => void,
 		merge: boolean,

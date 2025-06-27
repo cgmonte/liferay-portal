@@ -5,50 +5,7 @@
 
 import {PagesVisitor} from 'data-engine-js-components-web';
 
-import {LocalizedValue} from './ReactFieldBase';
-
-interface Column {
-	fields: WebContentField[];
-	size: number;
-}
-
-type WebContentFieldType =
-	| 'checkbox_multiple'
-	| 'captcha'
-	| 'checkbox'
-	| 'color'
-	| 'date'
-	| 'document_library'
-	| 'fieldset'
-	| 'grid'
-	| 'image'
-	| 'localizable_text'
-	| 'numeric'
-	| 'options'
-	| 'paragraph'
-	| 'radio'
-	| 'rich_text'
-	| 'separator'
-	| 'select'
-	| 'text';
-
-export interface WebContentField<T = unknown> {
-	disabled?: boolean;
-	fieldName: string;
-	hidden?: boolean;
-	localizable?: boolean;
-	localizedValueEdited?: LocalizedValue<any>;
-	name: string;
-	nestedFields?: WebContentField[];
-	settingsContext: {pages: unknown[]};
-	type: WebContentFieldType;
-	value?: T;
-	visible?: boolean;
-}
-
-interface PageVisitor extends PagesVisitor {
-	mapColumns: (mapper: (column: Column) => void) => void;
-}
+import type {Column, WebContentField} from 'data-engine-js-components-web';
 
 /**
  * Returns an array with all the occurences of the string 'Fieldset' followed by digits.
@@ -186,7 +143,7 @@ export function getFilteredPage({
 }: {
 	editingLanguageId: Liferay.Language.Locale;
 	filter: string;
-	pagesVisitor: PageVisitor;
+	pagesVisitor: PagesVisitor;
 }) {
 	return pagesVisitor.mapColumns((column: Column) => {
 		const visibleFieldsets = new Set<string>();
